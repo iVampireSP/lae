@@ -7,6 +7,10 @@ Route::name('admin.')->middleware(['admin'])->group(function () {
     Route::apiResource('admins', Admin\Admin\AdminController::class);
 
     Route::apiResource('users', Admin\User\UserController::class);
+    Route::apiResource('users.drops', Admin\User\DropController::class);
+
+    Route::apiResource('drops', Admin\User\DropController::class);
+
 
 
     // Route::resource('users.fields', v1\User\FieldsController::class)->only(['index']);

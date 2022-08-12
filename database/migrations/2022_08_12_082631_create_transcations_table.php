@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User\Drop;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -13,8 +14,22 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('transcations', function (Blueprint $table) {
             $table->id();
+
+            // remote transaction id
+            $table->string('remote_id')->index();
+
+            // drops id
+            $table->foreignIdFor(Drop::class)->index();
+
+            // payment
+            $table->string('payment')->index();
+
+            // amount
+            $table->decimal('amount', 8, 2)->default(0);
+
+
             $table->timestamps();
         });
     }
@@ -26,6 +41,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('transcations');
     }
 };
