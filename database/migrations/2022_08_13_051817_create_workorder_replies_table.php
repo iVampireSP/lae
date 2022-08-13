@@ -22,10 +22,12 @@ return new class extends Migration
             $table->text('content');
 
             // workorder id (on delete cascade)
-            $table->foreignIdFor(WorkOrder::class)->index()->onDelete('cascade');
+            $table->unsignedBigInteger('workorder_id')->index();
+            $table->foreign('workorder_id')->references('id')->on('workorders')->onDelete('cascade');
 
             // user id
-            $table->foreignIdFor(User::class)->index();
+            $table->unsignedBigInteger('user_id')->index();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             
             $table->boolean('is_pending')->default(false)->index();

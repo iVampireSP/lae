@@ -28,13 +28,16 @@ return new class extends Migration
             $table->enum('status', ['pending', 'done', 'success', 'failed', 'error', 'cancelled', 'processing', 'need_operation'])->index();
 
             // user id
-            $table->foreignIdFor(User::class)->index();
+            $table->unsignedBigInteger('user_id')->index();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             // provider module id
-            $table->foreignIdFor(ProviderModule::class)->index();
+            $table->unsignedBigInteger('provider_module_id')->index();
+            $table->foreign('provider_module_id')->references('id')->on('provider_modules')->onDelete('cascade');
 
             // host id
-            $table->foreignIdFor(Host::class)->index();
+            $table->unsignedBigInteger('host_id')->index();
+            $table->foreign('host_id')->references('id')->on('hosts')->onDelete('cascade');
 
             $table->timestamps();
         });

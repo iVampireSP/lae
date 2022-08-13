@@ -21,7 +21,8 @@ return new class extends Migration
             $table->string('remote_id')->index();
 
             // drops id
-            $table->foreignIdFor(Drop::class)->index();
+            $table->unsignedBigInteger('drops_id')->index();
+            $table->foreign('drops_id')->references('id')->on('drops');
 
             // payment
             $table->string('payment')->index();

@@ -20,10 +20,12 @@ return new class extends Migration
             $table->id();
 
             // provider id (on delete cascade)
-            $table->foreignIdFor(Provider::class)->index()->onDelete('cascade');
+            $table->unsignedBigInteger('provider_id')->index();
+            $table->foreign('provider_id')->references('id')->on('providers')->onDelete('cascade');
 
             // module id
-            $table->foreignIdFor(Module::class)->index();
+            $table->unsignedBigInteger('module_id')->index();
+            $table->foreign('module_id')->references('id')->on('modules')->onDelete('cascade');
 
             // api_token
             // $table->string('api_token')->index()->unique();

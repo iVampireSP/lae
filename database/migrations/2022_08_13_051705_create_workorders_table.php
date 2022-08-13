@@ -27,10 +27,12 @@ return new class extends Migration
             $table->text('content');
 
             // user id
-            $table->foreignIdFor(User::class)->index();
+            $table->unsignedBigInteger('user_id')->index();
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
             // host id
-            $table->foreignIdFor(Host::class)->index()->nullable();
+            $table->unsignedBigInteger('host_id')->index();
+            $table->foreign('host_id')->references('id')->on('hosts')->onDelete('cascade');
 
             // status
             $table->enum('status', ['open', 'user_read', 'closed', 'user_replied', 'replied', 'read', 'on_hold', 'in_progress', 'error', 'pending'])->default('pending')->index();

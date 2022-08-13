@@ -22,10 +22,12 @@ return new class extends Migration
             $table->string('name')->index();
 
             // provider id
-            $table->foreignIdFor(ProviderModule::class)->index();
+            $table->unsignedBigInteger('provider_id')->index();
+            $table->foreign('provider_id')->references('id')->on('providers')->onDelete('cascade');
 
             // user_id
-            $table->foreignIdFor(User::class)->index();
+            $table->unsignedBigInteger('user_id')->index();
+            $table->foreign('user_id')->references('id')->on('users');
 
             // price
             $table->double('price', 60, 8)->index();
