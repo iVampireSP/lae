@@ -45,6 +45,11 @@ return [
             'driver' => 'token',
             'provider' => 'admins',
         ],
+
+        'remote' => [
+            'driver' => 'token',
+            'provider' => 'providers',
+        ],
     ],
 
     /*
@@ -73,6 +78,11 @@ return [
         'admins' => [
             'driver' => 'eloquent',
             'model' => App\Models\Admin\Admin::class,
+        ],
+
+        'providers' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Provider::class,
         ],
 
         // 'users' => [
