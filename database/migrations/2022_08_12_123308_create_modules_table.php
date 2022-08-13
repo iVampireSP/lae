@@ -1,8 +1,9 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\Module\Module;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -24,6 +25,16 @@ return new class extends Migration
 
             $table->timestamps();
         });
+
+        // if env is local
+        if (env('APP_ENV') == 'local') {
+            $module = [
+                'name' => 'Example Model',
+                'type' => 'test',
+            ];
+
+            Module::create($module);
+        }
     }
 
     /**

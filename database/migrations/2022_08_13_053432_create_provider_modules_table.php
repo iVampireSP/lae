@@ -2,6 +2,7 @@
 
 use App\Models\Module\Module;
 use App\Models\Module\Provider;
+use App\Models\Module\ProviderModule;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -24,6 +25,9 @@ return new class extends Migration
             // module id
             $table->foreignIdFor(Module::class)->index();
 
+            // api_token
+            // $table->string('api_token')->index()->unique();
+
             // backend url
             $table->string('backend_url')->nullable();
 
@@ -33,6 +37,18 @@ return new class extends Migration
 
             $table->timestamps();
         });
+
+        // if env is local
+        if (env('APP_ENV') == 'local') {
+            $provider =  [
+                'provider_id' => 1,
+                'module_id' => 1,
+                'is_enabled' => 1,
+                // 'api_token' => 123456,
+            ];
+
+            ProviderModule::create($provider);
+        }
     }
 
     /**

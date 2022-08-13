@@ -2,9 +2,11 @@
 
 namespace App\Models\Module;
 
-use App\Models\Provider;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Str;
+use App\Models\Module\Module;
+use App\Models\Module\Provider;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ProviderModule extends Model
 {
@@ -16,6 +18,7 @@ class ProviderModule extends Model
         'provider_id',
         'module_id',
         'is_enabled',
+        // 'api_token'
     ];
 
     public function provider()
@@ -33,14 +36,16 @@ class ProviderModule extends Model
         return (bool) $value;
     }
 
-    // before create
-    // protected static function boot()
-    // {
-    //     parent::boot();
-    //     static::creating(function ($model) {
-            
-    //     });
-    // }
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($model) {
+            // if local
+            if (!app()->environment('local')) {
+                $model->api_token = Str::random(60);
+            }
+        });
+    }
 
 
 }

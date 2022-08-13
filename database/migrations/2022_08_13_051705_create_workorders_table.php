@@ -3,6 +3,7 @@
 use App\Models\Module\Module;
 use App\Models\Module\ProviderModule;
 use App\Models\User;
+use App\Models\User\Host;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -23,18 +24,16 @@ return new class extends Migration
             $table->string('title')->index();
 
             // content
-            $table->text('content')->nullable();
-
+            $table->text('content');
 
             // user id
             $table->foreignIdFor(User::class)->index();
 
-            // provider id
-            $table->foreignIdFor(ProviderModule::class)->index()->onDelete('set null');
+            // host id
+            $table->foreignIdFor(Host::class)->index()->nullable();
 
             // status
-            $table->enum('status', ['open', 'closed', 'user_replied', 'replied', 'on_hold', 'in_progress', 'error', 'pending'])->default('pending')->index();
-
+            $table->enum('status', ['open', 'user_read', 'closed', 'user_replied', 'replied', 'read', 'on_hold', 'in_progress', 'error', 'pending'])->default('pending')->index();
 
 
             $table->timestamps();

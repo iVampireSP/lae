@@ -13,8 +13,6 @@ class Module extends Model
 
     protected $fillable = [
         'name',
-        'short_name',
-        'backend_url',
-        'api_token',
+        'type',
     ];
 }

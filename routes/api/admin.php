@@ -8,11 +8,13 @@ Route::name('admin.')->middleware(['admin'])->group(function () {
 
     Route::apiResource('users', Admin\User\UserController::class);
     Route::apiResource('users.drops', Admin\User\DropController::class);
+    Route::apiResource('users.work-orders', Admin\WorkOrder\WorkOrderController::class);
+    Route::apiResource('users.hosts', Admin\Host\HostController::class);
 
-    Route::apiResource('drops', Admin\User\DropController::class);
+    // Route::apiResource('drops', Admin\User\DropController::class);
 
     // work orders
-    Route::apiResource('work-orders', Admin\WorkOrder\WorkOrderController::class);
+    // Route::apiResource('work-orders', Admin\WorkOrder\WorkOrderController::class);
 
 
 
