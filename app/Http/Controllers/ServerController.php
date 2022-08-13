@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Invoice;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Models\Invoice\Item;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
-class ItemController extends Controller
+class ServerController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +14,10 @@ class ItemController extends Controller
      */
     public function index()
     {
-        //
+        // get all servers from cache
+        // $servers = Cache::remember('servers', now()->addMinutes(5), function () {
+        //     return \App\Models\Server::all();
+        // });
     }
 
     /**
@@ -32,10 +34,10 @@ class ItemController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Invoice\Item  $item
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Item $item)
+    public function show($id)
     {
         //
     }
@@ -44,10 +46,10 @@ class ItemController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Invoice\Item  $item
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Item $item)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -55,10 +57,10 @@ class ItemController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Invoice\Item  $item
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Item $item)
+    public function destroy($id)
     {
         //
     }

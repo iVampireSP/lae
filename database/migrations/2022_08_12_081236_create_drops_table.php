@@ -27,7 +27,7 @@ return new class extends Migration
             $table->integer('rate')->default(1);
 
             // 实际收入
-            $table->decimal('total', 8, 2)->default(1);
+            $table->double('total', 8, 6)->default(0);
 
             $table->boolean('status')->default(0)->index();
 

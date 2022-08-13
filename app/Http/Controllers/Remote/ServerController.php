@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Admin\Invoice;
+namespace App\Http\Controllers\Remote;
 
 use App\Http\Controllers\Controller;
-use App\Models\Invoice\Transaction;
 use Illuminate\Http\Request;
 
-class TransactionController extends Controller
+class ServerController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,16 +25,16 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // 远程服务器汇报服务器状态
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Invoice\Transaction  $transaction
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Transaction $transaction)
+    public function show($id)
     {
         //
     }
@@ -44,10 +43,10 @@ class TransactionController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Invoice\Transaction  $transaction
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Transaction $transaction)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -55,10 +54,10 @@ class TransactionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Invoice\Transaction  $transaction
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Transaction $transaction)
+    public function destroy($id)
     {
         //
     }

@@ -27,7 +27,7 @@ return new class extends Migration
             $table->string('payment')->index();
 
             // amount
-            $table->decimal('amount', 8, 2)->default(0);
+            $table->double('amount', 8, 6)->default(0);
 
 
             $table->timestamps();
