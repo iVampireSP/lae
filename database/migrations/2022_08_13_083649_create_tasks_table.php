@@ -1,8 +1,10 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
+use App\Models\User;
+use App\Models\Module\ProviderModule;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
 
 return new class extends Migration
 {
@@ -15,6 +17,21 @@ return new class extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
+
+            $table->string('title');
+
+            // progress (max 100)
+            $table->integer('progress')->default(0);
+
+            // status
+            $table->enum('status', ['pending', 'done', 'success', 'failed', 'error', 'cancelled', 'processing'])->index();
+
+            // user id
+            $table->foreignIdFor(User::class)->index();
+
+            // provider module id
+            $table->foreignIdFor(ProviderModule::class)->index();
+
             $table->timestamps();
         });
     }
