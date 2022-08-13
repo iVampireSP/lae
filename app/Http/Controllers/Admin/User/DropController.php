@@ -34,7 +34,7 @@ class DropController extends Controller
 
         $data = [
             'payment' => 'admin',
-            'amount' => $request->amount,
+            'amount' => intval($request->amount),
             'status' => 1,
             'user_id' => $request->route('user'),
             'type' => 'add',

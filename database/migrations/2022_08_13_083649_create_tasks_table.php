@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use App\Models\User\Host;
 use App\Models\Module\ProviderModule;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
@@ -24,13 +25,16 @@ return new class extends Migration
             $table->integer('progress')->default(0);
 
             // status
-            $table->enum('status', ['pending', 'done', 'success', 'failed', 'error', 'cancelled', 'processing'])->index();
+            $table->enum('status', ['pending', 'done', 'success', 'failed', 'error', 'cancelled', 'processing', 'need_operation'])->index();
 
             // user id
             $table->foreignIdFor(User::class)->index();
 
             // provider module id
             $table->foreignIdFor(ProviderModule::class)->index();
+
+            // host id
+            $table->foreignIdFor(Host::class)->index();
 
             $table->timestamps();
         });

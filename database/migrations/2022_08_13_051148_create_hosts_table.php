@@ -28,7 +28,7 @@ return new class extends Migration
             $table->foreignIdFor(User::class)->index();
 
             // price
-            $table->double('price', 8, 6)->index();
+            $table->double('price', 60, 8)->index();
 
             // config
             $table->json('configuration')->nullable();

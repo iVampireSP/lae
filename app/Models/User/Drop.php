@@ -13,8 +13,18 @@ class Drop extends Model
 {
     use HasFactory, Lock;
 
+    protected $cache_key, $cache;
+
     protected $fillable = [
         'payment', 'amount', 'user_id', 'type'
+    ];
+
+    // casts
+    protected $casts = [
+        'amount' => 'double',
+        'total' => 'double',
+        'rate' => 'integer',
+        'status' => 'boolean',
     ];
 
     // user
@@ -41,9 +51,28 @@ class Drop extends Model
         // created
         self::created(function ($drops) {
             $drop = new self();
-            $drop->await('user_drops_' . $drops->user_id, function () use ($drops) {
-                $drops->user->drops += $drops->total;
-                $drops->user->save();
+            $drop->await('user_' . $drops->user_id, function () use ($drops) {
+                $cache = Cache::tags(['users']);
+                $drops->load('user');
+                $cache_key = 'user_' . $drops->user_id;
+
+                // if cache has user
+                if ($cache->has($cache_key)) {
+                    $user = $cache->get($cache_key);
+                    if (!($user instanceof User)) {
+                        $user = $drops->user;
+                    }
+
+                    $user->drops += $drops->total;
+
+
+                    $cache->put($cache_key, $user, 600);
+
+                    $user->save();
+                } else {
+                    $drops->user->drops += $drops->total;
+                    $drops->user->save();
+                }
             });
         });
     }

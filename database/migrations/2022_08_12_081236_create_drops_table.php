@@ -21,13 +21,13 @@ return new class extends Migration
             $table->string('payment')->index();
 
             // amount
-            $table->decimal('amount', 8, 2)->default(0);
+            $table->double('amount', 60, 8)->default(0);
 
             // 汇率
             $table->integer('rate')->default(1);
 
             // 实际收入
-            $table->double('total', 8, 6)->default(0);
+            $table->double('total', 60, 8)->default(0);
 
             $table->boolean('status')->default(0)->index();
 

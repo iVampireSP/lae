@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('password')->nullable();
 
             // 积分(8位小数点)
-            $table->double('drops', 8, 6)->default(0);
+            $table->double('drops', 60, 8)->default(0);
 
             $table->rememberToken();
             $table->timestamps();
