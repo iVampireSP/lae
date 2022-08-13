@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\User;
-use App\Models\Workorder\Workorder;
+use App\Models\WorkOrder\WorkOrder;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -18,8 +18,11 @@ return new class extends Migration
         Schema::create('workorder_replies', function (Blueprint $table) {
             $table->id();
 
+            // content
+            $table->text('content');
+
             // workorder id (on delete cascade)
-            $table->foreignIdFor(Workorder::class)->index()->onDelete('cascade');
+            $table->foreignIdFor(WorkOrder::class)->index()->onDelete('cascade');
 
             // user id
             $table->foreignIdFor(User::class)->index();

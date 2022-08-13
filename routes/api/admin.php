@@ -11,6 +11,9 @@ Route::name('admin.')->middleware(['admin'])->group(function () {
 
     Route::apiResource('drops', Admin\User\DropController::class);
 
+    // work orders
+    Route::apiResource('work-orders', Admin\WorkOrder\WorkOrderController::class);
+
 
 
     // Route::resource('users.fields', v1\User\FieldsController::class)->only(['index']);

@@ -25,8 +25,6 @@ return new class extends Migration
             // content
             $table->text('content')->nullable();
 
-            // host id (optional) and null on delete
-            $table->foreignIdFor(Module::class)->nullable()->onDelete('set null');
 
             // user id
             $table->foreignIdFor(User::class)->index();
