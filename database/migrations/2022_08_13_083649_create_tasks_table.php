@@ -31,9 +31,8 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->index();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
-            // provider module id
-            $table->unsignedBigInteger('provider_module_id')->index();
-            $table->foreign('provider_module_id')->references('id')->on('provider_modules')->onDelete('cascade');
+            $table->string('module_id')->index();
+            $table->foreign('module_id')->references('id')->on('modules')->onDelete('cascade');
 
             // host id
             $table->unsignedBigInteger('host_id')->index();

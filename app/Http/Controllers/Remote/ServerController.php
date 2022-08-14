@@ -46,23 +46,24 @@ class ServerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Status $status)
+    public function store(Request $request, Status $server)
     {
         // 
         $request->validate([
             'name' => 'required|string',
             'ip' => 'sometimes|ip',
-            'status' => 'required|string',
+            // status only allow online or offline
+            'status' => 'required|in:online,offline,maintenance',
         ]);
 
-        $status = $status->create([
+        $server = $server->create([
             'name' => $request->name,
             'ip' => $request->ip,
             'status' => $request->status,
-            'provider_id' => auth('remote')->id()
+            'module_id' => auth('remote')->id()
         ]);
 
-        return $this->success($status);
+        return $this->success($server);
     }
 
 
@@ -73,22 +74,18 @@ class ServerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Status $status)
+    public function update(Request $request, Status $server)
     {
-        // update 
+        // only allow name,ip,status
         $request->validate([
             'name' => 'sometimes|string',
             'ip' => 'sometimes|ip',
-            'status' => 'sometimes|string',
+            'status' => 'sometimes|in:online,offline,maintenance',
         ]);
 
-        $status->provider()->update([
-            'name' => $request->name,
-            'ip' => $request->ip,
-            'status' => $request->status,
-        ]);
+        $server->update($request->only(['name', 'ip', 'status']));
 
-        return $this->updated($status);
+        return $this->updated($server);
     }
 
     /**

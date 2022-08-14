@@ -22,8 +22,8 @@ return new class extends Migration
             $table->string('name')->index();
 
             // provider id
-            $table->unsignedBigInteger('provider_id')->index();
-            $table->foreign('provider_id')->references('id')->on('providers')->onDelete('cascade');
+            $table->string('module_id')->index();
+            // $table->foreign('module_id')->references('id')->on('modules')->onDelete('set null');
 
             // user_id
             $table->unsignedBigInteger('user_id')->index();

@@ -15,22 +15,21 @@ return new class extends Migration
     public function up()
     {
         Schema::create('modules', function (Blueprint $table) {
-            $table->id();
-
-            // name
-            $table->string('name')->index();
+            $table->string('id')->index()->primary()->unique();
 
             // type
             $table->string('type')->index();
 
-            $table->timestamps();
+            // api token
+            $table->string('api_token')->nullable()->unique()->index();
         });
 
         // if env is local
         if (env('APP_ENV') == 'local') {
             $module = [
-                'name' => 'Example Model',
+                'id' => 'Example Model',
                 'type' => 'test',
+                'api_token' => '123456'
             ];
 
             Module::create($module);

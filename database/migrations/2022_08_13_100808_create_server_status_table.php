@@ -23,9 +23,8 @@ return new class extends Migration
 
             $table->string('status');
 
-            // provider foreign key
-            $table->unsignedBigInteger('provider_id')->index();
-            $table->foreign('provider_id')->references('id')->on('providers')->onDelete('cascade');
+            $table->string('module_id')->index();
+            $table->foreign('module_id')->references('id')->on('modules')->onDelete('cascade');
 
 
             $table->timestamps();

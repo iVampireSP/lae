@@ -15,12 +15,24 @@ class Status extends Model
         'name',
         'ip',
         'status',
-        'provider_id',
+        'module_id',
     ];
 
     // scope
-    public function scopeProvider($query)
+    public function scopeModule($query)
     {
-        return $query->where('provider_id', auth('remote')->id());
+        return $query->where('module_id', auth('remote')->id());
+    }
+
+
+    // when update, check owner
+    protected static function boot()
+    {
+        parent::boot();
+        static::updating(function ($model) {
+            if ($model->module_id !== auth('remote')->id()) {
+                abort(403, 'Unauthorized action.');
+            }
+        });
     }
 }
