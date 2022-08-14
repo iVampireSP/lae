@@ -5,8 +5,9 @@ namespace App\Models\Module;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Module extends Model
+class Module extends Authenticatable
 {
     use HasFactory;
 

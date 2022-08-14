@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Remote;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Remote\Server\StatusRequest;
 use App\Models\Server\Status;
 use Illuminate\Support\Facades\Cache;
 
@@ -35,7 +36,7 @@ class ServerController extends Controller
         //     return [];
         // });
 
-        $servers = Status::provider()->get();
+        $servers = Status::module()->get();
 
         return $this->success($servers);
     }
@@ -74,7 +75,7 @@ class ServerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Status $server)
+    public function update(StatusRequest $request, Status $server)
     {
         // only allow name,ip,status
         $request->validate([
