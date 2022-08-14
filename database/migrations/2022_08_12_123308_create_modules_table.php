@@ -17,8 +17,7 @@ return new class extends Migration
         Schema::create('modules', function (Blueprint $table) {
             $table->string('id')->index()->primary()->unique();
 
-            // type
-            $table->string('type')->index();
+            $table->string('name')->index();
 
             // api token
             $table->string('api_token')->nullable()->unique()->index();
@@ -27,8 +26,8 @@ return new class extends Migration
         // if env is local
         if (env('APP_ENV') == 'local') {
             $module = [
-                'id' => 'Example Model',
-                'type' => 'test',
+                'id' => 'test',
+                'name' => 'Example Module',
                 'api_token' => '123456'
             ];
 

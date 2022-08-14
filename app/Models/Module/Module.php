@@ -19,7 +19,7 @@ class Module extends Model
 
     protected $fillable = [
         'id',
-        'type',
+        'name',
         'api_token'
     ];
 
