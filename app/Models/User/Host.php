@@ -21,7 +21,8 @@ class Host extends Model
         'user_id',
         'price',
         'configuration',
-        'status'
+        'status',
+        'managed_price',
     ];
 
     protected $casts = [
