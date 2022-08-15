@@ -15,15 +15,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('workorder_replies', function (Blueprint $table) {
+        Schema::create('work_order_replies', function (Blueprint $table) {
             $table->id();
 
             // content
             $table->text('content');
 
             // workorder id (on delete cascade)
-            $table->unsignedBigInteger('workorder_id')->index();
-            $table->foreign('workorder_id')->references('id')->on('workorders')->onDelete('cascade');
+            $table->unsignedBigInteger('work_order_id')->index();
+            $table->foreign('work_order_id')->references('id')->on('work_orders')->onDelete('cascade');
 
             // user id
             $table->unsignedBigInteger('user_id')->index();

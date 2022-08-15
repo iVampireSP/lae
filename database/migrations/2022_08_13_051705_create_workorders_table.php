@@ -17,7 +17,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('workorders', function (Blueprint $table) {
+        Schema::create('work_orders', function (Blueprint $table) {
             $table->id();
 
             // title
@@ -30,8 +30,12 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->index();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
+            // module id
+            $table->string('module_id')->index();
+            $table->foreign('module_id')->references('id')->on('modules')->onDelete('cascade');
+
             // host id
-            $table->unsignedBigInteger('host_id')->index();
+            $table->unsignedBigInteger('host_id')->index()->nullable();
             $table->foreign('host_id')->references('id')->on('hosts')->onDelete('cascade');
 
             // status

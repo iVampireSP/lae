@@ -3,23 +3,24 @@
 namespace App\Models\WorkOrder;
 
 use App\Models\User\Host;
+use Illuminate\Support\Arr;
+use App\Models\Module\Module;
 use App\Exceptions\CommonException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Support\Arr;
 
 class WorkOrder extends Model
 {
     use HasFactory;
 
-    protected $table = 'workorders';
+    protected $table = 'work_orders';
 
     protected $fillable = [
         'title',
         'content',
         'host_id',
         'user_id',
-        'provider_module_id',
+        'module_id',
         'status',
     ];
 
@@ -30,10 +31,26 @@ class WorkOrder extends Model
         return $this->hasMany(Reply::class);
     }
 
-    // provider module
+    // host
     public function host()
     {
         return $this->belongsTo(Host::class);
+    }
+
+    public function module()
+    {
+        return $this->belongsTo(Module::class);
+    }
+
+    // scope
+    public function scopeThisModule($query)
+    {
+        return $query->where('module_id', auth('remote')->id());
+    }
+
+    public function scopeUser($query)
+    {
+        return $query->where('user_id', auth()->id());
     }
 
 
@@ -43,22 +60,37 @@ class WorkOrder extends Model
         parent::boot();
 
         static::creating(function ($model) {
-            $model->load('host');
 
-            if (!$model->user_id === $model->host->user_id) {
-                throw new CommonException('user_id not match host user_id');
+            if ($model->host_id) {
+                $model->load(['host']);
+                $model->module_id = $model->host->module_id;
             }
 
-            $model->host->load('provider_module');
-            $provider_module = $model->host->provider_module;
+            // if logged
+            if (auth('sanctum')->check()) {
+                $model->user_id = auth('sanctum')->id();
 
-
-            if ($provider_module === null) {
-                $model->status = 'open';
+                if ($model->host_id) {
+                    if (!$model->user_id === $model->host->user_id) {
+                        throw new CommonException('user_id not match host user_id');
+                    }
+                }
             } else {
-                $model->status = 'pending';
+                throw new CommonException('user_id is required');
             }
 
+
+            if ($model->host_id) {
+                $model->host->load('module');
+                $module = $model->host->module;
+
+
+                if ($module === null) {
+                    $model->status = 'open';
+                } else {
+                    $model->status = 'pending';
+                }
+            }
         });
 
         // 更新时获取差异部分

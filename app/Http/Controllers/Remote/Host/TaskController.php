@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Remote\User;
+namespace App\Http\Controllers\Remote\Host;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -16,10 +16,10 @@ class TaskController extends Controller
     {
         $request->validate([
             'host_id' => 'sometimes|integer|exists:hosts,id',
-            'user_id' => 'integer|exists:users,id',
+            // 'user_id' => 'integer|exists:users,id',
         ]);
 
-        $this->user_id = $request->user_id;
+        // $this->user_id = $request->user_id;
         $this->host_id = $request->host_id;
     }
 
@@ -100,7 +100,7 @@ class TaskController extends Controller
     {
         $cache_key = 'user_tasks_' . $this->user_id;
         $data = [
-            'user_id' => $this->user_id,
+            // 'user_id' => $this->user_id,
             'done_at' => null,
             'host_id' => $this->host_id
         ];

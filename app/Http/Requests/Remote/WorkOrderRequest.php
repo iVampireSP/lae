@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Remote;
 
+use App\Models\WorkOrder\WorkOrder;
 use Illuminate\Foundation\Http\FormRequest;
 
 class WorkOrderRequest extends FormRequest
@@ -13,7 +14,7 @@ class WorkOrderRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return WorkOrder::where('id', $this->route('work_order')->id)->where('module_id', auth('remote')->id())->exists();
     }
 
     /**
