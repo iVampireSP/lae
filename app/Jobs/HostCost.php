@@ -55,6 +55,10 @@ class HostCost implements ShouldQueue
                     }
                 }
 
+                if ($host->managed_price) {
+                    $host->price = $host->managed_price;
+                }
+
                 $this->user->drops -= $host->price;
 
                 // update cache

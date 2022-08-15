@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('hosts', function (Blueprint $table) {
             //
-            $table->boolean('managed_price')->default(true)->index();
+            $table->double('managed_price', 60, 8)->index()->nullable()->after('price');
         });
     }
 
@@ -27,7 +27,8 @@ return new class extends Migration
     public function down()
     {
         Schema::table('hosts', function (Blueprint $table) {
-            //
+            // drop
+            $table->dropColumn('managed_price');
         });
     }
 };

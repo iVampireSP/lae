@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Remote;
+namespace App\Http\Controllers\Remote\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;

@@ -4,7 +4,8 @@ namespace App\Models\User;
 
 use App\Models\User;
 use App\Models\Module\Module;
-use App\Models\Module\ProviderModule;
+// use App\Models\Module\ProviderModule;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -35,10 +36,10 @@ class Host extends Model
         return $this->belongsTo(User::class);
     }
 
-    // provider module
-    public function provider_module() {
-        return $this->belongsTo(ProviderModule::class);
-    }
+    // // provider module
+    // public function provider_module() {
+    //     return $this->belongsTo(ProviderModule::class);
+    // }
 
     // workorders
     public function workorders() {
@@ -46,16 +47,15 @@ class Host extends Model
     }
 
     // module 远程一对一
-    public function module() {
-        return $this->hasOneThrough(Module::class, ProviderModule::class);
-    }
+    // public function module() {
+    //     return $this->hasOneThrough(Module::class, ProviderModule::class);
+    // }
+
 
     // scope 
     public function scopeActive($query) {
         return $query->where('status', 'running')->where('price', '!=', 0);
     }
-
-
 
     // on create
     protected static function boot()
