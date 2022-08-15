@@ -12,6 +12,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class HostCost implements ShouldQueue
 {
@@ -27,7 +28,6 @@ class HostCost implements ShouldQueue
     public function __construct()
     {
         //
-        $this->cache = Cache::tags(['users']);
     }
 
     /**
@@ -37,6 +37,8 @@ class HostCost implements ShouldQueue
      */
     public function handle()
     {
+        $this->cache = Cache::tags(['users']);
+
         // chunk hosts and load user
         Host::active()->with('user')->chunk(100, function ($hosts) {
             foreach ($hosts as $host) {
@@ -48,16 +50,22 @@ class HostCost implements ShouldQueue
                 if ($this->cache->has($this->cache_key)) {
                     // if user is not instances of Model
                     $user = $this->cache->get($this->cache_key);
-                    if (!($user instanceof User)) {
-                        $this->user = $this->cache->put($this->cache_key, $host->user, now()->addDay());
-                    } else {
+
+                    if ($user instanceof User) {
                         $this->user = $user;
+                    } else {
+                        $this->user = $this->cache->put($this->cache_key, $host->user, now()->addDay());
                     }
+                } else {
+                    $this->user = $this->cache->put($this->cache_key, $host->user, now()->addDay());
                 }
+
+                // Log::debug($user);
 
                 if ($host->managed_price) {
                     $host->price = $host->managed_price;
                 }
+
 
                 $this->user->drops -= $host->price;
 

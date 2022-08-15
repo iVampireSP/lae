@@ -37,7 +37,7 @@ class HostController extends Controller
     {
         $request->validate([
             'name' => 'required|max:255',
-            'provider_module_id' => 'required|integer|exists:provider_modules,id',
+            'module_id' => 'required|string|exists:modules,id',
             'price' => 'required|numeric',
         ]);
 
@@ -53,7 +53,7 @@ class HostController extends Controller
 
         $data = [
             'name' => $request->name,
-            'provider_module_id' => $request->provider_module_id,
+            'module_id' => $request->module_id,
             'user_id' => $user_id,
             'price' => $request->price,
             'configuration' => $request->configuration ?? [],

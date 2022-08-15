@@ -4,7 +4,6 @@ namespace App\Models\User;
 
 use App\Models\User;
 use App\Models\Module\Module;
-// use App\Models\Module\ProviderModule;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -18,7 +17,7 @@ class Host extends Model
 
     protected $fillable = [
         'name',
-        'provider_module_id',
+        'module_id',
         'user_id',
         'price',
         'configuration',
@@ -36,10 +35,10 @@ class Host extends Model
         return $this->belongsTo(User::class);
     }
 
-    // // provider module
-    // public function provider_module() {
-    //     return $this->belongsTo(ProviderModule::class);
-    // }
+    // module
+    public function module() {
+        return $this->belongsTo(Module::class);
+    }
 
     // workorders
     public function workorders() {
@@ -63,8 +62,8 @@ class Host extends Model
         parent::boot();
 
         static::creating(function ($model) {
-            $model->load(['provider_module']);
-            $model->provider_module->load(['provider', 'module']);
+            // $model->load('module');
+            // $model->module->load(['provider', 'module']);
 
             // add to queue
 

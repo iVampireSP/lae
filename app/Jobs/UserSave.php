@@ -26,7 +26,6 @@ class UserSave implements ShouldQueue
     public function __construct()
     {
         //
-        $this->cache = Cache::tags(['users']);
     }
 
     /**
@@ -37,6 +36,8 @@ class UserSave implements ShouldQueue
     public function handle()
     {
         //
+        $this->cache = Cache::tags(['users']);
+
         Host::active()->chunk(100, function ($hosts) {
             foreach ($hosts as $host) {
                 $this->cache_key = 'user_' . $host->user_id;
