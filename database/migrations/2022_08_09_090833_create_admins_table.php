@@ -36,7 +36,7 @@ return new class extends Migration
             $admin->name = 'admin';
             $admin->email = 'admin@admin.test';
             $admin->password = bcrypt('admin');
-            $admin->api_token = 'Qwerty123';
+            $admin->api_token = 123456;
             $admin->save();
         }
     }

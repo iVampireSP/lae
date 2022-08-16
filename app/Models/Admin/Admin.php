@@ -32,13 +32,11 @@ class Admin extends Model
         parent::boot();
         self::creating(function ($admin) {
 
-            if (app()->environment('production')) {
+            // if not set api_token
+            if (!$admin->api_token) {
                 $admin->api_token = Str::random(60);
-            } else {
-                $admin->api_token = 123456;
-
             }
-
+            
         });
     }
 }
