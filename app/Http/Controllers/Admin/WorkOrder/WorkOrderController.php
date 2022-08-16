@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Admin\WorkOrder;
 
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use App\Models\WorkOrder\Reply;
 use App\Models\WorkOrder\WorkOrder;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Arr;
@@ -14,7 +14,7 @@ class WorkOrderController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
     public function index(WorkOrder $work_order)
     {
@@ -26,8 +26,9 @@ class WorkOrderController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     *
+     * @return JsonResponse
      */
     public function store(Request $request)
     {
@@ -54,8 +55,10 @@ class WorkOrderController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\WorkOrder\WorkOrder  $workorder
-     * @return \Illuminate\Http\Response
+     * @param User      $user
+     * @param WorkOrder $work_order
+     *
+     * @return JsonResponse
      */
     public function show(User $user, Workorder $work_order)
     {
@@ -67,9 +70,11 @@ class WorkOrderController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\WorkOrder\WorkOrder  $work_order
-     * @return \Illuminate\Http\Response
+     * @param Request   $request
+     * @param User      $user
+     * @param WorkOrder $work_order
+     *
+     * @return JsonResponse
      */
     public function update(Request $request, User $user, WorkOrder $work_order)
     {
@@ -85,8 +90,10 @@ class WorkOrderController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\WorkOrder\WorkOrder  $work_order
-     * @return \Illuminate\Http\Response
+     * @param User      $user
+     * @param WorkOrder $work_order
+     *
+     * @return JsonResponse
      */
     public function destroy(User $user, WorkOrder $work_order)
     {

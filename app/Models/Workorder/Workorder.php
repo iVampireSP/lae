@@ -2,12 +2,11 @@
 
 namespace App\Models\WorkOrder;
 
-use App\Models\User\Host;
-use Illuminate\Support\Arr;
-use App\Models\Module\Module;
 use App\Exceptions\CommonException;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Host;
+use App\Models\Module\Module;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class WorkOrder extends Model
 {

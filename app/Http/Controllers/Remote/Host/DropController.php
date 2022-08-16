@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Remote\Host;
 
 use App\Http\Controllers\Controller;
-use App\Models\User\Host;
+use App\Models\Host;
 use Illuminate\Http\Request;
 
 class DropController extends Controller

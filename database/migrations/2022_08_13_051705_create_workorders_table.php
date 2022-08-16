@@ -1,9 +1,6 @@
 <?php
 
-use App\Models\Module\Module;
 use App\Models\Module\ProviderModule;
-use App\Models\User;
-use App\Models\User\Host;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
