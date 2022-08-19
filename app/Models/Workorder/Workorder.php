@@ -99,16 +99,35 @@ class WorkOrder extends Model
 
         // 更新时获取差异部分
         static::updating(function ($model) {
-            $original = $model->getOriginal();
-            // dd($original);
-            $diff = array_diff_assoc($model->attributes, $original);
+            // $original = $model->getOriginal();
+            // // dd($original);
+            // $diff = array_diff_assoc($model->attributes, $original);
 
-            // 如果更新了host_id，则抛出异常
-            if (isset($diff['host_id'])) {
-                throw new CommonException('host_id cannot be updated');
-            }
+            // // 如果更新了host_id，则抛出异常
+            // if (isset($diff['host_id'])) {
+            //     throw new CommonException('host_id cannot be updated');
+            // }
 
-            // queue patch diff
+        });
+
+        // updated
+        static::updated(function ($model) {
+            dispatch(new \App\Jobs\Remote\WorkOrder\WorkOrder($model, 'put'));
+
+            // $original = $model->getOriginal();
+            // $diff = array_diff_assoc($model->attributes, $original);
+            // // dd($diff);
+            // if (isset($diff['status'])) {
+            //     $model->load(['host']);
+            //     $model->host->load('module');
+            //     $module = $model->host->module;
+            //     if ($module === null) {
+            //         $model->status = 'open';
+            //     } else {
+            //         $model->status = 'pending';
+            //     }
+            //     $model->save();
+            // }
         });
     }
 }

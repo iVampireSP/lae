@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Remote;
 
+use App\Models\WorkOrder\Reply;
 use Illuminate\Bus\Queueable;
 use App\Models\WorkOrder\WorkOrder;
 use Illuminate\Support\Facades\Http;
@@ -33,7 +34,7 @@ class PushWorkOrder implements ShouldQueue
     public function handle()
     {
         // 
-        WorkOrder::whereIn('status', ['pending', 'error'])->with(['module', 'user', 'host'])->chunk(100, function ($workOrders) {
+        WorkOrder::whereIn('status', ['pending', 'error'])->with(['module', 'user', 'host', 'replies'])->chunk(100, function ($workOrders) {
             foreach ($workOrders as $workOrder) {
 
                 if ($workOrder->host->status === 'pending') {
@@ -50,9 +51,13 @@ class PushWorkOrder implements ShouldQueue
                 }
 
                 $workOrder->save();
+                
+            }
+        });
 
-
-                dd($response);
+        Reply::where('is_pending', 1)->chunk(100, function ($replies) {
+            foreach ($replies as $reply) {
+                dispatch(new \App\Jobs\Remote\WorkOrder\Reply($reply));
             }
         });
 

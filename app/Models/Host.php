@@ -56,6 +56,14 @@ class Host extends Model
         return $query->where('status', 'running')->where('price', '!=', 0);
     }
 
+    public function scopeThisUser($query, $module = null) {
+        if ($module) {
+            return $query->where('user_id', auth()->id())->where('module_id', $module);
+        } else {
+            return $query->where('user_id', auth()->id());
+        }
+    }
+
     // on create
     protected static function boot()
     {

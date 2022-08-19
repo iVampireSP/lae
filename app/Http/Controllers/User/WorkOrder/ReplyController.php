@@ -36,8 +36,10 @@ class ReplyController extends Controller
             'content' => 'string|required|min:1|max:1000',
         ]);
 
+
+
         $reply = Reply::create([
-            'content' => $request->content,
+            'content' => $request->toArray()['content'],
             'work_order_id' => $request->route('work_order'),
         ]);
 

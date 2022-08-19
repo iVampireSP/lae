@@ -2,8 +2,9 @@
 
 namespace App\Models\WorkOrder;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Exceptions\CommonException;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Reply extends Model
 {
@@ -14,7 +15,7 @@ class Reply extends Model
     protected $fillable = [
         'content',
         'work_order_id',
-        // 'user_id',
+        'user_id',
         'is_pending',
     ];
 
@@ -35,13 +36,18 @@ class Reply extends Model
         parent::boot();
         static::creating(function ($model) {
 
+            $model->is_pending = 1;
+
+
             // load work order
             $model->load(['workOrder']);
+
+            throw_if($model->workOrder->status == 'pending' || $model->workOrder->status == 'error', CommonException::class, '工单状态不正确');
+
             // change work order status
             if (auth('sanctum')->check()) {
                 $model->user_id = auth()->id();
                 $model->workOrder->status = 'user_replied';
-
             }
 
             if (auth('remote')->check()) {
@@ -50,8 +56,16 @@ class Reply extends Model
             }
 
             $model->workOrder->save();
+        });
 
+        static::created(function ($model) {
+            if (auth('remote')->check()) {
+                $model->workOrder->status = 'replied';
+                $model->workOrder->save();
+            }
+            // dispatch
+            dispatch(new \App\Jobs\Remote\WorkOrder\Reply($model));
+            dispatch(new \App\Jobs\Remote\WorkOrder\WorkOrder($model->workOrder, 'put'));
         });
     }
-
 }

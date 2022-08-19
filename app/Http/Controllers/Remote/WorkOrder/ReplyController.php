@@ -29,12 +29,21 @@ class ReplyController extends Controller
     public function store(Request $request)
     {
         //
-        $request->validate([
-            'content' => 'string|required|min:1|max:1000',
-        ]);
+        // $request->validate([
+        //     'content' => 'string|required|min:1|max:1000',
+        // ]);
+
+        $request_array = $request->all();
+
+
+        // dd([
+        //     'content' => $request_array['content'],
+        //     'work_order_id' => $request->route('work_order'),
+        // ]);
+
 
         $reply = Reply::create([
-            'content' => $request->content,
+            'content' => $request_array['content'],
             'work_order_id' => $request->route('work_order'),
         ]);
 
