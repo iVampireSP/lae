@@ -2,6 +2,7 @@
 
 namespace App\Models\Module;
 
+use Http;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -23,6 +24,18 @@ class Module extends Authenticatable
         'name',
         'api_token'
     ];
+
+
+    public function remote($func, $requests)
+    {
+        $http = Http::remote($this->api_token, $this->url);
+        $response = $http->post('functions/' . $func, $requests);
+
+        $json = $response->json();
+        $status = $response->status();
+
+        return [$json, $status];
+    }
 
     protected static function boot()
     {
