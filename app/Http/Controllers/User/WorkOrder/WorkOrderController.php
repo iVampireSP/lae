@@ -30,9 +30,10 @@ class WorkOrderController extends Controller
             return $this->error('module_id 和 host_id 至少要填写一个');
         }
 
+
         $workOrder = WorkOrder::create([
             'title' => $request->title,
-            'content' => $request->content,
+            'content' => $request['content'],
             'module_id' => $request->module_id,
             'host_id' => $request->host_id,
             'status' => 'pending',

@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\ApiResponse;
+// use App\Helpers\ApiResponse;
 use App\Models\User;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
+// use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -19,6 +19,15 @@ class AuthController extends Controller
 
     public function index(Request $request)
     {
+
+
+        // test
+        $handle = new \App\Jobs\Remote\PushHost();
+        $handle->handle();
+
+        $handle = new \App\Jobs\Remote\PushWorkOrder();
+        $handle->handle();
+
         // if logged in
         if (Auth::check()) {
             $token_name = 'login token ' . now()->toDateString();

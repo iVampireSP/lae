@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Jobs\Remote;
 use App\Jobs\HostCost;
 use App\Jobs\UserSave;
 use Illuminate\Console\Scheduling\Schedule;
@@ -22,6 +23,9 @@ class Kernel extends ConsoleKernel
         // dispatch HostCost job
         $schedule->job(new HostCost())->everyFiveMinutes();
         $schedule->job(new UserSave())->everyTenMinutes();
+        $schedule->job(new Remote\FetchModule())->everyMinute()->onOneServer();
+        $schedule->job(new Remote\PushHost())->everyMinute()->onOneServer();
+        $schedule->job(new Remote\PushWorkOrder())->everyMinute()->onOneServer();
 
     }
 

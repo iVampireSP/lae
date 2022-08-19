@@ -2,11 +2,12 @@
 
 namespace App\Models\WorkOrder;
 
-use App\Exceptions\CommonException;
 use App\Models\Host;
+use App\Models\User;
 use App\Models\Module\Module;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Exceptions\CommonException;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class WorkOrder extends Model
 {
@@ -23,6 +24,10 @@ class WorkOrder extends Model
         'status',
     ];
 
+    // user
+    public function user() {
+        return $this->belongsTo(User::class);
+    }
 
     // replies
     public function replies()

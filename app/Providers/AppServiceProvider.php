@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -24,5 +25,12 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         //
+
+        Http::macro('remote', function ($api_token, $url) {
+            return Http::withHeaders([
+                'X-Remote-Api-Token' => $api_token,
+            ])->baseUrl($url);
+        });
+
     }
 }
