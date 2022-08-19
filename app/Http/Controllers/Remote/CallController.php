@@ -2,19 +2,24 @@
 
 namespace App\Http\Controllers\Remote;
 
-use App\Http\Controllers\Controller;
-use App\Models\Module\Module;
+use App\Models\Host;
 use Illuminate\Http\Request;
+use App\Models\Module\Module;
+use App\Http\Controllers\Controller;
 
 class CallController extends Controller
 {
     // invoke the remote method
-    public function __invoke(Request $request, Module $module) {
-        $request->validate([
-            'func' => 'required|string|max:255',
-        ]);
+    public function host(Request $request, Host $host, $func) {
+        $host->load('module');
+        $response = $host->module->remoteHost($host->id, $func, $request->all());
 
-        $response = $module->remote($request->func, $request->all());
+        return $this->apiResponse($response[0], $response[1]);
+    }
+
+    public function module(Request $request, Module $module, $func)
+    {
+        $response = $module->remote($func, $request->all());
 
         return $this->apiResponse($response[0], $response[1]);
     }

@@ -26,6 +26,17 @@ class Module extends Authenticatable
     ];
 
 
+    public function remoteHost($host_id, $func, $requests)
+    {
+        $http = Http::remote($this->api_token, $this->url);
+        $response = $http->post("hosts/{$host_id}/functions/" . $func, $requests);
+
+        $json = $response->json();
+        $status = $response->status();
+
+        return [$json, $status];
+    }
+
     public function remote($func, $requests)
     {
         $http = Http::remote($this->api_token, $this->url);

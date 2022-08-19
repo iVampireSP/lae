@@ -14,6 +14,7 @@ Route::name('client.')->middleware(['api', 'auth:sanctum'])->group(function () {
     Route::apiResource('work-orders.replies', User\WorkOrder\ReplyController::class);
 
     // 调用远程 API
-    Route::post('module/{module}', CallController::class)->name('call');
+    Route::post('hosts/{host}/func/{func}', [CallController::class, 'host'])->name('host.call');
+    Route::post('/modules/{module}/func/{func}', [CallController::class, 'module'])->name('module.call');
 
 });
