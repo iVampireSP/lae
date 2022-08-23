@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Remote\Host;
 
 use App\Http\Controllers\Controller;
 use App\Models\Host;
+use Cache;
 use Illuminate\Http\Request;
 
 class HostController extends Controller
@@ -33,34 +34,59 @@ class HostController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  Host $host
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Host $host)
     {
+
+        return $this->success($host);
         //
+
+        // dd($host->cost());
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  Host $host
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Host $host)
     {
         //
+        $request->validate([
+            'status' => 'sometimes|in:stopped,running,suspended,error',
+            'managed_price' => 'sometimes|numeric|nullable',
+
+            // 如果是立即扣费
+            'cost_once' => 'sometimes|boolean|nullable',
+        ]);
+
+        // if has cost_once
+        if ($request->has('cost_once')) {
+            $host->cost($request->cost_once);
+
+            return $this->updated($request->cost_once);
+        }
+
+        $host->update($request->all());
+
+        return $this->updated($host);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  Host $host
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Host $host)
     {
         //
+        $host->delete();
+
+        return $this->deleted($host);
     }
 }

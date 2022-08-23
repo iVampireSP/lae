@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-use App\Exceptions\CommonException;
 use App\Models\Module\Module;
+use App\Exceptions\CommonException;
 use App\Models\WorkOrder\WorkOrder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Host extends Model
 {
@@ -31,17 +32,20 @@ class Host extends Model
 
 
     // user
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
     // module
-    public function module() {
+    public function module()
+    {
         return $this->belongsTo(Module::class);
     }
 
     // workOrders
-    public function workOrders() {
+    public function workOrders()
+    {
         return $this->hasMany(WorkOrder::class);
     }
 
@@ -52,16 +56,58 @@ class Host extends Model
 
 
     // scope
-    public function scopeActive($query) {
+    public function scopeActive($query)
+    {
         return $query->where('status', 'running')->where('price', '!=', 0);
     }
 
-    public function scopeThisUser($query, $module = null) {
+    public function scopeThisUser($query, $module = null)
+    {
         if ($module) {
             return $query->where('user_id', auth()->id())->where('module_id', $module);
         } else {
             return $query->where('user_id', auth()->id());
         }
+    }
+
+
+    // cost
+    public function cost($price = null)
+    {
+
+        $cache_key = 'user_' . $this->user_id;
+
+        // if cache has user
+
+        if (Cache::has($cache_key)) {
+            // if user is not instances of Model
+            $user = Cache::get($cache_key);
+
+            if (!($user instanceof User)) {
+                $user = Cache::put($cache_key, $this->user, now()->addDay());
+            }
+        } else {
+            $user = Cache::put($cache_key, $this->user, now()->addDay());
+        }
+        
+
+        // Log::debug($user);
+
+        if ($price !== null) {
+            $this->managed_price = $price;
+        }
+        
+        if ($this->managed_price) {
+            $this->price = $this->managed_price;
+        }
+
+
+        $user->drops -= $this->price;
+
+        // update cache
+        Cache::put($cache_key, $user, now()->addDay());
+
+        return true;
     }
 
     // on create
@@ -84,6 +130,18 @@ class Host extends Model
 
             // add to queue
 
+        });
+
+        // when Updated
+        static::updated(function ($model) {
+            dispatch(new \App\Jobs\Remote\Host($model, 'put'));
+        });
+
+        // when delete
+        static::deleting(function ($model) {
+            return false;
+
+            dispatch(new \App\Jobs\Remote\Host($model, 'delete'));
         });
     }
 }

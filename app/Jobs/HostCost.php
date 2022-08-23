@@ -35,40 +35,42 @@ class HostCost implements ShouldQueue
      */
     public function handle()
     {
-        $this->cache = Cache::tags(['users']);
+        // $this->cache = new Cache();
 
         // chunk hosts and load user
         Host::active()->with('user')->chunk(100, function ($hosts) {
             foreach ($hosts as $host) {
 
-                $this->cache_key = 'user_' . $host->user_id;
+                $host->cost();
 
-                // if cache has user
+                //     $this->cache_key = 'user_' . $host->user_id;
 
-                if ($this->cache->has($this->cache_key)) {
-                    // if user is not instances of Model
-                    $user = $this->cache->get($this->cache_key);
+                //     // if cache has user
 
-                    if ($user instanceof User) {
-                        $this->user = $user;
-                    } else {
-                        $this->user = $this->cache->put($this->cache_key, $host->user, now()->addDay());
-                    }
-                } else {
-                    $this->user = $this->cache->put($this->cache_key, $host->user, now()->addDay());
-                }
+                //     if ($this->cache->has($this->cache_key)) {
+                //         // if user is not instances of Model
+                //         $user = $this->cache->get($this->cache_key);
 
-                // Log::debug($user);
+                //         if ($user instanceof User) {
+                //             $this->user = $user;
+                //         } else {
+                //             $this->user = $this->cache->put($this->cache_key, $host->user, now()->addDay());
+                //         }
+                //     } else {
+                //         $this->user = $this->cache->put($this->cache_key, $host->user, now()->addDay());
+                //     }
 
-                if ($host->managed_price) {
-                    $host->price = $host->managed_price;
-                }
+                //     // Log::debug($user);
+
+                //     if ($host->managed_price) {
+                //         $host->price = $host->managed_price;
+                //     }
 
 
-                $this->user->drops -= $host->price;
+                //     $this->user->drops -= $host->price;
 
-                // update cache
-                $this->cache->put($this->cache_key, $this->user, now()->addDay());
+                //     // update cache
+                //     $this->cache->put($this->cache_key, $this->user, now()->addDay());
             }
         });
     }

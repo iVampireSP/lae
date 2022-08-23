@@ -34,18 +34,15 @@ class UserSave implements ShouldQueue
      */
     public function handle()
     {
-        //
-        $this->cache = Cache::tags(['users']);
-
         Host::active()->chunk(100, function ($hosts) {
             foreach ($hosts as $host) {
                 $this->cache_key = 'user_' . $host->user_id;
 
                 // if cache has user
 
-                if ($this->cache->has($this->cache_key)) {
+                if (Cache::has($this->cache_key)) {
                     // if user is not instances of Model
-                    $user = $this->cache->get($this->cache_key);
+                    $user = Cache::get($this->cache_key);
                     if ($user instanceof User) {
                         $this->await($this->cache_key, function () use ($user, $host) {
                             $user->save();
