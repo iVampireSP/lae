@@ -20,13 +20,12 @@ class AuthController extends Controller
     public function index(Request $request)
     {
 
-
         // test
-        $handle = new \App\Jobs\Remote\PushHost();
-        $handle->handle();
+        // $handle = new \App\Jobs\Remote\PushHost();
+        // $handle->handle();
 
-        $handle = new \App\Jobs\Remote\PushWorkOrder();
-        $handle->handle();
+        // $handle = new \App\Jobs\Remote\PushWorkOrder();
+        // $handle->handle();
 
         // if logged in
         if (Auth::check()) {

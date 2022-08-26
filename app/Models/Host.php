@@ -7,12 +7,12 @@ use App\Exceptions\CommonException;
 use App\Models\WorkOrder\WorkOrder;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+// use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Host extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
 
     protected $table = 'hosts';
 
@@ -96,7 +96,7 @@ class Host extends Model
         if ($price !== null) {
             $this->managed_price = $price;
         }
-        
+
         if ($this->managed_price) {
             $this->price = $this->managed_price;
         }
@@ -125,6 +125,9 @@ class Host extends Model
                 throw_if(!User::find($model->user_id), CommonException::class, 'user is not exists');
             }
 
+            // set price to 0
+            $model->price = 0;
+
             // $model->load('module');
             // $model->module->load(['provider', 'module']);
 
@@ -139,7 +142,7 @@ class Host extends Model
 
         // when delete
         static::deleting(function ($model) {
-            return false;
+            // return false;
 
             dispatch(new \App\Jobs\Remote\Host($model, 'delete'));
         });

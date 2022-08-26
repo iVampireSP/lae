@@ -6,6 +6,7 @@ use App\Models\Host;
 use Illuminate\Http\Request;
 use App\Models\Module\Module;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Http;
 
 class HostController extends Controller
 {
@@ -36,6 +37,33 @@ class HostController extends Controller
             'configuration' => 'required|json',
         ]);
 
+        $data = [
+            'name' => $request->name,
+            'module_id' => $module->id,
+            'configuration' => $request->configuration ?? [],
+        ];
+
+
+        // if (!$data['confirm']) {
+        //     $data['confirm'] = false;
+
+        // }
+
+        // $calc = $module->remotePost('/hosts', ['data' => $data]);
+        // $data['price'] = $calc[0]['data']['price'];
+
+        $host = Host::create($data);
+        return $this->created($host);
+
+        // if ($request->confirm) {
+        //     $host = Host::create($data);
+        //     return $this->created($host);
+        // } else {
+        //     // return $this->apiResponse($calc[0]['data'], $calc[1]);
+        // }
+
+
+
         // // post to module
         // $host = $module->hosts()->create([
         //     'name' => $request->name,
@@ -51,7 +79,6 @@ class HostController extends Controller
      */
     public function show()
     {
-        
     }
 
     /**

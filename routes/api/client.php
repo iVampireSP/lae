@@ -3,6 +3,7 @@
 use App\Http\Controllers\User;
 use App\Http\Controllers\Remote;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\User\TaskController;
 
 Route::name('client.')->middleware(['api', 'auth:sanctum'])->group(function () {
     // Route::apiResource('users', Controllers\User\UserController::class);
@@ -10,6 +11,10 @@ Route::name('client.')->middleware(['api', 'auth:sanctum'])->group(function () {
     Route::apiResource('/modules/{module}/hosts', User\HostController::class);
 
     Route::apiResource('drops', User\DropController::class);
+
+
+
+    Route::get('tasks', [TaskController::class, 'index']);
 
     Route::apiResource('work-orders', User\WorkOrder\WorkOrderController::class);
     Route::apiResource('work-orders.replies', User\WorkOrder\ReplyController::class);

@@ -43,6 +43,11 @@ class PushHost implements ShouldQueue
                 if (!$response->successful()) {
                     $host->status = 'error';
                 }
+
+                // dd($response);
+                $response_json = $response->json();
+
+                $host->price = $response_json['data']['price'];
                 
                 $host->save();
                 

@@ -48,6 +48,17 @@ class Module extends Authenticatable
         return [$json, $status];
     }
 
+    public function remotePost($path = '', $data = [])
+    {
+        $http = Http::remote($this->api_token, $this->url);
+        $response = $http->post($path, $data);
+
+        $json = $response->json();
+        $status = $response->status();
+
+        return [$json, $status];
+    }
+
     protected static function boot()
     {
         parent::boot();
