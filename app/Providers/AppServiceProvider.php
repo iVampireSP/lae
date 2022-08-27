@@ -27,7 +27,8 @@ class AppServiceProvider extends ServiceProvider
         //
 
         Http::macro('remote', function ($api_token, $url) {
-            return Http::withHeaders([
+            // 关闭证书验证
+            return Http::withoutVerifying()->withHeaders([
                 'X-Remote-Api-Token' => $api_token,
             ])->baseUrl($url);
         });
