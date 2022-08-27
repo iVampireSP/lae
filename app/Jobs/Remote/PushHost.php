@@ -48,8 +48,8 @@ class PushHost implements ShouldQueue
                 $response_json = $response->json();
 
                 // 检测是否有价格
-                if (isset($response_json['price'])) {
-                    $host->price = $response_json['price'];
+                if (isset($response_json['data']['price'])) {
+                    $host->price = $response_json['data']['price'];
                 } else {
                     $host->status = 'error';
                 }
