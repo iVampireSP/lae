@@ -18,10 +18,9 @@ class AllowCors
     {
 
         // Allow from any origin
-        header('Access-Control-Allow-Origin: *');
         header('Access-Control-Allow-Credentials: true');
         header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
-        
+
         return $next($request);
     }
 }
