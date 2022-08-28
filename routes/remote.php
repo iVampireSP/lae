@@ -7,7 +7,7 @@ Route::name('remote.')->middleware(['api'])->group(function () {
     Route::apiResource('modules', Remote\ModuleController::class)->only(['index']);
     Route::apiResource('servers', Remote\ServerController::class);
     Route::apiResource('hosts', Remote\Host\HostController::class);
-    Route::patch('hosts/{host}', [Remote\Host\DropController::class, 'update']);
+    // Route::patch('hosts/{host}', [Remote\Host\DropController::class, 'update']);
     // Route::patch('tasks', Remote\Host\TaskController::class);
     Route::apiResource('tasks', Remote\Host\TaskController::class);
 

@@ -110,41 +110,49 @@ class Host extends Model
         return true;
     }
 
+    /**
+     * 创建主机
+     * 
+     * 在此之后，所有的主机都将由 module 创建，并且主机的数据仅被用作计费。
+     * 
+     * 废弃
+     * @deprecated
+     */
     // on create
-    protected static function boot()
-    {
-        parent::boot();
+    // protected static function boot()
+    // {
+    //     parent::boot();
 
-        static::creating(function ($model) {
-            // if sanctum
-            if (auth('sanctum')->check()) {
-                $model->user_id = auth('sanctum')->id();
-            } else {
-                // if user_id is null
-                // check user_id is exists
-                throw_if(!User::find($model->user_id), CommonException::class, 'user is not exists');
-            }
+    //     // static::creating(function ($model) {
+    //     //     // if sanctum
+    //     //     // if (auth('sanctum')->check()) {
+    //     //     //     $model->user_id = auth('sanctum')->id();
+    //     //     // } else {
+    //     //     //     // if user_id is null
+    //     //     //     // check user_id is exists
+    //     //     //     throw_if(!User::find($model->user_id), CommonException::class, 'user is not exists');
+    //     //     // }
 
-            // set price to 0
-            $model->price = 0;
+    //     //     // // set price to 0
+    //     //     // $model->price = 0;
 
-            // $model->load('module');
-            // $model->module->load(['provider', 'module']);
+    //     //     // $model->load('module');
+    //     //     // $model->module->load(['provider', 'module']);
 
-            // add to queue
+    //     //     // add to queue
 
-        });
+    //     // });
 
-        // when Updated
-        static::updated(function ($model) {
-            dispatch(new \App\Jobs\Remote\Host($model, 'put'));
-        });
+    //     // when Updated
+    //     static::updated(function ($model) {
+    //         dispatch(new \App\Jobs\Remote\Host($model, 'put'));
+    //     });
 
-        // when delete
-        static::deleting(function ($model) {
-            // return false;
+    //     // when delete
+    //     static::deleting(function ($model) {
+    //         // return false;
 
-            dispatch(new \App\Jobs\Remote\Host($model, 'delete'));
-        });
-    }
+    //         dispatch(new \App\Jobs\Remote\Host($model, 'delete'));
+    //     });
+    // }
 }

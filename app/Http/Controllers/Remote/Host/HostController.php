@@ -17,7 +17,7 @@ class HostController extends Controller
     public function index()
     {
         //
-        Host::all();
+        // Host::all();
     }
 
     /**
@@ -28,13 +28,8 @@ class HostController extends Controller
      */
     public function store(Request $request)
     {
-        // 保存服务器
-        $request->validate([
-            'name' => 'required|string',
-            'ip' => 'sometimes|ip',
-            // status only allow online or offline
-            'status' => 'required|in:online,offline,maintenance',
-        ]);
+        // 存储计费项目
+        
     }
 
     /**

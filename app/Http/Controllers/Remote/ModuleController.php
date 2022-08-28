@@ -14,11 +14,13 @@ class ModuleController extends Controller
         return $this->success(auth('remote')->user());
     }
 
-    public function call(Request $request, Module $module, $func)
+    public function call(Request $request, Module $module)
     {
         $request->validate([
             'func' => 'required|string'
         ]);
+
+        $func = $request->func;
 
         // 不能让 func 的首个字符为 /
         if (Str::startsWith($func, '/')) {
