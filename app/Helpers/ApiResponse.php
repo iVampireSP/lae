@@ -18,7 +18,6 @@ trait ApiResponse
                 'to' => $data['to'],
             ];
             $data['paginate'] = 1;
-
         } else {
             $data = [
                 'data' => $data,
@@ -33,6 +32,11 @@ trait ApiResponse
         }
 
         return response()->json($data, $status);
+    }
+
+    public function remoteResponse($response, $status = 200)
+    {
+        return response()->json($response, $status);
     }
 
     // success

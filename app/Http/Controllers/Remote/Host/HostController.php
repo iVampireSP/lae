@@ -116,8 +116,6 @@ class HostController extends Controller
         //
         $host->delete();
 
-        // 
-
         return $this->deleted($host);
     }
 }

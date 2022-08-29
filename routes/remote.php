@@ -4,6 +4,8 @@ use App\Http\Controllers\Remote;
 use Illuminate\Support\Facades\Route;
 
 Route::name('remote.')->middleware(['api'])->group(function () {
+    // Route::apiResource('users', Remote\UserController::class)->only(['show']);
+
     Route::apiResource('modules', Remote\ModuleController::class)->only(['index']);
     Route::apiResource('servers', Remote\ServerController::class);
     Route::apiResource('hosts', Remote\Host\HostController::class);

@@ -109,6 +109,14 @@ class Host extends Model
         // update cache
         Cache::put($cache_key, $user, now()->addDay());
 
+
+        // if $user->drops <= 0
+        if ($user->drops <= 0) {
+            $this->update([
+                'status' => 'suspended',
+            ]);
+        }
+
         return true;
     }
 

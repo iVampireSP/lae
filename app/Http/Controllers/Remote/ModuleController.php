@@ -43,6 +43,6 @@ class ModuleController extends Controller
             return response($response['body'], $response['status']);
         }
 
-        return $this->apiResponse($response['json'], $response['status']);
+        return $this->remoteResponse($response['json'], $response['status']);
     }
 }
