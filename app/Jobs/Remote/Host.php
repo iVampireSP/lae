@@ -42,8 +42,8 @@ class Host implements ShouldQueue
         $http = Http::remote($this->host->module->api_token, $this->host->module->url);
        
         switch ($this->type) {
-            case 'put':
-                $response = $http->put('hosts/' . $this->host->id, $this->host->toArray());
+            case 'patch':
+                $response = $http->patch('hosts/' . $this->host->id, $this->host->toArray());
                 break;
             case 'post':
                 $response = $http->post('hosts', $this->host->toArray());

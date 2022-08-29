@@ -85,7 +85,7 @@ class HostController extends Controller
             // 'managed_price' => 'sometimes|numeric|nullable',
 
             // 如果是立即扣费
-            'cost_once' => 'sometimes|boolean|nullable',
+            'cost_once' => 'sometimes|numeric|nullable',
         ]);
 
         // if has cost_once
@@ -95,7 +95,12 @@ class HostController extends Controller
             return $this->updated($request->cost_once);
         }
 
-        $host->update($request->all());
+        $update = $request->all();
+        // module_id 不能被更新
+        unset($update['module_id']);
+        unset($update['user_id']);
+
+        $host->update($update);
 
         return $this->updated($host);
     }

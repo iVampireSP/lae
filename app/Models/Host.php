@@ -27,7 +27,9 @@ class Host extends Model
     ];
 
     protected $casts = [
-        'configuration' => 'array'
+        // 'configuration' => 'array',
+        'suspended_at' => 'datetime',
+
     ];
 
 
@@ -89,7 +91,7 @@ class Host extends Model
         } else {
             $user = Cache::put($cache_key, $this->user, now()->addDay());
         }
-        
+
 
         // Log::debug($user);
 
@@ -102,7 +104,7 @@ class Host extends Model
         }
 
 
-        $user->drops -= $this->price;
+        $user->drops -= (int) $this->price;
 
         // update cache
         Cache::put($cache_key, $user, now()->addDay());
@@ -119,40 +121,48 @@ class Host extends Model
      * @deprecated
      */
     // on create
-    // protected static function boot()
-    // {
-    //     parent::boot();
+    protected static function boot()
+    {
+        parent::boot();
 
-    //     // static::creating(function ($model) {
-    //     //     // if sanctum
-    //     //     // if (auth('sanctum')->check()) {
-    //     //     //     $model->user_id = auth('sanctum')->id();
-    //     //     // } else {
-    //     //     //     // if user_id is null
-    //     //     //     // check user_id is exists
-    //     //     //     throw_if(!User::find($model->user_id), CommonException::class, 'user is not exists');
-    //     //     // }
+        // static::creating(function ($model) {
+        //     // if sanctum
+        //     // if (auth('sanctum')->check()) {
+        //     //     $model->user_id = auth('sanctum')->id();
+        //     // } else {
+        //     //     // if user_id is null
+        //     //     // check user_id is exists
+        //     //     throw_if(!User::find($model->user_id), CommonException::class, 'user is not exists');
+        //     // }
 
-    //     //     // // set price to 0
-    //     //     // $model->price = 0;
+        //     // // set price to 0
+        //     // $model->price = 0;
 
-    //     //     // $model->load('module');
-    //     //     // $model->module->load(['provider', 'module']);
+        //     // $model->load('module');
+        //     // $model->module->load(['provider', 'module']);
 
-    //     //     // add to queue
+        //     // add to queue
 
-    //     // });
+        // });
 
-    //     // when Updated
-    //     static::updated(function ($model) {
-    //         dispatch(new \App\Jobs\Remote\Host($model, 'put'));
-    //     });
+        static::updating(function ($model) {
+            if ($model->status == 'suspended') {
+                $model->suspended_at = now();
+            } else if ($model->status == 'running') {
+                $model->suspended_at = null;
+            }
+        });
 
-    //     // when delete
-    //     static::deleting(function ($model) {
-    //         // return false;
+        // when Updated
+        static::updated(function ($model) {
+            dispatch(new \App\Jobs\Remote\Host($model, 'patch'));
+        });
 
-    //         dispatch(new \App\Jobs\Remote\Host($model, 'delete'));
-    //     });
-    // }
+        // // when delete
+        // static::deleting(function ($model) {
+        //     // return false;
+
+        //     // dispatch(new \App\Jobs\Remote\Host($model, 'delete'));
+        // });
+    }
 }
