@@ -61,6 +61,15 @@ class Module extends Authenticatable
 
         $requests['user_id'] = auth('sanctum')->id();
 
+        $user = auth('sanctum')->user();
+
+        if ($method == 'post') {
+            // add user to requests
+            $requests['user'] = $user;
+        }
+
+        $requests['user_id'] = $user['id'];
+
         $response = $http->{$method}("functions/{$func}", $requests);
 
         $json = $response->json();

@@ -26,7 +26,6 @@ class Host implements ShouldQueue
     {
         //
         $this->host = $host;
-        $this->host->load(['module']);
         $this->type = $type;
     }
 
@@ -38,7 +37,8 @@ class Host implements ShouldQueue
     public function handle()
     {
         //
-
+        $this->host->load(['module']);
+        
         $http = Http::remote($this->host->module->api_token, $this->host->module->url);
        
         switch ($this->type) {

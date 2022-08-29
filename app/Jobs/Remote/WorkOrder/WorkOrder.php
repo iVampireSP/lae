@@ -26,9 +26,7 @@ class WorkOrder implements ShouldQueue
     {
         //
         $this->workOrder = $workOrder;
-        $this->workOrder->load(['module']);
         $this->type = $type;
-
     }
 
     /**
@@ -38,6 +36,7 @@ class WorkOrder implements ShouldQueue
      */
     public function handle()
     {
+        $this->workOrder->load(['module']);
 
         $http = Http::remote($this->workOrder->module->api_token, $this->workOrder->module->url);
         if ($this->type == 'put') {

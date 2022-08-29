@@ -10,6 +10,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use App\Models\WorkOrder\Reply as WorkOrderReply;
+use Log;
 
 class Reply implements ShouldQueue
 {
@@ -25,10 +26,6 @@ class Reply implements ShouldQueue
     {
         //
         $this->reply = $reply;
-        $this->reply->load(['workOrder']);
-        $this->reply->workOrder->load(['module']);
-        // $this->reply->user = $this->reply->workOrder->user;
-
     }
 
     /**
@@ -39,9 +36,14 @@ class Reply implements ShouldQueue
     public function handle()
     {
         //
+        $this->reply->load(['workOrder', 'user']);
+        $this->reply->workOrder->load(['module']);
+        
         $http = Http::remote($this->reply->workOrder->module->api_token, $this->reply->workOrder->module->url);
 
-        $response = $http->post('work-orders/' . $this->reply->workOrder->id . '/replies', $this->reply->toArray());
+        $reply = $this->reply->toArray();
+
+        $response = $http->post('work-orders/' . $this->reply->workOrder->id . '/replies', $reply);
 
         if ($response->successful()) {
             $this->reply->is_pending = false;

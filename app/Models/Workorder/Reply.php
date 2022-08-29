@@ -3,6 +3,7 @@
 namespace App\Models\WorkOrder;
 
 use App\Exceptions\CommonException;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -22,6 +23,11 @@ class Reply extends Model
     public function workOrder()
     {
         return $this->belongsTo(WorkOrder::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function scopeWorkOrderId($query, $work_order_id)
