@@ -27,8 +27,22 @@ class ModuleController extends Controller
             $func = substr($func, 1);
         }
 
-        $response = $module->remote($func, $request->all());
+        // 过滤除了 "/" 以外的特殊字符
+        $func = preg_replace('/[^a-zA-Z0-9\/]/', '', $func);
+        
 
-        return $this->apiResponse($response[0], $response[1]);
+
+        // dd($func);
+
+        $method = Str::lower($request->method());
+
+
+        $response = $module->remoteRequest($method, $func, $request->all());
+
+        if ($response['json'] === null && $response['body'] !== null) {
+            return response($response['body'], $response['status']);
+        }
+
+        return $this->apiResponse($response['json'], $response['status']);
     }
 }

@@ -30,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
             // 关闭证书验证
             return Http::withoutVerifying()->withHeaders([
                 'X-Remote-Api-Token' => $api_token,
+                'Content-Type' => 'application/json'
             ])->baseUrl($url);
         });
 

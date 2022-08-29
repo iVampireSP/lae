@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Remote\Host;
 
-use App\Http\Controllers\Controller;
-use App\Models\Host;
 use Cache;
+use App\Models\Host;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class HostController extends Controller
 {
@@ -29,7 +30,29 @@ class HostController extends Controller
     public function store(Request $request)
     {
         // 存储计费项目
-        
+        $request->validate([
+            'status' => 'required|in:running,stopped,error,suspended,pending',
+            'price' => 'required|numeric',
+            'user_id' => 'required|integer|exists:users,id',
+        ]);
+
+        // 如果没有 name，则随机
+        $name = $request->input('name', Str::random(10));
+
+        $data = [
+            'name' => $name,
+            'status' => $request->status,
+            'price' => $request->price,
+            'user_id' => $request->user_id,
+            'module_id' => auth('remote')->id()
+        ];
+
+        $host = Host::create($data);
+
+        $host['host_id'] = $host->id;
+
+        return $this->created($host);
+
     }
 
     /**
@@ -58,8 +81,8 @@ class HostController extends Controller
     {
         //
         $request->validate([
-            'status' => 'sometimes|in:stopped,running,suspended,error',
-            'managed_price' => 'sometimes|numeric|nullable',
+            'status' => 'sometimes|in:running,stopped,error,suspended,pending',
+            // 'managed_price' => 'sometimes|numeric|nullable',
 
             // 如果是立即扣费
             'cost_once' => 'sometimes|boolean|nullable',

@@ -48,6 +48,34 @@ class Module extends Authenticatable
         return [$json, $status];
     }
 
+
+    // post, get, patch, delete 等请求
+    public function remoteRequest($method, $func, $requests)
+    {
+        $http = Http::remote($this->api_token, $this->url)
+            ->accept('application/json')
+            ->withHeaders(['X-Func' => $func]);
+
+
+        unset($requests['func']);
+
+        $requests['user_id'] = auth('sanctum')->id();
+
+        $response = $http->{$method}("functions/{$func}", $requests);
+
+        $json = $response->json();
+
+        $status = $response->status();
+
+        return [
+            'body' => $response->body(),
+            'json' => $json,
+            'status' => $status
+        ];
+    }
+
+
+
     public function remotePost($path = '', $data = [])
     {
         $http = Http::remote($this->api_token, $this->url);
