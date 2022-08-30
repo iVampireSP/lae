@@ -11,6 +11,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Cache;
+use Log;
 
 class UserSave implements ShouldQueue
 {
@@ -34,7 +35,11 @@ class UserSave implements ShouldQueue
      */
     public function handle()
     {
-        Host::active()->chunk(100, function ($hosts) {
+
+        // 弃用
+        return false;
+
+        Host::all()->chunk(100, function ($hosts) {
             foreach ($hosts as $host) {
                 $this->cache_key = 'user_' . $host->user_id;
 
@@ -43,11 +48,18 @@ class UserSave implements ShouldQueue
                 if (Cache::has($this->cache_key)) {
                     // if user is not instances of Model
                     $user = Cache::get($this->cache_key);
+
+                    Log::debug($user);
+
+
                     if ($user instanceof User) {
-                        $this->await($this->cache_key, function () use ($user, $host) {
+                        $this->await($this->cache_key, function () use ($user) {
                             $user->save();
                         });
                     }
+                } else {
+                    // save cache
+                    $this->cache->put($this->cache_key, $host->user, now()->addDay());
                 }
             }
         });

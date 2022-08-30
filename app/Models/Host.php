@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Log;
 use App\Models\Module\Module;
 use App\Exceptions\CommonException;
 use App\Models\WorkOrder\WorkOrder;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Database\Eloquent\Model;
 // use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Model;
+use App\Exceptions\User\BalanceNotEnoughException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Host extends Model
@@ -77,20 +79,25 @@ class Host extends Model
     public function cost($price = null)
     {
 
-        $cache_key = 'user_' . $this->user_id;
+        $this->load('user');
 
-        // if cache has user
 
-        if (Cache::has($cache_key)) {
-            // if user is not instances of Model
-            $user = Cache::get($cache_key);
-
-            if (!($user instanceof User)) {
-                $user = Cache::put($cache_key, $this->user, now()->addDay());
-            }
+        if ($this->user->balance < 10) {
+            $amount = 1;
+        } else if ($this->user->balance < 100) {
+            $amount = 10;
+        } else if ($this->user->balance < 1000) {
+            $amount = 100;
+        } else if ($this->user->balance < 10000) {
+            $amount = 1000;
         } else {
-            $user = Cache::put($cache_key, $this->user, now()->addDay());
+            $amount = 10000;
         }
+
+        $cache_key = 'user_drops_' . $this->user_id;
+
+        $drops = Cache::get($cache_key);
+
 
 
         // Log::debug($user);
@@ -103,23 +110,24 @@ class Host extends Model
             $this->price = $this->managed_price;
         }
 
+        // if drops <= price
+        if ($drops < $this->price) {
+            try {
+                $this->user->toDrops($amount);
+            } catch (BalanceNotEnoughException) {
+                $this->update([
+                    'status' => 'suspended',
+                ]);
 
-        $user->drops -= (int) $this->price;
-
-        // update cache
-        Cache::put($cache_key, $user, now()->addDay());
-
-
-        // if $user->drops <= 0
-        if ($user->drops <= 0) {
-            $this->update([
-                'status' => 'suspended',
-            ]);
+                return false;
+            }
         } else if ($this->status == 'suspended') {
             $this->update([
-                'status' => 'running',
+                'status' => 'stopped',
             ]);
         }
+
+        Cache::decrement($cache_key, $this->price);
 
         return true;
     }

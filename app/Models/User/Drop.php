@@ -46,6 +46,23 @@ class Drop extends Model
 
             $rate = Cache::get('drops_rate', 100);
             $drops->total = $drops->amount * $rate;
+
+            $this->cache_key = 'user_' . $drops->user_id;
+
+            // if cache has user
+
+            // if (Cache::has($this->cache_key)) {
+            //     // if user is not instances of Model
+            //     $user = Cache::get($this->cache_key);
+            //     if ($user instanceof User) {
+            //         $this->await($this->cache_key, function () use ($user) {
+            //             $user->save();
+            //         });
+            //     }
+
+            //     // delete cache
+            //     Cache::forget($this->cache_key);
+            // }
         });
 
         // created

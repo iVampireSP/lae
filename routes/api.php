@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\DropController;
 use App\Http\Controllers\User\TaskController;
 use App\Http\Controllers\Remote\ModuleController;
-use App\Http\Controllers\Admin\User\UserController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\User\WorkOrder\ReplyController;
 use App\Http\Controllers\User\WorkOrder\WorkOrderController;
 
