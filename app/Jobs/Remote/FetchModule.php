@@ -34,7 +34,7 @@ class FetchModule implements ShouldQueue
     public function handle()
     {
         //
-        Module::chunk(100, function ($modules) {
+        Module::whereNotNull('url')->chunk(100, function ($modules) {
             foreach ($modules as $module) {
                 $http = Http::remote($module->api_token, $module->url);
                 // dd($module->url);
