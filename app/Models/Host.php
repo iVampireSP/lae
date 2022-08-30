@@ -115,6 +115,10 @@ class Host extends Model
             $this->update([
                 'status' => 'suspended',
             ]);
+        } else if ($this->status == 'suspended') {
+            $this->update([
+                'status' => 'running',
+            ]);
         }
 
         return true;
