@@ -52,7 +52,7 @@ class WorkOrder extends Model
         return $query->where('module_id', auth('remote')->id());
     }
 
-    public function scopeUser($query)
+    public function scopeThisUser($query)
     {
         return $query->where('user_id', auth()->id());
     }
