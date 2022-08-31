@@ -52,6 +52,7 @@ class FetchModule implements ShouldQueue
                                 'module_name' => $module->name,
                                 'name' => $server['name'],
                                 'status' => $server['status'],
+                                'created_at' => $server['created_at'],
                                 'updated_at' => $server['updated_at'],
                             ];
                         }, $json['data']['servers']));
