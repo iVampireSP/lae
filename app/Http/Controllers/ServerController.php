@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Arr;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
