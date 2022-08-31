@@ -11,7 +11,7 @@ class TaskController extends Controller
     public function __invoke()
     {
         //
-        $tasks = Task::user()->get();
+        $tasks = Task::user()->with('host')->get();
 
         return $this->success($tasks);
     }
