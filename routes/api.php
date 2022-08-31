@@ -16,7 +16,7 @@ Route::name('api.')->middleware(['api', 'auth:sanctum'])->group(function () {
 
     Route::apiResource('drops', DropController::class);
 
-    Route::get('tasks', [TaskController::class, 'index']);
+    Route::get('tasks', TaskController::class);
 
     Route::apiResource('work-orders', WorkOrderController::class);
     Route::apiResource('work-orders.replies', ReplyController::class);
