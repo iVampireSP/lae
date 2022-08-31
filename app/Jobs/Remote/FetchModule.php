@@ -34,7 +34,7 @@ class FetchModule implements ShouldQueue
     public function handle()
     {
         //
-        Module::whereNotNull('url')->chunk(100, function ($modules)  {
+        Module::whereNotNull('url')->chunk(100, function ($modules) {
             $servers = [];
 
             foreach ($modules as $module) {
@@ -49,6 +49,7 @@ class FetchModule implements ShouldQueue
                         // 只保留 name, status
                         $servers = array_merge($servers, array_map(function ($server) use ($module) {
                             return [
+                                'module_id' => $module->id,
                                 'module_name' => $module->name,
                                 'name' => $server['name'],
                                 'status' => $server['status'],
@@ -63,8 +64,12 @@ class FetchModule implements ShouldQueue
                 }
             }
 
-            // Cache servers
-            Cache::put('servers', $servers, now()->addMinutes(10));
+            // if local
+            if (config('app.env') === 'local') {
+                Cache::forever('servers', $servers);
+            } else {
+                Cache::put('servers', $servers, now()->addMinutes(10));
+            }
         });
     }
 }
