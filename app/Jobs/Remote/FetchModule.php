@@ -34,20 +34,35 @@ class FetchModule implements ShouldQueue
     public function handle()
     {
         //
-        Module::whereNotNull('url')->chunk(100, function ($modules) {
+        Module::whereNotNull('url')->chunk(100, function ($modules)  {
+            $servers = [];
+
             foreach ($modules as $module) {
                 $http = Http::remote($module->api_token, $module->url);
                 // dd($module->url);
                 $response = $http->get('remote');
 
                 if ($response->successful()) {
-                    Cache::set('module_' . $module->id, $response->status());
+                    $json = $response->json();
+
+                    if (isset($json['data']['servers'])) {
+                        // 只保留 name, status
+                        $servers = array_merge($servers, array_map(function ($server) {
+                            return [
+                                'name' => $server['name'],
+                                'status' => $server['status'],
+                                'updated_at' => $server['updated_at'],
+                            ];
+                        }, $json['data']['servers']));
+                    }
                     // $module->update([
                     //     'data' => $response->json()
                     // ]);
                 }
-
             }
+
+            // Cache servers
+            Cache::put('servers', $servers, now()->addMinutes(10));
         });
     }
 }
