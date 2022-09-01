@@ -81,6 +81,8 @@ class Host extends Model
 
         $this->load('user');
 
+        $price = abs($price);
+
 
         if ($this->user->balance < 10) {
             $amount = 1;
@@ -134,9 +136,9 @@ class Host extends Model
 
     /**
      * 创建主机
-     * 
+     *
      * 在此之后，所有的主机都将由 module 创建，并且主机的数据仅被用作计费。
-     * 
+     *
      * 废弃
      * @deprecated
      */
