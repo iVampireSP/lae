@@ -25,3 +25,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/', [Controllers\AuthController::class, 'index'])->name('index');
+
+Route::get('/balances/{balance}', [Controllers\User\BalanceController::class, 'show'])->name('balances.pay.show');
+
+
