@@ -16,9 +16,8 @@ class BalanceController extends Controller
 
     public function index(Request $request)
     {
-        //
-        $balance = $request->user();
-        return $this->success($balance);
+        $balances = Balance::thisUser()->simplePaginate(30);
+        return $this->success($balances);
     }
 
     public function store(Request $request)
@@ -33,11 +32,27 @@ class BalanceController extends Controller
         $balance = new Balance();
 
 
-        $balance = $balance->create([
+        $data = [
             'user_id' => $user->id,
             'amount' => $request->amount,
             'payment' => 'alipay',
-        ]);
+        ];
+
+        // if local
+        if (env('APP_ENV') == 'local') {
+            $data['payment'] = null;
+            $data['paid_at'] = now();
+        }
+
+
+        $balance = $balance->create($data);
+
+        if (env('APP_ENV') == 'local') {
+            $user->increment('balance', $request->amount);
+            return $this->success($balance);
+        }
+
+
 
         // 生成 18 位订单号
         $order_id = date('YmdHis') . $balance->id . rand(1000, 9999);
