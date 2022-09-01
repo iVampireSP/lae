@@ -25,7 +25,7 @@ class BalanceController extends Controller
     {
         // 充值
         $request->validate([
-            'amount' => 'required|integer|max:10000',
+            'amount' => 'required|integer|min:1|max:10000',
         ]);
 
         $user = $request->user();
