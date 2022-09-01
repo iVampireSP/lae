@@ -38,8 +38,7 @@ class AuthController extends Controller
             } else if ($request->getToken) {
                 return $this->created($token);
             } else {
-                // 403
-                return $this->error('Direct access is not allowed.');
+                return view('index');
             }
         } else {
             // save callback url and referer url to session
