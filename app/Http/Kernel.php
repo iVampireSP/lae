@@ -48,6 +48,11 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
             \App\Http\Middleware\AllowCors::class,
         ],
+
+        'remote' => [
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\AllowCors::class,
+        ],
     ];
 
     /**
