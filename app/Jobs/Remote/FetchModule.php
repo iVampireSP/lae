@@ -4,13 +4,15 @@ namespace App\Jobs\Remote;
 
 use App\Models\Module\Module;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
+use GuzzleHttp\Exception\ConnectException;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 
 class FetchModule implements ShouldQueue
 {
@@ -33,14 +35,30 @@ class FetchModule implements ShouldQueue
      */
     public function handle()
     {
+        // 获取运行完成的时间
+
+        $last_run = Cache::get('servers_updated_at', false);
+        if ($last_run !== false) {
+            // 如果和上次运行时间间隔小于一分钟，则不运行
+            if (now()->diffInMinutes($last_run) < 1) {
+                return;
+            }
+        }
+
         //
         Module::whereNotNull('url')->chunk(100, function ($modules) {
             $servers = [];
 
             foreach ($modules as $module) {
-                $http = Http::remote($module->api_token, $module->url);
-                // dd($module->url);
-                $response = $http->get('remote');
+                try {
+                    $http = Http::remote($module->api_token, $module->url);
+                    // dd($module->url);
+                    $response = $http->get('remote');
+                } catch (ConnectException $e) {
+                    Log::error($e->getMessage());
+                    continue;
+                }
+
 
                 if ($response->successful()) {
                     $json = $response->json();
@@ -70,6 +88,9 @@ class FetchModule implements ShouldQueue
             } else {
                 Cache::put('servers', $servers, now()->addMinutes(10));
             }
+
+            // 缓存运行完成的时间
+            Cache::put('servers_updated_at', now(), now()->addMinutes(10));
         });
     }
 }
