@@ -23,10 +23,9 @@ class BalanceController extends Controller
 
     public function store(Request $request)
     {
-
         // 充值
         $request->validate([
-            'amount' => 'required|numeric',
+            'amount' => 'required|integer|max:10000',
         ]);
 
         $user = $request->user();
