@@ -5,6 +5,7 @@ use App\Http\Controllers\User\TaskController;
 use App\Http\Controllers\Remote\ModuleController;
 use App\Http\Controllers\ServerController;
 use App\Http\Controllers\User\BalanceController;
+use App\Http\Controllers\User\HostController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\User\WorkOrder\ReplyController;
 use App\Http\Controllers\User\WorkOrder\WorkOrderController;
@@ -12,6 +13,7 @@ use App\Http\Controllers\User\WorkOrder\WorkOrderController;
 Route::name('api.')->middleware(['api', 'auth:sanctum'])->group(function () {
     Route::apiResource('users', UserController::class);
     Route::get('servers', ServerController::class);
+    Route::get('hosts', HostController::class);
 
 
     Route::apiResource('balances', BalanceController::class)->only(['index', 'store']);
