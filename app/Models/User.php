@@ -59,17 +59,16 @@ class User extends Authenticatable
         try {
             $lock->block(5);
 
-            // if user balance <= 0
-            if ($this->balance < $amount) {
-                throw new BalanceNotEnoughException('余额不足');
-            }
-
             $this->balance -= $amount;
             $this->save();
 
             // increment user drops
             Cache::increment($cache_key, $total);
 
+            // if user balance <= 0
+            if ($this->balance < $amount) {
+                throw new BalanceNotEnoughException('余额不足');
+            }
         } catch (LockTimeoutException) {
             throw new CommonException('暂时无法处理此请求，请稍后再试。');
         } finally {
