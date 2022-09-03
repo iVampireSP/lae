@@ -67,12 +67,14 @@ class FetchModule implements ShouldQueue
                         // 只保留 name, status
                         $servers = array_merge($servers, array_map(function ($server) use ($module) {
                             return [
-                                'module_id' => $module->id,
-                                'module_name' => $module->name,
                                 'name' => $server['name'],
                                 'status' => $server['status'],
                                 'created_at' => $server['created_at'] ?? now(),
                                 'updated_at' => $server['updated_at'] ?? now(),
+                                'module' => [
+                                    'id' => $module->id,
+                                    'name' => $module->name,
+                                ]
                             ];
                         }, $json['data']['servers']));
                     }
