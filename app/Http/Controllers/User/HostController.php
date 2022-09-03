@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Http;
 
 class HostController extends Controller
 {
-    public function __invoke(Module $module)
+    public function index(Module $module)
     {
         //
         $hosts = Host::thisUser($module->id)->with('module', function ($query) {
@@ -18,6 +18,18 @@ class HostController extends Controller
         })->get();
 
         return $this->success($hosts);
+    }
+
+    public function destroy(Host $host)
+    {
+        if ($host->user_id == auth()->id()) {
+            dispatch(new \App\Jobs\Remote\Host($host, 'delete'));
+        } else {
+            return $this->error('无权操作');
+        }
+
+        return $this->deleted($host);
+
     }
 
     // /**

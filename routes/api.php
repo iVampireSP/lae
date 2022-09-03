@@ -13,7 +13,8 @@ use App\Http\Controllers\User\WorkOrder\WorkOrderController;
 Route::name('api.')->middleware(['api', 'auth:sanctum'])->group(function () {
     Route::apiResource('users', UserController::class);
     Route::get('servers', ServerController::class);
-    Route::get('hosts', HostController::class);
+    Route::get('hosts', [HostController::class, 'index']);
+    Route::delete('hosts/{host}', [HostController::class, 'destroy']);
 
 
     Route::apiResource('balances', BalanceController::class)->only(['index', 'store']);

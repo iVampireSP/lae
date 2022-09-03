@@ -22,7 +22,7 @@ class Host implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(HostModel $host, $type = 'post')
+    public function __construct($host, $type = 'post')
     {
         //
         $this->host = $host;
@@ -37,34 +37,46 @@ class Host implements ShouldQueue
     public function handle()
     {
         //
-        $this->host->load(['module']);
-        
-        $http = Http::remote($this->host->module->api_token, $this->host->module->url);
-       
+
+        // dd($this->host);
+
+        // $host = HostModel::find($this->host);
+        $host = $this->host;
+        $host->load(['module']);
+
+        $http = Http::remote($host->module->api_token, $host->module->url);
+
         switch ($this->type) {
             case 'patch':
-                $response = $http->patch('hosts/' . $this->host->id, $this->host->toArray());
+                $response = $http->patch('hosts/' . $host->id, $host->toArray());
                 break;
             case 'post':
-                $response = $http->post('hosts', $this->host->toArray());
+                $response = $http->post('hosts', $host->toArray());
 
                 break;
 
             case 'delete':
-                $response = $http->delete('hosts/' . $this->host->id);
+                $response = $http->delete('hosts/' . $host->id);
+
+                return;
+                // if response code is 404
+                // if ($response->successful() || $response->failed()) {
+                //     $host->delete();
+                // }
+
 
                 // if success
-                if ($response->successful()) {
-                    $this->host->delete();
-                }
+                // if ($response->successful()) {
+                //     $host->delete();
+                // }
 
                 break;
         }
 
         if (!$response->successful()) {
-            $this->host->status = 'error';
+            $host->status = 'error';
         }
 
-        $this->host->save();
+        $host->save();
     }
 }

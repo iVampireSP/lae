@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Jobs\ClearTasks;
+use App\Jobs\DeleteHost;
 use App\Jobs\Remote;
 use App\Jobs\HostCost;
 use App\Jobs\UserSave;
@@ -29,6 +30,8 @@ class Kernel extends ConsoleKernel
         $schedule->job(new Remote\PushWorkOrder())->everyMinute()->onOneServer();
 
         $schedule->job(new ClearTasks())->weekly();
+
+        $schedule->job(new DeleteHost())->hourly();
 
 
     }
