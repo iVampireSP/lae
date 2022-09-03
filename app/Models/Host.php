@@ -83,24 +83,9 @@ class Host extends Model
 
         $price = abs($price);
 
-
-        if ($this->user->balance < 10) {
-            $amount = 1;
-        } else if ($this->user->balance < 100) {
-            $amount = 10;
-        } else if ($this->user->balance < 1000) {
-            $amount = 100;
-        } else if ($this->user->balance < 10000) {
-            $amount = 1000;
-        } else {
-            $amount = 10000;
-        }
-
         $cache_key = 'user_drops_' . $this->user_id;
 
         $drops = Cache::get($cache_key);
-
-
 
         // Log::debug($user);
 
@@ -111,6 +96,8 @@ class Host extends Model
         if ($this->managed_price) {
             $this->price = $this->managed_price;
         }
+
+        $amount = $price / Cache::get('drops_rate', 100) + 1;
 
         // if drops <= price
         if ($drops < $this->price) {
