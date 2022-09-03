@@ -63,5 +63,12 @@ class Task extends Model
             }
 
         });
+
+        // updateing
+        static::updating(function ($model) {
+            if ($model->progress == 100) {
+                $model->status = 'done';
+            }
+        });
     }
 }
