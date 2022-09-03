@@ -63,7 +63,7 @@ class FetchModule implements ShouldQueue
                 if ($response->successful()) {
                     $json = $response->json();
 
-                    if (isset($json['data']['servers'])) {
+                    if (isset($json['data']['servers']) && is_array($json['data']['servers'])) {
                         // 只保留 name, status
                         $servers = array_merge($servers, array_map(function ($server) use ($module) {
                             return [
@@ -71,8 +71,8 @@ class FetchModule implements ShouldQueue
                                 'module_name' => $module->name,
                                 'name' => $server['name'],
                                 'status' => $server['status'],
-                                'created_at' => $server['created_at'],
-                                'updated_at' => $server['updated_at'],
+                                'created_at' => $server['created_at'] ?? now(),
+                                'updated_at' => $server['updated_at'] ?? now(),
                             ];
                         }, $json['data']['servers']));
                     }
