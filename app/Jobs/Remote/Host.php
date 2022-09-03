@@ -58,7 +58,11 @@ class Host implements ShouldQueue
             case 'delete':
                 $response = $http->delete('hosts/' . $host->id);
 
-                return;
+                if ($response->status() === 404) {
+                    $host->delete();
+                }
+
+                return 0;
                 // if response code is 404
                 // if ($response->successful() || $response->failed()) {
                 //     $host->delete();
