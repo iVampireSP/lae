@@ -78,10 +78,9 @@ class Host extends Model
     // cost
     public function cost($price = null)
     {
+        $price = abs($price);
 
         $this->load('user');
-
-        $price = abs($price);
 
         $cache_key = 'user_drops_' . $this->user_id;
 
@@ -115,6 +114,8 @@ class Host extends Model
                 'status' => 'stopped',
             ]);
         }
+
+        $this->price = abs($this->price);
 
         Cache::decrement($cache_key, $this->price);
 

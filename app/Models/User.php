@@ -51,9 +51,18 @@ class User extends Authenticatable
     public function toDrops($amount = 1)
     {
         $rate = Cache::get('drops_rate', 100);
-        $total = $amount * $rate;
-
         $cache_key = 'user_drops_' . $this->id;
+
+        $drops = Cache::get($cache_key, 0);
+
+        $total = 0;
+
+        if ($drops < 0) {
+            $amount += abs($drops) / $rate;
+        }
+
+        $total += $amount * $rate;
+
 
         $lock = Cache::lock("lock_" . $cache_key, 5);
         try {
