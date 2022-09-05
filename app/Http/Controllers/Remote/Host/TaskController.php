@@ -43,12 +43,6 @@ class TaskController extends Controller
             'status' => 'required|in:pending,processing,need_operation,done,success,failed,error,canceled',
         ]);
 
-        // if exists
-        $task = Task::where('host_id', $request->host_id)->where('title', $request->title)->exists();
-        if ($task) {
-            $task->delete();
-        }
-
         $task = Task::create($request->all());
 
         return $this->success($task);
