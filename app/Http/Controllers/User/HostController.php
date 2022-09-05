@@ -29,7 +29,9 @@ class HostController extends Controller
                 return $this->error('余额不足');
             }
 
-            $host->update($request->only(['status']));
+            $host->update([
+                'status' => 'running'
+            ]);
 
             return $this->updated($host);
         } else {
