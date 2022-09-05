@@ -38,12 +38,17 @@ class TaskController extends Controller
     {
         //
         $request->validate([
-            'host_id' => 'required|exists:hosts,id',
             'title' => 'required|max:255',
             'progress' => 'sometimes|integer|max:100',
             'status' => 'required|in:pending,processing,need_operation,done,success,failed,error,canceled',
         ]);
-        
+
+        // if exists
+        $task = Task::where('host_id', $request->host_id)->where('title', $request->title)->exists();
+        if ($task) {
+            $task->delete();
+        }
+
         $task = Task::create($request->all());
 
         return $this->success($task);
