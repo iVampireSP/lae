@@ -76,7 +76,7 @@ class BalanceController extends Controller
         }
 
         try {
-            $result = AlipayFactory::payment()->page()->pay("支付", $balance->order_id, $balance->amount, 'http://rcrmqishil.sharedwithexpose.com/api/pay/return');
+            $result = AlipayFactory::payment()->page()->pay("支付", $balance->order_id, $balance->amount, route('balances.pay.show', ['balance' => $balance->order_id]));
 
             $responseChecker = new ResponseChecker();
 

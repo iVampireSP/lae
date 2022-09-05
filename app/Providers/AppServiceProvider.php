@@ -38,14 +38,20 @@ class AppServiceProvider extends ServiceProvider
         });
 
         AlipayFactory::setOptions($this->alipayOptions());
-
     }
 
     private function alipayOptions()
     {
         $options = new AlipayConfig();
         $options->protocol = 'https';
-        $options->gatewayHost = 'openapi.alipaydev.com';
+
+        // if local
+        if (app()->environment() == 'local') {
+            $options->gatewayHost = 'openapi.alipaydev.com';
+        } else {
+            $options->gatewayHost = 'openapi.alipay.com';
+        }
+
         $options->signType = 'RSA2';
 
         $options->appId = config('alipay.app_id');
