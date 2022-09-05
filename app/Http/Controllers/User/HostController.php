@@ -25,7 +25,7 @@ class HostController extends Controller
         $user = $request->user();
         if ($host->user_id == $user->id) {
 
-            if ($user->balance <= 0) {
+            if ($user->balance < 1) {
                 return $this->error('余额不足');
             }
 
