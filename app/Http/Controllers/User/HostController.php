@@ -20,6 +20,25 @@ class HostController extends Controller
         return $this->success($hosts);
     }
 
+    public function update(Request $request, Host $host)
+    {
+        $user = $request->user();
+        if ($host->user_id == $user->id) {
+
+            if ($user->balance < 0) {
+                return $this->error('余额不足');
+            }
+
+            $host->update($request->only(['status']));
+
+            return $this->updated($host);
+        } else {
+            return $this->error('无权操作');
+        }
+
+        return $this->deleted($host);
+    }
+
     public function destroy(Host $host)
     {
         if ($host->user_id == auth()->id()) {
@@ -29,7 +48,6 @@ class HostController extends Controller
         }
 
         return $this->deleted($host);
-
     }
 
     // /**
