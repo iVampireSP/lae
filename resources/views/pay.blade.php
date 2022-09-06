@@ -7,7 +7,6 @@
 
 <body>
     {!! $html !!}
-{{--{{ $html  }}--}}
 </body>
 
 </html>
