@@ -109,9 +109,9 @@ class BalanceController extends Controller
         }
 
         if ($this->checkAndCharge($request->out_trade_no, $balance)) {
-            return view('pay_return')->with('success', '支付成功，非常感谢。');
+            return view('pay_success');
         } else {
-            return view('pay_return')->with('error', '无法完成支付，请联系我们。');
+            return view('pay_error');
         }
     }
 
