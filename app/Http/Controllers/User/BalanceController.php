@@ -76,7 +76,7 @@ class BalanceController extends Controller
         }
 
         try {
-            $result = AlipayFactory::payment()->page()->pay("支付", $balance->order_id, $balance->amount, route('balances.notify'));
+            $result = AlipayFactory::payment()->page()->pay("支付", $balance->order_id, $balance->amount, route('balances.return'));
 
             $responseChecker = new ResponseChecker();
 
@@ -95,6 +95,26 @@ class BalanceController extends Controller
         return $this->success($balance);
     }
 
+    public function return(Request $request)
+    {
+        // 检测订单是否存在
+        $balance = Balance::where('order_id', $request->out_trade_no)->with('user')->first();
+        if (!$balance) {
+            return $this->notFound('balance not found');
+        }
+
+        // 检测订单是否已支付
+        if ($balance->paid_at !== null) {
+            return $this->success('订单已支付');
+        }
+
+        if ($this->checkAndCharge($request->out_trade_no, $balance)) {
+            return redirect()->route('index')->with('success', '支付成功，非常感谢。');
+        } else {
+            return redirect()->route('index')->with('error', '无法完成支付，请联系我们。');
+        }
+    }
+
     public function notify(Request $request)
     {
         // 检测订单是否存在
@@ -108,7 +128,16 @@ class BalanceController extends Controller
             return $this->success('订单已支付');
         }
 
-        $trade = AlipayFactory::payment()->common()->query($request->out_trade_no);
+        if ($this->checkAndCharge($request->out_trade_no, $balance)) {
+            return $this->success();
+        } else {
+            return $this->error();
+        }
+    }
+
+    public function checkAndCharge($out_trade_no, Balance $balance)
+    {
+        $trade = AlipayFactory::payment()->common()->query($out_trade_no);
 
         if ($trade->code == "10000" && $trade->tradeStatus == "TRADE_SUCCESS") {
             $balance->paid_at = now();
@@ -121,16 +150,14 @@ class BalanceController extends Controller
                 DB::commit();
             } catch (\Exception $e) {
                 DB::rollBack();
-                AlipayFactory::payment()->common()->refund($request->out_trade_no, $trade->totalAmount);
+                AlipayFactory::payment()->common()->refund($out_trade_no, $trade->totalAmount);
                 return $this->error($e->getMessage());
             }
 
-            return $this->success('订单支付成功');
+            return true;
         } else {
-            return $this->error('订单支付失败');
+            return false;
         }
-
-
     }
 
     // // 转换为 drops
