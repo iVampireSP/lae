@@ -116,6 +116,7 @@ class AuthController extends Controller
                 'provider' => 'LoliArt',
                 'provider_id' => $oauth_user->id,
                 'real_name' => $oauth_user->real_name,
+                'balance' => 1
             ]);
 
             $request->session()->put('auth.password_confirmed_at', time());
