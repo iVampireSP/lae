@@ -29,5 +29,5 @@ Route::name('api.')->middleware(['api', 'auth:sanctum'])->group(function () {
 });
 
 
-Route::get('/pay/return', [BalanceController::class, 'notify'])->name('balances.return');
+Route::get('/pay/return', [BalanceController::class, 'return'])->name('balances.return');
 Route::get('/pay/notify', [BalanceController::class, 'notify'])->name('balances.notify');
