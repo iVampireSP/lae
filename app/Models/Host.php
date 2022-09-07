@@ -101,7 +101,13 @@ class Host extends Model
         // if drops <= price
         if ($drops < $this->price) {
             try {
-                $this->user->toDrops($amount);
+                // 算出需要补充多少 Drops
+                $need = $this->price - $drops;
+
+                // 算出需要补充多少余额
+                $need_amount = $need / Cache::get('drops_rate', 100) + 1;
+
+                $this->user->toDrops($amount + $need_amount);
             } catch (BalanceNotEnoughException) {
                 $this->update([
                     'status' => 'suspended',
