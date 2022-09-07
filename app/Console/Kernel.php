@@ -23,9 +23,9 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
 
         // dispatch HostCost job
-        $schedule->job(new HostCost())->everyFiveMinutes();
+        $schedule->job(new HostCost())->withoutOverlapping()->everyFiveMinutes();
         // $schedule->job(new UserSave())->everyTenMinutes();
-        $schedule->job(new Remote\FetchModule())->everyMinute();
+        $schedule->job(new Remote\FetchModule())->withoutOverlapping()->everyMinute();
         // $schedule->job(new Remote\PushHost())->everyMinute()->onOneServer();
         $schedule->job(new Remote\PushWorkOrder())->everyMinute()->onOneServer();
 
