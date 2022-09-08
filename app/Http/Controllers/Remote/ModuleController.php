@@ -17,23 +17,25 @@ class ModuleController extends Controller
 
     public function call(Request $request, Module $module)
     {
-        $this->validate($request, [
-            'func' => 'required|string'
-        ]);
+        // $this->validate($request, [
+        //     'func' => 'required|string'
+        // ]);
 
-        $func = $request->func;
+        // $func = $request->func;
 
-        // 不能让 func 的首个字符为 /
-        if (Str::startsWith($func, '/')) {
-            $func = substr($func, 1);
-        }
+        // // 不能让 func 的首个字符为 /
+        // if (Str::startsWith($func, '/')) {
+        //     $func = substr($func, 1);
+        // }
+
+        $path = request()->path();
+
+        // 删除 modules/{module} 的部分
+        $path = substr($path, strlen('/api/modules/' . $module->id));
 
         // 过滤除了 "/" 以外的特殊字符
-        $func = preg_replace('/[^a-zA-Z0-9\/]/', '', $func);
+        $path = preg_replace('/[^a-zA-Z0-9\/]/', '', $path);
 
-
-
-        // dd($func);
 
         $method = Str::lower($request->method());
 
@@ -47,7 +49,7 @@ class ModuleController extends Controller
         }
 
 
-        $response = $module->remoteRequest($method, $func, $request->all());
+        $response = $module->remoteRequest($method, $path, $request->all());
 
         if ($response['json'] === null && $response['body'] !== null) {
             return response($response['body'], $response['status']);

@@ -53,12 +53,10 @@ class Module extends Model implements AuthenticatableContract, AuthorizableContr
 
 
     // post, get, patch, delete 等请求
-    public function remoteRequest($method, $func, $requests)
+    public function remoteRequest($method, $path, $requests)
     {
         $http = Http::remote($this->api_token, $this->url)
-            ->accept('application/json')
-            ->withHeaders(['X-Func' => $func]);
-
+            ->accept('application/json');
 
         unset($requests['func']);
 
@@ -73,7 +71,7 @@ class Module extends Model implements AuthenticatableContract, AuthorizableContr
 
         $requests['user_id'] = $user['id'];
 
-        $response = $http->{$method}("functions/{$func}", $requests);
+        $response = $http->{$method}("functions/{$path}", $requests);
 
         $json = $response->json();
 
