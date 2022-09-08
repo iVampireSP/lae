@@ -5,6 +5,7 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Crypt;
 
 return new class extends Migration
 {
@@ -35,7 +36,7 @@ return new class extends Migration
             $admin = new Admin();
             $admin->name = 'admin';
             $admin->email = 'admin@admin.test';
-            $admin->password = bcrypt('admin');
+            $admin->password = 'admin';
             $admin->api_token = 123456;
             $admin->save();
         }

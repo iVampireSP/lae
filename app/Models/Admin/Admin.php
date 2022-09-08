@@ -3,6 +3,7 @@
 namespace App\Models\Admin;
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -23,7 +24,7 @@ class Admin extends Model
     // protect password
     public function setPasswordAttribute($value)
     {
-        $this->attributes['password'] = bcrypt($value);
+        $this->attributes['password'] = Crypt::encrypt($value);
     }
 
     // before create admin, generate api_token
@@ -36,7 +37,7 @@ class Admin extends Model
             if (!$admin->api_token) {
                 $admin->api_token = Str::random(60);
             }
-            
+
         });
     }
 }
