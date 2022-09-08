@@ -2,16 +2,8 @@
 
 /** @var \Laravel\Lumen\Routing\Router $router */
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers;
-
-
-// Route::get('/', [Controllers\AuthController::class, 'index'])->name('index');
-// $router->get('/', [Controllers\AuthController::class, 'index']);
-
 $router->get('/', [
-    'as' => 'index',
-    'uses' => 'AuthController@index'
+    'uses' => 'IndexController'
 ]);
 
 $router->get('/balances/{balance}', [
