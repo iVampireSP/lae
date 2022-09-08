@@ -105,6 +105,6 @@ return [
     |
     */
 
-    'prefix' => env('CACHE_PREFIX', 'edgebilling_cache'),
+    'prefix' => env('CACHE_PREFIX', 'laev3_cache'),
 
 ];
