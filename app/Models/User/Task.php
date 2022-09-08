@@ -26,12 +26,17 @@ class Task extends Model
 
     public $incrementing = false;
 
-    public function scopeUser($query) {
+    // key type string
+    protected $keyType = 'string';
+
+    public function scopeUser($query)
+    {
         return $query->where('user_id', auth()->id());
     }
 
 
-    public function host() {
+    public function host()
+    {
         return $this->belongsTo(Host::class);
     }
 
@@ -43,6 +48,7 @@ class Task extends Model
             // id 为 uuid
             $model->id = Uuid::uuid4()->toString();
 
+
             // host_id 和 user_id 至少存在一个
             if (!$model->host_id && !$model->user_id) {
                 throw new CommonException('host_id 和 user_id 至少存在一个');
@@ -51,17 +57,22 @@ class Task extends Model
             // if host_id
             if ($model->host_id) {
                 $model->load('host');
-                // dd($model);
 
+                if ($model->host === null) {
+                    throw new CommonException('host_id 不存在');
+                }
+
+                // dd($model);
 
                 // dd($model->host_id);
                 // $host = Host::where('id', $model->host_id)->first();
 
                 // dd($host);
 
+
+
                 $model->user_id = $model->host->user_id;
             }
-
         });
 
         // updateing

@@ -31,13 +31,13 @@ $router->group(['prefix' => 'tasks'], function () use ($router) {
     $router->post('/', [
         'uses' => 'Host\TaskController@store'
     ]);
-    $router->get('/{tasks}', [
+    $router->get('/{task}', [
         'uses' => 'Host\TaskController@show'
     ]);
-    $router->patch('/{tasks}', [
+    $router->patch('/{task}', [
         'uses' => 'Host\TaskController@update'
     ]);
-    $router->delete('/{tasks}', [
+    $router->delete('/{task}', [
         'uses' => 'Host\TaskController@destroy'
     ]);
 });

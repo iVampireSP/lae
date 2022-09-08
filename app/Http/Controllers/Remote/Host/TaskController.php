@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers\Remote\Host;
 
-use App\Models\Host;
-use Ramsey\Uuid\Uuid;
 use App\Models\User\Task;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Cache;
 
 class TaskController extends Controller
 {
@@ -63,7 +60,9 @@ class TaskController extends Controller
             'status' => 'sometimes|in:pending,processing,need_operation,done,success,failed,error,canceled',
         ]);
 
+
         $task->update($request->all());
+
 
         return $this->updated($task);
     }

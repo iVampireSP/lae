@@ -70,7 +70,7 @@ class AppServiceProvider extends ServiceProvider
         // $options->alipayPublicKey = Storage::get('alipayCertPublicKey_RSA2.crt');
 
         //可设置异步通知接收服务地址（可选）
-        $options->notifyUrl = "http://rcrmqishil.sharedwithexpose.com/api/pay/notify";
+        $options->notifyUrl = route('balances.notify');
 
 
         return $options;
