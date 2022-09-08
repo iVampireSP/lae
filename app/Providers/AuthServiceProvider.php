@@ -36,9 +36,9 @@ class AuthServiceProvider extends ServiceProvider
         // api guard and remote
 
         $this->app['auth']->viaRequest('api', function ($request) {
-            if ($request->input('api_token')) {
-                return AccessToken::where('token', $request->input('api_token'))->with('user')->first()->user ?? null;
-            }
+            // if ($request->input('api_token')) {
+            //     return AccessToken::where('token', $request->input('api_token'))->with('user')->first()->user ?? null;
+            // }
             // bearerToken
             $bearerToken = $request->bearerToken();
 
@@ -52,9 +52,9 @@ class AuthServiceProvider extends ServiceProvider
 
         $this->app['auth']->viaRequest('remote', function ($request) {
 
-            if ($request->input('api_token')) {
-                return Module::where('api_token', $request->input('api_token'))->first();
-            }
+            // if ($request->input('api_token')) {
+            //     return Module::where('api_token', $request->input('api_token'))->first();
+            // }
             // bearerToken
             $bearerToken = $request->bearerToken();
 
