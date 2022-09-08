@@ -66,9 +66,6 @@ $router->group(['prefix' => 'work-orders'], function () use ($router) {
     });
 });
 
-
-$router->addRoute(['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], '/modules/{module}', 'Remote\ModuleController@call');
-
 $router->group(['prefix' => 'modules/{module}'], function () use ($router) {
     $controller = 'Remote\ModuleController@call';
     $router->get('/{route:.*}/', $controller);
