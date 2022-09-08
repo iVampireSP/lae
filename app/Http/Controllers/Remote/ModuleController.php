@@ -17,7 +17,7 @@ class ModuleController extends Controller
 
     public function call(Request $request, Module $module)
     {
-        $request->validate([
+        $this->validate($request, [
             'func' => 'required|string'
         ]);
 
@@ -39,7 +39,7 @@ class ModuleController extends Controller
 
         // 如果 method 为 post, 检查用户余额
         if ($method == 'post') {
-            $user = auth('sanctum')->user();
+            $user = auth('api')->user();
 
             if ($user->balance < 1) {
                 return $this->error('余额小于 1, 无法使用 POST 请求。');

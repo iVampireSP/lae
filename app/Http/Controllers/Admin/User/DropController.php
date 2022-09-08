@@ -28,7 +28,7 @@ class DropController extends Controller
     public function store(Request $request)
     {
         //
-        $request->validate([
+        $this->validate($request, [
             'amount' => 'integer|required|min:1|max:1000',
         ]);
 

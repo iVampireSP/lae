@@ -22,7 +22,7 @@ class Reply extends Model
 
     public function workOrder()
     {
-        return $this->belongsTo(WorkOrder::class);
+        return $this->belongsTo(WorkOrder::class, 'work_order_id', 'id');
     }
 
     public function user()
@@ -48,10 +48,11 @@ class Reply extends Model
             // load work order
             $model->load(['workOrder']);
 
+
             throw_if($model->workOrder->status == 'pending' || $model->workOrder->status == 'error', CommonException::class, '工单状态不正确');
 
             // change work order status
-            if (auth('sanctum')->check()) {
+            if (auth('api')->check()) {
                 $model->user_id = auth()->id();
                 $model->workOrder->status = 'user_replied';
             }

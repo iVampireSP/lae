@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Remote\WorkOrder;
 use Illuminate\Http\Request;
 use App\Models\WorkOrder\Reply;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
 
 class ReplyController extends Controller
 {
@@ -29,22 +30,12 @@ class ReplyController extends Controller
     public function store(Request $request)
     {
         //
-        // $request->validate([
-        //     'content' => 'string|required|min:1|max:1000',
-        // ]);
 
         $request_array = $request->all();
 
-
-        // dd([
-        //     'content' => $request_array['content'],
-        //     'work_order_id' => $request->route('work_order'),
-        // ]);
-
-
         $reply = Reply::create([
             'content' => $request_array['content'],
-            'work_order_id' => $request->route('work_order'),
+            'work_order_id' => $request_array['work_order_id'],
         ]);
 
         return $this->success($reply);

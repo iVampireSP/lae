@@ -71,8 +71,8 @@ class WorkOrder extends Model
             }
 
             // if logged
-            if (auth('sanctum')->check()) {
-                $model->user_id = auth('sanctum')->id();
+            if (auth('api')->check()) {
+                $model->user_id = auth('api')->id();
 
                 if ($model->host_id) {
                     if (!$model->user_id === $model->host->user_id) {

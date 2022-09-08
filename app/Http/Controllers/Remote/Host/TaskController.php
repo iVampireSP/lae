@@ -37,7 +37,7 @@ class TaskController extends Controller
     public function store(Request $request)
     {
         //
-        $request->validate([
+        $this->validate($request, [
             'title' => 'required|max:255',
             'progress' => 'sometimes|integer|max:100',
             'status' => 'required|in:pending,processing,need_operation,done,success,failed,error,canceled',
@@ -58,7 +58,7 @@ class TaskController extends Controller
     public function update(Request $request, Task $task)
     {
         //
-        $request->validate([
+        $this->validate($request, [
             'progress' => 'sometimes|integer|max:100',
             'status' => 'sometimes|in:pending,processing,need_operation,done,success,failed,error,canceled',
         ]);

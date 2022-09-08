@@ -13,12 +13,12 @@ class WorkOrderController extends Controller
     public function index(Request $request, WorkOrder $workOrder) {
 
         $workOrder = $workOrder->thisUser()->with('user')->simplePaginate(10);
-        
+
         return $this->success($workOrder);
     }
 
     public function store(Request $request) {
-        $request->validate([
+        $this->validate($request, [
             'title' => 'required|max:255',
             'content' => 'required',
             'module_id' => 'nullable|sometimes|string|exists:modules,id',
@@ -48,7 +48,7 @@ class WorkOrderController extends Controller
     }
 
     public function update(WorkOrderRequest $request, WorkOrder $workOrder) {
-        $request->validate([
+        $this->validate($request, [
             'status' => 'nullable|sometimes|string|in:closed',
         ]);
 

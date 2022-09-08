@@ -9,12 +9,13 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Support\Facades\Log;
+
+// use Illuminate\Contracts\Queue\ShouldBeUnique;
 
 class PushWorkOrder implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use InteractsWithQueue, Queueable, SerializesModels;
 
     /**
      * Create a new job instance.
@@ -33,7 +34,7 @@ class PushWorkOrder implements ShouldQueue
      */
     public function handle()
     {
-        // 
+        //
         WorkOrder::whereIn('status', ['pending', 'error'])->with(['module', 'user', 'host', 'replies'])->chunk(100, function ($workOrders) {
             foreach ($workOrders as $workOrder) {
 
@@ -47,11 +48,15 @@ class PushWorkOrder implements ShouldQueue
                 $response = $http->post('work-orders', $workOrder->toArray());
 
                 if (!$response->successful()) {
+                    Log::error('推送工单失败', [
+                        'work_order_id' => $workOrder->id,
+                        'response' => $response->body(),
+                    ]);
                     $workOrder->status = 'error';
                 }
 
                 $workOrder->save();
-                
+
             }
         });
 

@@ -2,11 +2,11 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\ServiceProvider;
 use Alipay\EasySDK\Kernel\Config as AlipayConfig;
 use Alipay\EasySDK\Kernel\Factory as AlipayFactory;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -18,16 +18,19 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         //
+
+        require_once app()->basePath('app') . '/Helpers.php';
+
     }
 
-    /**
-     * Bootstrap any application services.
-     *
-     * @return void
-     */
     public function boot()
     {
         //
+
+        header('server: Cluster Ready!');
+        header('x-powered-by: LaeCloud');
+        header('x-for-you: Code is Poetry.');
+
 
         Http::macro('remote', function ($api_token, $url) {
             // 关闭证书验证

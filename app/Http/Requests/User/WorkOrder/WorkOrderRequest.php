@@ -3,7 +3,7 @@
 namespace App\Http\Requests\User\WorkOrder;
 
 use App\Models\WorkOrder\WorkOrder;
-use Illuminate\Foundation\Http\FormRequest;
+use Anik\Form\FormRequest;
 
 class WorkOrderRequest extends FormRequest
 {
@@ -12,10 +12,10 @@ class WorkOrderRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
 
-        $work_order = $this->route('work_order');
+        $work_order = $this->route('workOrder');
 
         // if work_order is model
         if ($work_order instanceof WorkOrder) {
@@ -25,7 +25,7 @@ class WorkOrderRequest extends FormRequest
         }
 
 
-        return WorkOrder::where('user_id', auth('sanctum')->id())->where('id', $work_order_id)->exists();
+        return WorkOrder::where('user_id', auth('api')->id())->where('id', $work_order_id)->exists();
 
         return false;
     }
@@ -35,7 +35,7 @@ class WorkOrderRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             //

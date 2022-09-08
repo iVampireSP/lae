@@ -3,7 +3,7 @@
 namespace App\Http\Requests\Remote\Server;
 
 use App\Models\Server\Status;
-use Illuminate\Foundation\Http\FormRequest;
+use Anik\Form\FormRequest;
 
 class StatusRequest extends FormRequest
 {
@@ -12,7 +12,7 @@ class StatusRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         $server = $this->route('server');
 
@@ -24,7 +24,7 @@ class StatusRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             //

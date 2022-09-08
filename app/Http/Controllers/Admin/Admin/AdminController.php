@@ -57,7 +57,7 @@ class AdminController extends Controller
      */
     public function update(Request $request, Admin $admin)
     {
-        // 
+        //
         $admin->update($request->all());
 
         return $this->updated($admin);

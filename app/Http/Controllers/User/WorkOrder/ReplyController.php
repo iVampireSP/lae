@@ -32,15 +32,18 @@ class ReplyController extends Controller
     public function store(WorkOrderRequest $request)
     {
         // add reply
-        $request->validate([
+        $this->validate($request, [
             'content' => 'string|required|min:1|max:1000',
         ]);
 
 
 
+
+
+
         $reply = Reply::create([
             'content' => $request->toArray()['content'],
-            'work_order_id' => $request->route('work_order'),
+            'work_order_id' => $request->route('workOrder')->id,
         ]);
 
 

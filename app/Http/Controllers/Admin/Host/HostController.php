@@ -38,7 +38,7 @@ class HostController extends Controller
      */
     public function store(Request $request, Host $host)
     {
-        $request->validate([
+        $this->validate($request, [
             'name' => 'required|max:255',
             'module_id' => 'required|string|exists:modules,id',
             'price' => 'required|numeric',
@@ -48,7 +48,7 @@ class HostController extends Controller
         if ($request->route('user')) {
             $user_id = $request->route('user');
         } else {
-            $request->validate([
+            $this->validate($request, [
                 'user_id' => 'required|integer|exists:users,id',
             ]);
             $user_id = $request->user_id;

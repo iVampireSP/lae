@@ -30,7 +30,7 @@ class HostController extends Controller
     public function store(Request $request)
     {
         // 存储计费项目
-        $request->validate([
+        $this->validate($request, [
             'status' => 'required|in:running,stopped,error,suspended,pending',
             'price' => 'required|numeric',
             'user_id' => 'required|integer|exists:users,id',
@@ -80,7 +80,7 @@ class HostController extends Controller
     public function update(Request $request, Host $host)
     {
         //
-        $request->validate([
+        $this->validate($request, [
             'status' => 'sometimes|in:running,stopped,error,suspended,pending',
             // 'managed_price' => 'sometimes|numeric|nullable',
 

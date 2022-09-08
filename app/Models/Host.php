@@ -143,8 +143,8 @@ class Host extends Model
 
         // static::creating(function ($model) {
         //     // if sanctum
-        //     // if (auth('sanctum')->check()) {
-        //     //     $model->user_id = auth('sanctum')->id();
+        //     // if (auth('api')->check()) {
+        //     //     $model->user_id = auth('api')->id();
         //     // } else {
         //     //     // if user_id is null
         //     //     // check user_id is exists

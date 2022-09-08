@@ -1,33 +1,79 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\User\TaskController;
-use App\Http\Controllers\Remote\ModuleController;
-use App\Http\Controllers\ServerController;
-use App\Http\Controllers\User\BalanceController;
-use App\Http\Controllers\User\HostController;
-use App\Http\Controllers\UserController;
-use App\Http\Controllers\User\WorkOrder\ReplyController;
-use App\Http\Controllers\User\WorkOrder\WorkOrderController;
+/** @var \Laravel\Lumen\Routing\Router $router */
 
-Route::name('api.')->middleware(['api', 'auth:sanctum'])->group(function () {
-    Route::apiResource('users', UserController::class);
-    Route::get('servers', ServerController::class);
-    Route::apiResource('hosts', HostController::class)->only(['index', 'update', 'destroy']);
+$router->get('/users', [
+    'uses' => 'UserController@index'
+]);
 
+$router->get('/servers', [
+    'uses' => 'ServerController'
+]);
 
-    Route::apiResource('balances', BalanceController::class)->only(['index', 'store']);
-    // Route::apiResource('drops', DropController::class);
-
-    Route::get('tasks', TaskController::class);
-
-    Route::apiResource('work-orders', WorkOrderController::class);
-    Route::apiResource('work-orders.replies', ReplyController::class);
-
-    // 调用远程 API
-    Route::any('/modules/{module}', [ModuleController::class, 'call'])->name('module.call');
+$router->group(['prefix' => 'hosts'], function () use ($router) {
+    $router->get('/', [
+        'uses' => 'User\HostController@index'
+    ]);
+    $router->patch('/{host}', [
+        'uses' => 'User\HostController@update'
+    ]);
+    $router->delete('/{host}', [
+        'uses' => 'User\HostController@destroy'
+    ]);
 });
 
 
-Route::get('/pay/return', [BalanceController::class, 'return'])->name('balances.return');
-Route::get('/pay/notify', [BalanceController::class, 'notify'])->name('balances.notify');
+$router->group(['prefix' => 'balances'], function () use ($router) {
+    $router->get('/', [
+        'uses' => 'User\BalanceController@index'
+    ]);
+    $router->post('/', [
+        'uses' => 'User\BalanceController@store'
+    ]);
+});
+
+$router->get('/tasks', [
+    'uses' => 'User\TaskController'
+]);
+
+$router->group(['prefix' => 'work-orders'], function () use ($router) {
+    $router->get('/', [
+        'uses' => 'User\WorkOrder\WorkOrderController@index'
+    ]);
+    $router->post('/', [
+        'uses' => 'User\WorkOrder\WorkOrderController@store'
+    ]);
+    $router->patch('/{workOrder}', [
+        'uses' => 'User\WorkOrder\WorkOrderController@update'
+    ]);
+    $router->delete('/{workOrder}', [
+        'uses' => 'User\WorkOrder\WorkOrderController@destroy'
+    ]);
+
+    $router->group(['prefix' => '{workOrder}/replies'], function () use ($router) {
+        $router->get('/', [
+            'uses' => 'User\WorkOrder\ReplyController@index'
+        ]);
+        $router->post('/', [
+            'uses' => 'User\WorkOrder\ReplyController@store'
+        ]);
+        $router->patch('/{reply}', [
+            'uses' => 'User\WorkOrder\ReplyController@update'
+        ]);
+        $router->delete('/{reply}', [
+            'uses' => 'User\WorkOrder\ReplyController@destroy'
+        ]);
+    });
+});
+
+
+$router->addRoute(['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'], '/modules/{module}', 'Remote\ModuleController@call');
+
+$router->group(['prefix' => 'modules/{module}'], function () use ($router) {
+    $controller = 'Remote\ModuleController@call';
+    $router->get('/{route:.*}/', $controller);
+    $router->post('/{route:.*}/', $controller);
+    $router->put('/{route:.*}/', $controller);
+    $router->patch('/{route:.*}/', $controller);
+    $router->delete('/{route:.*}/', $controller);
+});

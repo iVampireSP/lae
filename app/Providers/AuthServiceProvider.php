@@ -2,29 +2,68 @@
 
 namespace App\Providers;
 
-// use Illuminate\Support\Facades\Gate;
-use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use App\Models\AccessToken;
+use App\Models\Module\Module;
+use App\Models\User;
+use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
 {
     /**
-     * The model to policy mappings for the application.
+     * Register any application services.
      *
-     * @var array<class-string, class-string>
+     * @return void
      */
-    protected $policies = [
-        // 'App\Models\Model' => 'App\Policies\ModelPolicy',
-    ];
+    public function register()
+    {
+        //
+    }
 
     /**
-     * Register any authentication / authorization services.
+     * Boot the authentication services for the application.
      *
      * @return void
      */
     public function boot()
     {
-        $this->registerPolicies();
+        // Here you may define how you wish users to be authenticated for your Lumen
+        // application. The callback which receives the incoming request instance
+        // should return either a User instance or null. You're free to obtain
+        // the User instance via an API token or any other method necessary.
 
-        //
+
+        // api guard and remote
+
+        $this->app['auth']->viaRequest('api', function ($request) {
+            if ($request->input('api_token')) {
+                return AccessToken::where('token', $request->input('api_token'))->with('user')->first()->user ?? null;
+            }
+            // bearerToken
+            $bearerToken = $request->bearerToken();
+
+
+            return AccessToken::where('token', $bearerToken)->with('user')->first()->user ?? null;
+
+            // if ($request->input('api_token')) {
+            //     return User::where('api_token', $request->input('api_token'))->first();
+            // }
+        });
+
+        $this->app['auth']->viaRequest('remote', function ($request) {
+
+            if ($request->input('api_token')) {
+                return Module::where('api_token', $request->input('api_token'))->first();
+            }
+            // bearerToken
+            $bearerToken = $request->bearerToken();
+
+
+            return Module::where('token', $bearerToken)->first() ?? null;
+
+            // if ($request->input('api_token')) {
+            //     return User::where('api_token', $request->input('api_token'))->first();
+            // }
+        });
     }
 }

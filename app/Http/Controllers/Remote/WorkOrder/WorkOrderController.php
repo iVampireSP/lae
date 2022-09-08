@@ -20,7 +20,7 @@ class WorkOrderController extends Controller
         // $work_orders = $work_orders->simplePaginate(10);
 
         $workOrder = $workOrder->thisModule()->simplePaginate(10);
-        
+
         return $this->success($workOrder);
     }
 
@@ -34,7 +34,7 @@ class WorkOrderController extends Controller
 
     public function update(WorkOrderRequest $request, WorkOrder $workOrder)
     {
-        $request->validate([
+        $this->validate($request, [
             'status' => 'nullable|sometimes|string|in:open,closed,on_hold,in_progress',
         ]);
 

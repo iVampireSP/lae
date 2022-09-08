@@ -23,7 +23,7 @@ class BalanceController extends Controller
     public function store(Request $request)
     {
         // 充值
-        $request->validate([
+        $this->validate($request, [
             'amount' => 'required|integer|min:1|max:10000',
         ]);
 
@@ -38,19 +38,19 @@ class BalanceController extends Controller
             'payment' => 'alipay',
         ];
 
-        // if local
-        if (env('APP_ENV') == 'local') {
-            $data['payment'] = null;
-            $data['paid_at'] = now();
-        }
+        // // if local
+        // if (env('APP_ENV') == 'local') {
+        //     $data['payment'] = null;
+        //     $data['paid_at'] = now();
+        // }
 
 
         $balance = $balance->create($data);
 
-        if (env('APP_ENV') == 'local') {
-            $user->increment('balance', $request->amount);
-            return $this->success($balance);
-        }
+        // if (env('APP_ENV') == 'local') {
+        //     $user->increment('balance', $request->amount);
+        //     return $this->success($balance);
+        // }
 
 
 
@@ -163,7 +163,7 @@ class BalanceController extends Controller
     // // 转换为 drops
     // public function transfer($amount = 1)
     // {
-    //     $balance = auth('sanctum')->user();
+    //     $balance = auth('api')->user();
     //     $balance->decrement('amount', $request->amount);
     //     return $this->success($balance);
     // }

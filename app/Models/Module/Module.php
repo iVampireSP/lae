@@ -2,15 +2,18 @@
 
 namespace App\Models\Module;
 
-use Http;
 use Illuminate\Support\Str;
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Support\Facades\Http;
+use Laravel\Lumen\Auth\Authorizable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 
-class Module extends Authenticatable
+class Module extends Model implements AuthenticatableContract, AuthorizableContract
 {
-    use HasFactory;
+    use Authenticatable, Authorizable, HasFactory;
 
     protected $table = 'modules';
 
@@ -59,9 +62,9 @@ class Module extends Authenticatable
 
         unset($requests['func']);
 
-        $requests['user_id'] = auth('sanctum')->id();
+        $requests['user_id'] = auth('api')->id();
 
-        $user = auth('sanctum')->user();
+        $user = auth('api')->user();
 
         if ($method == 'post') {
             // add user to requests

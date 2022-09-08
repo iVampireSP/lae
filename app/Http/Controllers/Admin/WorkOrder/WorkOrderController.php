@@ -33,7 +33,7 @@ class WorkOrderController extends Controller
     public function store(Request $request)
     {
         //
-        $request->validate([
+        $this->validate($request, [
             'title' => 'required|max:255',
             'host_id' => 'required|integer|exists:hosts,id',
             'content' => 'required|max:255',

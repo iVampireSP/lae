@@ -61,7 +61,7 @@ class HostController extends Controller
     // public function store(Request $request, Module $module)
     // {
     //     // User create host
-    //     $request->validate([
+    //     $this->validate($request, [
     //         'name' => 'required|max:255',
     //         'configuration' => 'required|json',
     //     ]);

@@ -3,7 +3,7 @@
 namespace App\Http\Requests\Remote;
 
 use App\Models\WorkOrder\WorkOrder;
-use Illuminate\Foundation\Http\FormRequest;
+use Anik\Form\FormRequest;
 
 class WorkOrderRequest extends FormRequest
 {
@@ -12,9 +12,18 @@ class WorkOrderRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
-        return WorkOrder::where('id', $this->route('work_order')->id)->where('module_id', auth('remote')->id())->exists();
+        $work_order = $this->route('workOrder');
+
+        // if work_order is model
+        if ($work_order instanceof WorkOrder) {
+            $work_order_id = $work_order->id;
+        } else {
+            $work_order_id = $work_order;
+        }
+
+        return WorkOrder::where('id', $work_order_id)->where('module_id', auth('remote')->id())->exists();
     }
 
     /**
@@ -22,7 +31,7 @@ class WorkOrderRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             //
