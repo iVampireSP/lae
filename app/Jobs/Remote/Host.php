@@ -63,9 +63,9 @@ class Host implements ShouldQueue
                     $host->delete();
                 }
 
-                // if ($response->status() === 404) {
-                //     $host->delete();
-                // }
+                if ($response->status() === 404) {
+                    $host->delete();
+                }
 
                 return 0;
                 // if response code is 404
