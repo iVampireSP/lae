@@ -44,6 +44,11 @@ class HostController extends Controller
     public function destroy(Host $host)
     {
         if ($host->user_id == auth()->id()) {
+
+            if ($host->status == 'pending') {
+                return $this->error('主机正在创建中，无法删除');
+            }
+
             dispatch(new \App\Jobs\Remote\Host($host, 'delete'));
         } else {
             return $this->error('无权操作');
