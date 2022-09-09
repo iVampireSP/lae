@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Models\AccessToken;
 use App\Models\Module\Module;
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
@@ -42,8 +43,9 @@ class AuthServiceProvider extends ServiceProvider
             // bearerToken
             $bearerToken = $request->bearerToken();
 
-
-            return AccessToken::where('token', $bearerToken)->with('user')->first()->user ?? null;
+            return Cache::remember('api_token_' . $bearerToken, 60, function () use ($bearerToken) {
+                return AccessToken::where('token', $bearerToken)->with('user')->first()->user ?? null;
+            });
 
             // if ($request->input('api_token')) {
             //     return User::where('api_token', $request->input('api_token'))->first();
@@ -58,8 +60,9 @@ class AuthServiceProvider extends ServiceProvider
             // bearerToken
             $bearerToken = $request->bearerToken();
 
-
-            return Module::where('token', $bearerToken)->first() ?? null;
+            return Cache::remember('api_token_' . $bearerToken, 60, function () use ($bearerToken) {
+                return Module::where('token', $bearerToken)->first() ?? null;
+            });
 
             // if ($request->input('api_token')) {
             //     return User::where('api_token', $request->input('api_token'))->first();
