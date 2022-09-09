@@ -27,9 +27,9 @@ class AppServiceProvider extends ServiceProvider
     {
         //
 
-        header('server: Cluster Ready!');
-        header('x-powered-by: LaeCloud');
-        header('x-for-you: Code is Poetry.');
+        // header('server: Cluster Ready!');
+        // header('x-powered-by: LaeCloud');
+        // header('x-for-you: Code is Poetry.');
 
 
         Http::macro('remote', function ($api_token, $url) {
