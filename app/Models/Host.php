@@ -114,7 +114,7 @@ class Host extends Model
             ]);
         }
 
-        $this->price = (string)($this->price);
+        $this->price = intval(log10(abs($this->price)) / 3);;
 
         Cache::decrement($cache_key, $this->price);
 
