@@ -99,6 +99,10 @@ class BalanceController extends Controller
 
     public function return(Request $request)
     {
+        $this->validate($request, [
+            'out_trade_no' => 'required',
+        ]);
+
         // 检测订单是否存在
         $balance = Balance::where('order_id', $request->out_trade_no)->with('user')->first();
         if (!$balance) {
@@ -119,6 +123,10 @@ class BalanceController extends Controller
 
     public function notify(Request $request)
     {
+        $this->validate($request, [
+            'out_trade_no' => 'required',
+        ]);
+
         // 检测订单是否存在
         $balance = Balance::where('order_id', $request->out_trade_no)->with('user')->first();
         if (!$balance) {
