@@ -77,23 +77,17 @@ class Host extends Model
     // cost
     public function cost($price = null)
     {
-        $price = abs($price);
-
         $this->load('user');
 
         $cache_key = 'user_drops_' . $this->user_id;
 
         $drops = Cache::get($cache_key);
 
-        // Log::debug($user);
 
         if ($price !== null) {
-            $this->managed_price = $price;
+            $this->price = $price;
         }
 
-        if ($this->managed_price) {
-            $this->price = $this->managed_price;
-        }
 
         $amount = $price / Cache::get('drops_rate', 100) + 1;
 

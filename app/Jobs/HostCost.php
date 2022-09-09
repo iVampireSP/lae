@@ -4,13 +4,10 @@ namespace App\Jobs;
 
 use App\Helpers\Lock;
 use App\Models\Host;
-use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
-
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Cache;
 
 class HostCost implements ShouldQueue
 {
