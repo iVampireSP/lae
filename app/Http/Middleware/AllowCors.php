@@ -19,7 +19,8 @@ class AllowCors
             'Access-Control-Allow-Origin'      => '*',
             'Access-Control-Allow-Methods'     => 'POST, GET, OPTIONS, PUT, PATCH, DELETE',
             'Access-Control-Allow-Credentials' => 'true',
-            'Access-Control-Allow-Headers' => 'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+            'Access-Control-Allow-Headers' => 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+            'Access-Control-Max-Age' => '86400',
         ];
 
         if ($request->isMethod('OPTIONS')) {
