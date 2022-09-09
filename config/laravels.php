@@ -305,4 +305,8 @@ return [
         'upload_tmp_dir'     => @is_writable('/dev/shm/') ? '/dev/shm' : '/tmp',
         'http_compression'   => env('LARAVELS_HTTP_COMPRESSION', false),
     ],
+
+    'cleaners' => [
+        Hhxsv5\LaravelS\Illuminate\Cleaners\AuthCleaner::class,
+    ],
 ];
