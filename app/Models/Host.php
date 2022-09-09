@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Log;
 use App\Models\Module\Module;
 use App\Exceptions\CommonException;
 use App\Models\WorkOrder\WorkOrder;
