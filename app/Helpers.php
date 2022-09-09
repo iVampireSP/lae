@@ -20,8 +20,10 @@ function getDrops($user_id)
         $multiple *= 10;
     }
 
+    $drops = Cache::get($cache_key);
 
-    $drops = Cache::get($cache_key) / (config('drops.decimal') * $multiple);
+    // 除以 $multiple
+    $drops = $drops / $multiple;
 
     return $drops;
 }

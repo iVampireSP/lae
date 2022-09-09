@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Alipay\EasySDK\Kernel\Util\ResponseChecker;
 use Alipay\EasySDK\Kernel\Factory as AlipayFactory;
+use Illuminate\Support\Facades\Log;
 
 class BalanceController extends Controller
 {
@@ -87,7 +88,7 @@ class BalanceController extends Controller
                 return view('pay', compact('html'));
             }
         } catch (Exception $e) {
-            dd($e->getMessage());
+            Log::error($e);
             echo "调用失败，" . $e->getMessage() . PHP_EOL;;
         }
 
