@@ -46,7 +46,13 @@ class HostController extends Controller
         if ($host->user_id == auth()->id()) {
 
             if ($host->status == 'pending') {
-                return $this->error('主机正在创建中，无法删除');
+
+                // 如果上次更新时间大于 5min
+                if (time() - strtotime($host->updated_at) > 300) {
+                    $host->delete();
+                } else {
+                    return $this->error('请等待 5 分钟后再试');
+                }
             }
 
             dispatch(new \App\Jobs\Remote\Host($host, 'delete'));
