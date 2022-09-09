@@ -183,6 +183,8 @@ class BalanceController extends Controller
         $resp = [
             'drops' => (float) Cache::get($cache_key),
             'month_usage' => getDrops($user_id),
+            'rate' => config('drops.rate'),
+            'decimal' => config('drops.decimal'),
         ];
 
         return $this->success($resp);
