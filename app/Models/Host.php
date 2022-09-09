@@ -89,6 +89,8 @@ class Host extends Model
 
 
         $amount = $price / Cache::get('drops_rate', 100) + 1;
+        $amount = intval(log10(abs($amount)) / 3);
+
 
         // if drops <= price
         if ($drops < $this->price) {
@@ -114,6 +116,8 @@ class Host extends Model
         }
 
         $this->price = intval(log10(abs($this->price)) / 3);
+
+        echo $this->price;
 
         Cache::decrement($cache_key, $this->price);
 
