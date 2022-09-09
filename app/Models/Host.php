@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Models\Module\Module;
-use App\Exceptions\CommonException;
 use App\Models\WorkOrder\WorkOrder;
 use Illuminate\Support\Facades\Cache;
 // use Illuminate\Database\Eloquent\SoftDeletes;
@@ -114,7 +113,7 @@ class Host extends Model
             ]);
         }
 
-        $this->price = intval(log10(abs($this->price)) / 3);;
+        $this->price = intval(log10(abs($this->price)) / 3);
 
         Cache::decrement($cache_key, $this->price);
 
