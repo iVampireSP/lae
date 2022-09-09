@@ -12,7 +12,8 @@ class UserController extends Controller
     {
         $user = $request->user();
 
-        $user['drops'] = (float) Cache::get('user_drops_' . $user['id'], 0);
+        $user['drops'] = getDrops($user['id']);
+        $user['drops_rate'] = config('drops.rate');
 
         return $this->success($user);
     }

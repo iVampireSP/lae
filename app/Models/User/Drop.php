@@ -44,7 +44,7 @@ class Drop extends Model
             }
 
 
-            $rate = Cache::get('drops_rate', 100);
+            $rate =  config('drops.rate') ;
             $drops->total = $drops->amount * $rate;
 
             $this->cache_key = 'user_' . $drops->user_id;

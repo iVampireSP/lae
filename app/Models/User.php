@@ -46,10 +46,11 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     public function toDrops($amount = 1)
     {
-        $rate = Cache::get('drops_rate', 100);
+        $rate = config('drops.rate');
+
         $cache_key = 'user_drops_' . $this->id;
 
-        $drops = Cache::get($cache_key, 0);
+        $drops = getDrops($this->id);
 
         $total = 0;
 
@@ -59,7 +60,6 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
         $total += $amount * $rate;
 
-
         $lock = Cache::lock("lock_" . $cache_key, 5);
         try {
             $lock->block(5);
@@ -67,8 +67,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
             $this->balance -= $amount;
             $this->save();
 
-            // increment user drops
-            Cache::increment($cache_key, $total);
+            addDrops($this->id, $total);
 
             // if user balance <= 0
             if ($this->balance < $amount) {

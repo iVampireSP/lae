@@ -78,19 +78,13 @@ class Host extends Model
     {
         $this->load('user');
 
-        $cache_key = 'user_drops_' . $this->user_id;
-
-        $drops = Cache::get($cache_key);
-
+        $drops = getDrops($this->user_id);
 
         if ($price !== null) {
             $this->price = $price;
         }
 
-
-        $amount = $price / Cache::get('drops_rate', 100) + 1;
-        $amount = intval(log10(abs($amount)) / 3);
-
+        $amount = $price / config('drops.rate') + 1;
 
         // if drops <= price
         if ($drops < $this->price) {
@@ -99,7 +93,7 @@ class Host extends Model
                 $need = $this->price - $drops;
 
                 // 算出需要补充多少余额
-                $need_amount = $need / Cache::get('drops_rate', 100) + 1;
+                $need_amount = $need / config('drops.rate') + 1;
 
                 $this->user->toDrops($amount + $need_amount);
             } catch (BalanceNotEnoughException) {
@@ -115,11 +109,7 @@ class Host extends Model
             ]);
         }
 
-        $this->price = intval(log10(abs($this->price)) / 3);
-
-        echo $this->price;
-
-        Cache::decrement($cache_key, $this->price);
+        reduceDrops($this->user_id, $this->price);
 
         return true;
     }

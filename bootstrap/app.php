@@ -70,6 +70,7 @@ $app->configure('oauth');
 $app->configure('queue');
 $app->configure('session');
 $app->configure('alipay');
+$app->configure('drops');
 
 /*
 |--------------------------------------------------------------------------
