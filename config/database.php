@@ -97,7 +97,7 @@ return [
 
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'scheme' => 'tls',
+            // 'scheme' => 'tls',
             'prefix' => 'laecloud_database_',
         ],
 
