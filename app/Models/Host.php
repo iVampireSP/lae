@@ -109,6 +109,20 @@ class Host extends Model
             ]);
         }
 
+        $month = now()->month;
+
+        $month_cache_key = 'user_' . $this->user_id . '_month_' . $month . 'hosts_drops';
+        $hosts_drops = Cache::get($month_cache_key, []);
+
+        // 统计 Host 消耗的 Drops
+        if (isset($hosts_drops[$this->id])) {
+            $hosts_drops[$this->id] += $this->price;
+        } else {
+            $hosts_drops[$this->id] = $this->price;
+        }
+
+        Cache::put($month_cache_key, $hosts_drops, 604800);
+
         reduceDrops($this->user_id, $this->price);
 
         return true;

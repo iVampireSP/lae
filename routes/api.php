@@ -14,6 +14,9 @@ $router->group(['prefix' => 'hosts'], function () use ($router) {
     $router->get('/', [
         'uses' => 'User\HostController@index'
     ]);
+    $router->get('/usages', [
+        'uses' => 'User\HostController@usages'
+    ]);
     $router->patch('/{host}', [
         'uses' => 'User\HostController@update'
     ]);
@@ -29,6 +32,10 @@ $router->group(['prefix' => 'balances'], function () use ($router) {
     ]);
     $router->post('/', [
         'uses' => 'User\BalanceController@store'
+    ]);
+
+    $router->get('/drops', [
+        'uses' => 'User\BalanceController@drops'
     ]);
 });
 

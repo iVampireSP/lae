@@ -40,6 +40,10 @@ function reduceDrops($user_id, $amount = 0)
         $multiple *= 10;
     }
 
+    $month = now()->month;
+
+    Cache::increment('user_' . $user_id . '_month_' . $month . '_drops', $amount);
+
     $amount = $amount * $multiple;
 
     $drops = Cache::decrement($cache_key, $amount);
@@ -66,4 +70,3 @@ function addDrops($user_id, $amount = 0)
 
     return $drops;
 }
-

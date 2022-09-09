@@ -43,9 +43,13 @@ class AuthServiceProvider extends ServiceProvider
             // bearerToken
             $bearerToken = $request->bearerToken();
 
-            return Cache::remember('api_token_' . $bearerToken, 60, function () use ($bearerToken) {
-                return AccessToken::where('token', $bearerToken)->with('user')->first()->user ?? null;
-            });
+            if ($bearerToken) {
+                return Cache::remember('api_token_' . $bearerToken, 60, function () use ($bearerToken) {
+                    return AccessToken::where('token', $bearerToken)->with('user')->first()->user ?? null;
+                });
+            } else {
+                return null;
+            }
 
             // if ($request->input('api_token')) {
             //     return User::where('api_token', $request->input('api_token'))->first();
@@ -60,9 +64,15 @@ class AuthServiceProvider extends ServiceProvider
             // bearerToken
             $bearerToken = $request->bearerToken();
 
-            return Cache::remember('api_token_' . $bearerToken, 60, function () use ($bearerToken) {
-                return Module::where('token', $bearerToken)->first() ?? null;
-            });
+            if ($bearerToken) {
+                return Cache::remember('api_token_' . $bearerToken, 60, function () use ($bearerToken) {
+                    return Module::where('token', $bearerToken)->first() ?? null;
+                });
+            } else {
+                return null;
+            }
+
+
 
             // if ($request->input('api_token')) {
             //     return User::where('api_token', $request->input('api_token'))->first();

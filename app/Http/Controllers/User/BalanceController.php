@@ -6,10 +6,11 @@ use Exception;
 use App\Models\User\Balance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 use Alipay\EasySDK\Kernel\Util\ResponseChecker;
 use Alipay\EasySDK\Kernel\Factory as AlipayFactory;
-use Illuminate\Support\Facades\Log;
 
 class BalanceController extends Controller
 {
@@ -170,4 +171,20 @@ class BalanceController extends Controller
     // }
 
 
+
+    public function drops()
+    {
+        $month = now()->month;
+
+        $user_id = auth()->id();
+
+        $cache_key = 'user_' . $user_id . '_month_' . $month . '_drops';
+
+        $resp = [
+            'drops' => (float) Cache::get($cache_key),
+            'month_usage' => getDrops($user_id),
+        ];
+
+        return $this->success($resp);
+    }
 }

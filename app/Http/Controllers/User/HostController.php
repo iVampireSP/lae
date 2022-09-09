@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Module\Module;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Cache;
 
 class HostController extends Controller
 {
@@ -61,6 +62,16 @@ class HostController extends Controller
         }
 
         return $this->deleted($host);
+    }
+
+    public function usages()
+    {
+        $month = now()->month;
+
+        $month_cache_key = 'user_' . auth()->id() . '_month_' . $month . 'hosts_drops';
+        $hosts_drops = Cache::get($month_cache_key, []);
+
+        return $this->success($hosts_drops);
     }
 
     // /**
