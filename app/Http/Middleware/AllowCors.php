@@ -21,6 +21,10 @@ class AllowCors
             'Access-Control-Allow-Credentials' => 'true',
             'Access-Control-Allow-Headers' => 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
             'Access-Control-Max-Age' => '86400',
+
+            'server' => 'Cluster Ready!',
+            'x-powered-by' => 'LaeCloud',
+            'x-for-you' => 'Code is Poetry.',
         ];
 
         if ($request->isMethod('OPTIONS')) {

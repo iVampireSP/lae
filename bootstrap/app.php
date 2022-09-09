@@ -93,7 +93,6 @@ $app->routeMiddleware([
     //     \Illuminate\Routing\Middleware\SubstituteBindings::class,
     //     \App\Http\Middleware\AllowCors::class,
     // ],
-    'cors' => \App\Http\Middleware\AllowCors::class,
 ]);
 
 /*
