@@ -183,6 +183,8 @@ class Host extends Model
         // when Updated
         static::updated(function ($model) {
             dispatch(new \App\Jobs\Remote\Host($model, 'patch'));
+
+            Cache::forget('user_hosts_' . $model->user_id);
         });
 
         // // when delete
@@ -191,5 +193,9 @@ class Host extends Model
 
         //     // dispatch(new \App\Jobs\Remote\Host($model, 'delete'));
         // });
+
+        static::deleted(function ($model) {
+            Cache::forget('user_hosts_' . $model->user_id);
+        });
     }
 }
