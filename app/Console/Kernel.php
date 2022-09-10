@@ -31,7 +31,7 @@ class Kernel extends ConsoleKernel
         //
 
         // dispatch HostCost job
-        $schedule->job(new HostCost())->withoutOverlapping()->everyFiveMinutes();
+        $schedule->job(new HostCost())->everyFiveMinutes();
         // $schedule->job(new UserSave())->everyTenMinutes();
         $schedule->job(new Remote\FetchModule())->withoutOverlapping()->everyMinute();
         // $schedule->job(new Remote\PushHost())->everyMinute()->onOneServer();
