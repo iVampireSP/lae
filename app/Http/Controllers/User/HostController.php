@@ -6,7 +6,6 @@ use App\Models\Host;
 use Illuminate\Http\Request;
 use App\Models\Module\Module;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
 
 class HostController extends Controller
@@ -14,9 +13,7 @@ class HostController extends Controller
     public function index(Module $module)
     {
         //
-        $hosts = Host::thisUser($module->id)->with('module', function ($query) {
-            $query->select(['id', 'name']);
-        })->get();
+        $hosts = (new Host())->getUserHosts($module->id ?? null);
 
         return $this->success($hosts);
     }

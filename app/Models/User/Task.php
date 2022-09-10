@@ -6,6 +6,7 @@ use App\Models\Host;
 use App\Exceptions\CommonException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Cache;
 use Ramsey\Uuid\Uuid;
 
 class Task extends Model
@@ -32,6 +33,14 @@ class Task extends Model
     public function scopeUser($query)
     {
         return $query->where('user_id', auth()->id());
+    }
+
+
+    public function getCurrentUserTasks()
+    {
+        return Cache::remember('user_tasks_' . auth()->id(), 3600, function () {
+            return $this->user()->with('host')->get();
+        });
     }
 
 
@@ -72,6 +81,8 @@ class Task extends Model
 
 
                 $model->user_id = $model->host->user_id;
+
+                Cache::forget('user_tasks_' . auth()->id());
             }
         });
 
@@ -80,6 +91,16 @@ class Task extends Model
             if ($model->progress == 100) {
                 $model->status = 'done';
             }
+        });
+
+        // updated and delete
+        static::updated(function () {
+            Cache::forget('user_tasks_' . auth()->id());
+        });
+
+
+        static::deleted(function () {
+            Cache::forget('user_tasks_' . auth()->id());
         });
     }
 }
