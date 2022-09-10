@@ -111,7 +111,7 @@ class Host extends Model
 
         $month = now()->month;
 
-        $month_cache_key = 'user_' . $this->user_id . '_month_' . $month . 'hosts_drops';
+        $month_cache_key = 'user_' . $this->user_id . '_month_' . $month . '_hosts_drops';
         $hosts_drops = Cache::get($month_cache_key, []);
 
         // 统计 Host 消耗的 Drops
