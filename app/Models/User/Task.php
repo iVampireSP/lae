@@ -82,7 +82,7 @@ class Task extends Model
 
                 $model->user_id = $model->host->user_id;
 
-                Cache::forget('user_tasks_' . auth()->id());
+                Cache::forget('user_tasks_' . $model->user_id);
             }
         });
 
@@ -94,13 +94,13 @@ class Task extends Model
         });
 
         // updated and delete
-        static::updated(function () {
-            Cache::forget('user_tasks_' . auth()->id());
+        static::updated(function ($model) {
+            Cache::forget('user_tasks_' . $model->user_id);
         });
 
 
-        static::deleted(function () {
-            Cache::forget('user_tasks_' . auth()->id());
+        static::deleted(function ($model) {
+            Cache::forget('user_tasks_' . $model->user_id);
         });
     }
 }
