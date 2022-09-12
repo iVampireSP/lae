@@ -39,7 +39,7 @@ class Task extends Model
     public function getCurrentUserTasks()
     {
         return Cache::remember('user_tasks_' . auth()->id(), 3600, function () {
-            return $this->user()->with('host')->get();
+            return $this->user()->with('host')->latest()->get();
         });
     }
 
