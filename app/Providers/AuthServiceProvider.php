@@ -65,7 +65,7 @@ class AuthServiceProvider extends ServiceProvider
             $bearerToken = $request->bearerToken();
 
             if ($bearerToken) {
-                return Cache::remember('api_token_' . $bearerToken, 60, function () use ($bearerToken) {
+                return Cache::remember('remote_api_token_' . $bearerToken, 60, function () use ($bearerToken) {
                     return Module::where('token', $bearerToken)->first() ?? null;
                 });
             } else {
