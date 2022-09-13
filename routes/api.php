@@ -50,6 +50,9 @@ $router->group(['prefix' => 'work-orders'], function () use ($router) {
     $router->post('/', [
         'uses' => 'User\WorkOrder\WorkOrderController@store'
     ]);
+    $router->get('/{workOrder}', [
+        'uses' => 'User\WorkOrder\WorkOrderController@show'
+    ]);
     $router->patch('/{workOrder}', [
         'uses' => 'User\WorkOrder\WorkOrderController@update'
     ]);
