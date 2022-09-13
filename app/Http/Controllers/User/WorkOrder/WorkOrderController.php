@@ -28,7 +28,7 @@ class WorkOrderController extends Controller
         $request = $request->all();
 
         // module_id 和 host_id 必须有个要填写
-        if (!$request['module_id'] && !$request['host_id']) {
+        if (!$request['module_id'] ?? 0 && !$request['host_id'] ?? 0) {
             return $this->error('module_id 和 host_id 至少要填写一个');
         }
 
