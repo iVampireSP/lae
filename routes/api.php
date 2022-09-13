@@ -67,12 +67,12 @@ $router->group(['prefix' => 'work-orders'], function () use ($router) {
         $router->post('/', [
             'uses' => 'User\WorkOrder\ReplyController@store'
         ]);
-        $router->patch('/{reply}', [
-            'uses' => 'User\WorkOrder\ReplyController@update'
-        ]);
-        $router->delete('/{reply}', [
-            'uses' => 'User\WorkOrder\ReplyController@destroy'
-        ]);
+        // $router->patch('/{reply}', [
+        //     'uses' => 'User\WorkOrder\ReplyController@update'
+        // ]);
+        // $router->delete('/{reply}', [
+        //     'uses' => 'User\WorkOrder\ReplyController@destroy'
+        // ]);
     });
 });
 

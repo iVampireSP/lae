@@ -18,7 +18,9 @@ class ReplyController extends Controller
     {
         //
 
-        $replies = Reply::workOrderId($request->route('work_order'))->simplePaginate(10);
+        $workOrder_id =  $request->route('workOrder')['id'];
+
+        $replies = Reply::workOrderId($workOrder_id)->simplePaginate(10);
 
         return $this->success($replies);
     }
