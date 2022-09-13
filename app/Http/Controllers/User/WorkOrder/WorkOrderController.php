@@ -12,7 +12,7 @@ class WorkOrderController extends Controller
     //
     public function index(Request $request, WorkOrder $workOrder) {
 
-        $workOrder = $workOrder->thisUser()->with('user')->simplePaginate(10);
+        $workOrder = $workOrder->thisUser()->with(['user', 'module', 'host'])->simplePaginate(10);
 
         return $this->success($workOrder);
     }
@@ -44,6 +44,7 @@ class WorkOrderController extends Controller
     }
 
     public function show(WorkOrderRequest $request, WorkOrder $workOrder) {
+        $workOrder->load(['module', 'host']);
         return $this->success($workOrder);
     }
 
