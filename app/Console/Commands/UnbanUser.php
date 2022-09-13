@@ -2,9 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Host;
 use App\Models\User;
-use App\Models\AccessToken;
 use Illuminate\Console\Command;
 
 class UnbanUser extends Command
