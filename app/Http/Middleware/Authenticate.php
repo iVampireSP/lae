@@ -37,8 +37,14 @@ class Authenticate
      */
     public function handle($request, Closure $next, $guard = null)
     {
-        if ($this->auth->guard($guard)->guest()) {
+        $auth = $this->auth->guard($guard);
+        if ($auth->guest()) {
             return $this->unauthorized('Unauthorized.');
+        }
+
+        $user = $this->auth->guard($guard)->user();
+        if ($user->banned_at) {
+            return $this->forbidden('您已被封禁，原因是: ' . $user->banned_reason);
         }
 
         return $next($request);

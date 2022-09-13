@@ -41,6 +41,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     protected $casts = [
         'email_verified_at' => 'datetime',
         'balance' => 'float',
+        'banned_at' => 'datetime',
     ];
 
 
