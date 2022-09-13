@@ -22,7 +22,7 @@ class WorkOrderController extends Controller
             'title' => 'required|max:255',
             'content' => 'required',
             'module_id' => 'nullable|sometimes|string|exists:modules,id',
-            'host_id' => 'nullable|sometimes|string|exists:hosts,id',
+            'host_id' => 'nullable|sometimes|exists:hosts,id',
         ]);
 
         // module_id 和 host_id 必须有个要填写
