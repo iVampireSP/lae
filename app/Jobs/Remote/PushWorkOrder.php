@@ -42,6 +42,14 @@ class PushWorkOrder implements ShouldQueue
                     continue;
                 }
 
+                if ($workOrder->status === 'error') {
+                    // 如果 created_at 超过 3 天 use Carbon
+                    if (now()->diffInDays($workOrder->created_at) > 3) {
+                        $workOrder->delete();
+                        continue;
+                    }
+                }
+
                 $http = Http::remote($workOrder->module->api_token, $workOrder->module->url);
                 $workOrder->status = 'open';
 
