@@ -28,6 +28,11 @@ class Module extends Model implements AuthenticatableContract, AuthorizableContr
         'api_token'
     ];
 
+    protected $hidden = [
+        'api_token',
+        'url'
+    ];
+
 
     public function remoteHost($host_id, $func, $requests)
     {
