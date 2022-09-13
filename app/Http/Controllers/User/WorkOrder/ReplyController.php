@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\User\WorkOrder;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\User\WorkOrder\WorkOrderRequest;
-use App\Models\WorkOrder\Reply;
 use Illuminate\Http\Request;
+use App\Models\WorkOrder\Reply;
+use App\Models\WorkOrder\WorkOrder;
+use App\Http\Controllers\Controller;
 
 class ReplyController extends Controller
 {
@@ -14,13 +14,13 @@ class ReplyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(WorkOrderRequest $request)
+    public function index(WorkOrder $workOrder)
     {
-        //
+        if (auth()->id() !== $workOrder->user_id) {
+            return $this->notFound('无法找到对应的工单。');
+        }
 
-        $workOrder_id = $request->route('workOrder')['id'];
-
-        $replies = Reply::workOrderId($workOrder_id)->simplePaginate(10);
+        $replies = Reply::workOrderId($workOrder->id)->simplePaginate(10);
 
         return $this->success($replies);
     }
@@ -31,8 +31,12 @@ class ReplyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(WorkOrderRequest $request)
+    public function store(Request $request, WorkOrder $workOrder)
     {
+        if (auth()->id() !== $workOrder->user_id) {
+            return $this->notFound('无法找到对应的工单。');
+        }
+
         // add reply
         $this->validate($request, [
             'content' => 'string|required|min:1|max:1000',
@@ -41,7 +45,7 @@ class ReplyController extends Controller
 
         $reply = Reply::create([
             'content' => $request->toArray()['content'],
-            'work_order_id' => $request->route('workOrder')->id,
+            'work_order_id' => $workOrder->id,
         ]);
 
 

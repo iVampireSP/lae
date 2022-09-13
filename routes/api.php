@@ -60,20 +60,22 @@ $router->group(['prefix' => 'work-orders'], function () use ($router) {
         'uses' => 'User\WorkOrder\WorkOrderController@destroy'
     ]);
 
-    $router->group(['prefix' => '{workOrder}/replies'], function () use ($router) {
-        $router->get('/', [
-            'uses' => 'User\WorkOrder\ReplyController@index'
-        ]);
-        $router->post('/', [
-            'uses' => 'User\WorkOrder\ReplyController@store'
-        ]);
-        // $router->patch('/{reply}', [
-        //     'uses' => 'User\WorkOrder\ReplyController@update'
-        // ]);
-        // $router->delete('/{reply}', [
-        //     'uses' => 'User\WorkOrder\ReplyController@destroy'
-        // ]);
-    });
+    $router->get('/{workOrder}/replies', [
+        'uses' => 'User\WorkOrder\ReplyController@index'
+    ]);
+    $router->post('/{workOrder}/replies', [
+        'uses' => 'User\WorkOrder\ReplyController@store'
+    ]);
+
+    // $router->group(['prefix' => ''], function () use ($router) {
+
+    //     // $router->patch('/{reply}', [
+    //     //     'uses' => 'User\WorkOrder\ReplyController@update'
+    //     // ]);
+    //     // $router->delete('/{reply}', [
+    //     //     'uses' => 'User\WorkOrder\ReplyController@destroy'
+    //     // ]);
+    // });
 });
 
 $router->group(['prefix' => 'modules/{module}'], function () use ($router) {
