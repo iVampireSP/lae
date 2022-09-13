@@ -18,7 +18,7 @@ class ReplyController extends Controller
     {
         //
 
-        $workOrder_id =  $request->route('workOrder')['id'];
+        $workOrder_id = $request->route('workOrder')['id'];
 
         $replies = Reply::workOrderId($workOrder_id)->simplePaginate(10);
 
@@ -37,10 +37,6 @@ class ReplyController extends Controller
         $this->validate($request, [
             'content' => 'string|required|min:1|max:1000',
         ]);
-
-
-
-
 
 
         $reply = Reply::create([
