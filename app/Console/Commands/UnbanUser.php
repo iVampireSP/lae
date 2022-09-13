@@ -44,14 +44,11 @@ class UnbanUser extends Command
 
         $user_id = $this->argument('user_id');
 
-        $reason = $this->argument('reason');
-
         $user = User::find($user_id);
 
         $this->info('解除封禁: ' . $user->name);
 
         $user->banned_at = null;
-        $user->banned_reason = $reason;
         $user->save();
 
         $this->info('用户已解除封禁。');
