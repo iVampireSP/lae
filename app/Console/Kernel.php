@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Console\Commands\BanUser;
 use App\Console\Commands\SuspendUserAllHosts;
+use App\Console\Commands\UnbanUser;
 use App\Jobs\HostCost;
 use App\Jobs\ClearTasks;
 use App\Jobs\DeleteHost;
@@ -21,6 +22,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         //
         BanUser::class,
+        UnbanUser::class,
         SuspendUserAllHosts::class
     ];
 
