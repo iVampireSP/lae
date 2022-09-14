@@ -25,6 +25,10 @@ $app = new Laravel\Lumen\Application(
 
 $app->withFacades();
 
+
+$app->register(Jenssegers\Mongodb\MongodbServiceProvider::class);
+
+
 $app->withEloquent();
 
 /*
@@ -116,7 +120,6 @@ $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
 $app->register(\Anik\Form\FormRequestServiceProvider::class);
 $app->register(App\Providers\RouteBindingServiceProvider::class);
 
-$app->register(Jenssegers\Mongodb\MongodbServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
