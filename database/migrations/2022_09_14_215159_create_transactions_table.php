@@ -13,10 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('transactions', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+
+        Schema::connection('mongodb')->create('transactions', function (Blueprint $collection) {
+            $collection->unsignedBigInteger('user_id')->index();
+            $collection->expire('created_at', now()->addYear());
+
         });
+
     }
 
     /**
@@ -26,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('transactions');
+        Schema::connection('mongodb')->dropIfExists('transactions');
     }
 };

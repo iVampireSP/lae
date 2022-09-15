@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use Alipay\EasySDK\Kernel\Util\ResponseChecker;
 use Alipay\EasySDK\Kernel\Factory as AlipayFactory;
+use App\Models\Transaction;
 
 class BalanceController extends Controller
 {
@@ -179,6 +180,13 @@ class BalanceController extends Controller
     // }
 
 
+    public function transactions() {
+        $transactions = Transaction::thisUser()->simplePaginate(30);
+
+        return $this->success($transactions);
+    }
+
+
 
     public function drops()
     {
@@ -188,8 +196,10 @@ class BalanceController extends Controller
 
         $cache_key = 'user_' . $user_id . '_month_' . $month . '_drops';
 
+        $transactions = new Transaction();
+
         $resp = [
-            'drops' => getDrops($user_id),
+            'drops' => $transactions->getDrops($user_id),
             'monthly_usages' => (float) Cache::get($cache_key, 0),
             'rate' => config('drops.rate'),
             'decimal' => config('drops.decimal'),

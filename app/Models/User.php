@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Transaction;
 use App\Exceptions\CommonException;
 use Illuminate\Auth\Authenticatable;
 use Laravel\Lumen\Auth\Authorizable;
@@ -51,7 +52,9 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
         $cache_key = 'user_drops_' . $this->id;
 
-        $drops = getDrops($this->id);
+        $transactions = new Transaction();
+
+        $drops = $transactions->getDrops($this->id);
 
         $total = 0;
 
@@ -68,7 +71,11 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
             $this->balance -= $amount;
             $this->save();
 
-            addDrops($this->id, $total);
+            $transactions->increaseDrops($this->id, $total);
+
+            // $transactions
+
+            $transactions->addPayoutBalance($this->id, $amount, '自动转换为 Drops');
 
             // if user balance <= 0
             if ($this->balance < $amount) {
@@ -83,6 +90,14 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $this;
     }
 
+    // when update
+    // protected static function boot()
+    // {
+    //     parent::boot();
 
+    //     // when update
+    //     static::updating(function ($model) {
 
+    //     });
+    // }
 }

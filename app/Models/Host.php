@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\Transaction;
 use App\Models\Module\Module;
 use App\Models\WorkOrder\WorkOrder;
-use Illuminate\Support\Facades\Cache;
 // use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
 use App\Exceptions\User\BalanceNotEnoughException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -89,7 +90,9 @@ class Host extends Model
     {
         $this->load('user');
 
-        $drops = getDrops($this->user_id);
+        $transaction = new Transaction();
+
+        $drops = $transaction->getDrops($this->user_id);
 
         if ($price !== null) {
             $this->price = $price;
@@ -134,7 +137,9 @@ class Host extends Model
 
         Cache::put($month_cache_key, $hosts_drops, 604800);
 
-        reduceDrops($this->user_id, $this->price);
+        $description = $this->name . ' 扣费。';
+
+        $transaction->reduceDrops($this->user_id, $this->price, $description);
 
         return true;
     }

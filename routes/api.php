@@ -30,8 +30,14 @@ $router->group(['prefix' => 'balances'], function () use ($router) {
     $router->get('/', [
         'uses' => 'User\BalanceController@index'
     ]);
+
     $router->post('/', [
         'uses' => 'User\BalanceController@store'
+    ]);
+
+
+    $router->get('/transactions', [
+        'uses' => 'User\BalanceController@transactions'
     ]);
 
     $router->get('/drops', [
