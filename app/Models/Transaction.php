@@ -55,6 +55,8 @@ class Transaction extends Model
         'gift_drops',
 
         'user_id',
+        'host_id',
+        'module_id',
     ];
 
 
@@ -83,12 +85,6 @@ class Transaction extends Model
         return $drops;
     }
 
-
-    public function reduceCurrentUserDrops($amount = 0)
-    {
-        return $this->reduceDrops(auth()->id(), $amount);
-    }
-
     public function increaseCurrentUserDrops($amount = 0)
     {
         return $this->increaseDrops(auth()->id(), $amount);
@@ -110,12 +106,12 @@ class Transaction extends Model
     }
 
 
-    public function reduceDrops($user_id, $amount = 0, $description = null)
+    public function reduceDrops($user_id, $host_id, $module_id, $auto = 1, $amount = 0)
     {
+
         $cache_key = 'user_drops_' . $user_id;
 
         $decimal = config('drops.decimal');
-
 
         $month = now()->month;
 
@@ -123,17 +119,19 @@ class Transaction extends Model
 
         $amount = $amount * $decimal;
 
-        $drops = Cache::decrement($cache_key, $amount);
+        Cache::decrement($cache_key, $amount);
 
-        // (new App\Models\Transaction)->create(['name' => 1]);
+        if ($auto) {
+            $description = '平台按时间自动扣费。';
+        } else {
+            $description = '集成模块发起的扣费。';
+        }
 
-        $this->addPayoutDrops($user_id, $amount / $decimal, $description);
-
-        return $drops;
+        $this->addPayoutDrops($user_id, $amount / $decimal, $description, $host_id, $module_id);
     }
 
 
-    public function addPayoutDrops($user_id, $amount, $description)
+    public function addPayoutDrops($user_id, $amount, $description, $host_id, $module_id)
     {
         $data = [
             'type' => 'payout',
@@ -143,10 +141,13 @@ class Transaction extends Model
             'income_drops' => 0,
             'outcome' => 0,
             'outcome_drops' => $amount,
+            'host_id' => $host_id,
+            'module_id' => $module_id,
         ];
 
         return $this->addLog($user_id, $data);
     }
+
 
     public function addIncomeDrops($user_id, $amount, $description)
     {
@@ -187,7 +188,7 @@ class Transaction extends Model
             'income' => 0,
             'income_drops' => 0,
             'outcome' => $amount,
-            'outcome_drops' => 0,
+            'outcome_drops' => 0
         ];
 
         return $this->addLog($user_id, $data);

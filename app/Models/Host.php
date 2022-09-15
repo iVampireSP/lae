@@ -137,9 +137,7 @@ class Host extends Model
 
         Cache::put($month_cache_key, $hosts_drops, 604800);
 
-        $description = '主机服务 ' . $this->name . ' 扣费。';
-
-        $transaction->reduceDrops($this->user_id, $this->price, $description);
+        $transaction->reduceDrops($this->user_id, $this->id, $this->module_id, 1, $this->price);
 
         return true;
     }

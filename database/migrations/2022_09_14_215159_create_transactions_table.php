@@ -20,6 +20,10 @@ return new class extends Migration
                 'type'
             )->index();
             $collection->unsignedBigInteger('payment')->index();
+            $collection->unsignedBigInteger(
+                'module_id'
+            )->index()->nullable();
+            $collection->unsignedBigInteger('host_id')->index()->nullable();
 
             // a year
             $year = 365 * 24 * 60 * 60;
