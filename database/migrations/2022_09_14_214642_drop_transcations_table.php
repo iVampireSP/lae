@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         //
-        Schema::dropDatabaseIfExists('transcations');
+        Schema::dropIfExists('transcations');
     }
 
     // /**
