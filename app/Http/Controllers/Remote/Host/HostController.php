@@ -90,7 +90,7 @@ class HostController extends Controller
 
         // if has cost_once
         if ($request->has('cost_once')) {
-            $host->cost($request->cost_once);
+            $host->cost($request->cost_once, false);
 
             return $this->updated($request->cost_once);
         }

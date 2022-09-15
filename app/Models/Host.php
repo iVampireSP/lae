@@ -86,7 +86,7 @@ class Host extends Model
 
 
     // cost
-    public function cost($price = null)
+    public function cost($price = null, $auto = true)
     {
         $this->load('user');
 
@@ -137,7 +137,7 @@ class Host extends Model
 
         Cache::put($month_cache_key, $hosts_drops, 604800);
 
-        $transaction->reduceDrops($this->user_id, $this->id, $this->module_id, 1, $this->price);
+        $transaction->reduceDrops($this->user_id, $this->id, $this->module_id, $auto, $this->price);
 
         return true;
     }
