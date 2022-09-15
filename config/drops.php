@@ -2,5 +2,5 @@
 
 return [
     'rate' => 1000,
-    'decimal' => 5,
+    'decimal' => 10000,
 ];

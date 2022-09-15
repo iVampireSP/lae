@@ -76,16 +76,9 @@ class Transaction extends Model
 
         $decimal = config('drops.decimal');
 
-        // 计算需要乘以多少
-        $multiple = 1;
-        for ($i = 0; $i < $decimal; $i++) {
-            $multiple *= 10;
-        }
-
         $drops = Cache::get($cache_key);
 
-        // 除以 $multiple
-        $drops = $drops / $multiple;
+        $drops = $drops / $decimal;
 
         return $drops;
     }
@@ -108,16 +101,10 @@ class Transaction extends Model
 
         $decimal = config('drops.decimal');
 
-        // 计算需要乘以多少
-        $multiple = 1;
-        for ($i = 0; $i < $decimal; $i++) {
-            $multiple *= 10;
-        }
 
-        $amount = $amount * $multiple;
+        $amount = $amount * $decimal;
 
         $drops = Cache::increment($cache_key, $amount);
-
 
         return $drops;
     }
@@ -129,23 +116,18 @@ class Transaction extends Model
 
         $decimal = config('drops.decimal');
 
-        // 计算需要乘以多少
-        $multiple = 1;
-        for ($i = 0; $i < $decimal; $i++) {
-            $multiple *= 10;
-        }
 
         $month = now()->month;
 
         Cache::increment('user_' . $user_id . '_month_' . $month . '_drops', $amount);
 
-        $amount = $amount * $multiple;
+        $amount = $amount * $decimal;
 
         $drops = Cache::decrement($cache_key, $amount);
 
         // (new App\Models\Transaction)->create(['name' => 1]);
 
-        $this->addPayoutDrops($user_id, $amount, $description);
+        $this->addPayoutDrops($user_id, $amount / $decimal, $description);
 
         return $drops;
     }
