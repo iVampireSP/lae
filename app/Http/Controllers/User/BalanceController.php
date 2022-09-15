@@ -154,10 +154,15 @@ class BalanceController extends Controller
             $balance->paid_at = now();
             $balance->save();
 
+            $transaction = new Transaction();
 
             DB::beginTransaction();
             try {
                 $balance->user->increment('balance', $trade->totalAmount);
+
+                $description = '充值 ' . $trade->totalAmount . ' 元，对端订单号: ' . $out_trade_no;
+                $transaction->addIncomeBalance($balance->user_id, 'alipay', $trade->totalAmount, $description);
+
                 DB::commit();
             } catch (\Exception $e) {
                 DB::rollBack();
