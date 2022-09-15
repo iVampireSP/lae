@@ -186,7 +186,7 @@ class BalanceController extends Controller
 
 
     public function transactions() {
-        $transactions = Transaction::thisUser()->simplePaginate(30);
+        $transactions = Transaction::thisUser()->latest()->simplePaginate(30);
 
         return $this->success($transactions);
     }
