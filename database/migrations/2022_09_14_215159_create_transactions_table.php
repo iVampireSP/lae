@@ -16,7 +16,10 @@ return new class extends Migration
 
         Schema::connection('mongodb')->create('transactions', function (Blueprint $collection) {
             $collection->unsignedBigInteger('user_id')->index();
-            $collection->expire('created_at', now()->addYear());
+
+            // a year
+            $year = 365 * 24 * 60 * 60;
+            $collection->expire('created_at', $year);
 
         });
 
