@@ -84,6 +84,13 @@ $router->group(['prefix' => 'work-orders'], function () use ($router) {
     // });
 });
 
+
+$router->group(['prefix' => 'forum'], function () use ($router) {
+    $router->get('/announcements', [
+        'uses' => 'ForumController@announcements'
+    ]);
+});
+
 $router->group(['prefix' => 'modules/{module}'], function () use ($router) {
     $controller = 'Remote\ModuleController@call';
     $router->get('/{route:.*}/', $controller);
