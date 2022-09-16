@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Remote;
 
+use App\Models\Transaction;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Module\Module;
@@ -12,7 +13,51 @@ class ModuleController extends Controller
 {
     public function index()
     {
-        return $this->success(auth('remote')->user());
+        $module = auth('remote')->user();
+
+        $transactions = new Transaction();
+
+        // begin of this month
+        $beginOfMonth = now()->startOfMonth();
+
+        // end of this month
+        $endOfMonth = now()->endOfMonth();
+
+        $this_month_balance_and_drops = Cache::remember('this_month_balance_and_drops_' . $module->id, 3600, function () use ($transactions, $module, $beginOfMonth, $endOfMonth) {
+            $this_month = $transactions->where('module_id', $module->id)->whereBetween('created_at', [$beginOfMonth, $endOfMonth]);
+
+            // this month transactions
+            return [
+                'balance' => $this_month->sum('outcome'),
+                'drops' => $this_month->sum('outcome_drops')
+            ];
+        });
+
+        $last_month_balance_and_drops = Cache::remember('last_month_balance_and_drops_' . $module->id, 3600, function () use ($transactions, $module, $beginOfMonth, $endOfMonth) {
+            // last month transactions
+            $last_moth = $transactions->where('module_id', $module->id)->whereBetween('created_at', [$beginOfMonth, $endOfMonth]);
+
+            return [
+                'balance' => $last_moth->sum('outcome'),
+                'drops' => $last_moth->sum('outcome_drops')
+            ];
+        });
+
+
+        $rate = (int)config('drops.rate') - 10;
+
+        $data = [
+            'module' => $module,
+            'transactions' => [
+                'this_month' => $this_month_balance_and_drops,
+                'last_month' => $last_month_balance_and_drops,
+            ],
+            'balance' => [
+                'rate' => $rate,
+            ]
+        ];
+
+        return $this->success($data);
     }
 
     public function call(Request $request, Module $module)
