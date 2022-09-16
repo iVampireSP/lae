@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\BanUser;
+use App\Console\Commands\CalcModule;
 use App\Console\Commands\SuspendUserAllHosts;
 use App\Console\Commands\UnbanUser;
 use App\Jobs\HostCost;
@@ -23,7 +24,8 @@ class Kernel extends ConsoleKernel
         //
         BanUser::class,
         UnbanUser::class,
-        SuspendUserAllHosts::class
+        SuspendUserAllHosts::class,
+        CalcModule::class,
     ];
 
     /**

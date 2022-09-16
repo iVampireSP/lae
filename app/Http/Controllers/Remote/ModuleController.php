@@ -15,47 +15,14 @@ class ModuleController extends Controller
     {
         $module = auth('remote')->user();
 
-        $transactions = new Transaction();
-
-        // begin of this month
-        $beginOfMonth = now()->startOfMonth();
-
-        // end of this month
-        $endOfMonth = now()->endOfMonth();
-
-        $this_month_balance_and_drops = Cache::remember('this_month_balance_and_drops_' . $module->id, 3600, function () use ($transactions, $module, $beginOfMonth, $endOfMonth) {
-            $this_month = $transactions->where('module_id', $module->id)->whereBetween('created_at', [$beginOfMonth, $endOfMonth]);
-
-            // this month transactions
-            return [
-                'balance' => $this_month->sum('outcome'),
-                'drops' => $this_month->sum('outcome_drops')
-            ];
-        });
-
-        $last_month_balance_and_drops = Cache::remember('last_month_balance_and_drops_' . $module->id, 3600, function () use ($transactions, $module, $beginOfMonth, $endOfMonth) {
-            // last month transactions
-            $last_moth = $transactions->where('module_id', $module->id)->whereBetween('created_at', [$beginOfMonth, $endOfMonth]);
-
-            return [
-                'balance' => $last_moth->sum('outcome'),
-                'drops' => $last_moth->sum('outcome_drops')
-            ];
-        });
-
-
-        $rate = (int)config('drops.rate') - 10;
+        $calc = $this->calcModule($module);
 
         $data = [
-            'module' => $module,
-            'transactions' => [
-                'this_month' => $this_month_balance_and_drops,
-                'last_month' => $last_month_balance_and_drops,
-            ],
-            'balance' => [
-                'rate' => $rate,
-            ]
+            'module' => $module
         ];
+
+        // merge
+        $data = array_merge($data, $calc);
 
         return $this->success($data);
     }
@@ -101,5 +68,51 @@ class ModuleController extends Controller
         }
 
         return $this->remoteResponse($response['json'], $response['status']);
+    }
+
+
+    public function calcModule(Module $module)
+    {
+        // begin of this month
+        $beginOfMonth = now()->startOfMonth();
+
+        // end of this month
+        $endOfMonth = now()->endOfMonth();
+
+        $this_month_balance_and_drops = Cache::remember('this_month_balance_and_drops_' . $module->id, 3600, function () use ($module, $beginOfMonth, $endOfMonth) {
+            $this_month = Transaction::where('module_id', $module->id)->whereBetween('created_at', [$beginOfMonth, $endOfMonth]);
+
+            // this month transactions
+            return [
+                'balance' => $this_month->sum('outcome'),
+                'drops' => $this_month->sum('outcome_drops')
+            ];
+        });
+
+        $last_month_balance_and_drops = Cache::remember('last_month_balance_and_drops_' . $module->id, 3600, function () use ($module, $beginOfMonth, $endOfMonth) {
+            // last month transactions
+            $last_moth = Transaction::where('module_id', $module->id)->whereBetween('created_at', [$beginOfMonth, $endOfMonth]);
+
+            return [
+                'balance' => $last_moth->sum('outcome'),
+                'drops' => $last_moth->sum('outcome_drops')
+            ];
+        });
+
+
+        $rate = (int)config('drops.rate') - 10;
+
+        $data = [
+            'transactions' => [
+                'this_month' => $this_month_balance_and_drops,
+                'last_month' => $last_month_balance_and_drops,
+            ],
+            'balance' => [
+                'rate' => $rate,
+            ]
+        ];
+
+
+        return $data;
     }
 }
