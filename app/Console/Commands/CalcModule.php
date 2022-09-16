@@ -39,32 +39,36 @@ class CalcModule extends Command
      */
     public function handle()
     {
-        //
         $moduleController =  new ModuleController();
+        $rate = config('drops.module_rate');
 
-        $modules = Module::get();
-
-        // 当前时间
-        $now = now();
 
         $this->warn('开始计算集成模块收益。');
-        $this->warn('当前时间: ' . $now);
-
-        foreach ($modules as $module) {
-            $report = $moduleController->calcModule($module);
+        $this->warn('当前时间: ' . now());
+        $this->warn('比例: 1:' . $rate . ' (1 元 = ' . $rate . ' Drops)');
 
 
-            $income = $report['transactions']['this_month']['drops'] / $report['balance']['rate'];
+        Module::chunk(100, function ($modules) use ($rate, $moduleController) {
+            foreach ($modules as $module) {
+                $report = $moduleController->calcModule($module);
 
-            if ($income < 0) {
-                $income = 0;
+
+                $income = $report['transactions']['this_month']['drops'] / $rate;
+
+                if ($income < 0) {
+                    $income = 0;
+                }
+
+                // 取 2 位
+                $income = round($income, 2);
+
+                $text = $module->name . " 收益 {$income} 元 ";
+                $this->info($text);
             }
+        });
 
-            // 取 2 位
-            $income = round($income, 2);
-
-            $text = $module->name . " 收益 {$income} 元 ";
-            $this->info($text);
-        }
+        $this->warn('计算模块收益完成。');
+        $this->warn('完成时间: ' . now());
+        $this->warn('比例: 1:' . $rate . ' (1 元 = ' . $rate . ' Drops)');
     }
 }

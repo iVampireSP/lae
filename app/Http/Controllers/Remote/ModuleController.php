@@ -18,7 +18,8 @@ class ModuleController extends Controller
         $calc = $this->calcModule($module);
 
         $data = [
-            'module' => $module
+            'module' => $module,
+            'rate' => (int) config('drops.module_rate'),
         ];
 
         // merge
@@ -99,16 +100,10 @@ class ModuleController extends Controller
             ];
         });
 
-
-        $rate = (int)config('drops.rate') - 10;
-
         $data = [
             'transactions' => [
                 'this_month' => $this_month_balance_and_drops,
                 'last_month' => $last_month_balance_and_drops,
-            ],
-            'balance' => [
-                'rate' => $rate,
             ]
         ];
 
