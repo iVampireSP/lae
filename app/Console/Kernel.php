@@ -6,6 +6,7 @@ use App\Console\Commands\BanUser;
 use App\Console\Commands\CalcModule;
 use App\Console\Commands\SuspendUserAllHosts;
 use App\Console\Commands\UnbanUser;
+use App\Jobs\CheckAndChargeBalance;
 use App\Jobs\HostCost;
 use App\Jobs\ClearTasks;
 use App\Jobs\DeleteHost;
@@ -48,5 +49,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new ClearTasks())->weekly();
 
         $schedule->job(new DeleteHost())->hourly();
+
+        $schedule->job(new CheckAndChargeBalance())->hourly();
     }
 }

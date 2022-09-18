@@ -78,6 +78,11 @@ class BalanceController extends Controller
             return $this->error('订单已支付');
         }
 
+
+        if (now()->diffInDays($balance->created_at) > 1) {
+            return $this->error('订单已失效');
+        }
+
         try {
             $result = AlipayFactory::payment()->page()->pay("支付", $balance->order_id, $balance->amount, route('balances.return'));
 
@@ -115,7 +120,7 @@ class BalanceController extends Controller
             return $this->success('订单已支付');
         }
 
-        if ($this->checkAndCharge($request->out_trade_no, $balance)) {
+        if ($this->checkAndCharge($balance)) {
             return view('pay_success');
         } else {
             return view('pay_error');
@@ -139,16 +144,16 @@ class BalanceController extends Controller
             return $this->success('订单已支付');
         }
 
-        if ($this->checkAndCharge($request->out_trade_no, $balance)) {
+        if ($this->checkAndCharge($balance)) {
             return $this->success();
         } else {
             return $this->error();
         }
     }
 
-    public function checkAndCharge($out_trade_no, Balance $balance)
+    public function checkAndCharge(Balance $balance)
     {
-        $trade = AlipayFactory::payment()->common()->query($out_trade_no);
+        $trade = AlipayFactory::payment()->common()->query($balance->order_id);
 
         if ($trade->code == "10000" && $trade->tradeStatus == "TRADE_SUCCESS") {
             $balance->paid_at = now();
@@ -160,13 +165,13 @@ class BalanceController extends Controller
             try {
                 $balance->user->increment('balance', $trade->totalAmount);
 
-                $description = '充值 ' . $trade->totalAmount . ' 元，对端订单号: ' . $out_trade_no;
+                $description = '充值 ' . $trade->totalAmount . ' 元';
                 $transaction->addIncomeBalance($balance->user_id, 'alipay', $trade->totalAmount, $description);
 
                 DB::commit();
             } catch (\Exception $e) {
                 DB::rollBack();
-                AlipayFactory::payment()->common()->refund($out_trade_no, $trade->totalAmount);
+                AlipayFactory::payment()->common()->refund($balance->order_id, $trade->totalAmount);
                 return $this->error($e->getMessage());
             }
 
@@ -185,7 +190,8 @@ class BalanceController extends Controller
     // }
 
 
-    public function transactions() {
+    public function transactions()
+    {
         $transactions = Transaction::thisUser()->latest()->simplePaginate(30);
 
         return $this->success($transactions);
