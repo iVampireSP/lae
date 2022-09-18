@@ -36,6 +36,15 @@ class ForumController extends Controller
         return $this->resp($resp);
     }
 
+    public function pinned()
+    {
+        $resp = $this->cache(function () {
+            return $this->get('discussions?filter[tag]=pinned&page[offset]=0&sort=-commentCount');
+        });
+
+        return $this->resp($resp);
+    }
+
 
     public function cache(Closure $callback)
     {
@@ -48,7 +57,8 @@ class ForumController extends Controller
     }
 
 
-    public function resp($data) {
+    public function resp($data)
+    {
         $data['base_url'] = $this->baseUrl;
 
         return $this->success($data);

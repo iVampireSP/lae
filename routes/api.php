@@ -89,6 +89,10 @@ $router->group(['prefix' => 'forum'], function () use ($router) {
     $router->get('/announcements', [
         'uses' => 'ForumController@announcements'
     ]);
+
+    $router->get('/pinned', [
+        'uses' => 'ForumController@pinned'
+    ]);
 });
 
 $router->group(['prefix' => 'modules/{module}'], function () use ($router) {
