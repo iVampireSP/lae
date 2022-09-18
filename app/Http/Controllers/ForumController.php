@@ -51,7 +51,7 @@ class ForumController extends Controller
         // 获取调用方法名
         $method = debug_backtrace()[1]['function'];
 
-        return Cache::remember('forum.func.' . $method . '.user_' . auth()->id(), 60, function () use ($callback) {
+        return Cache::remember('forum.func.' . $method, 60, function () use ($callback) {
             return $callback();
         });
     }
