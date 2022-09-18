@@ -28,8 +28,6 @@ class CheckAndChargeBalance extends Job
 
         $bc = new BalanceController();
 
-
-        // 查找今天未支付的订单
         Balance::where('paid_at', null)->chunk(100, function ($balances) use ($bc) {
             foreach ($balances as $balance) {
                 if (!$bc->checkAndCharge($balance)) {
@@ -39,6 +37,9 @@ class CheckAndChargeBalance extends Job
                 }
             }
         });
+
+        // 删除所有未付款并且大于两天的订单
+        Balance::where('paid_at', null)->where('created_at', '<', now()->subDays(2))->delete();
 
         // Balance::chunk(100, function ($balances) use ($bc) {
         //     foreach ($balances as $balance) {
