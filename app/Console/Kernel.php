@@ -6,6 +6,7 @@ use App\Console\Commands\BanUser;
 use App\Console\Commands\CalcModule;
 use App\Console\Commands\SuspendUserAllHosts;
 use App\Console\Commands\UnbanUser;
+use App\Console\Commands\UserAddBalance;
 use App\Jobs\CheckAndChargeBalance;
 use App\Jobs\HostCost;
 use App\Jobs\ClearTasks;
@@ -27,6 +28,7 @@ class Kernel extends ConsoleKernel
         UnbanUser::class,
         SuspendUserAllHosts::class,
         CalcModule::class,
+        UserAddBalance::class,
     ];
 
     /**
