@@ -35,10 +35,10 @@ class Host extends Model
 
 
     // get user hosts
-    public function getUserHosts($module_id) {
-
-        return Cache::remember('user_hosts_' . auth()->id(), 3600, function () use ($module_id) {
-            return $this->thisUser($module_id)->with('module', function ($query) {
+    public function getUserHosts($user_id = null)
+    {
+        return Cache::remember('user_hosts_' . $user_id ?? auth()->id(), 3600, function () use ($user_id) {
+            return $this->where('user_id', $user_id)->with('module', function ($query) {
                 $query->select(['id', 'name']);
             })->get();
         });

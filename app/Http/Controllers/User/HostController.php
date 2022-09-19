@@ -10,10 +10,10 @@ use Illuminate\Support\Facades\Cache;
 
 class HostController extends Controller
 {
-    public function index(Module $module)
+    public function index()
     {
         //
-        $hosts = (new Host())->getUserHosts($module->id ?? null);
+        $hosts = (new Host())->getUserHosts(auth()->id());
 
         return $this->success($hosts);
     }

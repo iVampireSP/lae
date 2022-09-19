@@ -89,6 +89,27 @@ class Module extends Model implements AuthenticatableContract, AuthorizableContr
         ];
     }
 
+    public function moduleRequest($method, $path, $requests)
+    {
+        $http = Http::remote($this->api_token, $this->url)
+            ->accept('application/json');
+
+        unset($requests['func']);
+
+        $requests['module_id'] = auth('module')->id();
+
+        $response = $http->{$method}("exports/{$path}", $requests);
+
+        $json = $response->json();
+
+        $status = $response->status();
+        return [
+            'body' => $response->body(),
+            'json' => $json,
+            'status' => $status
+        ];
+    }
+
 
 
     public function remotePost($path = '', $data = [])

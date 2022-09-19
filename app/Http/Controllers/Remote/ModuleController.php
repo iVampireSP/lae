@@ -72,6 +72,25 @@ class ModuleController extends Controller
     }
 
 
+    public function exportCall(Request $request, Module $module)
+    {
+        $path = request()->path();
+
+        $path = substr($path, strlen('/remote/modules/' . $module->id));
+        $path = preg_replace('/[^a-zA-Z0-9\/]/', '', $path);
+
+        $method = Str::lower($request->method());
+
+        $response = $module->moduleRequest($method, $path, $request->all());
+
+        if ($response['json'] === null && $response['body'] !== null) {
+            return response($response['body'], $response['status']);
+        }
+
+        return $this->remoteResponse($response['json'], $response['status']);
+    }
+
+
     public function calcModule(Module $module)
     {
         // begin of this month
