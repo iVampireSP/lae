@@ -78,7 +78,7 @@ $router->group(['prefix' => 'work-orders'], function () use ($router) {
 // 模块间调用
 
 $router->group(['prefix' => 'modules/{module}'], function () use ($router) {
-    $controller = 'Remote\ModuleController@exportCall';
+    $controller = 'ModuleController@exportCall';
     $router->get('/{route:.*}/', $controller);
     $router->post('/{route:.*}/', $controller);
     $router->put('/{route:.*}/', $controller);
@@ -90,4 +90,8 @@ $router->group(['prefix' => 'modules/{module}'], function () use ($router) {
 // 用户信息
 $router->get('users/{user}', [
     'uses' => '\App\Http\Controllers\Remote\UserController@show'
+]);
+
+$router->get('users/{user}/hosts', [
+    'uses' => '\App\Http\Controllers\Remote\UserController@hosts'
 ]);

@@ -60,14 +60,20 @@ class Module extends Model implements AuthenticatableContract, AuthorizableContr
     // post, get, patch, delete 等请求
     public function remoteRequest($method, $path, $requests)
     {
+        $user = auth('api')->user();
+
         $http = Http::remote($this->api_token, $this->url)
             ->accept('application/json');
 
+        // add Headers
+        $http->withHeaders([
+            'X-User' => $user->id
+        ]);
+
         unset($requests['func']);
 
-        $requests['user_id'] = auth('api')->id();
+        $requests['user_id'] = $user->id;
 
-        $user = auth('api')->user();
 
         if ($method == 'post') {
             // add user to requests
@@ -91,12 +97,16 @@ class Module extends Model implements AuthenticatableContract, AuthorizableContr
 
     public function moduleRequest($method, $path, $requests)
     {
+        $module_id = auth('remote')->id();
+
         $http = Http::remote($this->api_token, $this->url)
             ->accept('application/json');
 
-        unset($requests['func']);
+        $http->withHeaders([
+            'X-Module' => $module_id
+        ]);
 
-        $requests['module_id'] = auth('module')->id();
+        $requests['module_id'] = $module_id;
 
         $response = $http->{$method}("exports/{$path}", $requests);
 

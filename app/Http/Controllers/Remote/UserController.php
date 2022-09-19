@@ -23,9 +23,9 @@ class UserController extends Controller
         return $this->success($user);
     }
 
-    public function hosts(Request $request, User $user)
+    public function hosts(User $user)
     {
-        $hosts = (new Host())->getUserHosts($request->module_id ?? null);
+        $hosts = (new Host())->getUserHosts($user->id);
 
         return $this->success($hosts);
     }
