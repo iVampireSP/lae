@@ -30,7 +30,7 @@ class ForumController extends Controller
     public function announcements()
     {
         $resp = $this->cache(function () {
-            return $this->get('discussions?filter[tag]=announcements&page[offset]=0&sort=-commentCount');
+            return $this->get('discussions?filter[tag]=announcements&page[offset]=0&sort=-createdAt');
         });
 
         return $this->resp($resp);
@@ -39,7 +39,7 @@ class ForumController extends Controller
     public function pinned()
     {
         $resp = $this->cache(function () {
-            return $this->get('discussions?filter[tag]=pinned&page[offset]=0&sort=-commentCount');
+            return $this->get('discussions?filter[tag]=pinned&page[offset]=0&sort=-createdAt');
         });
 
         return $this->resp($resp);
