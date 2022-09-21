@@ -7,6 +7,7 @@ use App\Console\Commands\CalcModule;
 use App\Console\Commands\SuspendUserAllHosts;
 use App\Console\Commands\UnbanUser;
 use App\Console\Commands\UserAddBalance;
+use App\Jobs\AutoCloseWorkOrder;
 use App\Jobs\CheckAndChargeBalance;
 use App\Jobs\HostCost;
 use App\Jobs\ClearTasks;
@@ -53,5 +54,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new DeleteHost())->hourly();
 
         $schedule->job(new CheckAndChargeBalance())->hourly();
+
+        $schedule->job(new AutoCloseWorkOrder())->everyFiveMinutes();
     }
 }
