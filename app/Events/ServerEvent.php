@@ -4,17 +4,18 @@ namespace App\Events;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 
 class ServerEvent extends Event implements ShouldBroadcast
 {
 
-    public array $servers;
+    public array $data;
 
     public string $type = 'servers.updated';
 
     public function __construct($servers)
     {
-        $this->servers = $servers;
+        $this->data = $servers;
     }
 
     public function broadcastOn()
