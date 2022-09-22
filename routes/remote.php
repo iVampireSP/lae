@@ -95,3 +95,12 @@ $router->get('users/{user}', [
 $router->get('users/{user}/hosts', [
     'uses' => '\App\Http\Controllers\Remote\UserController@hosts'
 ]);
+
+
+$router->post('broadcast/users/{user}', [
+    'uses' => '\App\Http\Controllers\Remote\BroadcastController@broadcast_to_user'
+]);
+
+$router->post('broadcast/hosts/{host}', [
+    'uses' => '\App\Http\Controllers\Remote\BroadcastController@broadcast_to_host'
+]);
