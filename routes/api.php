@@ -106,6 +106,4 @@ $router->group(['prefix' => 'modules/{module}'], function () use ($router) {
     $router->delete('/{route:.*}/', $controller);
 });
 
-
-$router->get('broadcasting/auth', ['uses' => 'BroadcastController@authenticate']);
 $router->post('broadcasting/auth', ['uses' => 'BroadcastController@authenticate']);

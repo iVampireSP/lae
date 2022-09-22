@@ -2,15 +2,16 @@
 
 namespace App\Jobs\Remote\WorkOrder;
 
+use Log;
+use App\Events\UserEvent;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 // use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Models\WorkOrder\Reply as WorkOrderReply;
-use Log;
 
 class Reply implements ShouldQueue
 {
@@ -47,6 +48,9 @@ class Reply implements ShouldQueue
 
         if ($response->successful()) {
             $this->reply->is_pending = false;
+
+            broadcast(new UserEvent($this->reply->workOrder->user_id, 'work-order.replied', $this->reply));
+
         } else {
             $this->reply->is_pending = true;
         }

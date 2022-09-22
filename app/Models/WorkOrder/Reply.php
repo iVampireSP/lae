@@ -2,8 +2,9 @@
 
 namespace App\Models\WorkOrder;
 
-use App\Exceptions\CommonException;
 use App\Models\User;
+use App\Events\UserEvent;
+use App\Exceptions\CommonException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -60,6 +61,8 @@ class Reply extends Model
             if (auth('remote')->check()) {
                 $model->user_id = null;
                 $model->workOrder->status = 'replied';
+
+                broadcast(new UserEvent($model->user_id, 'work-order.replied', $model->workOrder));
             }
 
             $model->workOrder->save();

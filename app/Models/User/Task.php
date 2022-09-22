@@ -3,11 +3,12 @@
 namespace App\Models\User;
 
 use App\Models\Host;
+use Ramsey\Uuid\Uuid;
+use App\Events\UserEvent;
 use App\Exceptions\CommonException;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Support\Facades\Cache;
-use Ramsey\Uuid\Uuid;
 
 class Task extends Model
 {
@@ -86,6 +87,12 @@ class Task extends Model
             }
         });
 
+        // created
+        static::created(function ($model) {
+            $model->load('host');
+            broadcast(new UserEvent($model->user_id, 'tasks.created', $model));
+        });
+
         // updateing
         static::updating(function ($model) {
             if ($model->progress == 100) {
@@ -96,11 +103,16 @@ class Task extends Model
         // updated and delete
         static::updated(function ($model) {
             Cache::forget('user_tasks_' . $model->user_id);
+
+            $model->load('host');
+            broadcast(new UserEvent($model->user_id, 'tasks.updated', $model));
         });
 
 
         static::deleted(function ($model) {
             Cache::forget('user_tasks_' . $model->user_id);
+
+            broadcast(new UserEvent($model->user_id, 'tasks.deleted', $model));
         });
     }
 }

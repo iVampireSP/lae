@@ -2,10 +2,11 @@
 
 namespace App\Models;
 
+use App\Events\UserEvent;
 use App\Models\Transaction;
 use App\Models\Module\Module;
-use App\Models\WorkOrder\WorkOrder;
 // use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\WorkOrder\WorkOrder;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
 use App\Exceptions\User\BalanceNotEnoughException;
@@ -139,41 +140,18 @@ class Host extends Model
 
         $transaction->reduceDrops($this->user_id, $this->id, $this->module_id, $auto, $this->price);
 
+        broadcast(new UserEvent($this->user_id, 'balances.drops.reduced', $this->user));
+
         return true;
     }
 
-    /**
-     * 创建主机
-     *
-     * 在此之后，所有的主机都将由 module 创建，并且主机的数据仅被用作计费。
-     *
-     * 废弃
-     * @deprecated
-     */
-    // on create
     protected static function boot()
     {
         parent::boot();
 
-        // static::creating(function ($model) {
-        //     // if sanctum
-        //     // if (auth('api')->check()) {
-        //     //     $model->user_id = auth('api')->id();
-        //     // } else {
-        //     //     // if user_id is null
-        //     //     // check user_id is exists
-        //     //     throw_if(!User::find($model->user_id), CommonException::class, 'user is not exists');
-        //     // }
-
-        //     // // set price to 0
-        //     // $model->price = 0;
-
-        //     // $model->load('module');
-        //     // $model->module->load(['provider', 'module']);
-
-        //     // add to queue
-
-        // });
+        static::created(function ($model) {
+            broadcast(new UserEvent($model->user_id, 'hosts.created', $model));
+        });
 
         static::updating(function ($model) {
             if ($model->status == 'suspended') {
@@ -181,6 +159,8 @@ class Host extends Model
             } else if ($model->status == 'running') {
                 $model->suspended_at = null;
             }
+
+            broadcast(new UserEvent($model->user_id, 'hosts.updating', $model));
         });
 
         // when Updated
@@ -188,16 +168,18 @@ class Host extends Model
             dispatch(new \App\Jobs\Remote\Host($model, 'patch'));
 
             Cache::forget('user_hosts_' . $model->user_id);
+
+            broadcast(new UserEvent($model->user_id, 'hosts.updated', $model));
         });
 
-        // // when delete
+        //
         // static::deleting(function ($model) {
-        //     // return false;
-
-        //     // dispatch(new \App\Jobs\Remote\Host($model, 'delete'));
+        //     broadcast(new UserEvent($model->user_id, 'hosts.deleting', $model));
         // });
 
         static::deleted(function ($model) {
+            broadcast(new UserEvent($model->user_id, 'hosts.deleted', $model));
+
             Cache::forget('user_hosts_' . $model->user_id);
         });
     }

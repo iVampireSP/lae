@@ -2,6 +2,7 @@
 
 namespace App\Jobs\Remote;
 
+use App\Events\ServerEvent;
 use App\Models\Module\Module;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\Log;
@@ -11,8 +12,6 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use GuzzleHttp\Exception\ConnectException;
 use Illuminate\Contracts\Queue\ShouldQueue;
-
-// use Illuminate\Contracts\Queue\ShouldBeUnique;
 
 class FetchModule implements ShouldQueue
 {
@@ -77,6 +76,8 @@ class FetchModule implements ShouldQueue
                                 ]
                             ];
                         }, $json['data']['servers']));
+
+                        broadcast(new ServerEvent($servers));
                     }
                     // $module->update([
                     //     'data' => $response->json()

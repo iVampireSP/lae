@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserEvent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
 class ServerController extends Controller
 {
-    public function __invoke(Request $request) {
+    public function __invoke(Request $request)
+    {
 
         $servers = Cache::get('servers', []);
         //
