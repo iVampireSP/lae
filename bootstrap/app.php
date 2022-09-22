@@ -76,6 +76,7 @@ $app->configure('session');
 $app->configure('alipay');
 $app->configure('drops');
 $app->configure('forum');
+$app->configure('broadcasting');
 
 /*
 |--------------------------------------------------------------------------
@@ -91,6 +92,7 @@ $app->configure('forum');
 $app->middleware([
     // App\Http\Middleware\ExampleMiddleware::class
     \App\Http\Middleware\AllowCors::class,
+    // \App\Http\Middleware\LogAllRequest::class,
 ]);
 
 $app->routeMiddleware([
@@ -117,9 +119,12 @@ $app->register(App\Providers\AuthServiceProvider::class);
 $app->register(Illuminate\Redis\RedisServiceProvider::class);
 $app->register(Hhxsv5\LaravelS\Illuminate\LaravelSServiceProvider::class);
 $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
-// $app->register(App\Providers\EventServiceProvider::class);
+$app->register(App\Providers\EventServiceProvider::class);
 $app->register(\Anik\Form\FormRequestServiceProvider::class);
 $app->register(App\Providers\RouteBindingServiceProvider::class);
+
+// broadcast
+$app->register(App\Providers\BroadcastServiceProvider::class);
 
 
 /*
@@ -154,6 +159,5 @@ $app->router->group([
 ], function ($router) {
     require __DIR__ . '/../routes/remote.php';
 });
-
 
 return $app;

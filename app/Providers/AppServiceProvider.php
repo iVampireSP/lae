@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Alipay\EasySDK\Kernel\Config as AlipayConfig;
 use Alipay\EasySDK\Kernel\Factory as AlipayFactory;
+use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 

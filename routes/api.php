@@ -2,6 +2,8 @@
 
 /** @var \Laravel\Lumen\Routing\Router $router */
 
+use Illuminate\Support\Facades\Broadcast;
+
 $router->get('/users', [
     'uses' => 'UserController@index'
 ]);
@@ -103,3 +105,7 @@ $router->group(['prefix' => 'modules/{module}'], function () use ($router) {
     $router->patch('/{route:.*}/', $controller);
     $router->delete('/{route:.*}/', $controller);
 });
+
+
+$router->get('broadcasting/auth', ['uses' => 'BroadcastController@authenticate']);
+$router->post('broadcasting/auth', ['uses' => 'BroadcastController@authenticate']);
