@@ -51,7 +51,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
         $cache_key = 'user_drops_' . $this->id;
 
-        if ($amount === 0) {
+        if ($amount === 0 || $amount === null) {
             return $this;
         }
 
