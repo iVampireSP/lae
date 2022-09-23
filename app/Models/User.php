@@ -48,9 +48,15 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
     public function toDrops($amount = 1)
     {
-        $rate = config('drops.rate');
 
         $cache_key = 'user_drops_' . $this->id;
+
+        if ($amount === 0) {
+            return $this;
+        }
+
+        $rate = config('drops.rate');
+
 
         $transactions = new Transaction();
 
