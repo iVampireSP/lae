@@ -6,6 +6,7 @@ use Illuminate\Support\Str;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Support\Facades\Http;
 use Laravel\Lumen\Auth\Authorizable;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
@@ -131,6 +132,15 @@ class Module extends Model implements AuthenticatableContract, AuthorizableContr
         $status = $response->status();
 
         return [$json, $status];
+    }
+
+
+    // get cached modules
+    public static function cached_modules()
+    {
+        return Cache::remember('modules', 600, function () {
+            return Module::all();
+        });
     }
 
     protected static function boot()

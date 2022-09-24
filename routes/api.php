@@ -2,14 +2,16 @@
 
 /** @var \Laravel\Lumen\Routing\Router $router */
 
-use Illuminate\Support\Facades\Broadcast;
-
 $router->get('/users', [
     'uses' => 'UserController@index'
 ]);
 
 $router->get('/servers', [
     'uses' => 'ServerController'
+]);
+
+$router->get('/modules', [
+    'uses' => 'User\ModuleController'
 ]);
 
 $router->group(['prefix' => 'hosts'], function () use ($router) {
