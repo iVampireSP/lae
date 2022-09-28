@@ -142,6 +142,13 @@ class Host extends Model
 
         broadcast(new UserEvent($this->user_id, 'balances.drops.reduced', $this->user));
 
+        // 检测用户余额是否足够
+        if ($this->user->balance < 0) {
+            $this->update([
+                'status' => 'suspended',
+            ]);
+        }
+
         return true;
     }
 
