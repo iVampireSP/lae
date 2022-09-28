@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Console\Commands\BanUser;
 use App\Console\Commands\CalcModule;
+use App\Console\Commands\GetUser;
 use App\Console\Commands\SuspendUserAllHosts;
 use App\Console\Commands\UnbanUser;
 use App\Console\Commands\UserAddBalance;
@@ -30,6 +31,7 @@ class Kernel extends ConsoleKernel
         SuspendUserAllHosts::class,
         CalcModule::class,
         UserAddBalance::class,
+        GetUser::class,
     ];
 
     /**

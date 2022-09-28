@@ -4,7 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Models\Host;
 use Illuminate\Http\Request;
-use App\Models\Module\Module;
+// use App\Models\Module\Module;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 
