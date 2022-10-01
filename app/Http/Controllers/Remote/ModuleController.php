@@ -57,7 +57,7 @@ class ModuleController extends Controller
             $user = auth('api')->user();
 
             if ($user->balance < 1) {
-                return $this->error('余额小于 1, 无法使用 POST 请求。');
+                return $this->error('账户余额不足，请保证账户余额至少有 1 元。');
             }
         }
 
