@@ -194,16 +194,38 @@ class Transaction extends Model
         return $this->addLog($user_id, $data);
     }
 
+    public function reduceAmount($user_id, $amount = 0, $description = '扣除费用请求。')
+    {
+        $user = User::findOrFail($user_id);
+
+        if ($user) {
+            $user->balance -= $amount;
+
+            $user->save();
+        }
+
+        $data = [
+            'type' => 'payout',
+            'payment' => 'balance',
+            'description' => $description,
+            'income' => 0,
+            'income_drops' => 0,
+            'outcome' => $amount,
+            'outcome_drops' => 0
+        ];
+
+        return $this->addLog($user_id, $data);
+    }
+
 
     private function addLog($user_id, $data)
     {
         $user = User::find($user_id);
 
-
         $current = [
             'balance' => $user->balance,
             'drops' => $this->getDrops($user_id),
-            'user_id' => $user_id,
+            'user_id' => intval($user_id),
         ];
 
         // merge

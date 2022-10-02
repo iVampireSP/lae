@@ -15,7 +15,7 @@ class GetUser extends Command
      *
      * @var string
      */
-    protected $signature = 'user {id}';
+    protected $signature = 'user {email_or_id}';
 
     /**
      * The console command description.
@@ -42,18 +42,19 @@ class GetUser extends Command
     public function handle()
     {
         //
-        $id = $this->argument('id');
+        $email_or_id = $this->argument('email_or_id');
 
-        $user = User::findOrFail($id);
+        $user = User::where('email', $email_or_id)->orWhere('id', $email_or_id)->first();
+
 
         $transaction = new Transaction();
 
-        $drops = $transaction->getDrops($id);
+        $drops = $transaction->getDrops($user->id);
 
 
         $this->warn('用户基本信息');
 
-        $this->info('用户 ID: ' . $id);
+        $this->info('用户 ID: ' . $user->id);
         $this->info('名称: ' . $user->name);
         $this->info('邮箱: ' . $user->email);
         $this->info('余额：' . $user->balance . ' 元');
