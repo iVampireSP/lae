@@ -48,11 +48,11 @@ class ReduceBalance extends Command
 
         $user = User::find($user_id);
 
-        $this->warn('扣除金额: ' . $user->balance);
+        $this->warn('扣除金额: ' . $user->balance . ' 元');
 
-        $this->warn('用户当前余额：' . $user->balance);
+        $this->warn('用户当前余额：' . $user->balance . ' 元');
 
-        $this->warn('剩余余额：' . $user->balance - $amount);
+        $this->warn('剩余余额：' . $user->balance -$amount . ' 元');
 
         $confirm = $this->confirm('确认扣除？');
 
@@ -62,7 +62,7 @@ class ReduceBalance extends Command
 
             $this->info('扣除成功。');
         } else {
-            $this->info('取消扣除');
+            $this->info('取消扣除。');
         }
     }
 }
