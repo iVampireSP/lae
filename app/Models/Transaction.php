@@ -113,12 +113,6 @@ class Transaction extends Model
 
         $decimal = config('drops.decimal');
 
-        $month = now()->month;
-
-        Cache::increment('user_' . $user_id . '_month_' . $month . '_drops', $amount);
-
-        $amount = $amount * $decimal;
-
         Cache::decrement($cache_key, $amount);
 
         if ($auto) {
@@ -144,6 +138,10 @@ class Transaction extends Model
             'host_id' => $host_id,
             'module_id' => $module_id,
         ];
+
+        $month = now()->month;
+
+        Cache::increment('user_' . $user_id . '_month_' . $month . '_drops', $amount);
 
         return $this->addLog($user_id, $data);
     }
