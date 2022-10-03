@@ -201,17 +201,17 @@ class BalanceController extends Controller
 
     public function drops()
     {
-        $month = now()->month;
+        // $month = now()->month;
 
         $user_id = auth()->id();
 
-        $cache_key = 'user_' . $user_id . '_month_' . $month . '_drops';
+        // $cache_key = 'user_' . $user_id . '_month_' . $month . '_drops';
 
         $transactions = new Transaction();
 
         $resp = [
             'drops' => $transactions->getDrops($user_id),
-            'monthly_usages' => (double) Cache::get($cache_key, 0),
+            // 'monthly_usages' => (double) Cache::get($cache_key, 0),
             'rate' => config('drops.rate'),
             'decimal' => config('drops.decimal'),
         ];
