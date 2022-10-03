@@ -34,6 +34,8 @@ class Kernel extends ConsoleKernel
         UserAddBalance::class,
         GetUser::class,
         ReduceBalance::class,
+        Commands\System\Down::class,
+        Commands\System\Up::class,
     ];
 
     /**

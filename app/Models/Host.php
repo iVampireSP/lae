@@ -138,8 +138,6 @@ class Host extends Model
 
         Cache::put($month_cache_key, $hosts_drops, 604800);
 
-        $this->price *= config('drops.decimal');
-
         $transaction->reduceDrops($this->user_id, $this->id, $this->module_id, $auto, $this->price);
 
         broadcast(new UserEvent($this->user_id, 'balances.drops.reduced', $this->user));

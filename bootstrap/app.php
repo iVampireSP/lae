@@ -97,6 +97,7 @@ $app->middleware([
 
 $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
+    'maintenance' => App\Http\Middleware\Maintenance::class,
     // 'remote' => [
     //     \Illuminate\Routing\Middleware\SubstituteBindings::class,
     //     \App\Http\Middleware\AllowCors::class,
@@ -147,7 +148,7 @@ $app->router->group([
 $app->router->group([
     'namespace' => 'App\Http\Controllers',
     'prefix' => 'api',
-    'middleware' => ['auth:api'],
+    'middleware' => ['maintenance', 'auth:api'],
 ], function ($router) {
     require __DIR__ . '/../routes/api.php';
 });

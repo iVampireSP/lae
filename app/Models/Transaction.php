@@ -77,13 +77,11 @@ class Transaction extends Model
 
         $cache_key = 'user_drops_' . $user_id;
 
-        $decimal = config('drops.decimal');
+        $drops = Cache::get($cache_key, [
+            'drops' => 0,
+        ]);
 
-        $drops = Cache::get($cache_key);
-
-        $drops = $drops / $decimal;
-
-        return $drops;
+        return $drops['drops'];
     }
 
     public function increaseCurrentUserDrops($amount = 0)
@@ -96,14 +94,15 @@ class Transaction extends Model
     {
         $cache_key = 'user_drops_' . $user_id;
 
-        $decimal = config('drops.decimal');
+        $current_drops = Cache::get($cache_key, [
+            'drops' => 0,
+        ]);
 
+        $current_drops['drops'] += $amount;
 
-        $amount = $amount * $decimal;
+        Cache::forever($cache_key, $current_drops);
 
-        $drops = Cache::increment($cache_key, $amount);
-
-        return $drops;
+        return $current_drops['drops'];
     }
 
 
@@ -112,9 +111,15 @@ class Transaction extends Model
 
         $cache_key = 'user_drops_' . $user_id;
 
-        $decimal = config('drops.decimal');
+        $current_drops = Cache::get($cache_key, [
+            'drops' => 0,
+        ]);
 
-        Cache::decrement($cache_key, $amount);
+        $current_drops['drops'] = $current_drops['drops'] - $amount;
+
+        $current_drops['drops'] = round($current_drops['drops'], 5);
+
+        Cache::forever($cache_key, $current_drops);
 
         if ($auto) {
             $description = '平台按时间自动扣费。';
@@ -122,8 +127,7 @@ class Transaction extends Model
             $description = '集成模块发起的扣费。';
         }
 
-        $this->addPayoutDrops($user_id, $amount / $decimal, $description, $host_id, $module_id);
-        // $this->addPayoutDrops($user_id, $amount, $description, $host_id, $module_id);
+        $this->addPayoutDrops($user_id, $amount, $description, $host_id, $module_id);
     }
 
 
