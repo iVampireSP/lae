@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Jenssegers\Mongodb\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class Transaction extends Model
 {
@@ -122,6 +123,7 @@ class Transaction extends Model
         }
 
         $this->addPayoutDrops($user_id, $amount / $decimal, $description, $host_id, $module_id);
+        // $this->addPayoutDrops($user_id, $amount, $description, $host_id, $module_id);
     }
 
 
