@@ -141,9 +141,14 @@ class Transaction extends Model
             'module_id' => $module_id,
         ];
 
-        $month = now()->month;
 
-        Cache::increment('user_' . $user_id . '_month_' . $month . '_drops', $amount);
+        // $amount = (double) $amount;
+
+        // Log::debug($amount);
+
+        // $month = now()->month;
+
+        // Cache::increment('user_' . $user_id . '_month_' . $month . '_drops', $amount);
 
         return $this->addLog($user_id, $data);
     }

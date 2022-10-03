@@ -211,7 +211,7 @@ class BalanceController extends Controller
 
         $resp = [
             'drops' => $transactions->getDrops($user_id),
-            'monthly_usages' => (float) Cache::get($cache_key, 0),
+            'monthly_usages' => (double) Cache::get($cache_key, 0),
             'rate' => config('drops.rate'),
             'decimal' => config('drops.decimal'),
         ];
