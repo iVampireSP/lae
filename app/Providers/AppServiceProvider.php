@@ -21,7 +21,6 @@ class AppServiceProvider extends ServiceProvider
         //
 
         require_once app()->basePath('app') . '/Helpers.php';
-
     }
 
     public function boot()
@@ -38,6 +37,8 @@ class AppServiceProvider extends ServiceProvider
             return Http::withoutVerifying()->withHeaders([
                 'X-Remote-Api-Token' => $api_token,
                 'Content-Type' => 'application/json'
+            ])->withOptions([
+                'version' => 2,
             ])->baseUrl($url);
         });
 
