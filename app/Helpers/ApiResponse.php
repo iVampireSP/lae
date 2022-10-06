@@ -31,12 +31,12 @@ trait ApiResponse
             $data['success'] = 0;
         }
 
-        return response()->json($data, $status);
+        return response()->json($data, $status)->setEncodingOptions(JSON_UNESCAPED_UNICODE);
     }
 
     public function remoteResponse($response, $status = 200)
     {
-        return response()->json($response, $status);
+        return response()->json($response, $status)->setEncodingOptions(JSON_UNESCAPED_UNICODE);
     }
 
     // success
