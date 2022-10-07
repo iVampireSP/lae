@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
-use Jenssegers\Mongodb\Eloquent\Model;
-use Illuminate\Support\Facades\Cache;
+use App\Exceptions\ChargeException;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
+use Jenssegers\Mongodb\Eloquent\Model;
+use Illuminate\Contracts\Cache\LockTimeoutException;
 
 class Transaction extends Model
 {
@@ -203,27 +205,61 @@ class Transaction extends Model
         return $this->addLog($user_id, $data);
     }
 
+
+
     public function reduceAmount($user_id, $amount = 0, $description = '扣除费用请求。')
     {
-        $user = User::findOrFail($user_id);
 
-        if ($user) {
+        $lock = Cache::lock("user_balance_lock_" . $user_id, 10);
+        try {
+
+            $lock->block(5);
+
+            $user = User::findOrFail($user_id);
+
             $user->balance -= $amount;
-
             $user->save();
+
+            $this->addPayoutBalance($user_id, $amount, $description);
+
+            return $user->balance;
+        } finally {
+            optional($lock)->release();
         }
 
-        $data = [
-            'type' => 'payout',
-            'payment' => 'balance',
-            'description' => $description,
-            'income' => 0,
-            'income_drops' => 0,
-            'outcome' => $amount,
-            'outcome_drops' => 0
-        ];
+        return false;
+    }
 
-        return $this->addLog($user_id, $data);
+    public function addAmount($user_id, $payment = 'console', $amount = 0, $description = null)
+    {
+        $lock = Cache::lock("user_balance_lock_" . $user_id, 10);
+        try {
+
+            $lock->block(5);
+
+            $user = User::findOrFail($user_id);
+
+            $left_balance = $user->balance + $amount;
+
+            $user->increment('balance', $amount);
+
+            if (!$description) {
+                $description = '充值金额。';
+            } else {
+                $description = '充值 ' . $amount . ' 元';
+            }
+
+            $this->addIncomeBalance($user_id, $payment, $amount, $description);
+
+            return $left_balance;
+        } catch (LockTimeoutException $e) {
+            Log::error($e);
+            throw new ChargeException('充值失败，请稍后再试。');
+        } finally {
+            optional($lock)->release();
+        }
+
+        return false;
     }
 
 

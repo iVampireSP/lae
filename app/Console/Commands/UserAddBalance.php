@@ -7,6 +7,7 @@ use App\Models\Transaction;
 use App\Models\User\Balance;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
+use App\Exceptions\ChargeException;
 
 class UserAddBalance extends Command
 {
@@ -53,8 +54,9 @@ class UserAddBalance extends Command
 
         $balance = new Balance();
 
-        $this->info($user->name . ', 当前余额: ' . $user->balance);
+        $this->info($user->name . ', 当前余额: ' . $user->balance . ' 元');
 
+        $this->info('充值后余额: ' . ($user->balance + $amount) . ' 元');
         if (!$this->confirm('确认充值 ' . $amount . ' 元?')) {
             $this->info('已取消。');
             return;
@@ -70,30 +72,18 @@ class UserAddBalance extends Command
 
         $transaction = new Transaction();
 
-        DB::beginTransaction();
+        $description = '控制台充值 ' . $amount . ' 元';
+
         try {
-            $balance->user->increment('balance', $amount);
-
-            $description = '控制台充值 ' . $amount . ' 元';
-            $transaction->addIncomeBalance($balance->user_id, 'console', $amount, $description);
-
-            $balance->update([
-                'paid_at' => now(),
-            ]);
-
-            DB::commit();
+            $transaction->addAmount($user->id, 'console', $amount, $description);
 
             $this->info('充值成功。');
 
             $user->refresh();
             $this->info($user->name . ', 当前余额: ' . $user->balance);
+        } catch (ChargeException $e) {
 
-        } catch (\Exception $e) {
-            DB::rollBack();
-
-            $this->error('充值失败。' . $e->getMessage());
-
-            return;
+            return $this->error($e->getMessage());
         }
     }
 }

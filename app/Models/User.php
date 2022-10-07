@@ -96,14 +96,14 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $this;
     }
 
-    // when update
-    // protected static function boot()
-    // {
-    //     parent::boot();
+    protected static function boot()
+    {
+        parent::boot();
 
-    //     // when update
-    //     static::updating(function ($model) {
+        static::updating(function ($model) {
 
-    //     });
-    // }
+            // balance 四舍五入
+            $model->balance = round($model->balance, 2);
+        });
+    }
 }

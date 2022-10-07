@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Remote\Host;
 
-use Cache;
 use App\Models\Host;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -52,7 +51,6 @@ class HostController extends Controller
         $host['host_id'] = $host->id;
 
         return $this->created($host);
-
     }
 
     /**
@@ -86,14 +84,23 @@ class HostController extends Controller
 
             // 如果是立即扣费
             'cost_once' => 'sometimes|numeric|nullable',
+
+            'cost_balance' => 'sometimes|numeric|nullable',
         ]);
 
         // if has cost_once
         if ($request->has('cost_once')) {
-            $host->cost($request->cost_once, false);
+            $host->cost($request->cost_once ?? 0, false);
 
-            return $this->updated($request->cost_once);
+            return $this->updated();
         }
+
+        if ($request->has('cost_balance')) {
+            $host->costBalance($request->cost_balance ?? 0);
+
+            return $this->updated();
+        }
+
 
         $update = $request->all();
         // module_id 不能被更新

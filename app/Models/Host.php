@@ -152,6 +152,24 @@ class Host extends Model
         return true;
     }
 
+
+    public function costBalance($amount = 1)
+    {
+        $transaction = new Transaction();
+
+        $left = $transaction->reduceAmount($this->user_id, $amount);
+
+        broadcast(new UserEvent($this->user_id, 'balances.amount.reduced', $this->user));
+
+        if ($left < 0) {
+            $this->update([
+                'status' => 'suspended',
+            ]);
+        }
+
+        return true;
+    }
+
     protected static function boot()
     {
         parent::boot();

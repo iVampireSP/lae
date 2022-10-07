@@ -3,15 +3,16 @@
 namespace App\Http\Controllers\User;
 
 use Exception;
+use App\Models\Transaction;
 use App\Models\User\Balance;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Exceptions\ChargeException;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use Alipay\EasySDK\Kernel\Util\ResponseChecker;
 use Alipay\EasySDK\Kernel\Factory as AlipayFactory;
-use App\Models\Transaction;
 
 class BalanceController extends Controller
 {
@@ -161,16 +162,9 @@ class BalanceController extends Controller
 
             $transaction = new Transaction();
 
-            DB::beginTransaction();
             try {
-                $balance->user->increment('balance', $trade->totalAmount);
-
-                $description = '充值 ' . $trade->totalAmount . ' 元';
-                $transaction->addIncomeBalance($balance->user_id, 'alipay', $trade->totalAmount, $description);
-
-                DB::commit();
-            } catch (\Exception $e) {
-                DB::rollBack();
+                $transaction->addAmount($balance->user_id, 'alipay', $trade->totalAmount);
+            } catch (ChargeException $e) {
                 AlipayFactory::payment()->common()->refund($balance->order_id, $trade->totalAmount);
                 return $this->error($e->getMessage());
             }
