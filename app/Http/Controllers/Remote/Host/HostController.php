@@ -102,10 +102,7 @@ class HostController extends Controller
         }
 
 
-        $update = $request->all();
-        // module_id 不能被更新
-        unset($update['module_id']);
-        unset($update['user_id']);
+        $update = $request->except(['module_id', 'user_id']);
 
         $host->update($update);
 

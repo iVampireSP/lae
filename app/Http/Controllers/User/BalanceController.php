@@ -184,9 +184,20 @@ class BalanceController extends Controller
     // }
 
 
-    public function transactions()
+    public function transactions(Request $request)
     {
-        $transactions = Transaction::thisUser()->latest()->simplePaginate(30);
+        $transactions = Transaction::thisUser();
+
+
+        if ($request->has('type')) {
+            $transactions = $transactions->where('type', $request->type);
+        }
+
+        if ($request->has('payment')) {
+            $transactions = $transactions->where('payment', $request->payment);
+        }
+
+        $transactions = $transactions->latest()->simplePaginate(30);
 
         return $this->success($transactions);
     }
