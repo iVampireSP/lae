@@ -171,7 +171,7 @@ class Host extends Model
 
         Cache::put($month_cache_key, $hosts_drops, 604800);
 
-        $left = $transaction->reduceAmount($this->user_id, $amount);
+        $left = $transaction->reduceHostAmount($this->user_id, $this->id, $this->module_id, $amount);
 
         broadcast(new UserEvent($this->user_id, 'balances.amount.reduced', $this->user));
 

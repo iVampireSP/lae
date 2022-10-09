@@ -100,7 +100,7 @@ class ModuleController extends Controller
         $endOfMonth = now()->endOfMonth();
 
         $this_month_balance_and_drops = Cache::remember($module->id . '_this_month_balance_and_drops', 3600, function () use ($module, $beginOfMonth, $endOfMonth) {
-            $this_month = Transaction::where('module_id', $module->id)->whereBetween('created_at', [$beginOfMonth, $endOfMonth]);
+            $this_month = Transaction::where('module_id', $module->id)->where('type', 'payout')->whereBetween('created_at', [$beginOfMonth, $endOfMonth]);
 
             // this month transactions
             return [
@@ -111,7 +111,7 @@ class ModuleController extends Controller
 
         $last_month_balance_and_drops = Cache::remember($module->id . '_last_month_balance_and_drops', 3600, function () use ($module, $beginOfMonth, $endOfMonth) {
             // last month transactions
-            $last_moth = Transaction::where('module_id', $module->id)->whereBetween('created_at', [$beginOfMonth, $endOfMonth]);
+            $last_moth = Transaction::where('module_id', $module->id)->where('type', 'payout')->whereBetween('created_at', [$beginOfMonth, $endOfMonth]);
 
             return [
                 'balance' => $last_moth->sum('outcome'),

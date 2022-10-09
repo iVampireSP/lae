@@ -142,7 +142,7 @@ class Transaction extends Model
             'income' => 0,
             'income_drops' => 0,
             'outcome' => 0,
-            'outcome_drops' => $amount,
+            'outcome_drops' => (float) $amount,
             'host_id' => $host_id,
             'module_id' => $module_id,
         ];
@@ -167,7 +167,7 @@ class Transaction extends Model
             'payment' => 'balance',
             'description' => $description,
             'income' => 0,
-            'income_drops' => $amount,
+            'income_drops' => (float) $amount,
             'outcome' => 0,
             'outcome_drops' => 0,
         ];
@@ -181,7 +181,7 @@ class Transaction extends Model
             'type' => 'income',
             'payment' => $payment,
             'description' => $description,
-            'income' => $amount,
+            'income' => (float) $amount,
             'income_drops' => 0,
             'outcome' => 0,
             'outcome_drops' => 0,
@@ -198,8 +198,25 @@ class Transaction extends Model
             'description' => $description,
             'income' => 0,
             'income_drops' => 0,
-            'outcome' => $amount,
+            'outcome' => (float) $amount,
             'outcome_drops' => 0
+        ];
+
+        return $this->addLog($user_id, $data);
+    }
+
+    public function addHostPayoutBalance($user_id, $host_id, $module_id, $amount, $description)
+    {
+        $data = [
+            'type' => 'payout',
+            'payment' => 'balance',
+            'description' => $description,
+            'income' => 0,
+            'income_drops' => 0,
+            'outcome' => (float) $amount,
+            'outcome_drops' => 0,
+            'host_id' => $host_id,
+            'module_id' => $module_id,
         ];
 
         return $this->addLog($user_id, $data);
@@ -221,6 +238,30 @@ class Transaction extends Model
             $user->save();
 
             $this->addPayoutBalance($user_id, $amount, $description);
+
+            return $user->balance;
+        } finally {
+            optional($lock)->release();
+        }
+
+        return false;
+    }
+
+
+    public function reduceHostAmount($user_id, $host_id, $module_id, $amount = 0, $description = '扣除费用请求。')
+    {
+
+        $lock = Cache::lock("user_balance_lock_" . $user_id, 10);
+        try {
+
+            $lock->block(5);
+
+            $user = User::findOrFail($user_id);
+
+            $user->balance -= $amount;
+            $user->save();
+
+            $this->addHostPayoutBalance($user_id, $host_id, $module_id, $amount, $description);
 
             return $user->balance;
         } finally {
