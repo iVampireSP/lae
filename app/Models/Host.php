@@ -157,6 +157,20 @@ class Host extends Model
     {
         $transaction = new Transaction();
 
+        $month = now()->month;
+
+        $month_cache_key = 'user_' . $this->user_id . '_month_' . $month . '_hosts_balances';
+        $hosts_drops = Cache::get($month_cache_key, []);
+
+        // 统计 Host 消耗的 Drops
+        if (isset($hosts_drops[$this->id])) {
+            $hosts_drops[$this->id] += $amount;
+        } else {
+            $hosts_drops[$this->id] = $amount;
+        }
+
+        Cache::put($month_cache_key, $hosts_drops, 604800);
+
         $left = $transaction->reduceAmount($this->user_id, $amount);
 
         broadcast(new UserEvent($this->user_id, 'balances.amount.reduced', $this->user));
