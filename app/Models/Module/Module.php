@@ -81,8 +81,6 @@ class Module extends Model implements AuthenticatableContract, AuthorizableContr
             $requests['user'] = $user;
         }
 
-        $requests['user_id'] = $user['id'];
-
         $response = $http->{$method}("functions/{$path}", $requests);
 
         $json = $response->json();
