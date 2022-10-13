@@ -83,6 +83,9 @@ class Transaction extends Model
             'drops' => 0,
         ]);
 
+        // 保留 5 位
+        $drops['drops'] = round($drops['drops'], 5);
+
         return $drops['drops'];
     }
 
