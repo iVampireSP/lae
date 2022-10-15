@@ -99,7 +99,7 @@ class Host extends Model
             $this->price = $price;
         }
 
-        $this->price = round($this->price, 5);
+        $this->price = round($this->price, 8);
 
         $amount = $price / config('drops.rate') + 1;
 

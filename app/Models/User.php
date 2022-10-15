@@ -70,6 +70,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
 
         $total += $amount * $rate;
 
+
+        // amount 保留两位小数
+        $amount = round($amount, 2);
+
         $lock = Cache::lock("lock_" . $cache_key, 5);
         try {
             $lock->block(5);

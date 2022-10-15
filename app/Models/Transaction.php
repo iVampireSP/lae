@@ -83,8 +83,8 @@ class Transaction extends Model
             'drops' => 0,
         ]);
 
-        // 保留 5 位
-        $drops['drops'] = round($drops['drops'], 5);
+        // 保留 8 位
+        $drops['drops'] = round($drops['drops'], 8);
 
         return $drops['drops'];
     }
