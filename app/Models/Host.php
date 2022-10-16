@@ -96,18 +96,18 @@ class Host extends Model
         $drops = $transaction->getDrops($this->user_id);
 
         if ($price !== null) {
-            $this->price = $price;
+            $real_price = $price;
         }
 
-        $this->price = round($this->price, 8);
+        $real_price = round($real_price, 8);
 
         $amount = $price / config('drops.rate') + 1;
 
         // if drops <= price
-        if ($drops < $this->price) {
+        if ($drops < $real_price) {
             try {
                 // 算出需要补充多少 Drops
-                $need = $this->price - $drops;
+                $need = $real_price - $drops;
 
                 // 算出需要补充多少余额
                 $need_amount = $need / config('drops.rate') + 1;
@@ -133,14 +133,14 @@ class Host extends Model
 
         // 统计 Host 消耗的 Drops
         if (isset($hosts_drops[$this->id])) {
-            $hosts_drops[$this->id] += $this->price;
+            $hosts_drops[$this->id] += $real_price;
         } else {
-            $hosts_drops[$this->id] = $this->price;
+            $hosts_drops[$this->id] = $real_price;
         }
 
         Cache::put($month_cache_key, $hosts_drops, 604800);
 
-        $transaction->reduceDrops($this->user_id, $this->id, $this->module_id, $auto, $this->price);
+        $transaction->reduceDrops($this->user_id, $this->id, $this->module_id, $auto, $real_price);
 
         broadcast(new UserEvent($this->user_id, 'balances.drops.reduced', $this->user));
 

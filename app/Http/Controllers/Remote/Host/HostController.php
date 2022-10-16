@@ -112,13 +112,17 @@ class HostController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Host $host
+     * @param  $host
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Host $host)
+    public function destroy($host)
     {
-        //
-        $host->delete();
+
+        $host = Host::where('id', $host)->first($host);
+
+        if ($host) {
+            $host->delete();
+        }
 
         return $this->deleted($host);
     }
