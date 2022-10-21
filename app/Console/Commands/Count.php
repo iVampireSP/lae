@@ -48,10 +48,11 @@ class Count extends Command
         $users = User::count();
         $transactions = new Transaction();
 
-        // 获取今年的交易记录
-        $transactions = $transactions->whereYear('created_at', date('Y'));
+        // 获取今年的交易记录 (MongoDB)
+        $startOfYear = now()->startOfYear();
+        $endOfYear = now()->endOfYear();
 
-        $transactions = $transactions->count();
+        $transactions = Transaction::where('type', 'payout')->whereBetween('created_at', [$startOfYear, $endOfYear])->count();
 
         $hosts = Host::count();
         $workOrders = WorkOrder::count();
@@ -65,6 +66,6 @@ class Count extends Command
         $this->warn('服务器数量: ' . $servers);
         $this->warn('工单数量: ' . $workOrders);
         $this->warn('工单回复数量: ' . $replies);
-        $this->warn('今年的交易记录: ' . $transactions);
+        $this->warn('今年的交易记录: ' . $transactions . ' 条');
     }
 }
