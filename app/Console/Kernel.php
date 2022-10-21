@@ -4,6 +4,7 @@ namespace App\Console;
 
 use App\Console\Commands\BanUser;
 use App\Console\Commands\CalcModule;
+use App\Console\Commands\Count;
 use App\Console\Commands\GetUser;
 use App\Console\Commands\ReduceBalance;
 use App\Console\Commands\SuspendUserAllHosts;
@@ -34,6 +35,7 @@ class Kernel extends ConsoleKernel
         UserAddBalance::class,
         GetUser::class,
         ReduceBalance::class,
+        Count::class,
         Commands\System\Down::class,
         Commands\System\Up::class,
     ];
