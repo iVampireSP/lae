@@ -45,6 +45,7 @@ class Count extends Command
     {
         //
 
+        $this->info('正在获取用户数量...');
         $users = User::count();
         $transactions = new Transaction();
 
@@ -52,14 +53,24 @@ class Count extends Command
         $startOfYear = now()->startOfYear();
         $endOfYear = now()->endOfYear();
 
+        $this->info('正在获取交易记录...');
         $transactions = Transaction::where('type', 'payout')->whereBetween('created_at', [$startOfYear, $endOfYear])->count();
 
+        $this->info('正在获取主机数量...');
         $hosts = Host::count();
+
+        $this->info('正在获取工单数量...');
         $workOrders = WorkOrder::count();
+
+        $this->info('正在获取工单回复数量...');
         $replies = Reply::count();
 
+        $this->info('统计服务器...');
         $servers = Cache::get('servers', []);
         $servers = count($servers);
+
+        $this->info('完成。');
+
 
         $this->warn('用户数量: ' . $users);
         $this->warn('主机数量: ' . $hosts);
