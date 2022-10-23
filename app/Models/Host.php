@@ -95,12 +95,12 @@ class Host extends Model
 
         $drops = $transaction->getDrops($this->user_id);
 
-        if ($price !== null) {
+        if ($price != null) {
             $real_price = $price;
         }
 
         if ($price == 0) {
-            return true;
+            $real_price = 0;
         }
 
         $real_price = round($real_price ?? 0, 8);
