@@ -99,7 +99,11 @@ class Host extends Model
             $real_price = $price;
         }
 
-        $real_price = round($real_price, 8);
+        if ($price == 0) {
+            return true;
+        }
+
+        $real_price = round($real_price ?? 0, 8);
 
         $amount = $price / config('drops.rate') + 1;
 
