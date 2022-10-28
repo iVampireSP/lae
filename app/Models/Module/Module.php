@@ -71,8 +71,6 @@ class Module extends Model implements AuthenticatableContract, AuthorizableContr
             'X-User' => $user->id
         ]);
 
-        unset($requests['func']);
-
         $requests['user_id'] = $user->id;
 
 
