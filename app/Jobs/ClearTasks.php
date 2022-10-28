@@ -31,10 +31,7 @@ class ClearTasks implements ShouldQueue
      */
     public function handle()
     {
-        //
-
-        // 删除所有状态不为 pending 的任务
-        Task::where('status', '!=', 'pending')->delete();
-
+        // 删除所有大于 1 天的任务
+        Task::where('created_at', '<', now()->subDays(1))->delete();
     }
 }
