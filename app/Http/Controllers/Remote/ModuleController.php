@@ -53,13 +53,13 @@ class ModuleController extends Controller
         $method = Str::lower($request->method());
 
         // 如果 method 为 post, 检查用户余额
-        if ($method == 'post') {
-            $user = auth('api')->user();
+        // if ($method == 'post') {
+        //     $user = auth('api')->user();
 
-            if ($user->balance < 1) {
-                return $this->error('账户余额不足，请保证账户余额至少有 1 元。');
-            }
-        }
+        //     if ($user->balance < 1) {
+        //         return $this->error('账户余额不足，请保证账户余额至少有 1 元。');
+        //     }
+        // }
 
 
         $response = $module->remoteRequest($method, $path, $request->all());

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Remote\Host;
 
 use App\Models\Host;
+use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+// use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Log;
+use App\Exceptions\User\BalanceNotEnoughException;
 
 class HostController extends Controller
 {
@@ -36,6 +38,13 @@ class HostController extends Controller
             'user_id' => 'required|integer|exists:users,id',
         ]);
 
+        //
+        $user = User::findOrFail($request->user_id);
+
+        if ($user->balance <= 1) {
+            throw new BalanceNotEnoughException("余额不足，无法开设新的计费项目。");
+        }
+
         // 如果没有 name，则随机
         $name = $request->input('name', Str::random(10));
 
@@ -43,7 +52,7 @@ class HostController extends Controller
             'name' => $name,
             'status' => $request->status,
             'price' => $request->price,
-            'user_id' => $request->user_id,
+            'user_id' => $user->id,
             'module_id' => auth('remote')->id()
         ];
 
