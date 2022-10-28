@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Remote;
 use App\Models\Host;
 use App\Models\User;
 use App\Models\Transaction;
-use Illuminate\Http\Request;
+// use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class UserController extends Controller
