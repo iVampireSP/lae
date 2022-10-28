@@ -42,7 +42,7 @@ class HostController extends Controller
         $user = User::findOrFail($request->user_id);
 
         if ($user->balance <= 1) {
-            throw new BalanceNotEnoughException("余额不足，无法开设新的计费项目。");
+            return $this->error('此用户余额不足，无法开设计费项目。');
         }
 
         // 如果没有 name，则随机
