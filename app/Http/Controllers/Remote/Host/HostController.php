@@ -6,6 +6,7 @@ use App\Models\Host;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
 
 class HostController extends Controller
 {
@@ -117,12 +118,17 @@ class HostController extends Controller
      */
     public function destroy($host)
     {
-
-        $host = Host::where('id', $host)->first($host);
-
-        if ($host) {
+        if ($host instanceof Host) {
             $host->delete();
+        } else {
+            $host = Host::where('id', $host)->first($host);
+
+            if ($host) {
+                $host->delete();
+            }
         }
+
+
 
         return $this->deleted($host);
     }
