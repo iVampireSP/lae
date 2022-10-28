@@ -73,7 +73,7 @@ $app->configure('laravels');
 $app->configure('oauth');
 $app->configure('queue');
 $app->configure('session');
-$app->configure('alipay');
+$app->configure('payment');
 $app->configure('drops');
 $app->configure('forum');
 $app->configure('broadcasting');

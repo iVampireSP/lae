@@ -5,9 +5,9 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Alipay\EasySDK\Kernel\Config as AlipayConfig;
 use Alipay\EasySDK\Kernel\Factory as AlipayFactory;
-use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
+use EasyWeChat\Pay\Application as WePay;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -43,6 +43,41 @@ class AppServiceProvider extends ServiceProvider
         });
 
         AlipayFactory::setOptions($this->alipayOptions());
+
+        $wechat_pay_config = [
+            'mch_id' => config('payment.wepay.mch_id'),
+
+            // 商户证书
+            'private_key' => __DIR__ . '/certs/apiclient_key.pem',
+            'certificate' => __DIR__ . '/certs/apiclient_cert.pem',
+
+            // v3 API 秘钥
+            'secret_key' =>
+            config('payment.wepay.v3_secret_key'),
+
+            // v2 API 秘钥
+            'v2_secret_key' => config('payment.wepay.v2_secret_key'),
+
+            // 平台证书：微信支付 APIv3 平台证书，需要使用工具下载
+            // 下载工具：https://github.com/wechatpay-apiv3/CertificateDownloader
+            'platform_certs' => [
+                // '/path/to/wechatpay/cert.pem',
+            ],
+
+            /**
+             * 接口请求相关配置，超时时间等，具体可用参数请参考：
+             * https://github.com/symfony/symfony/blob/5.3/src/Symfony/Contracts/HttpClient/HttpClientInterface.php
+             */
+            'http' => [
+                'throw'  => true, // 状态码非 200、300 时是否抛出异常，默认为开启
+                'timeout' => 5.0,
+            ],
+        ];
+
+        $app = new WePay($wechat_pay_config);
+
+        // mount app to global
+        app()->instance('wepay', $app);
     }
 
     private function alipayOptions()
@@ -59,7 +94,7 @@ class AppServiceProvider extends ServiceProvider
 
         $options->signType = 'RSA2';
 
-        $options->appId = config('alipay.app_id');
+        $options->appId = config('payment.alipay.app_id');
 
         // 为避免私钥随源码泄露，推荐从文件中读取私钥字符串而不是写入源码中
         $options->merchantPrivateKey = trim(Storage::get('alipayAppPriv.key'));

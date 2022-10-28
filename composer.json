@@ -23,7 +23,8 @@
         "mmghv/lumen-route-binding": "^1.0",
         "mongodb/mongodb": "^1.13",
         "predis/predis": "^2.0",
-        "pusher/pusher-php-server": "^7.0"
+        "pusher/pusher-php-server": "^7.0",
+        "w7corp/easywechat": "^6.8"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
