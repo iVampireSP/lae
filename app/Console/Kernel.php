@@ -7,6 +7,7 @@ use App\Console\Commands\CalcModule;
 use App\Console\Commands\Count;
 use App\Console\Commands\GetUser;
 use App\Console\Commands\ReduceBalance;
+use App\Console\Commands\Status;
 use App\Console\Commands\SuspendUserAllHosts;
 use App\Console\Commands\UnbanUser;
 use App\Console\Commands\UserAddBalance;
@@ -37,6 +38,7 @@ class Kernel extends ConsoleKernel
         GetUser::class,
         ReduceBalance::class,
         Count::class,
+        Status::class,
         Commands\System\Down::class,
         Commands\System\Up::class,
     ];

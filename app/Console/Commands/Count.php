@@ -59,6 +59,12 @@ class Count extends Command
         $this->info('正在获取主机数量...');
         $hosts = Host::count();
 
+        $this->info('正在获取激活的主机数量...');
+        $active_hosts = Host::active()->count();
+
+        $this->info('正在获取暂停的主机数量...');
+        $suspended_hosts = Host::whereNull('suspended_at')->count();
+
         $this->info('正在获取工单数量...');
         $workOrders = WorkOrder::count();
 
@@ -74,9 +80,13 @@ class Count extends Command
 
         $this->warn('用户数量: ' . $users);
         $this->warn('主机数量: ' . $hosts);
+        $this->warn('正常的主机数量: ' . $active_hosts);
+        $this->warn('暂停的主机数量: ' . $suspended_hosts);
         $this->warn('服务器数量: ' . $servers);
         $this->warn('工单数量: ' . $workOrders);
         $this->warn('工单回复数量: ' . $replies);
         $this->warn('今年的交易记录: ' . $transactions . ' 条');
+
+        return 0;
     }
 }
