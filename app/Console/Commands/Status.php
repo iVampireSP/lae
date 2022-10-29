@@ -20,7 +20,7 @@ class Status extends Command
      *
      * @var string
      */
-    protected $description = '获取 莱云 系统状态';
+    protected $description = '获取 莱云 运行环境';
 
     /**
      * Create a new command instance.
