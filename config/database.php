@@ -47,7 +47,7 @@ return [
             'prefix' => env('DB_PREFIX', ''),
             'strict' => env('DB_STRICT_MODE', true),
             'engine' => env('DB_ENGINE'),
-            'timezone' => env('DB_TIMEZONE', '+00:00'),
+            'timezone' => env('DB_TIMEZONE', '+08:00'),
             'options' => [
                 PDO::ATTR_PERSISTENT => true,
             ],
