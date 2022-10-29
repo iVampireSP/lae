@@ -2,11 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Host;
-use App\Models\User;
 use DB;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Redis;
 
 class Status extends Command
