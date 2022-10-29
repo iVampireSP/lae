@@ -2,12 +2,14 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
-use Alipay\EasySDK\Kernel\Config as AlipayConfig;
-use Alipay\EasySDK\Kernel\Factory as AlipayFactory;
+use Dotenv\Dotenv;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\ServiceProvider;
 use EasyWeChat\Pay\Application as WePay;
+use Alipay\EasySDK\Kernel\Config as AlipayConfig;
+use Alipay\EasySDK\Kernel\Factory as AlipayFactory;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,6 +27,7 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot()
     {
+        $this->generateInstanceId();
         //
 
         // header('server: Cluster Ready!');
@@ -111,5 +114,24 @@ class AppServiceProvider extends ServiceProvider
 
 
         return $options;
+    }
+
+
+    public function generateInstanceId()
+    {
+        if (config('app.instance_id') == null) {
+            $instance_id = md5(uniqid());
+
+            // 获取 .env 目录
+            $env_path = dirname(__DIR__) . '/../.env';
+
+            // 追加到 .env 文件
+            file_put_contents($env_path, PHP_EOL . "INSTANCE_ID={$instance_id}", FILE_APPEND);
+
+            // $env = file_get_contents(app()->environmentFilePath());
+            // $env = preg_replace('/INSTANCE_ID=(.*)/', 'INSTANCE_ID=' . $instance_id, $env);
+            // file_put_contents(app()->environmentFilePath(), $env);
+
+        }
     }
 }

@@ -3,11 +3,13 @@
 namespace App\Models\Module;
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Support\Facades\Http;
 use Laravel\Lumen\Auth\Authorizable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Eloquent\Model;
+use GuzzleHttp\Exception\ConnectException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
@@ -128,6 +130,29 @@ class Module extends Model implements AuthenticatableContract, AuthorizableContr
         $status = $response->status();
 
         return [$json, $status];
+    }
+
+    public function check($module_id = null)
+    {
+        if ($module_id) {
+            $module = Module::find($module_id);
+        } else {
+            $module = $this;
+        }
+
+        try {
+            $http = Http::remote($module->api_token, $module->url);
+            // dd($module->url);
+            $response = $http->get('remote');
+        } catch (ConnectException $e) {
+            Log::error($e->getMessage());
+        }
+
+        if ($response->status() == 200) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 

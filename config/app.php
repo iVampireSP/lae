@@ -108,4 +108,10 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
+    'instance_id' => env('INSTANCE_ID', null),
+
+    'instance_type' => env('INSTANCE_TYPE', 'primary'),
+
+    'instance_address' => env('INSTANCE_address', null),
+
 ];
