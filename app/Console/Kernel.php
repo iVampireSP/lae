@@ -4,7 +4,7 @@ namespace App\Console;
 
 use App\Console\Commands\BanUser;
 use App\Console\Commands\CalcModule;
-use App\Console\Commands\Check;
+use App\Console\Commands\Cluster;
 use App\Console\Commands\Count;
 use App\Console\Commands\GetUser;
 use App\Console\Commands\ReduceBalance;
@@ -40,7 +40,9 @@ class Kernel extends ConsoleKernel
         ReduceBalance::class,
         Count::class,
         Status::class,
-        Check::class,
+        Cluster\Init::class,
+        Cluster\Worker::class,
+        Cluster\Sync::class,
         Commands\System\Down::class,
         Commands\System\Up::class,
     ];

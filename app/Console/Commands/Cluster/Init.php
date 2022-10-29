@@ -1,28 +1,26 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Cluster;
 
-use App\Models\Module\Module;
 use DB;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Redis;
 
-class Check extends Command
+class Init extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'check';
+    protected $signature = 'cluster:init';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = '检查服务可用性';
+    protected $description = '初始化此节点。当公网 IP 发生变化时，需要重新初始化。';
 
     /**
      * Create a new command instance.
@@ -95,9 +93,9 @@ class Check extends Command
                 'type' => $type,
             ]);
 
-            $this->info('节点注册成功');
+            $this->warn('节点注册成功');
         } else {
-            $this->info('节点已注册');
+            $this->warn('节点已注册');
 
             // 如果 IP 不同，则更新 IP
             if ($node['ip'] != $addr) {
