@@ -88,6 +88,10 @@ $router->group(['prefix' => 'modules/{module}'], function () use ($router) {
 
 
 // 用户信息
+$router->get('users', [
+    'uses' => '\App\Http\Controllers\Remote\UserController@index'
+]);
+
 $router->get('users/{user}', [
     'uses' => '\App\Http\Controllers\Remote\UserController@show'
 ]);
