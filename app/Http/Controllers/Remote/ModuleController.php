@@ -93,36 +93,17 @@ class ModuleController extends Controller
 
     public function calcModule(Module $module)
     {
-        // begin of this month
-        $beginOfMonth = now()->startOfMonth();
 
-        // end of this month
-        $endOfMonth = now()->endOfMonth();
+        $default = [
+            'balance' => 0,
+            'drops' => 0,
+        ];
 
-        $this_month_balance_and_drops = Cache::remember($module->id . '_this_month_balance_and_drops', 3600, function () use ($module, $beginOfMonth, $endOfMonth) {
-            $this_month = Transaction::where('module_id', $module->id)->where('type', 'payout')->whereBetween('created_at', [$beginOfMonth, $endOfMonth]);
-
-            // this month transactions
-            return [
-                'balance' => $this_month->sum('outcome'),
-                'drops' => $this_month->sum('outcome_drops')
-            ];
-        });
-
-        $last_month_balance_and_drops = Cache::remember($module->id . '_last_month_balance_and_drops', 3600, function () use ($module, $beginOfMonth, $endOfMonth) {
-            // last month transactions
-            $last_moth = Transaction::where('module_id', $module->id)->where('type', 'payout')->whereBetween('created_at', [$beginOfMonth, $endOfMonth]);
-
-            return [
-                'balance' => $last_moth->sum('outcome'),
-                'drops' => $last_moth->sum('outcome_drops')
-            ];
-        });
 
         $data = [
             'transactions' => [
-                'this_month' => $this_month_balance_and_drops,
-                'last_month' => $last_month_balance_and_drops,
+                'this_month' => Cache::get('this_month_balance_and_drops_' . $module->id, $default),
+                'last_month' => Cache::get('last_month_balance_and_drops_' . $module->id, $default),
             ]
         ];
 

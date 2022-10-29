@@ -6,6 +6,7 @@ use App\Exceptions\ChargeException;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Cache;
 use Jenssegers\Mongodb\Eloquent\Model;
+use App\Exceptions\User\BalanceNotEnoughException;
 use Illuminate\Contracts\Cache\LockTimeoutException;
 
 class Transaction extends Model
@@ -193,7 +194,7 @@ class Transaction extends Model
         return $this->addLog($user_id, $data);
     }
 
-    public function addPayoutBalance($user_id, $amount, $description)
+    public function addPayoutBalance($user_id, $amount, $description, $module_id = null)
     {
         $data = [
             'type' => 'payout',
@@ -204,6 +205,10 @@ class Transaction extends Model
             'outcome' => (float) $amount,
             'outcome_drops' => 0
         ];
+
+        if ($module_id) {
+            $data['module_id'] = $module_id;
+        }
 
         return $this->addLog($user_id, $data);
     }
@@ -241,6 +246,35 @@ class Transaction extends Model
             $user->save();
 
             $this->addPayoutBalance($user_id, $amount, $description);
+
+            return $user->balance;
+        } finally {
+            optional($lock)->release();
+        }
+
+        return false;
+    }
+
+    public function reduceAmountModuleFail($user_id, $module_id, $amount = 0, $description = '扣除费用请求。')
+    {
+
+        $lock = Cache::lock("user_balance_lock_" . $user_id, 10);
+        try {
+
+            $lock->block(5);
+
+            $user = User::findOrFail($user_id);
+
+            $user->balance -= $amount;
+
+            // if balance < 0
+            if ($user->balance < 0) {
+                throw new BalanceNotEnoughException('余额不足。');
+            }
+
+            $user->save();
+
+            $this->addPayoutBalance($user_id, $amount, $description, $module_id);
 
             return $user->balance;
         } finally {
