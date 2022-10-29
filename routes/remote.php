@@ -92,6 +92,10 @@ $router->get('users/{user}', [
     'uses' => '\App\Http\Controllers\Remote\UserController@show'
 ]);
 
+$router->post('users/{user}/reduce', [
+    'uses' => '\App\Http\Controllers\Remote\UserController@reduce'
+]);
+
 $router->get('users/{user}/hosts', [
     'uses' => '\App\Http\Controllers\Remote\UserController@hosts'
 ]);
