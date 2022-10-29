@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Remote;
 
-use App\Models\Transaction;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Module\Module;
