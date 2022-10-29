@@ -47,5 +47,7 @@ class UserController extends Controller
         } catch (BalanceNotEnoughException) {
             return $this->error('余额不足');
         }
+
+        return $this->success();
     }
 }
