@@ -32,9 +32,7 @@ class CalcModule extends Job
         // end of this month
         $endOfMonth = now()->endOfMonth();
 
-        $moduleController = new ModuleController();
-
-        Module::chunk(100, function ($modules) use ($moduleController, $beginOfMonth, $endOfMonth) {
+        Module::chunk(100, function ($modules) use ($beginOfMonth, $endOfMonth) {
             foreach ($modules as $module) {
 
                 $this_month = Transaction::where('module_id', $module->id)->where('type', 'payout')->whereBetween('created_at', [$beginOfMonth, $endOfMonth]);
