@@ -127,6 +127,10 @@ $app->register(App\Providers\RouteBindingServiceProvider::class);
 // broadcast
 $app->register(App\Providers\BroadcastServiceProvider::class);
 
+// filesystem
+$app->register(Illuminate\Filesystem\FilesystemServiceProvider::class);
+$app->register(Freyo\Flysystem\QcloudCOSv5\ServiceProvider::class);
+
 
 /*
 |--------------------------------------------------------------------------
