@@ -44,7 +44,7 @@ class Authenticate
 
         $user = $this->auth->guard($guard)->user();
         if ($user->banned_at) {
-            return $this->forbidden('您已被封禁，原因是: ' . $user->banned_reason);
+            return $this->forbidden('您已被封禁，原因是: ' . $user->banned_reason ?? '一次或多次触犯了我们的规则。');
         }
 
         return $next($request);
