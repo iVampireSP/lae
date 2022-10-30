@@ -54,6 +54,8 @@ $app->singleton(
 
 
 
+
+
 /*
 |--------------------------------------------------------------------------
 | Register Config Files
@@ -77,6 +79,7 @@ $app->configure('payment');
 $app->configure('drops');
 $app->configure('forum');
 $app->configure('broadcasting');
+$app->configure('filesystems');
 
 /*
 |--------------------------------------------------------------------------
@@ -130,6 +133,8 @@ $app->register(App\Providers\BroadcastServiceProvider::class);
 // filesystem
 $app->register(Illuminate\Filesystem\FilesystemServiceProvider::class);
 // $app->register(Freyo\Flysystem\QcloudCOSv5\ServiceProvider::class);
+
+
 
 
 /*
