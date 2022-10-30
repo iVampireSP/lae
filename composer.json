@@ -14,6 +14,7 @@
         "anik/form-request": "^4.5",
         "doctrine/dbal": "^3.3",
         "flipbox/lumen-generator": "^9.1",
+        "freyo/flysystem-qcloud-cos-v5": "^2.0",
         "guzzlehttp/guzzle": "^7.5",
         "hhxsv5/laravel-s": "~3.7.0",
         "illuminate/redis": "^9.28",

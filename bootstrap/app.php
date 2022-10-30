@@ -52,6 +52,14 @@ $app->singleton(
     App\Console\Kernel::class
 );
 
+$app->singleton('filesystem', function ($app) {
+    $app->alias('filesystem', Illuminate\Contracts\Filesystem\Factory::class);
+    return $app->loadComponent(
+        'filesystems',
+        Illuminate\Filesystem\FilesystemServiceProvider::class,
+        'filesystem'
+    );
+});
 
 
 
@@ -132,8 +140,7 @@ $app->register(App\Providers\BroadcastServiceProvider::class);
 
 // filesystem
 $app->register(Illuminate\Filesystem\FilesystemServiceProvider::class);
-// $app->register(Freyo\Flysystem\QcloudCOSv5\ServiceProvider::class);
-
+$app->register(Freyo\Flysystem\QcloudCOSv5\ServiceProvider::class);
 
 
 
