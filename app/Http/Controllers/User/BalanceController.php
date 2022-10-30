@@ -6,12 +6,12 @@ use Exception;
 use App\Models\Transaction;
 use App\Models\User\Balance;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Exceptions\ChargeException;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 use Alipay\EasySDK\Kernel\Util\ResponseChecker;
+use Alipay\EasySDK\Kernel\Config as AlipayConfig;
 use Alipay\EasySDK\Kernel\Factory as AlipayFactory;
 
 class BalanceController extends Controller
@@ -73,8 +73,6 @@ class BalanceController extends Controller
 
     public function show(Request $request, Balance $balance)
     {
-        // dd(AlipayFactory::payment()->common()->query('20220901070430102316'));
-        // dd(route(''));
         if ($balance->paid_at !== null) {
             return $this->error('订单已支付');
         }
@@ -85,6 +83,8 @@ class BalanceController extends Controller
         }
 
         try {
+            AlipayFactory::setOptions($this->alipayOptions());
+
             $result = AlipayFactory::payment()->page()->pay("支付", $balance->order_id, $balance->amount, route('balances.return'));
 
             $responseChecker = new ResponseChecker();
@@ -154,6 +154,8 @@ class BalanceController extends Controller
 
     public function checkAndCharge(Balance $balance)
     {
+        AlipayFactory::setOptions($this->alipayOptions());
+
         $trade = AlipayFactory::payment()->common()->query($balance->order_id);
 
         if ($trade->code == "10000" && $trade->tradeStatus == "TRADE_SUCCESS") {
@@ -221,5 +223,35 @@ class BalanceController extends Controller
         ];
 
         return $this->success($resp);
+    }
+
+
+    private function alipayOptions()
+    {
+        $options = new AlipayConfig();
+        $options->protocol = 'https';
+
+        // if local
+        if (app()->environment() == 'local') {
+            $options->gatewayHost = 'openapi.alipaydev.com';
+        } else {
+            $options->gatewayHost = 'openapi.alipay.com';
+        }
+
+        $options->signType = 'RSA2';
+
+        $options->appId = config('payment.alipay.app_id');
+
+        // 为避免私钥随源码泄露，推荐从文件中读取私钥字符串而不是写入源码中
+        $options->merchantPrivateKey = trim(Storage::get('alipayAppPriv.key'));
+
+        $options->alipayCertPath = storage_path('app/alipayCertPublicKey_RSA2.crt');
+        $options->alipayRootCertPath = storage_path('app/alipayRootCert.crt');
+        $options->merchantCertPath = storage_path('app/appCertPublicKey.crt');
+
+        $options->notifyUrl = route('balances.notify');
+
+
+        return $options;
     }
 }
