@@ -12,7 +12,7 @@ class WorkOrderController extends Controller
     public function index(WorkOrder $workOrder)
     {
 
-        $workOrder = $workOrder->thisUser()->with(['user', 'module', 'host'])->simplePaginate(10);
+        $workOrder = $workOrder->thisUser()->with(['user', 'module', 'host'])->simplePaginate(100);
 
         return $this->success($workOrder);
     }

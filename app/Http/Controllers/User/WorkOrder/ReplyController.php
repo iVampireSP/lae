@@ -20,7 +20,7 @@ class ReplyController extends Controller
             return $this->notFound('无法找到对应的工单。');
         }
 
-        $replies = Reply::workOrderId($workOrder->id)->simplePaginate(10);
+        $replies = Reply::workOrderId($workOrder->id)->simplePaginate(100);
 
         return $this->success($replies);
     }

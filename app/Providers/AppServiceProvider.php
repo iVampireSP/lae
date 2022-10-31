@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Storage;
+// use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 
 
@@ -24,6 +24,12 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->generateInstanceId();
+
+
+        // $this->app->make(\Illuminate\Notifications\ChannelManager::class)->extend('your-channel', function () {
+        //     return $this->app->make(App\Channels\YourChannel::class);
+        // });
+
         //
 
         // header('server: Cluster Ready!');

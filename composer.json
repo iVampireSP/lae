@@ -17,6 +17,7 @@
         "freyo/flysystem-qcloud-cos-v5": "^2.0",
         "guzzlehttp/guzzle": "^7.5",
         "hhxsv5/laravel-s": "~3.7.0",
+        "illuminate/notifications": "^9.34",
         "illuminate/redis": "^9.28",
         "jenssegers/mongodb": "^3.9",
         "laravel/lumen-framework": "^9.0",

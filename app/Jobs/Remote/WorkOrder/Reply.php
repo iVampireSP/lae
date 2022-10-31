@@ -47,16 +47,16 @@ class Reply implements ShouldQueue
         $response = $http->post('work-orders/' . $this->reply->workOrder->id . '/replies', $reply);
 
         if ($response->successful()) {
-            $this->reply->is_pending = false;
+            $this->reply->update([
+                'is_pending' => false
+            ]);
 
             broadcast(new UserEvent($this->reply->workOrder->user_id, 'work-order.replied', $this->reply));
 
         } else {
-            $this->reply->is_pending = true;
+            $this->reply->update([
+                'is_pending' => true
+            ]);
         }
-
-        $this->reply->save();
-
-
     }
 }

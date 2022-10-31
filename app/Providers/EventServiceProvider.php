@@ -12,9 +12,9 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        \App\Events\ExampleEvent::class => [
-            \App\Listeners\ExampleListener::class,
-        ],
+        // \App\Events\WorkOrderProcessed::class => [
+        //     \App\Listeners\SendWorkOrderNotification::class,
+        // ],
     ];
 
     /**
@@ -25,5 +25,12 @@ class EventServiceProvider extends ServiceProvider
     public function shouldDiscoverEvents()
     {
         return false;
+    }
+
+    public function boot() {
+        parent::boot();
+
+        \App\Models\WorkOrder\WorkOrder::observe(\App\Observers\WorkOrder\WorkOrderObserver::class);
+        \App\Models\WorkOrder\Reply::observe(\App\Observers\WorkOrder\ReplyObserver::class);
     }
 }

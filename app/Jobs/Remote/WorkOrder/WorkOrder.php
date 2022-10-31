@@ -46,11 +46,12 @@ class WorkOrder implements ShouldQueue
         }
 
         if (!$response->successful()) {
-            $this->workOrder->status = 'error';
+            $this->workOrder->update([
+                'status' => 'error'
+            ]);
         } else {
             broadcast(new UserEvent($this->workOrder->user_id, 'work-order.updated', $this->workOrder));
         }
 
-        $this->workOrder->save();
     }
 }

@@ -134,6 +134,7 @@ $app->register(Flipbox\LumenGenerator\LumenGeneratorServiceProvider::class);
 $app->register(App\Providers\EventServiceProvider::class);
 $app->register(\Anik\Form\FormRequestServiceProvider::class);
 $app->register(App\Providers\RouteBindingServiceProvider::class);
+$app->register(Illuminate\Notifications\NotificationServiceProvider::class);
 
 // broadcast
 $app->register(App\Providers\BroadcastServiceProvider::class);

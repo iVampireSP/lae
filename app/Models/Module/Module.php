@@ -33,7 +33,8 @@ class Module extends Model implements AuthenticatableContract, AuthorizableContr
 
     protected $hidden = [
         'api_token',
-        'url'
+        'url',
+        'wecom_key'
     ];
 
 
