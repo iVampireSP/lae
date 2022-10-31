@@ -75,40 +75,49 @@ class Init extends Command
         $this->info('正在准备节点');
         $instance_id = config('app.instance_id');
 
+        $inst_data = [
+            'instance_id' => $instance_id,
+            'ip' => $addr,
+            'port' => $port,
+            'type' => $type,
+        ];
+
+        dd(cluster_run_wait('register', $inst_data));
+
         // 检测其他 莱云 计算节点
-        $nodes = Cache::get('nodes', collect([]));
+        // $nodes = Cache::get('nodes', collect([]));
 
         // 检测节点是否在集合里
-        $node = $nodes->where('instance_id', $instance_id)->first();
+        // $node = $nodes->where('instance_id', $instance_id)->first();
 
-        if ($node == null) {
-            $this->warn('节点未注册');
-            $this->info('正在注册节点');
+        // if ($node == null) {
+        //     $this->warn('节点未注册');
+        //     $this->info('正在注册节点');
 
-            // add to collect
-            $nodes->push([
-                'instance_id' => $instance_id,
-                'ip' => $addr,
-                'port' => $port,
-                'type' => $type,
-            ]);
+        //     // add to collect
+        //     $nodes->push([
+        //         'instance_id' => $instance_id,
+        //         'ip' => $addr,
+        //         'port' => $port,
+        //         'type' => $type,
+        //     ]);
 
-            $this->warn('节点注册成功');
-        } else {
-            $this->warn('节点已注册');
+        //     $this->warn('节点注册成功');
+        // } else {
+        //     $this->warn('节点已注册');
 
-            // 如果 IP 不同，则更新 IP
-            if ($node['ip'] != $addr) {
-                $this->info('正在更新节点 IP');
-                $node['ip'] = $addr;
-                $this->info('节点 IP 更新成功');
-            }
+        //     // 如果 IP 不同，则更新 IP
+        //     if ($node['ip'] != $addr) {
+        //         $this->info('正在更新节点 IP');
+        //         $node['ip'] = $addr;
+        //         $this->info('节点 IP 更新成功');
+        //     }
 
-            $node['port'] = $port;
-        }
+        //     $node['port'] = $port;
+        // }
 
-        // save cache
-        Cache::forever('nodes', $nodes);
+        // // save cache
+        // Cache::forever('nodes', $nodes);
 
 
 

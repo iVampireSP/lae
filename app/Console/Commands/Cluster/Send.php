@@ -3,7 +3,7 @@
 namespace App\Console\Commands\Cluster;
 
 use Illuminate\Console\Command;
-use Illuminate\Redis\RedisManager;
+use Illuminate\Redis\Connections\PhpRedisConnection;
 
 class Send extends Command
 {
@@ -22,7 +22,7 @@ class Send extends Command
     protected $description = '发送节点心跳';
 
 
-    protected RedisManager $redis;
+    protected PhpRedisConnection $redis;
     protected String $instance_id;
 
     /**
@@ -34,7 +34,7 @@ class Send extends Command
     {
         parent::__construct();
 
-        $this->redis = app('redis');
+        $this->redis = app('redis')->connection('cluster_ready');
         $this->instance_id = config('app.instance_id');
     }
 
@@ -58,13 +58,10 @@ class Send extends Command
         while (true) {
 
             // get cpu usage
-            $cpu = round($this->getCpuUsage(), 2);
+            // $cpu = round($this->getCpuUsage(), 2);
 
-            echo "CPU: {$cpu}%\n";
-            $this->redis->publish('cluster_ready', json_encode([
-                'instance_id' => $this->instance_id,
-                'cpu' => $cpu,
-            ]));
+            // echo "CPU: {$cpu}%\n";
+            $this->publish();
 
             sleep(1);
         }
@@ -91,7 +88,20 @@ class Send extends Command
     {
         $this->redis->publish('cluster_ready', json_encode([
             'instance_id' => $this->instance_id,
-            'cpu' => 1
+            'task_id' => cluster_task_id(),
+            'type' => 'register',
+            'data' => [
+                'cpu' => $this->getCpuUsage(),
+            ],
         ]));
+
+        // $this->redis->publish('cluster_ready', json_encode([
+        //     'instance_id' => $this->instance_id,
+        //     'task_id' => cluster_task_id(),
+        //     'type' => 'cpu_usage',
+        //     'data' => [
+        //         'cpu' => $this->getCpuUsage(),
+        //     ],
+        // ]));
     }
 }

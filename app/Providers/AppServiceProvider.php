@@ -89,6 +89,9 @@ class AppServiceProvider extends ServiceProvider
             // 追加到 .env 文件
             file_put_contents($env_path, PHP_EOL . "INSTANCE_ID={$instance_id}", FILE_APPEND);
 
+            // 重新加载配置
+            config(['app.instance_id' => $instance_id]);
+
             // $env = file_get_contents(app()->environmentFilePath());
             // $env = preg_replace('/INSTANCE_ID=(.*)/', 'INSTANCE_ID=' . $instance_id, $env);
             // file_put_contents(app()->environmentFilePath(), $env);
