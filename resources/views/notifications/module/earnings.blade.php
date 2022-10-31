@@ -4,10 +4,13 @@
 ## 本月
 #### 现金 {{ round($data['transactions']['this_month']['balance'], 2) }} 元
 #### Drops {{ round($data['transactions']['this_month']['drops'], 4) }}
+#### 合计 {{ round($data['transactions']['this_month']['balance'] + $data['transactions']['this_month']['drops'] / $data['rate'], 2) }} 元
 ==================================
 ## 上个月
 #### 现金 {{ round($data['transactions']['last_month']['balance'], 2) }} 元
 #### Drops {{ round($data['transactions']['last_month']['drops'], 4) }}
+#### 合计 {{ round($data['transactions']['last_month']['balance'] + $data['transactions']['last_month']['drops'] / $data['rate'], 2) }} 元
+
 
 
 {{--
