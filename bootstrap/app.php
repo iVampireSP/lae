@@ -88,6 +88,7 @@ $app->configure('drops');
 $app->configure('forum');
 $app->configure('broadcasting');
 $app->configure('filesystems');
+$app->configure('settings');
 
 /*
 |--------------------------------------------------------------------------
