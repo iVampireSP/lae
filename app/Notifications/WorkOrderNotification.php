@@ -9,10 +9,9 @@ use App\Models\WorkOrder\Reply;
 use App\Models\WorkOrder\WorkOrder;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Log;
 
-class WorkOrderNotification extends Notification
+class WorkOrderNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
