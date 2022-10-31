@@ -32,5 +32,6 @@ class EventServiceProvider extends ServiceProvider
 
         \App\Models\WorkOrder\WorkOrder::observe(\App\Observers\WorkOrder\WorkOrderObserver::class);
         \App\Models\WorkOrder\Reply::observe(\App\Observers\WorkOrder\ReplyObserver::class);
+        \App\Models\User\Balance::observe(\App\Observers\BalanceObserve::class);
     }
 }

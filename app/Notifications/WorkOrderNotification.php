@@ -33,7 +33,7 @@ class WorkOrderNotification extends Notification implements ShouldQueue
      */
     public function via($notifiable)
     {
-        return [WeComRobotChannel::class];
+        return [];
     }
 
     public function toGroup($notifiable)
@@ -78,7 +78,7 @@ class WorkOrderNotification extends Notification implements ShouldQueue
         $module->makeHidden(['wecom_key']);
 
 
-        $body = Http::post('https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=' . $wecom_key, [
+        $resp = Http::post('https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=' . $wecom_key, [
             'msgtype' => 'markdown',
             'markdown' => [
                 'content' => view($view, [
@@ -90,9 +90,13 @@ class WorkOrderNotification extends Notification implements ShouldQueue
             ],
         ]);
 
-        Log::info('企业微信机器人发送消息', [
-            'body' => $body->body(),
-            'status' => $body->status(),
-        ]);
+        if (!$resp->successful()) {
+            Log::error('企业微信机器人发送失败', [
+                'resp' => $resp->json(),
+                'workOrder' => $workOrder,
+                'reply' => $reply,
+                'module' => $module,
+            ]);
+        }
     }
 }

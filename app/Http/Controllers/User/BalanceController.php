@@ -42,11 +42,11 @@ class BalanceController extends Controller
             'payment' => 'alipay',
         ];
 
-        // // if local
-        // if (env('APP_ENV') == 'local') {
-        //     $data['payment'] = null;
-        //     $data['paid_at'] = now();
-        // }
+        // if local
+        if (env('APP_ENV') == 'local') {
+            $data['payment'] = null;
+            $data['paid_at'] = now();
+        }
 
 
         $balance = $balance->create($data);
