@@ -70,10 +70,11 @@ class WorkOrderNotification extends Notification
         $module->makeVisible(['wecom_key']);
 
         if ($module->wecom_key == null) {
-            return;
+            $wecom_key = config('settings.wecom.robot_hook.default');
+        } else {
+            $wecom_key = $module->wecom_key;
         }
 
-        $wecom_key = $module->wecom_key;
         // 隐藏字段
         $module->makeHidden(['wecom_key']);
 
