@@ -47,7 +47,7 @@ class SendThisMonthModuleEarnings extends Job
                         'rate' => $rate,
                     ];
 
-                    return (new ModuleEarnings($module))
+                    (new ModuleEarnings($module))
                         ->toGroup($data);
                 }
             }
