@@ -19,6 +19,7 @@ use App\Jobs\HostCost;
 use App\Jobs\ClearTasks;
 use App\Jobs\DeleteHost;
 use App\Jobs\Remote;
+use App\Jobs\SendThisMonthModuleEarnings;
 use Illuminate\Console\Scheduling\Schedule;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;
 
@@ -56,8 +57,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        //
-
         // dispatch HostCost job
         $schedule->job(new HostCost())->everyFiveMinutes();
         // $schedule->job(new UserSave())->everyTenMinutes();
@@ -74,5 +73,8 @@ class Kernel extends ConsoleKernel
         $schedule->job(new AutoCloseWorkOrder())->everyFiveMinutes();
 
         $schedule->job(new JobsCalcModule())->everyFiveMinutes();
+
+        // 每天晚上 20 点，发送模块收益
+        $schedule->job(new SendThisMonthModuleEarnings())->dailyAt('20:00');
     }
 }
