@@ -68,7 +68,7 @@ class Kernel extends ConsoleKernel
 
         $schedule->job(new DeleteHost())->hourly();
 
-        $schedule->job(new CheckAndChargeBalance())->everyThirtyMinutes();
+        $schedule->job(new CheckAndChargeBalance())->everyFiveMinutes()->onOneServer()->withoutOverlapping();
 
         $schedule->job(new AutoCloseWorkOrder())->everyFiveMinutes();
 
