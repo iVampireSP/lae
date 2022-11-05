@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\UserEvent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
