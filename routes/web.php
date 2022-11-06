@@ -26,27 +26,3 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/balance/{balance}', [BalanceController::class, 'show'])->name('balances.pay.show');
 Route::get('/pay/alipay/notify', [BalanceController::class, 'notify'])->name('balances.alipay.notify');
 
-
-Route::get('/pay', function () {
-    $pay = Pay::alipay()->web([
-        'out_trade_no' => 'lae-' . time(),
-        'total_amount' => 10,
-        'subject' => config('app.display_name') . ' 充值',
-    ]);
-
-    return $pay;
-});
-
-Route::get('/t', function () {
-    return Pay::alipay()->transfer([
-        'out_biz_no' => '202106051432',
-        'trans_amount' => '0.01',
-        'product_code' => 'TRANS_ACCOUNT_NO_PWD',
-        'biz_scene' => 'DIRECT_TRANSFER',
-        'payee_info' => [
-            'identity' => '2088622956327844',
-            'identity_type' => 'ALIPAY_USER_ID',
-            'name' => 'vsjnhi5180'
-        ],
-    ]);
-});
