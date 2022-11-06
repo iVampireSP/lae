@@ -27,6 +27,10 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         //
+
+        \App\Models\WorkOrder\WorkOrder::observe(\App\Observers\WorkOrder\WorkOrderObserver::class);
+        \App\Models\WorkOrder\Reply::observe(\App\Observers\WorkOrder\ReplyObserver::class);
+        \App\Models\Balance::observe(\App\Observers\BalanceObserve::class);
     }
 
     /**
