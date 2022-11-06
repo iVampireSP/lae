@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Remote\Server;
 
+use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Server\Status;
-use Anik\Form\FormRequest;
 
 class StatusRequest extends FormRequest
 {

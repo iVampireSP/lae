@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Remote\WorkOrder;
 
-use Illuminate\Http\Request;
-use App\Models\WorkOrder\Reply;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Log;
+use App\Models\WorkOrder\Reply;
+use Illuminate\Http\Request;
 
 class ReplyController extends Controller
 {

@@ -2,15 +2,16 @@
 
 namespace App\Models\WorkOrder;
 
-use App\Models\User;
 use App\Events\UserEvent;
 use App\Exceptions\CommonException;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class Reply extends Model
 {
-    use HasFactory;
+    use HasFactory, Cachable;
 
     protected $table = 'work_order_replies';
 
@@ -53,7 +54,7 @@ class Reply extends Model
             throw_if($model->workOrder->status == 'pending' || $model->workOrder->status == 'error', CommonException::class, '工单状态不正确');
 
             // change work order status
-            if (auth('api')->check()) {
+            if (auth()->check()) {
                 $model->user_id = auth()->id();
                 $model->workOrder->status = 'user_replied';
             }

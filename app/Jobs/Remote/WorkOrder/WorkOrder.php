@@ -3,13 +3,14 @@
 namespace App\Jobs\Remote\WorkOrder;
 
 use App\Events\UserEvent;
-use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
-// use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Models\WorkOrder\WorkOrder as WorkOrderWorkOrder;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Http;
+
+// use Illuminate\Contracts\Queue\ShouldBeUnique;
 
 class WorkOrder implements ShouldQueue
 {

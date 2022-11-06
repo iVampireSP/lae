@@ -2,10 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Balance;
 use App\Models\Host;
-use App\Models\User;
 use App\Models\Transaction;
-use App\Models\User\Balance;
+use App\Models\User;
 use Illuminate\Console\Command;
 
 class GetUser extends Command

@@ -2,16 +2,17 @@
 
 namespace App\Models\WorkOrder;
 
-use App\Models\Host;
-use App\Models\User;
-use App\Models\Module\Module;
 use App\Exceptions\CommonException;
-use Illuminate\Database\Eloquent\Model;
+use App\Models\Host;
+use App\Models\Module;
+use App\Models\User;
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class WorkOrder extends Model
 {
-    use HasFactory;
+    use HasFactory, Cachable;
 
     protected $table = 'work_orders';
 
@@ -25,23 +26,24 @@ class WorkOrder extends Model
     ];
 
     // user
-    public function user() {
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
         return $this->belongsTo(User::class);
     }
 
     // replies
-    public function replies()
+    public function replies(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Reply::class);
     }
 
     // host
-    public function host()
+    public function host(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Host::class);
     }
 
-    public function module()
+    public function module(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Module::class);
     }
@@ -71,8 +73,8 @@ class WorkOrder extends Model
             }
 
             // if logged
-            if (auth('api')->check()) {
-                $model->user_id = auth('api')->id();
+            if (auth()->check()) {
+                $model->user_id = auth()->id();
 
                 if ($model->host_id) {
                     if (!$model->user_id === $model->host->user_id) {
@@ -97,37 +99,9 @@ class WorkOrder extends Model
             }
         });
 
-        // 更新时获取差异部分
-        static::updating(function ($model) {
-            // $original = $model->getOriginal();
-            // // dd($original);
-            // $diff = array_diff_assoc($model->attributes, $original);
-
-            // // 如果更新了host_id，则抛出异常
-            // if (isset($diff['host_id'])) {
-            //     throw new CommonException('host_id cannot be updated');
-            // }
-
-        });
-
         // updated
         static::updated(function ($model) {
             dispatch(new \App\Jobs\Remote\WorkOrder\WorkOrder($model, 'put'));
-
-            // $original = $model->getOriginal();
-            // $diff = array_diff_assoc($model->attributes, $original);
-            // // dd($diff);
-            // if (isset($diff['status'])) {
-            //     $model->load(['host']);
-            //     $model->host->load('module');
-            //     $module = $model->host->module;
-            //     if ($module === null) {
-            //         $model->status = 'open';
-            //     } else {
-            //         $model->status = 'pending';
-            //     }
-            //     $model->save();
-            // }
         });
     }
 }

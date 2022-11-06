@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Remote;
 
-use App\Models\Host;
-use App\Models\User;
-use App\Models\Transaction;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Exceptions\User\BalanceNotEnoughException;
+use App\Http\Controllers\Controller;
+use App\Models\Host;
+use App\Models\Transaction;
+use App\Models\User;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {

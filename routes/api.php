@@ -1,111 +1,38 @@
 <?php
 
-/** @var \Laravel\Lumen\Routing\Router $router */
+use App\Http\Controllers\Api\BalanceController;
+use App\Http\Controllers\Api\ForumController;
+use App\Http\Controllers\Api\HostController;
+use App\Http\Controllers\Api\ModuleController;
+use App\Http\Controllers\Api\ServerController;
+use App\Http\Controllers\Api\TaskController;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\WorkOrder\ReplyController;
+use App\Http\Controllers\Api\WorkOrder\WorkOrderController;
+use Illuminate\Support\Facades\Route;
 
-$router->get('/users', [
-    'uses' => 'UserController@index'
-]);
+Route::get('user', [UserController::class, 'index']);
+Route::get('users', [UserController::class, 'index']);
+Route::get('servers', ServerController::class);
+Route::get('modules', [ModuleController::class, 'index']);
+Route::get('tasks', TaskController::class);
 
-$router->get('/servers', [
-    'uses' => 'ServerController'
-]);
+Route::get('forum/announcements', [ForumController::class, 'pinned']);
+Route::get('forum/pinned', [ForumController::class, 'announcements']);
 
-$router->get('/modules', [
-    'uses' => 'User\ModuleController'
-]);
+Route::get('hosts/usages', [HostController::class, 'usages']);
+Route::resource('hosts', HostController::class);
 
-$router->group(['prefix' => 'hosts'], function () use ($router) {
-    $router->get('/', [
-        'uses' => 'User\HostController@index'
-    ]);
-    $router->get('/usages', [
-        'uses' => 'User\HostController@usages'
-    ]);
-    $router->patch('/{host}', [
-        'uses' => 'User\HostController@update'
-    ]);
-    $router->delete('/{host}', [
-        'uses' => 'User\HostController@destroy'
-    ]);
-});
+Route::resource('balances', BalanceController::class)->only(['index', 'store']);
+Route::get('balances/transactions', [BalanceController::class, 'transactions']);
+Route::get('balances/drops', [BalanceController::class, 'drops']);
 
+Route::resource('work-orders', WorkOrderController::class)->only(['index', 'store', 'show']);
 
-$router->group(['prefix' => 'balances'], function () use ($router) {
-    $router->get('/', [
-        'uses' => 'User\BalanceController@index'
-    ]);
-
-    $router->post('/', [
-        'uses' => 'User\BalanceController@store'
-    ]);
+Route::resource('work-orders.replies', ReplyController::class)->only(['index', 'store']);
 
 
-    $router->get('/transactions', [
-        'uses' => 'User\BalanceController@transactions'
-    ]);
+// 匹配 modules/{module} 的路由，正则匹配斜杠
+Route::any('modules/{module}/{path?}', [ModuleController::class, 'call'])
+    ->where('path', '.*');
 
-    $router->get('/drops', [
-        'uses' => 'User\BalanceController@drops'
-    ]);
-});
-
-$router->get('/tasks', [
-    'uses' => 'User\TaskController'
-]);
-
-$router->group(['prefix' => 'work-orders'], function () use ($router) {
-    $router->get('/', [
-        'uses' => 'User\WorkOrder\WorkOrderController@index'
-    ]);
-    $router->post('/', [
-        'uses' => 'User\WorkOrder\WorkOrderController@store'
-    ]);
-    $router->get('/{workOrder}', [
-        'uses' => 'User\WorkOrder\WorkOrderController@show'
-    ]);
-    $router->patch('/{workOrder}', [
-        'uses' => 'User\WorkOrder\WorkOrderController@update'
-    ]);
-    $router->delete('/{workOrder}', [
-        'uses' => 'User\WorkOrder\WorkOrderController@destroy'
-    ]);
-
-    $router->get('/{workOrder}/replies', [
-        'uses' => 'User\WorkOrder\ReplyController@index'
-    ]);
-    $router->post('/{workOrder}/replies', [
-        'uses' => 'User\WorkOrder\ReplyController@store'
-    ]);
-
-    // $router->group(['prefix' => ''], function () use ($router) {
-
-    //     // $router->patch('/{reply}', [
-    //     //     'uses' => 'User\WorkOrder\ReplyController@update'
-    //     // ]);
-    //     // $router->delete('/{reply}', [
-    //     //     'uses' => 'User\WorkOrder\ReplyController@destroy'
-    //     // ]);
-    // });
-});
-
-
-$router->group(['prefix' => 'forum'], function () use ($router) {
-    $router->get('/announcements', [
-        'uses' => 'ForumController@announcements'
-    ]);
-
-    $router->get('/pinned', [
-        'uses' => 'ForumController@pinned'
-    ]);
-});
-
-$router->group(['prefix' => 'modules/{module}'], function () use ($router) {
-    $controller = 'Remote\ModuleController@call';
-    $router->get('/{route:.*}/', $controller);
-    $router->post('/{route:.*}/', $controller);
-    $router->put('/{route:.*}/', $controller);
-    $router->patch('/{route:.*}/', $controller);
-    $router->delete('/{route:.*}/', $controller);
-});
-
-$router->post('broadcasting/auth', ['uses' => 'BroadcastController@authenticate']);

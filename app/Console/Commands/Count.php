@@ -3,11 +3,11 @@
 namespace App\Console\Commands;
 
 use App\Models\Host;
-use App\Models\User;
 use App\Models\Transaction;
+use App\Models\User;
 use App\Models\WorkOrder\Reply;
-use Illuminate\Console\Command;
 use App\Models\WorkOrder\WorkOrder;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Cache;
 
 class Count extends Command

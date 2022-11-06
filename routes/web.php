@@ -1,60 +1,33 @@
 <?php
 
-/** @var \Laravel\Lumen\Routing\Router $router */
+use App\Http\Controllers\Api\BalanceController;
+use App\Http\Controllers\AuthController;
+use Illuminate\Support\Facades\Route;
 
-$router->get('/', [
-    'uses' => 'IndexController'
-]);
+Route::prefix('auth')->group(function () {
+    Route::get('redirect', [AuthController::class, 'redirect'])->name('login');
+    Route::get('callback', [AuthController::class, 'callback'])->name('callback');
+});
 
-$router->get('/balances/{balance}', [
-    'as' => 'balances.pay.show',
-    'uses' => 'User\BalanceController@show'
-]);
+Route::get('/', [AuthController::class, 'index'])->name('index');
+Route::view('not_verified', 'not_verified')->name('not_verified');
 
-$router->get('/pay/return', [
-    'as' => 'balances.return',
-    'uses' => 'User\BalanceController@return'
-]);
+Route::middleware(['auth'])->group(function () {
+    Route::view('banned', 'banned')->name('banned');
 
-$router->get('/pay/notify', [
-    'as' => 'balances.notify',
-    'uses' => 'User\BalanceController@notify'
-]);
+    Route::post('/newToken', [AuthController::class, 'newToken'])->name('newToken');
+    Route::delete('/deleteAll', [AuthController::class, 'deleteAll'])->name('deleteAll');
 
-
-
-// $router->group(['prefix' => 'auth', 'middleware' => 'session'], function () use ($router) {
-//     $router->get('redirect', [
-//         'as' => 'login',
-//         'uses' => 'AuthController@redirect'
-//     ]);
-
-//     $router->get('callback', [
-//         'as' => 'callback',
-//         'uses' => 'AuthController@callback'
-//     ]);
-// });
-
-// auth controller
-
-// Route::prefix('auth')->group(function () {
-//     Route::get('redirect', [Controllers\AuthController::class, 'redirect'])->name('login');
-//     Route::get('callback', [Controllers\AuthController::class, 'callback'])->name('callback');
-// });
-
-// Route::middleware('auth')->group(function () {
-//     Route::post('/createApiToken', [Controllers\AuthController::class, 'createApiToken'])->name('createApiToken');
-//     Route::delete('/invokeAllApiToken', [Controllers\AuthController::class, 'invokeAllApiToken'])->name('invokeAllApiToken');
-// });
+    // logout
+    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+});
 
 
-// Route::get('/balances/{balance}', [Controllers\User\BalanceController::class, 'show'])->name('balances.pay.show');
+Route::get('/balance/{balance}', [BalanceController::class, 'show'])->name('balances.pay.show');
+Route::get('/pay/return', [BalanceController::class, 'return'])->name('balances.alipay.return');
+Route::get('/pay/notify', [BalanceController::class, 'notify'])->name('balances.alipay.notify');
 
 
+Route::get('/pay', function () {
 
-
-// $router->get('/', []);
-
-// $router->get('/', function () use ($router) {
-//     return $router->app->version();
-// });
+});

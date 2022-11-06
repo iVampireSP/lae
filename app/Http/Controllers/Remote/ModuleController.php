@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Remote;
 
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use App\Models\Module\Module;
 use App\Http\Controllers\Controller;
+use App\Models\Module;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 class ModuleController extends Controller
 {
@@ -29,23 +29,10 @@ class ModuleController extends Controller
 
     public function call(Request $request, Module $module)
     {
-        // $this->validate($request, [
-        //     'func' => 'required|string'
-        // ]);
-
-        // $func = $request->func;
-
-        // // 不能让 func 的首个字符为 /
-        // if (Str::startsWith($func, '/')) {
-        //     $func = substr($func, 1);
-        // }
-
         $path = request()->path();
 
-        // 删除 modules/{module} 的部分
         $path = substr($path, strlen('/api/modules/' . $module->id));
 
-        // 过滤除了 "/" 以外的特殊字符
         $path = preg_replace('/[^a-zA-Z0-9\/]/', '', $path);
 
 
@@ -53,7 +40,7 @@ class ModuleController extends Controller
 
         // 如果 method 为 post, 检查用户余额
         // if ($method == 'post') {
-        //     $user = auth('api')->user();
+        //     $user = auth()->user();
 
         //     if ($user->balance < 1) {
         //         return $this->error('账户余额不足，请保证账户余额至少有 1 元。');
@@ -71,7 +58,7 @@ class ModuleController extends Controller
     }
 
 
-    public function exportCall(Request $request, Module $module)
+    public function exportCall(Request $request, Module $module): \Illuminate\Http\Response|\Illuminate\Http\JsonResponse|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
     {
         $path = request()->path();
 
@@ -90,7 +77,7 @@ class ModuleController extends Controller
     }
 
 
-    public function calcModule(Module $module)
+    public function calcModule(Module $module): array
     {
 
         $default = [
@@ -98,15 +85,11 @@ class ModuleController extends Controller
             'drops' => 0,
         ];
 
-
-        $data = [
+        return [
             'transactions' => [
                 'this_month' => Cache::get('this_month_balance_and_drops_' . $module->id, $default),
                 'last_month' => Cache::get('last_month_balance_and_drops_' . $module->id, $default),
             ]
         ];
-
-
-        return $data;
     }
 }

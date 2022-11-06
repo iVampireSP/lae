@@ -1,8 +1,8 @@
 <?php
 
 use App\Models\User;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\Cache;
 
 return new class extends Migration
 {

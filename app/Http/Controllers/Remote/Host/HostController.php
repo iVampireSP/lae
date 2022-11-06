@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Remote\Host;
 
+use App\Http\Controllers\Controller;
 use App\Models\Host;
 use App\Models\User;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+
 // use Illuminate\Support\Facades\Log;
-use App\Http\Controllers\Controller;
-use App\Exceptions\User\BalanceNotEnoughException;
 
 class HostController extends Controller
 {

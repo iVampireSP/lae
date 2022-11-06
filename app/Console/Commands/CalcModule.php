@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Http\Controllers\Remote\ModuleController;
-use App\Models\Module\Module;
+use App\Models\Module;
 use Illuminate\Console\Command;
 
 class CalcModule extends Command

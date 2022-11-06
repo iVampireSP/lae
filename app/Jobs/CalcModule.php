@@ -2,10 +2,9 @@
 
 namespace App\Jobs;
 
+use App\Models\Module;
 use App\Models\Transaction;
-use App\Models\Module\Module;
 use Illuminate\Support\Facades\Cache;
-use App\Http\Controllers\Remote\ModuleController;
 
 class CalcModule extends Job
 {

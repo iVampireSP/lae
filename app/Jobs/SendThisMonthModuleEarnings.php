@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Models\Module\Module;
+use App\Models\Module;
 use App\Notifications\ModuleEarnings;
 use Illuminate\Support\Facades\Cache;
 

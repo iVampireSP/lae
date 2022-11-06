@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Remote;
 
+use App\Events\UserEvent;
+use App\Http\Controllers\Controller;
 use App\Models\Host;
 use App\Models\User;
-use App\Events\UserEvent;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class BroadcastController extends Controller
 {

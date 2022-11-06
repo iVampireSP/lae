@@ -3,11 +3,11 @@
 namespace App\Models;
 
 use App\Exceptions\ChargeException;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Cache;
-use Jenssegers\Mongodb\Eloquent\Model;
 use App\Exceptions\User\BalanceNotEnoughException;
 use Illuminate\Contracts\Cache\LockTimeoutException;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
+use Jenssegers\Mongodb\Eloquent\Model;
 
 class Transaction extends Model
 {

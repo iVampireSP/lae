@@ -2,12 +2,11 @@
 
 namespace App\Console\Commands;
 
-use App\Models\User;
-use App\Models\Transaction;
-use App\Models\User\Balance;
-use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
 use App\Exceptions\ChargeException;
+use App\Models\Balance;
+use App\Models\Transaction;
+use App\Models\User;
+use Illuminate\Console\Command;
 
 class UserAddBalance extends Command
 {

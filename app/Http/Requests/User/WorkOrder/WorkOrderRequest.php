@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests\User\WorkOrder;
 
+use Illuminate\Foundation\Http\FormRequest;
 use App\Models\WorkOrder\WorkOrder;
-use Anik\Form\FormRequest;
 
-class WorkOrderRequest extends FormRequest
+class WorkOrderReques extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,7 +25,7 @@ class WorkOrderRequest extends FormRequest
         }
 
 
-        return WorkOrder::where('user_id', auth('api')->id())->where('id', $work_order_id)->exists();
+        return WorkOrder::where('user_id', auth()->id())->where('id', $work_order_id)->exists();
 
         return false;
     }

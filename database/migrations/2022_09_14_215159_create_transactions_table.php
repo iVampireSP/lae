@@ -14,6 +14,11 @@ return new class extends Migration
     public function up()
     {
 
+        // if transaction collection exists
+        if (Schema::connection('mongodb')->hasTable('transactions')) {
+            return true;
+        }
+
         Schema::connection('mongodb')->create('transactions', function (Blueprint $collection) {
             $collection->unsignedBigInteger('user_id')->index();
             $collection->unsignedBigInteger(

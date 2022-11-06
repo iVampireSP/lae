@@ -2,8 +2,8 @@
 
 namespace App\Jobs;
 
-use App\Http\Controllers\User\BalanceController;
-use App\Models\User\Balance;
+use App\Http\Controllers\Api\BalanceController;
+use App\Models\Balance;
 
 class CheckAndChargeBalance extends Job
 {

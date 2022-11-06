@@ -37,13 +37,5 @@ class AllowCors
         }
 
         return $response;
-
-        // // Pre-Middleware Action
-
-        // $response = $next($request);
-
-        // // Post-Middleware Action
-
-        // return $response;
     }
 }

@@ -3,18 +3,20 @@
 namespace App\Models;
 
 use App\Events\UserEvent;
-use App\Models\Transaction;
-use App\Models\Module\Module;
-// use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Models\WorkOrder\WorkOrder;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Database\Eloquent\Model;
 use App\Exceptions\User\BalanceNotEnoughException;
+use App\Models\WorkOrder\WorkOrder;
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo as BelongsToAlias;
+use Illuminate\Database\Eloquent\Relations\HasMany as HasManyAlias;
+use Illuminate\Support\Facades\Cache;
+
+// use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Host extends Model
 {
-    use HasFactory;
+    use HasFactory, Cachable;
 
     protected $table = 'hosts';
 
@@ -38,37 +40,29 @@ class Host extends Model
     // get user hosts
     public function getUserHosts($user_id = null)
     {
-        return Cache::remember('user_hosts_' . $user_id ?? auth()->id(), 3600, function () use ($user_id) {
-            return $this->where('user_id', $user_id)->with('module', function ($query) {
-                $query->select(['id', 'name']);
-            })->get();
-        });
+        return $this->where('user_id', $user_id)->with('module', function ($query) {
+            $query->select(['id', 'name']);
+        })->get();
     }
 
 
     // user
-    public function user()
+    public function user(): BelongsToAlias
     {
         return $this->belongsTo(User::class);
     }
 
     // module
-    public function module()
+    public function module(): BelongsToAlias
     {
         return $this->belongsTo(Module::class);
     }
 
     // workOrders
-    public function workOrders()
+    public function workOrders(): HasManyAlias
     {
         return $this->hasMany(WorkOrder::class);
     }
-
-    // module 远程一对一
-    // public function module() {
-    //     return $this->hasOneThrough(Module::class, ProviderModule::class);
-    // }
-
 
     // scope
     public function scopeActive($query)
@@ -87,7 +81,7 @@ class Host extends Model
 
 
     // cost
-    public function cost($price = null, $auto = true)
+    public function cost($price = null, $auto = true): bool
     {
         $this->load('user');
 

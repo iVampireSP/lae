@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Remote\WorkOrder;
 
-use Illuminate\Http\Request;
-use App\Models\WorkOrder\WorkOrder;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Remote\WorkOrderRequest;
+use App\Models\WorkOrder\WorkOrder;
+use Illuminate\Http\Request;
 
 class WorkOrderController extends Controller
 {

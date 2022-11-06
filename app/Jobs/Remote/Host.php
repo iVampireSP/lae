@@ -2,14 +2,14 @@
 
 namespace App\Jobs\Remote;
 
+use App\Models\Host as HostModel;
 use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Http;
 
 // use Illuminate\Contracts\Queue\ShouldBeUnique;
-use App\Models\Host as HostModel;
 
 class Host implements ShouldQueue
 {

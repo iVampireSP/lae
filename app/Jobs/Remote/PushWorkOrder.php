@@ -3,12 +3,12 @@
 namespace App\Jobs\Remote;
 
 use App\Models\WorkOrder\Reply;
-use Illuminate\Bus\Queueable;
 use App\Models\WorkOrder\WorkOrder;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 // use Illuminate\Contracts\Queue\ShouldBeUnique;
