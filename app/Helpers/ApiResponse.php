@@ -5,17 +5,17 @@ namespace App\Helpers;
 trait ApiResponse
 {
     // RESTful API response
-    public function apiResponse($data, $status = 200)
+    public function apiResponse($data = [], $status = 200)
     {
         // if data is paginated, return paginated data
         if ($data instanceof \Illuminate\Pagination\Paginator) {
             $data = $data->toArray();
-            $data['data'] = $data['data'];
+            $data['data'] = $data['data'] ?? [];
             $data['meta'] = [
-                'per_page' => $data['per_page'],
-                'current_page' => $data['current_page'],
-                'from' => $data['from'],
-                'to' => $data['to'],
+                'per_page' => $data['per_page'] ?? 0,
+                'current_page' => $data['current_page'] ?? 0,
+                'from' => $data['from'] ?? 0,
+                'to' => $data['to'] ?? 0,
             ];
             $data['paginate'] = 1;
         } else {

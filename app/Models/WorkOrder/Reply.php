@@ -59,7 +59,7 @@ class Reply extends Model
                 $model->workOrder->status = 'user_replied';
             }
 
-            if (auth('remote')->check()) {
+            if (auth('module')->check()) {
                 $model->user_id = null;
                 $model->workOrder->status = 'replied';
 
@@ -70,7 +70,7 @@ class Reply extends Model
         });
 
         static::created(function ($model) {
-            if (auth('remote')->check()) {
+            if (auth('module')->check()) {
                 $model->workOrder->status = 'replied';
                 $model->workOrder->save();
             }

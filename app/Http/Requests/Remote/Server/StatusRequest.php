@@ -16,7 +16,7 @@ class StatusRequest extends FormRequest
     {
         $server = $this->route('server');
 
-        return $server->query()->where('module_id', auth('remote')->id())->exists();
+        return $server->query()->where('module_id', auth('module')->id())->exists();
     }
 
     /**

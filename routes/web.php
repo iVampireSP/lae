@@ -24,8 +24,7 @@ Route::middleware(['auth'])->group(function () {
 
 
 Route::get('/balance/{balance}', [BalanceController::class, 'show'])->name('balances.pay.show');
-Route::get('/pay/return', [BalanceController::class, 'return'])->name('balances.alipay.return');
-Route::get('/pay/notify', [BalanceController::class, 'notify'])->name('balances.alipay.notify');
+Route::get('/pay/alipay/notify', [BalanceController::class, 'notify'])->name('balances.alipay.notify');
 
 
 Route::get('/pay', function () {

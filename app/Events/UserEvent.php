@@ -37,8 +37,8 @@ class UserEvent extends Event implements ShouldBroadcastNow
 
         // if (Auth::check()) {
 
-        if (Auth::guard('remote')->check()) {
-            $this->module = Auth::guard('remote')->user();
+        if (Auth::guard('module')->check()) {
+            $this->module = Auth::guard('module')->user();
         } else {
             $this->module = null;
         }

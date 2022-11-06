@@ -52,8 +52,9 @@ class HostController extends Controller
             'name' => $name,
             'status' => $request->status,
             'price' => $request->price,
+            'managed_price' => $request->managed_price ?? 0,
             'user_id' => $user->id,
-            'module_id' => auth('remote')->id()
+            'module_id' => auth('module')->id()
         ];
 
         $host = Host::create($data);

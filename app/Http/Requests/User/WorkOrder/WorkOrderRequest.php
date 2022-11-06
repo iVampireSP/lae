@@ -5,7 +5,7 @@ namespace App\Http\Requests\User\WorkOrder;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\WorkOrder\WorkOrder;
 
-class WorkOrderReques extends FormRequest
+class WorkOrderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

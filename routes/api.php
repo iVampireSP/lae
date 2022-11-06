@@ -27,7 +27,7 @@ Route::resource('balances', BalanceController::class)->only(['index', 'store']);
 Route::get('balances/transactions', [BalanceController::class, 'transactions']);
 Route::get('balances/drops', [BalanceController::class, 'drops']);
 
-Route::resource('work-orders', WorkOrderController::class)->only(['index', 'store', 'show']);
+Route::resource('work-orders', WorkOrderController::class)->only(['index', 'store', 'show', 'update']);
 
 Route::resource('work-orders.replies', ReplyController::class)->only(['index', 'store']);
 

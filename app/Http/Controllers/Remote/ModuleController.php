@@ -12,7 +12,7 @@ class ModuleController extends Controller
 {
     public function index()
     {
-        $module = auth('remote')->user();
+        $module = auth('module')->user();
 
         $calc = $this->calcModule($module);
 

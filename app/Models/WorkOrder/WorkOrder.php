@@ -51,7 +51,7 @@ class WorkOrder extends Model
     // scope
     public function scopeThisModule($query)
     {
-        return $query->where('module_id', auth('remote')->id());
+        return $query->where('module_id', auth('module')->id());
     }
 
     public function scopeThisUser($query)

@@ -192,7 +192,6 @@ class Host extends Model
 
         static::created(function ($model) {
             broadcast(new UserEvent($model->user_id, 'hosts.created', $model));
-            Cache::forget('user_tasks_' . $model->user_id);
         });
 
         static::updating(function ($model) {
@@ -201,8 +200,6 @@ class Host extends Model
             } else if ($model->status == 'running') {
                 $model->suspended_at = null;
             }
-            Cache::forget('user_tasks_' . $model->user_id);
-
 
             broadcast(new UserEvent($model->user_id, 'hosts.updating', $model));
         });

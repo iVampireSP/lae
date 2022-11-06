@@ -2,14 +2,17 @@
 
 namespace App\Models;
 
-use GuzzleHttp\Exception\ConnectException;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
+use GuzzleHttp\Exception\ConnectException;
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class Module extends Authenticatable
 {
+    use Cachable;
+
     protected $table = 'modules';
 
     // primary key
@@ -89,7 +92,7 @@ class Module extends Authenticatable
 
     public function moduleRequest($method, $path, $requests)
     {
-        $module_id = auth('remote')->id();
+        $module_id = auth('module')->id();
 
         $http = Http::remote($this->api_token, $this->url)
             ->accept('application/json');

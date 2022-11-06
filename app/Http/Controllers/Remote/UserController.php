@@ -69,7 +69,7 @@ class UserController extends Controller
             'description' => 'required|string',
         ]);
 
-        $module = auth('remote')->user();
+        $module = auth('module')->user();
 
         $transaction = new Transaction();
 
