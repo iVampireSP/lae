@@ -88,30 +88,6 @@ class BalanceController extends Controller
         ]);
 
         return $pay;
-
-
-        // $result = false;
-        // try {
-        //     $result = $this->checkAndCharge($balance, true);
-        //     // if ($responseChecker->success($result)) {
-        //     //     $html = $result->body;
-        //     //     return view('pay', compact('html'));
-        //     // }
-        // } catch (Exception $e) {
-        //     Log::error($e);
-        //     return $this->error($e->getMessage());
-        // }
-
-        // if ($result) {
-
-
-        //     return response($pay);
-        // } else {
-        //     return $this->error('支付失败');
-        // }
-
-
-        // return $this->success($balance);
     }
 
     public function notify(Request $request)
@@ -129,7 +105,7 @@ class BalanceController extends Controller
         // 检测订单是否已支付
         if ($balance->paid_at !== null) {
             // return $this->success('订单已支付');
-            return view('pay_success');
+            return view('pay_process');
         }
 
         $data = Pay::alipay()->callback();
@@ -148,11 +124,9 @@ class BalanceController extends Controller
             throw new ChargeException('商户不匹配');
         }
 
-        if ($this->checkAndCharge($balance)) {
-            return $this->success();
-        } else {
-            return $this->error();
-        }
+        $this->checkAndCharge($balance);
+
+        return view('pay_process');
     }
 
     public function checkAndCharge(Balance $balance, $check = false)
@@ -176,7 +150,7 @@ class BalanceController extends Controller
             return $this->error('无法验证支付结果');
         }
 
-        return view('pay_success');
+        return true;
     }
 
     /**
