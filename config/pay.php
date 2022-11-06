@@ -22,13 +22,14 @@ return [
             // 选填-服务商模式下的服务商 id，当 mode 为 Pay::MODE_SERVICE 时使用该参数
             'service_provider_id' => '',
             // 选填-默认为正常模式。可选为： MODE_NORMAL, MODE_SANDBOX, MODE_SERVICE
-            'mode' => Pay::MODE_NORMAL,
+            // 如果应用程序环境为 local，自动切换为沙箱模式
+            'mode' => env('APP_ENV') == 'local' ? Pay::MODE_SANDBOX : Pay::MODE_NORMAL,
         ],
     ],
     'wechat' => [
         'default' => [
             // 必填-商户号，服务商模式下为服务商商户号
-            'mch_id' => '',
+            'mch_id' => env('WECHAT_MENCENT_ID'),
             // 必填-商户秘钥
             'mch_secret_key' => '',
             // 必填-商户私钥 字符串或路径

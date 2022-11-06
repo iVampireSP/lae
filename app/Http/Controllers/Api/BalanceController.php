@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Yansongda\LaravelPay\Facades\Pay;
 use Illuminate\Support\Facades\Storage;
+use Yansongda\Pay\Exception\InvalidResponseException;
 
 class BalanceController extends Controller
 {
@@ -56,7 +57,7 @@ class BalanceController extends Controller
 
 
         return $pay;
-        
+
 
         // if local
         // if (env('APP_ENV') == 'local') {
@@ -120,11 +121,20 @@ class BalanceController extends Controller
             'out_trade_no' => 'required',
         ]);
 
+        $alipay = Pay::alipay();
+
+        $data = $alipay->callback();
+
+        Log::debug($data);
+
+        dd($data);
+
+        return;
         // 检测订单是否存在
-        $balance = Balance::where('order_id', $request->out_trade_no)->with('user')->first();
-        if (!$balance) {
-            return $this->notFound('balance not found');
-        }
+        // $balance = Balance::where('order_id', $request->out_trade_no)->with('user')->first();
+        // if (!$balance) {
+        //     return $this->notFound('balance not found');
+        // }
 
         // 检测订单是否已支付
         if ($balance->paid_at !== null) {
@@ -162,29 +172,45 @@ class BalanceController extends Controller
         }
     }
 
-    public function checkAndCharge(Balance $balance)
+    public function checkAndCharge(Balance $balance, $check = false)
     {
-        // AlipayFactory::setOptions($this->alipayOptions());
 
-        // $trade = AlipayFactory::payment()->common()->query($balance->order_id);
+        if ($check) {
+            $alipay = Pay::alipay()->find(['out_trade_no' => $balance->order_id,]);
 
-        // if ($trade->code == "10000" && $trade->tradeStatus == "TRADE_SUCCESS") {
-        //     $balance->paid_at = now();
-        //     $balance->save();
+            if ($alipay->trade_status !== 'TRADE_SUCCESS') {
+                return false;
+            }
+        }
 
-        //     $transaction = new Transaction();
+        try {
 
-        //     try {
-        //         $transaction->addAmount($balance->user_id, 'alipay', $trade->totalAmount);
-        //     } catch (ChargeException $e) {
-        //         AlipayFactory::payment()->common()->refund($balance->order_id, $trade->totalAmount);
-        //         return $this->error($e->getMessage());
-        //     }
+            // 请自行对 trade_status 进行判断及其它逻辑进行判断，在支付宝的业务通知中，只有交易通知状态为 TRADE_SUCCESS 或 TRADE_FINISHED 时，支付宝才会认定为买家付款成功。
+            // 1、商户需要验证该通知数据中的out_trade_no是否为商户系统中创建的订单号；
+            // 2、判断total_amount是否确实为该订单的实际金额（即商户订单创建时的金额）；
+            // 3、校验通知中的seller_id（或者seller_email) 是否为out_trade_no这笔单据的对应的操作方（有的时候，一个商户可能有多个seller_id/seller_email）；
+            // 4、验证app_id是否为该商户本身。
+            // 5、其它业务逻辑情况
 
-        //     return true;
-        // } else {
-        //     return false;
-        // }
+            // 验证 商户
+            // if ($data['app_id'] != config('pay.alipay.app_id')) {
+            //     throw new ChargeException('商户不匹配');
+            // }
+
+            // if ((int) $data->total_amount != (int) $balance->amount) {
+            //     throw new ChargeException('金额不一致');
+            // }
+
+            $balance->update([
+                'paid_at' => now()
+            ]);
+
+            (new Transaction)->addAmount($balance->user_id, 'alipay', $data->totalAmount);
+        } catch (InvalidResponseException) {
+            return $this->error('无法验证支付结果');
+        }
+
+        return $alipay->success();
     }
 
     // // 转换为 drops

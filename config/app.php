@@ -16,6 +16,7 @@ return [
     */
 
     'name' => env('APP_NAME', 'LAECLOUD'),
+    'display_name' => env('APP_DISPLAY_NAME', env('APP_NAME', 'LAECLOUD')),
 
     /*
     |--------------------------------------------------------------------------
