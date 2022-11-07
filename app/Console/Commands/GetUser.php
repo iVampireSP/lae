@@ -44,7 +44,7 @@ class GetUser extends Command
         //
         $email_or_id = $this->argument('email_or_id');
 
-        $user = User::where('email', $email_or_id)->orWhere('id', $email_or_id)->first();
+        $user = User::where('email', $email_or_id)->orWhere('id', $email_or_id)->orWhere('name', $email_or_id)->first();
 
 
         $transaction = new Transaction();
