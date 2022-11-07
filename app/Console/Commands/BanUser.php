@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Models\AccessToken;
 use App\Models\Host;
 use App\Models\User;
 use Illuminate\Console\Command;
@@ -62,9 +61,9 @@ class BanUser extends Command
             'suspended_at' => now()
         ]);
 
-        $this->info('正在清除 Token.');
+        $this->info('正在吊销所有 Token...');
 
-        AccessToken::where('user_id', $user_id)->delete();
+        $user->tokens()->delete();
 
         $this->info('封禁用户成功。');
 

@@ -36,7 +36,7 @@ class AuthController extends Controller
         if (Auth::check()) {
             $user = Auth::user();
             if ($user->banned_at !== null) {
-                $user->tokens()->delete();
+                // $user->tokens()->delete();
                 return redirect()->route('banned');
             }
         }
