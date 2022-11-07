@@ -2,7 +2,7 @@
 
 namespace App\Notifications;
 
-use App\Models\User\Balance;
+use App\Models\Balance;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
