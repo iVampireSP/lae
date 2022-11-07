@@ -30,7 +30,7 @@ class CheckAndChargeBalance extends Job
 
         Balance::where('paid_at', null)->chunk(100, function ($balances) use ($bc) {
             foreach ($balances as $balance) {
-                if (!$bc->checkAndCharge($balance)) {
+                if (!$bc->checkAndCharge($balance, true)) {
                     if (now()->diffInDays($balance->created_at) > 1) {
                         $balance->delete();
                     }

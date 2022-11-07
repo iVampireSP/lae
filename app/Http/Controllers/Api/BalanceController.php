@@ -83,7 +83,7 @@ class BalanceController extends Controller
 
         $pay = Pay::alipay()->web([
             'out_trade_no' => $balance->order_id,
-            'total_amount' => 10,
+            'total_amount' => $balance->amount,
             'subject' => config('app.display_name') . ' 充值',
         ]);
 
@@ -138,6 +138,10 @@ class BalanceController extends Controller
             if ($alipay->trade_status !== 'TRADE_SUCCESS') {
                 return false;
             }
+        }
+
+        if ($balance->paid_at !== null) {
+            return true;
         }
 
         try {
