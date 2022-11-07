@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use Laravel\Sanctum\Sanctum;
+use App\Models\PersonalAccessToken;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\ServiceProvider;
 
@@ -25,6 +27,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         //
+
+        Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
 
         Http::macro('remote', function ($api_token, $url) {
             // 关闭证书验证
