@@ -21,15 +21,15 @@ Route::get('forum/announcements', [ForumController::class, 'pinned']);
 Route::get('forum/pinned', [ForumController::class, 'announcements']);
 
 Route::get('hosts/usages', [HostController::class, 'usages']);
-Route::resource('hosts', HostController::class);
+Route::apiResource('hosts', HostController::class);
 
-Route::resource('balances', BalanceController::class)->only(['index', 'store']);
+Route::apiResource('balances', BalanceController::class)->only(['index', 'store']);
 Route::get('balances/transactions', [BalanceController::class, 'transactions']);
 Route::get('balances/drops', [BalanceController::class, 'drops']);
 
-Route::resource('work-orders', WorkOrderController::class)->only(['index', 'store', 'show', 'update']);
+Route::apiResource('work-orders', WorkOrderController::class)->only(['index', 'store', 'show', 'update']);
 
-Route::resource('work-orders.replies', ReplyController::class)->only(['index', 'store']);
+Route::apiResource('work-orders.replies', ReplyController::class)->only(['index', 'store']);
 
 
 // 匹配 modules/{module} 的路由，正则匹配斜杠

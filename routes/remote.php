@@ -11,12 +11,12 @@ use App\Http\Controllers\Remote\WorkOrder\WorkOrderController;
 
 Route::get('modules', [ModuleController::class, 'index']);
 
-Route::resource('hosts', HostController::class);
+Route::apiResource('hosts', HostController::class);
 
-Route::resource('tasks', TaskController::class);
+Route::apiResource('tasks', TaskController::class);
 
-Route::resource('work-orders', WorkOrderController::class);
-Route::resource('work-orders.replies', ReplyController::class);
+Route::apiResource('work-orders', WorkOrderController::class);
+Route::apiResource('work-orders.replies', ReplyController::class);
 
 // 用户信息
 Route::get('users', [UserController::class, 'index']);
