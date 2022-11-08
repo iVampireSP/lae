@@ -10,6 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Support\Facades\Log;
 
 class CheckHostIfExistsOnModule implements ShouldQueue
 {
@@ -41,7 +42,8 @@ class CheckHostIfExistsOnModule implements ShouldQueue
                 $response = $http->get('hosts/' . $host->id);
 
                 if ($response->status() === 404) {
-                    dispatch(new \App\Jobs\Remote\Host($host, 'delete'));
+                    Log::debug($host->module->name . ' ' . $host->name . ' ' . $host->id . ' 不存在，删除');
+                    // dispatch(new \App\Jobs\Remote\Host($host, 'delete'));
                 }
             }
         });
