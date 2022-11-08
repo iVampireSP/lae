@@ -38,9 +38,6 @@ class Host implements ShouldQueue
     {
         //
 
-        // dd($this->host);
-
-        // $host = HostModel::find($this->host);
         $host = $this->host;
         $host->load(['module']);
 
@@ -49,43 +46,29 @@ class Host implements ShouldQueue
         switch ($this->type) {
             case 'patch':
                 $response = $http->patch('hosts/' . $host->id, $host->toArray());
+
                 break;
             case 'post':
                 $response = $http->post('hosts', $host->toArray());
 
                 break;
-
             case 'delete':
                 $response = $http->delete('hosts/' . $host->id);
 
                 // if successful
-                if ($response->successful()) {
+                if ($response->successful() || $response->status() === 404) {
                     $host->delete();
                 }
-
-                if ($response->status() === 404) {
-                    $host->delete();
-                }
-
-                return 0;
-                // if response code is 404
-                // if ($response->successful() || $response->failed()) {
-                //     $host->delete();
-                // }
-
-
-                // if success
-                // if ($response->successful()) {
-                //     $host->delete();
-                // }
 
                 break;
         }
 
-        if (!$response->successful()) {
-            $host->status = 'error';
-        }
+        if ($this->type !== 'delete') {
+            if (!$response->successful()) {
+                $host->status = 'error';
+            }
 
-        $host->save();
+            $host->save();
+        }
     }
 }
