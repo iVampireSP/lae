@@ -131,14 +131,12 @@ class HostController extends Controller
         if ($host instanceof Host) {
             $host->delete();
         } else {
-            $host = Host::where('id', $host)->first($host);
+            $host = Host::findOrFail($host);
 
             if ($host) {
                 $host->delete();
             }
         }
-
-
 
         return $this->deleted($host);
     }
