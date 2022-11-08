@@ -8,6 +8,7 @@ use App\Jobs\DeleteHost;
 use App\Jobs\Remote\FetchModule;
 use App\Jobs\Remote\PushWorkOrder;
 use App\Jobs\CheckAndChargeBalance;
+use App\Jobs\CheckHostIfExistsOnModule;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -33,6 +34,8 @@ class Kernel extends ConsoleKernel
         $schedule->job(new ClearTasks())->weekly();
 
         $schedule->job(new DeleteHost())->hourly();
+
+        $schedule->job(new CheckHostIfExistsOnModule())->hourly()->withoutOverlapping()->onOneServer();
 
         $schedule->job(new CheckAndChargeBalance())->everyFiveMinutes()->onOneServer()->withoutOverlapping();
     }
