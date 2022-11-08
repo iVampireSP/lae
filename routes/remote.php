@@ -1,13 +1,13 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Remote\UserController;
-use App\Http\Controllers\Remote\ModuleController;
 use App\Http\Controllers\Remote\BroadcastController;
 use App\Http\Controllers\Remote\Host\HostController;
 use App\Http\Controllers\Remote\Host\TaskController;
+use App\Http\Controllers\Remote\ModuleController;
+use App\Http\Controllers\Remote\UserController;
 use App\Http\Controllers\Remote\WorkOrder\ReplyController;
 use App\Http\Controllers\Remote\WorkOrder\WorkOrderController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('modules', [ModuleController::class, 'index']);
 

@@ -2,13 +2,13 @@
 
 namespace App\Notifications;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\Http;
 use App\Broadcasting\WeComRobotChannel;
 use App\Models\WorkOrder\Reply;
 use App\Models\WorkOrder\WorkOrder;
-use Illuminate\Notifications\Notification;
+use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class WorkOrderNotification extends Notification implements ShouldQueue

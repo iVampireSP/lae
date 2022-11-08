@@ -2,13 +2,13 @@
 
 namespace App\Console;
 
-use App\Jobs\HostCost;
-use App\Jobs\ClearTasks;
-use App\Jobs\DeleteHost;
-use App\Jobs\Remote\FetchModule;
-use App\Jobs\Remote\PushWorkOrder;
 use App\Jobs\CheckAndChargeBalance;
 use App\Jobs\CheckHostIfExistsOnModule;
+use App\Jobs\ClearTasks;
+use App\Jobs\DeleteHost;
+use App\Jobs\HostCost;
+use App\Jobs\Remote\FetchModule;
+use App\Jobs\Remote\PushWorkOrder;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 

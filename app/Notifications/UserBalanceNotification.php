@@ -2,13 +2,13 @@
 
 namespace App\Notifications;
 
+use App\Broadcasting\WeComRobotChannel;
 use App\Models\Balance;
 use Illuminate\Bus\Queueable;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Http;
-use App\Broadcasting\WeComRobotChannel;
-use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class UserBalanceNotification extends Notification implements ShouldQueue
 {

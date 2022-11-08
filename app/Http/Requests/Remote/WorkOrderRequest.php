@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests\Remote;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\WorkOrder\WorkOrder;
+use Illuminate\Foundation\Http\FormRequest;
 
 class WorkOrderRequest extends FormRequest
 {

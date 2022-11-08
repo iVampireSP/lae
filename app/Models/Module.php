@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Http;
-use GuzzleHttp\Exception\ConnectException;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
+use GuzzleHttp\Exception\ConnectException;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class Module extends Authenticatable
 {
