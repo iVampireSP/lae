@@ -39,5 +39,12 @@ class DeleteHost implements ShouldQueue
                 dispatch(new \App\Jobs\Remote\Host($host, 'delete'));
             }
         });
+        
+        // 查找部署时间超过3天以上的 host
+        Host::where('status', 'pending')->where('created_at', '<', now()->subDays(3))->chunk(100, function ($hosts) {
+            foreach ($hosts as $host) {
+                dispatch(new \App\Jobs\Remote\Host($host, 'delete'));
+            }
+        });
     }
 }
