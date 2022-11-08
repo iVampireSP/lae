@@ -35,7 +35,7 @@ class Kernel extends ConsoleKernel
 
         $schedule->job(new DeleteHost())->hourly();
 
-        $schedule->job(new CheckHostIfExistsOnModule())->hourly()->withoutOverlapping()->onOneServer();
+        $schedule->job(new CheckHostIfExistsOnModule())->everyThirtyMinutes()->withoutOverlapping()->onOneServer();
 
         $schedule->job(new CheckAndChargeBalance())->everyFiveMinutes()->onOneServer()->withoutOverlapping();
     }

@@ -32,8 +32,10 @@ class CheckHostIfExistsOnModule implements ShouldQueue
      */
     public function handle()
     {
+        // now 添加1.5小时
+
         //
-        Host::with('module')->chunk(100, function ($hosts) {
+        Host::with('module')->where('created_at', '<', now()->subHour())->chunk(100, function ($hosts) {
             foreach ($hosts as $host) {
                 $http = Http::remote($host->module->api_token, $host->module->url);
                 $response = $http->get('hosts/' . $host->id);
