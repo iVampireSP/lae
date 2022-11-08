@@ -42,7 +42,7 @@ class CheckHostIfExistsOnModule implements ShouldQueue
                 $response = $http->get('hosts/' . $host->id);
 
                 if ($response->status() === 404) {
-                    // Log::debug($host->module->name . ' ' . $host->name . ' ' . $host->id . ' 不存在，删除');
+                    Log::warning($host->module->name . ' ' . $host->name . ' ' . $host->id . ' 不存在，删除。');
                     dispatch(new \App\Jobs\Remote\Host($host, 'delete'));
                 }
             }
