@@ -4,6 +4,8 @@ namespace App\Exceptions;
 
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\JsonResponse;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -45,7 +47,16 @@ class Handler extends ExceptionHandler
     public function register()
     {
         $this->reportable(function (Throwable $e) {
-            //
+            // custom json 404 response
+            if ($e instanceof NotFoundHttpException) {
+                return response()->json([
+                    'message' => 'Not Found',
+                    'errors' => [
+                        'code' => 404,
+                        'message' => 'Not Found'
+                    ]
+                ], 404);
+            }
         });
     }
 
