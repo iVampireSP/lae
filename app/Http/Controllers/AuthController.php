@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 // use App\Helpers\ApiResponse;
 
-use App\Models\AccessToken;
 use App\Models\User;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
