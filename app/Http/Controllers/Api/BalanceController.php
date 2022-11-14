@@ -102,25 +102,31 @@ class BalanceController extends Controller
             return view('pay_process');
         }
 
-        $data = Pay::alipay()->callback();
+        // try {
+        //     $data = Pay::alipay()->callback();
+        // } catch (InvalidResponseException $e) {
+        //     return $this->error('支付失败');
+        // }
 
-        // 检测 out_trade_no 是否为商户系统中创建的订单号
-        if ($data->out_trade_no != $balance->order_id) {
-            return $this->error('订单号不一致');
+        // // 检测 out_trade_no 是否为商户系统中创建的订单号
+        // if ($data->out_trade_no != $balance->order_id) {
+        //     return $this->error('订单号不一致');
+        // }
+
+        // if ((int) $data->total_amount != (int) $balance->amount) {
+        //     throw new ChargeException('金额不一致');
+        // }
+
+        // // 验证 商户
+        // if ($data['app_id'] != config('pay.alipay.default.app_id')) {
+        //     throw new ChargeException('商户不匹配');
+        // }
+
+        if ($this->checkAndCharge($balance, true)) {
+            return view('pay_process');
+        } else {
+            return $this->error('支付失败');
         }
-
-        if ((int) $data->total_amount != (int) $balance->amount) {
-            throw new ChargeException('金额不一致');
-        }
-
-        // 验证 商户
-        if ($data['app_id'] != config('pay.alipay.default.app_id')) {
-            throw new ChargeException('商户不匹配');
-        }
-
-        $this->checkAndCharge($balance);
-
-        return view('pay_process');
     }
 
     public function checkAndCharge(Balance $balance, $check = false)
@@ -145,7 +151,7 @@ class BalanceController extends Controller
                 'paid_at' => now()
             ]);
         } catch (InvalidResponseException) {
-            return $this->error('无法验证支付结果');
+            return $this->error('无法验证支付结果。');
         }
 
         return true;
