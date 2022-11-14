@@ -23,7 +23,7 @@
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
                 <a class="navbar-brand" href="{{ route('admin.index') }}">
-                    {{ config('app.name') }}
+                    {{ config('app.display_name') }}
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -35,7 +35,7 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.merchants.index') }}">商户</a>
+{{--                            <a class="nav-link" href="{{ route('admin.merchants.index') }}">客户</a>--}}
                         </li>
                     </ul>
 
@@ -43,9 +43,9 @@
                     <ul class="navbar-nav ms-auto">
                         <!-- Authentication Links -->
                         @guest
-                            @if (Route::has('login'))
+                            @if (Route::has('admin.login'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                    <a class="nav-link" href="{{ route('admin.login') }}">{{ __('Login') }}</a>
                                 </li>
                             @endif
                         @else
@@ -75,8 +75,12 @@
         </nav>
 
         <main class="py-4">
-            <x-alert />
-            @yield('content')
+            <div class="container">
+                <div class="row">
+                    <x-alert />
+                    @yield('content')
+                </div>
+            </div>
         </main>
     </div>
 </body>
