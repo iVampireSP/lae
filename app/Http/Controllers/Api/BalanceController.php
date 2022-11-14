@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Exceptions\ChargeException;
 use App\Http\Controllers\Controller;
 use App\Models\Balance;
 use App\Models\Transaction;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Yansongda\LaravelPay\Facades\Pay;
 use Yansongda\Pay\Exception\InvalidResponseException;
@@ -161,9 +161,9 @@ class BalanceController extends Controller
      * 获取交易记录
      *
      * @param  mixed $request
-     * @return void
+     * @return JsonResponse
      */
-    public function transactions(Request $request)
+    public function transactions(Request $request): JsonResponse
     {
         $transactions = Transaction::where('user_id', auth()->id());
 
@@ -183,9 +183,9 @@ class BalanceController extends Controller
     /**
      * 获取 Drops
      *
-     * @return void
+     * @return JsonResponse
      */
-    public function drops()
+    public function drops(): JsonResponse
     {
         $user_id = auth()->id();
 
