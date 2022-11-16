@@ -37,12 +37,12 @@ class CheckHostIfExistsOnModule implements ShouldQueue
         //
         Host::with('module')->where('created_at', '<', now()->subHour())->chunk(100, function ($hosts) {
             foreach ($hosts as $host) {
-                $http = Http::remote($host->module->api_token, $host->module->url);
+                $http = Http::module($host->module->api_token, $host->module->url);
                 $response = $http->get('hosts/' . $host->id);
 
                 if ($response->status() === 404) {
                     Log::warning($host->module->name . ' ' . $host->name . ' ' . $host->id . ' 不存在，删除。');
-                    dispatch(new \App\Jobs\Remote\Host($host, 'delete'));
+                    dispatch(new \App\Jobs\Module\Host($host, 'delete'));
                 }
             }
         });

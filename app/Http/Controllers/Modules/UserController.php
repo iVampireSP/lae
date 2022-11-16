@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Remote;
+namespace App\Http\Controllers\Modules;
 
 use App\Exceptions\User\BalanceNotEnoughException;
 use App\Http\Controllers\Controller;

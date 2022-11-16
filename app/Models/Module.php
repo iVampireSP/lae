@@ -35,7 +35,7 @@ class Module extends Authenticatable
 
     public function remoteHost($host_id, $func, $requests)
     {
-        $http = Http::remote($this->api_token, $this->url);
+        $http = Http::module($this->api_token, $this->url);
         $response = $http->post("hosts/{$host_id}/functions/" . $func, $requests);
 
         $json = $response->json();
@@ -46,7 +46,7 @@ class Module extends Authenticatable
 
     public function remote($func, $requests)
     {
-        $http = Http::remote($this->api_token, $this->url);
+        $http = Http::module($this->api_token, $this->url);
         $response = $http->post('functions/' . $func, $requests);
 
         $json = $response->json();
@@ -61,7 +61,7 @@ class Module extends Authenticatable
     {
         $user = auth()->user();
 
-        $http = Http::remote($this->api_token, $this->url)
+        $http = Http::module($this->api_token, $this->url)
             ->accept('application/json');
 
         // add Headers
@@ -94,7 +94,7 @@ class Module extends Authenticatable
     {
         $module_id = auth('module')->id();
 
-        $http = Http::remote($this->api_token, $this->url)
+        $http = Http::module($this->api_token, $this->url)
             ->accept('application/json');
 
         $http->withHeaders([
@@ -119,7 +119,7 @@ class Module extends Authenticatable
 
     public function remotePost($path = '', $data = [])
     {
-        $http = Http::remote($this->api_token, $this->url);
+        $http = Http::module($this->api_token, $this->url);
         $response = $http->post($path, $data);
 
         $json = $response->json();
@@ -137,7 +137,7 @@ class Module extends Authenticatable
         }
 
         try {
-            $http = Http::remote($module->api_token, $module->url);
+            $http = Http::module($module->api_token, $module->url);
             // dd($module->url);
             $response = $http->get('remote');
         } catch (ConnectException $e) {

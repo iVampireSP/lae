@@ -23,7 +23,7 @@ Route::get('forum/pinned', [ForumController::class, 'announcements']);
 Route::get('hosts/usages', [HostController::class, 'usages']);
 Route::apiResource('hosts', HostController::class);
 
-Route::apiResource('balances', BalanceController::class)->only(['index', 'store']);
+// Route::apiResource('balances', BalanceController::class)->only(['index', 'store']);
 Route::get('balances/transactions', [BalanceController::class, 'transactions']);
 Route::get('balances/drops', [BalanceController::class, 'drops']);
 

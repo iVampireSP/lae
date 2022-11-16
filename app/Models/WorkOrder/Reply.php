@@ -75,8 +75,8 @@ class Reply extends Model
                 $model->workOrder->save();
             }
             // dispatch
-            dispatch(new \App\Jobs\Remote\WorkOrder\Reply($model));
-            dispatch(new \App\Jobs\Remote\WorkOrder\WorkOrder($model->workOrder, 'put'));
+            dispatch(new \App\Jobs\Module\WorkOrder\Reply($model));
+            dispatch(new \App\Jobs\Module\WorkOrder\WorkOrder($model->workOrder, 'put'));
         });
     }
 }

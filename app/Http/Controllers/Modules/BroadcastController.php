@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Remote;
+namespace App\Http\Controllers\Modules;
 
 use App\Events\UserEvent;
 use App\Http\Controllers\Controller;

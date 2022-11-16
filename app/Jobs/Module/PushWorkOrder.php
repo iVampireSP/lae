@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs\Remote;
+namespace App\Jobs\Module;
 
 use App\Models\WorkOrder\Reply;
 use App\Models\WorkOrder\WorkOrder;
@@ -50,7 +50,7 @@ class PushWorkOrder implements ShouldQueue
                     }
                 }
 
-                $http = Http::remote($workOrder->module->api_token, $workOrder->module->url);
+                $http = Http::module($workOrder->module->api_token, $workOrder->module->url);
                 $workOrder->status = 'open';
 
                 $response = $http->post('work-orders', $workOrder->toArray());
@@ -70,7 +70,7 @@ class PushWorkOrder implements ShouldQueue
 
         Reply::where('is_pending', 1)->chunk(100, function ($replies) {
             foreach ($replies as $reply) {
-                dispatch(new \App\Jobs\Remote\WorkOrder\Reply($reply));
+                dispatch(new \App\Jobs\Module\WorkOrder\Reply($reply));
             }
         });
 

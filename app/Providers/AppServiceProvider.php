@@ -33,10 +33,10 @@ class AppServiceProvider extends ServiceProvider
 
         Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
 
-        Http::macro('remote', function ($api_token, $url) {
+        Http::macro('module', function ($api_token, $url) {
             // 关闭证书验证
             return Http::withoutVerifying()->withHeaders([
-                'X-Remote-Api-Token' => $api_token,
+                'X-Module-Api-Token' => $api_token,
                 'Content-Type' => 'application/json'
             ])->withOptions([
                 'version' => 2,

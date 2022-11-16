@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Http\Controllers\Remote\ModuleController;
+use App\Http\Controllers\Modules\ModuleController;
 use App\Models\Module;
 use Illuminate\Console\Command;
 
@@ -70,5 +70,7 @@ class CalcModule extends Command
         $this->warn('计算模块收益完成。');
         $this->warn('完成时间: ' . now());
         $this->warn('比例: 1:' . $rate . ' (1 元 = ' . $rate . ' Drops)');
+
+        return 1;
     }
 }

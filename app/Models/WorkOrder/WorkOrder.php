@@ -101,7 +101,7 @@ class WorkOrder extends Model
 
         // updated
         static::updated(function ($model) {
-            dispatch(new \App\Jobs\Remote\WorkOrder\WorkOrder($model, 'put'));
+            dispatch(new \App\Jobs\Module\WorkOrder\WorkOrder($model, 'put'));
         });
     }
 }

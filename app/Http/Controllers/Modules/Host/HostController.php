@@ -1,11 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Remote\Host;
+namespace App\Http\Controllers\Modules\Host;
 
 use App\Http\Controllers\Controller;
 use App\Models\Host;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 
 // use Illuminate\Support\Facades\Log;
@@ -15,19 +17,22 @@ class HostController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
         //
         // Host::all();
+
+        return;
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     *
+     * @return Response|JsonResponse
      */
     public function store(Request $request)
     {
@@ -68,7 +73,8 @@ class HostController extends Controller
      * Display the specified resource.
      *
      * @param  Host $host
-     * @return \Illuminate\Http\Response
+     *
+     * @return JsonResponse
      */
     public function show(Host $host)
     {
@@ -82,9 +88,10 @@ class HostController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  Host $host
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param  Host   $host
+     *
+     * @return JsonResponse
      */
     public function update(Request $request, Host $host)
     {
@@ -124,7 +131,8 @@ class HostController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  $host
-     * @return \Illuminate\Http\Response
+     *
+     * @return JsonResponse
      */
     public function destroy($host)
     {

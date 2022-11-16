@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Remote\Host;
+namespace App\Http\Controllers\Modules\Host;
 
 use App\Http\Controllers\Controller;
 use App\Models\Task;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class TaskController extends Controller
 {
@@ -14,7 +16,7 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response|null
      */
     public function index(Request $request)
     {
@@ -23,13 +25,15 @@ class TaskController extends Controller
 
         // return $this->getTasks();
 
+        return null;
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     *
+     * @return JsonResponse
      */
     public function store(Request $request)
     {
@@ -48,10 +52,10 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request $request
-     * @param \App\Models\Task          $task
+     * @param Request $request
+     * @param Task    $task
      *
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
     public function update(Request $request, Task $task)
     {

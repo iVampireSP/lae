@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs\Remote;
+namespace App\Jobs\Module;
 
 use App\Models\Host;
 use Illuminate\Bus\Queueable;
@@ -35,7 +35,7 @@ class PushHost implements ShouldQueue
         //
         Host::whereIn('status', ['pending', 'error'])->with(['module', 'user'])->chunk(100, function ($hosts) {
             foreach ($hosts as $host) {
-                $http = Http::remote($host->module->api_token, $host->module->url);
+                $http = Http::module($host->module->api_token, $host->module->url);
                 $host->status = 'running';
 
                 $response = $http->post('hosts', $host->toArray());

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs\Remote;
+namespace App\Jobs\Module;
 
 use App\Events\ServerEvent;
 use App\Models\Module;
@@ -50,7 +50,7 @@ class FetchModule implements ShouldQueue
 
             foreach ($modules as $module) {
                 try {
-                    $http = Http::remote($module->api_token, $module->url);
+                    $http = Http::module($module->api_token, $module->url);
                     // dd($module->url);
                     $response = $http->get('remote');
                 } catch (ConnectException $e) {

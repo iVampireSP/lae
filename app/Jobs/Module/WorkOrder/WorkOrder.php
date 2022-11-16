@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs\Remote\WorkOrder;
+namespace App\Jobs\Module\WorkOrder;
 
 use App\Events\UserEvent;
 use App\Models\WorkOrder\WorkOrder as WorkOrderWorkOrder;
@@ -39,7 +39,7 @@ class WorkOrder implements ShouldQueue
     {
         $this->workOrder->load(['module']);
 
-        $http = Http::remote($this->workOrder->module->api_token, $this->workOrder->module->url);
+        $http = Http::module($this->workOrder->module->api_token, $this->workOrder->module->url);
         if ($this->type == 'put') {
             $response = $http->put('work-orders/' . $this->workOrder->id, $this->workOrder->toArray());
         } else {

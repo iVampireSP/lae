@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Remote\WorkOrder;
+namespace App\Http\Controllers\Modules\WorkOrder;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Remote\WorkOrderRequest;

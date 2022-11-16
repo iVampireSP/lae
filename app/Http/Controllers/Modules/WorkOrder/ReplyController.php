@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Remote\WorkOrder;
+namespace App\Http\Controllers\Modules\WorkOrder;
 
 use App\Http\Controllers\Controller;
 use App\Models\WorkOrder\Reply;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ReplyController extends Controller
@@ -11,7 +12,7 @@ class ReplyController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return JsonResponse
      */
     public function index(Request $request)
     {
@@ -23,8 +24,8 @@ class ReplyController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return JsonResponse
      */
     public function store(Request $request)
     {

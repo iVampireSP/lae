@@ -50,7 +50,7 @@ class HostController extends Controller
                 }
             }
 
-            dispatch(new \App\Jobs\Remote\Host($host, 'delete'));
+            dispatch(new \App\Jobs\Module\Host($host, 'delete'));
         } else {
             return $this->error('无权操作');
         }

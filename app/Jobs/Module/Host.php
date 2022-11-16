@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs\Remote;
+namespace App\Jobs\Module;
 
 use App\Models\Host as HostModel;
 use Illuminate\Bus\Queueable;
@@ -41,7 +41,7 @@ class Host implements ShouldQueue
         $host = $this->host;
         $host->load(['module']);
 
-        $http = Http::remote($host->module->api_token, $host->module->url);
+        $http = Http::module($host->module->api_token, $host->module->url);
 
         switch ($this->type) {
             case 'patch':

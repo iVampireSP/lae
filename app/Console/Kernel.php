@@ -7,8 +7,8 @@ use App\Jobs\CheckHostIfExistsOnModule;
 use App\Jobs\ClearTasks;
 use App\Jobs\DeleteHost;
 use App\Jobs\HostCost;
-use App\Jobs\Remote\FetchModule;
-use App\Jobs\Remote\PushWorkOrder;
+use App\Jobs\Module\FetchModule;
+use App\Jobs\Module\PushWorkOrder;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
