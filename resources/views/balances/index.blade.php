@@ -13,7 +13,7 @@
     <form name="charge" method="POST" target="_blank" action="{{ route('balances.store') }}"
           onsubmit="return confirm('请注意: 由于计费方式的特殊性，我们不支持退款，请合理充值。')">
         @csrf
-        <input type="number" id="amount" name="amount" value="10" min="1" max="1000" />元
+        <input type="number" id="amount" name="amount" value="10" min="1" max="1000"/>元
         <button type="submit" class="btn btn-primary">充值</button>
     </form>
     <span>≈ <span id="to_drops"></span> Drops</span>

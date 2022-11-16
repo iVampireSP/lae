@@ -28,7 +28,7 @@ class UserAddDrops extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
 
         $user_id = $this->argument('user_id');
@@ -40,7 +40,7 @@ class UserAddDrops extends Command
 
         $current_drops = $transaction->getDrops($user->id);
 
-        $this->info($user->name . ', 当前 ' . $current_drops. ' Drops');
+        $this->info($user->name . ', 当前 ' . $current_drops . ' Drops');
 
         $this->info($user->name . ', 当前余额: ' . $user->balance . ' 元');
 
@@ -48,7 +48,7 @@ class UserAddDrops extends Command
 
         if (!$this->confirm('确认添加 ' . $amount . ' Drops?')) {
             $this->info('已取消。');
-            return;
+            return 0;
         }
 
         $transaction->increaseDrops($user->id, $amount, '管理员添加 Drops', 'console');

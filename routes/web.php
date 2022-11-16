@@ -13,7 +13,6 @@ Route::middleware(['auth', 'banned'])->group(function () {
     Route::delete('deleteAll', [AuthController::class, 'deleteAll'])->name('deleteAll');
 
 
-
     Route::get('transactions', [BalanceController::class, 'transactions'])->name('transactions');
     Route::resource('balances', BalanceController::class);
 

@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Remote\WorkOrderRequest;
 use App\Models\WorkOrder\WorkOrder;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class WorkOrderController extends Controller
 {

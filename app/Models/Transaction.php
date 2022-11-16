@@ -91,70 +91,17 @@ class Transaction extends Model
         return $current_drops['drops'];
     }
 
-    public function reduceDrops($user_id, $host_id, $module_id, $auto = 1, $amount = 0)
-    {
-
-        $cache_key = 'user_drops_' . $user_id;
-
-        $current_drops = Cache::get($cache_key, [
-            'drops' => 0,
-        ]);
-
-        $current_drops['drops'] = $current_drops['drops'] - $amount;
-
-        $current_drops['drops'] = round($current_drops['drops'], 5);
-
-        Cache::forever($cache_key, $current_drops);
-
-        if ($auto) {
-            $description = '平台按时间自动扣费。';
-        } else {
-            $description = '集成模块发起的扣费。';
-        }
-
-        // $this->addPayoutDrops($user_id, $amount, $description, $host_id, $module_id);
-    }
-
-    public function reduceDropsWithoutHost($user_id, $amount = 0, $description = null)
-    {
-
-        $cache_key = 'user_drops_' . $user_id;
-
-        $current_drops = Cache::get($cache_key, [
-            'drops' => 0,
-        ]);
-
-        $current_drops['drops'] = $current_drops['drops'] - $amount;
-
-        $current_drops['drops'] = round($current_drops['drops'], 5);
-
-        Cache::forever($cache_key, $current_drops);
-
-        $this->addPayoutDrops($user_id, $amount, $description, null, null);
-    }
-
-    public function addPayoutDrops($user_id, $amount, $description, $host_id, $module_id)
+    public function addIncomeDrops($user_id, $amount, $description, $payment = 'balance')
     {
         $data = [
-            'type' => 'payout',
-            'payment' => 'drops',
+            'type' => 'income',
+            'payment' => $payment,
             'description' => $description,
             'income' => 0,
-            'income_drops' => 0,
+            'income_drops' => (float)$amount,
             'outcome' => 0,
-            'outcome_drops' => (float)$amount,
-            'host_id' => $host_id,
-            'module_id' => $module_id,
+            'outcome_drops' => 0,
         ];
-
-
-        // $amount = (double) $amount;
-
-        // Log::debug($amount);
-
-        // $month = now()->month;
-
-        // Cache::increment('user_' . $user_id . '_month_' . $month . '_drops', $amount);
 
         return $this->addLog($user_id, $data);
     }
@@ -198,19 +145,28 @@ class Transaction extends Model
         return $drops['drops'];
     }
 
-    public function addIncomeDrops($user_id, $amount, $description, $payment = 'balance')
+    public function reduceDrops($user_id, $host_id, $module_id, $auto = 1, $amount = 0)
     {
-        $data = [
-            'type' => 'income',
-            'payment' => $payment,
-            'description' => $description,
-            'income' => 0,
-            'income_drops' => (float)$amount,
-            'outcome' => 0,
-            'outcome_drops' => 0,
-        ];
 
-        return $this->addLog($user_id, $data);
+        $cache_key = 'user_drops_' . $user_id;
+
+        $current_drops = Cache::get($cache_key, [
+            'drops' => 0,
+        ]);
+
+        $current_drops['drops'] = $current_drops['drops'] - $amount;
+
+        $current_drops['drops'] = round($current_drops['drops'], 5);
+
+        Cache::forever($cache_key, $current_drops);
+
+        if ($auto) {
+            $description = '平台按时间自动扣费。';
+        } else {
+            $description = '集成模块发起的扣费。';
+        }
+
+        // $this->addPayoutDrops($user_id, $amount, $description, $host_id, $module_id);
     }
 
     public function reduceAmount($user_id, $amount = 0, $description = '扣除费用请求。')
@@ -419,5 +375,49 @@ class Transaction extends Model
         return true;
 
 
+    }
+
+    public function reduceDropsWithoutHost($user_id, $amount = 0, $description = null)
+    {
+
+        $cache_key = 'user_drops_' . $user_id;
+
+        $current_drops = Cache::get($cache_key, [
+            'drops' => 0,
+        ]);
+
+        $current_drops['drops'] = $current_drops['drops'] - $amount;
+
+        $current_drops['drops'] = round($current_drops['drops'], 5);
+
+        Cache::forever($cache_key, $current_drops);
+
+        $this->addPayoutDrops($user_id, $amount, $description, null, null);
+    }
+
+    public function addPayoutDrops($user_id, $amount, $description, $host_id, $module_id)
+    {
+        $data = [
+            'type' => 'payout',
+            'payment' => 'drops',
+            'description' => $description,
+            'income' => 0,
+            'income_drops' => 0,
+            'outcome' => 0,
+            'outcome_drops' => (float)$amount,
+            'host_id' => $host_id,
+            'module_id' => $module_id,
+        ];
+
+
+        // $amount = (double) $amount;
+
+        // Log::debug($amount);
+
+        // $month = now()->month;
+
+        // Cache::increment('user_' . $user_id . '_month_' . $month . '_drops', $amount);
+
+        return $this->addLog($user_id, $data);
     }
 }
