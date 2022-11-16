@@ -35,7 +35,7 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-{{--                            <a class="nav-link" href="{{ route('admin.merchants.index') }}">客户</a>--}}
+                            <a class="nav-link" href="{{ route('admin.users.index') }}">用户</a>
                         </li>
                     </ul>
 
@@ -76,8 +76,11 @@
 
         <main class="py-4">
             <div class="container">
+                <x-alert />
+            </div>
+
+            <div class="container">
                 <div class="row">
-                    <x-alert />
                     @yield('content')
                 </div>
             </div>

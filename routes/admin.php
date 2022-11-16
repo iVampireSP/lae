@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::withoutMiddleware(['auth'])->group(function () {
@@ -14,7 +15,7 @@ Route::view('/', 'admin.index')->name('index')->middleware('auth:admin');
 
 
 Route::group([
-    'middleware' => 'auth:admins',
+    'middleware' => 'auth:admin',
 ], function () {
-    // Route::resource('merchants', MerchantController::class);
+    Route::resource('users', UserController::class);
 });
