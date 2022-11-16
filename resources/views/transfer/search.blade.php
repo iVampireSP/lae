@@ -34,12 +34,12 @@
             </div>
 
             <button type="submit" class="btn btn-primary mt-3">转账</button>
-
+        </div>
     </form>
 
     <script>
         function beforeContinue() {
-            return true;
+            // return true;
             if (confirm('您确定要转账吗？')) {
                 if (confirm('当您确定后，您将无法取消。')) {
                     if (confirm('钱款会直接汇入到对方账户，您将无法退回。')) {
