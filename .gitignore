@@ -18,5 +18,3 @@ yarn-error.log
 /.vscode
 rr
 .rr.yaml
-composer.lock
-/.composer.lock
