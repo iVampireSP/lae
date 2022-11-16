@@ -18,6 +18,7 @@ Route::middleware(['auth', 'banned'])->group(function () {
     Route::resource('balances', BalanceController::class);
 
     Route::get('transfer', [TransferController::class, 'index'])->name('transfer');
+    Route::post('transfer', [TransferController::class, 'transfer']);
 
 
 });

@@ -41,8 +41,12 @@
                         <a class="nav-link text-auto" href="{{ route('balances.index') }}">余额</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link text-auto" href="{{ route('transfer') }}">转账</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link text-auto" href="{{ route('transactions') }}">交易记录</a>
                     </li>
+
                 </ul>
 
                 <!-- Right Side Of Navbar -->
@@ -80,7 +84,7 @@
         </div>
     </nav>
 
-    <main class="py-4" >
+    <main class="py-4">
         <div class="container">
             <x-alert/>
         </div>

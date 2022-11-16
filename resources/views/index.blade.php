@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', '用户')
+@section('title', '密钥管理')
 
 @section('content')
 

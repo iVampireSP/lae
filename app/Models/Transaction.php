@@ -74,7 +74,7 @@ class Transaction extends Model
         return $this->increaseDrops(auth()->id(), $amount);
     }
 
-    public function increaseDrops($user_id, $amount = 0)
+    public function increaseDrops($user_id, $amount, $description = null, $payment = null)
     {
         $cache_key = 'user_drops_' . $user_id;
 
@@ -85,6 +85,8 @@ class Transaction extends Model
         $current_drops['drops'] += $amount;
 
         Cache::forever($cache_key, $current_drops);
+
+        $this->addIncomeDrops($user_id, $amount, $description, $payment);
 
         return $current_drops['drops'];
     }
@@ -111,6 +113,24 @@ class Transaction extends Model
         }
 
         // $this->addPayoutDrops($user_id, $amount, $description, $host_id, $module_id);
+    }
+
+    public function reduceDropsWithoutHost($user_id, $amount = 0, $description = null)
+    {
+
+        $cache_key = 'user_drops_' . $user_id;
+
+        $current_drops = Cache::get($cache_key, [
+            'drops' => 0,
+        ]);
+
+        $current_drops['drops'] = $current_drops['drops'] - $amount;
+
+        $current_drops['drops'] = round($current_drops['drops'], 5);
+
+        Cache::forever($cache_key, $current_drops);
+
+        $this->addPayoutDrops($user_id, $amount, $description, null, null);
     }
 
     public function addPayoutDrops($user_id, $amount, $description, $host_id, $module_id)
@@ -178,11 +198,11 @@ class Transaction extends Model
         return $drops['drops'];
     }
 
-    public function addIncomeDrops($user_id, $amount, $description)
+    public function addIncomeDrops($user_id, $amount, $description, $payment = 'balances')
     {
         $data = [
             'type' => 'income',
-            'payment' => 'balances',
+            'payment' => $payment,
             'description' => $description,
             'income' => 0,
             'income_drops' => (float)$amount,
@@ -220,7 +240,7 @@ class Transaction extends Model
     {
         $data = [
             'type' => 'payout',
-            'payment' => 'balances',
+            'payment' => 'balance',
             'description' => $description,
             'income' => 0,
             'income_drops' => 0,
@@ -345,12 +365,67 @@ class Transaction extends Model
             'type' => 'income',
             'payment' => $payment,
             'description' => $description,
-            'income' => (float) $amount,
+            'income' => (float)$amount,
             'income_drops' => 0,
             'outcome' => 0,
             'outcome_drops' => 0,
         ];
 
         return $this->addLog($user_id, $data);
+    }
+
+    public function transfer(User $user, User $to, float $amount, string $description): float
+    {
+        $lock = Cache::lock("user_balance_lock_" . $user->id, 10);
+        $lock_to = Cache::lock("user_balance_lock_" . $to->id, 10);
+        try {
+
+            $lock->block(5);
+            $lock_to->block(5);
+
+            $user->balance -= $amount;
+            $user->save();
+
+            $to->balance += $amount;
+            $to->save();
+
+            $description_new = "转账给 {$to->name}({$to->email}) {$amount} 元，{$description}";
+
+            $this->addPayoutBalance($user->id, $amount, $description_new);
+
+            $description_new = "收到来自 {$user->name}($user->email) 转来的 {$amount} 元， $description";
+
+            $this->addIncomeBalance($to->id, 'transfer', $amount, $description_new);
+
+            return $user->balance;
+        } finally {
+            optional($lock)->release();
+            optional($lock_to)->release();
+        }
+
+    }
+
+    public function transferDrops(User $user, User $to, float $amount, string|null $description = null): bool
+    {
+
+        $user_drops = $this->getDrops($user->id);
+
+        // if drops not enough
+        if ($user_drops < $amount) {
+            return false;
+        }
+
+        $description_new = "转账给 {$to->name}($to->email)  {$amount} Drops， $description";
+
+        $this->reduceDropsWithoutHost($user->id, $amount, $description_new);
+
+        $description_new = "收到来自 {$to->name}($to->email) 转来的 {$amount} Drops， $description";
+
+
+        $this->increaseDrops($to->id, $amount, $description_new, 'transfer');
+
+        return true;
+
+
     }
 }

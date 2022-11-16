@@ -31,10 +31,11 @@ class Payment extends Component
             'alipay' => '支付宝',
             'wechat', 'wepay' => '微信支付',
             'drops' => 'Drops',
-            'balance' => '余额',
+            'balance', 'balances' => '余额',
             'unfreeze' => '解冻',
             'freeze' => '冻结',
             'console' => '控制台',
+            'transfer' => '转账',
             default => $this->payment,
         };
 
