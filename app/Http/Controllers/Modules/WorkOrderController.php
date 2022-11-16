@@ -1,16 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Modules\WorkOrder;
+namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Remote\WorkOrderRequest;
 use App\Models\WorkOrder\WorkOrder;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class WorkOrderController extends Controller
 {
     //
-    public function index(Request $request, WorkOrder $workOrder)
+    public function index(WorkOrder $workOrder): JsonResponse
     {
         // $work_orders = new WorkOrder();
         // // if route has user
@@ -29,12 +30,15 @@ class WorkOrderController extends Controller
 
     // }
 
-    public function show(WorkOrderRequest $request, WorkOrder $workOrder)
+    public function show(WorkOrderRequest $request, WorkOrder $workOrder): JsonResponse
     {
         return $this->success($workOrder);
     }
 
-    public function update(WorkOrderRequest $request, WorkOrder $workOrder)
+    /**
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function update(WorkOrderRequest $request, WorkOrder $workOrder): JsonResponse
     {
         $this->validate($request, [
             'status' => 'nullable|sometimes|string|in:open,closed,on_hold,in_progress',

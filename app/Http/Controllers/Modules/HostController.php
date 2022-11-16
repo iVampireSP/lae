@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Modules\Host;
+namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers\Controller;
 use App\Models\Host;
@@ -9,6 +9,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
+use function auth;
 
 // use Illuminate\Support\Facades\Log;
 
@@ -17,14 +18,14 @@ class HostController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @return Response|null
      */
-    public function index()
+    public function index(): ?Response
     {
         //
         // Host::all();
 
-        return;
+        return null;
     }
 
     /**
@@ -33,8 +34,9 @@ class HostController extends Controller
      * @param Request $request
      *
      * @return Response|JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request)
+    public function store(Request $request): Response|JsonResponse
     {
         // 存储计费项目
         $this->validate($request, [
@@ -76,7 +78,7 @@ class HostController extends Controller
      *
      * @return JsonResponse
      */
-    public function show(Host $host)
+    public function show(Host $host): JsonResponse
     {
 
         return $this->success($host);
@@ -92,8 +94,9 @@ class HostController extends Controller
      * @param Host    $host
      *
      * @return JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(Request $request, Host $host)
+    public function update(Request $request, Host $host): JsonResponse
     {
         //
         $this->validate($request, [
@@ -134,16 +137,14 @@ class HostController extends Controller
      *
      * @return JsonResponse
      */
-    public function destroy($host)
+    public function destroy($host): JsonResponse
     {
         if ($host instanceof Host) {
             $host->delete();
         } else {
             $host = Host::findOrFail($host);
 
-            if ($host) {
-                $host->delete();
-            }
+            $host?->delete();
         }
 
         return $this->deleted($host);

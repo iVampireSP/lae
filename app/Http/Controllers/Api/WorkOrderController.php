@@ -1,16 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Api\WorkOrder;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\WorkOrder\WorkOrder;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use function auth;
 
 class WorkOrderController extends Controller
 {
     //
-    public function index(WorkOrder $workOrder)
+    public function index(WorkOrder $workOrder): JsonResponse
     {
 
         $workOrder = $workOrder->thisUser()->with(['user', 'module', 'host'])->simplePaginate(100);
@@ -18,6 +19,9 @@ class WorkOrderController extends Controller
         return $this->success($workOrder);
     }
 
+    /**
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function store(Request $request)
     {
         $this->validate($request, [
@@ -46,7 +50,7 @@ class WorkOrderController extends Controller
         return $this->success($workOrder);
     }
 
-    public function show(WorkOrder $workOrder)
+    public function show(WorkOrder $workOrder): JsonResponse
     {
         if (auth()->id() !== $workOrder->user_id) {
             return $this->notFound('无法找到对应的工单。');
@@ -56,6 +60,9 @@ class WorkOrderController extends Controller
         return $this->success($workOrder);
     }
 
+    /**
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function update(Request $request, WorkOrder $workOrder)
     {
 

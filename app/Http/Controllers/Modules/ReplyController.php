@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Modules\WorkOrder;
+namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers\Controller;
 use App\Models\WorkOrder\Reply;
@@ -14,7 +14,7 @@ class ReplyController extends Controller
      *
      * @return JsonResponse
      */
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         //
         $replies = Reply::workOrderId($request->route('work_order'))->simplePaginate(10);
@@ -28,7 +28,7 @@ class ReplyController extends Controller
      *
      * @return JsonResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         //
 

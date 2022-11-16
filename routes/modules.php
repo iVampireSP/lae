@@ -1,12 +1,12 @@
 <?php
 
 use App\Http\Controllers\Modules\BroadcastController;
-use App\Http\Controllers\Modules\Host\HostController;
-use App\Http\Controllers\Modules\Host\TaskController;
+use App\Http\Controllers\Modules\HostController;
 use App\Http\Controllers\Modules\ModuleController;
+use App\Http\Controllers\Modules\ReplyController;
+use App\Http\Controllers\Modules\TaskController;
 use App\Http\Controllers\Modules\UserController;
-use App\Http\Controllers\Modules\WorkOrder\ReplyController;
-use App\Http\Controllers\Modules\WorkOrder\WorkOrderController;
+use App\Http\Controllers\Modules\WorkOrderController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('modules', [ModuleController::class, 'index']);

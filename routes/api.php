@@ -4,11 +4,11 @@ use App\Http\Controllers\Api\BalanceController;
 use App\Http\Controllers\Api\ForumController;
 use App\Http\Controllers\Api\HostController;
 use App\Http\Controllers\Api\ModuleController;
+use App\Http\Controllers\Api\ReplyController;
 use App\Http\Controllers\Api\ServerController;
 use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Api\UserController;
-use App\Http\Controllers\Api\WorkOrder\ReplyController;
-use App\Http\Controllers\Api\WorkOrder\WorkOrderController;
+use App\Http\Controllers\Api\WorkOrderController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('user', [UserController::class, 'index']);

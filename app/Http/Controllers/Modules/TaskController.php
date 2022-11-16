@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Modules\Host;
+namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers\Controller;
 use App\Models\Task;
@@ -18,7 +18,7 @@ class TaskController extends Controller
      *
      * @return Response|null
      */
-    public function index(Request $request)
+    public function index(Request $request): ?Response
     {
         //
         // $this->assignId($request);
@@ -34,8 +34,9 @@ class TaskController extends Controller
      * @param Request $request
      *
      * @return JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         //
         $this->validate($request, [
@@ -56,8 +57,9 @@ class TaskController extends Controller
      * @param Task    $task
      *
      * @return JsonResponse
+     * @throws \Illuminate\Validation\ValidationException
      */
-    public function update(Request $request, Task $task)
+    public function update(Request $request, Task $task): JsonResponse
     {
         //
         $this->validate($request, [

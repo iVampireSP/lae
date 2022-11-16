@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\WorkOrder;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\WorkOrder\Reply;
@@ -13,7 +13,7 @@ class ReplyController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index(WorkOrder $workOrder)
     {
