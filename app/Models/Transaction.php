@@ -110,7 +110,7 @@ class Transaction extends Model
             $description = '集成模块发起的扣费。';
         }
 
-        $this->addPayoutDrops($user_id, $amount, $description, $host_id, $module_id);
+        // $this->addPayoutDrops($user_id, $amount, $description, $host_id, $module_id);
     }
 
     public function addPayoutDrops($user_id, $amount, $description, $host_id, $module_id)
