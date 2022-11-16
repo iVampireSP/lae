@@ -19,6 +19,7 @@ class UserController extends Controller
         $user['drops'] = $transaction->getDrops($user['id']);
         $user['drops_rate'] = config('drops.rate');
 
+
         return $this->success($user);
     }
 }

@@ -2,19 +2,22 @@
 
 use App\Http\Controllers\Web\AuthController;
 use App\Http\Controllers\Web\BalanceController;
+use App\Http\Controllers\Web\TransferController;
 use Illuminate\Support\Facades\Route;
 
-Route::middleware(['auth'])->group(function () {
-    Route::view('banned', 'banned')->name('banned');
+Route::middleware(['auth', 'banned'])->group(function () {
+    Route::view('banned', 'banned')->name('banned')->withoutMiddleware('banned');
+    Route::post('logout', [AuthController::class, 'logout'])->name('logout')->withoutMiddleware('banned');
 
-    Route::post('/newToken', [AuthController::class, 'newToken'])->name('newToken');
-    Route::delete('/deleteAll', [AuthController::class, 'deleteAll'])->name('deleteAll');
-
-    // logout
-    Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::post('newToken', [AuthController::class, 'newToken'])->name('newToken');
+    Route::delete('deleteAll', [AuthController::class, 'deleteAll'])->name('deleteAll');
 
 
-    Route::resource('/balances', BalanceController::class);
+
+    Route::get('transactions', [BalanceController::class, 'transactions'])->name('transactions');
+    Route::resource('balances', BalanceController::class);
+
+    Route::get('transfer', [TransferController::class, 'index'])->name('transfer');
 
 
 });
@@ -24,7 +27,7 @@ Route::prefix('auth')->group(function () {
     Route::get('callback', [AuthController::class, 'callback'])->name('callback');
 });
 
-Route::get('/', [AuthController::class, 'index'])->name('index');
+Route::get('/', [AuthController::class, 'index'])->name('index')->middleware('banned');
 Route::view('not_verified', 'not_verified')->name('not_verified');
 
 

@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Api\BalanceController;
 use App\Http\Controllers\Api\ForumController;
 use App\Http\Controllers\Api\HostController;
 use App\Http\Controllers\Api\ModuleController;
@@ -24,8 +23,8 @@ Route::get('hosts/usages', [HostController::class, 'usages']);
 Route::apiResource('hosts', HostController::class);
 
 // Route::apiResource('balances', BalanceController::class)->only(['index', 'store']);
-Route::get('balances/transactions', [BalanceController::class, 'transactions']);
-Route::get('balances/drops', [BalanceController::class, 'drops']);
+// Route::get('balances/transactions', [BalanceController::class, 'transactions']);
+// Route::get('balances/drops', [BalanceController::class, 'drops']);
 
 Route::apiResource('work-orders', WorkOrderController::class)->only(['index', 'store', 'show', 'update']);
 

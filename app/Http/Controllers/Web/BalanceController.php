@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Balance;
+use App\Models\Module;
 use App\Models\Transaction;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
@@ -24,7 +25,11 @@ class BalanceController extends Controller
 
         $balance = $request->user()->balance;
 
-        return view('balances.index', compact('drops', 'balance'));
+        $balances = Balance::thisUser()->latest()->paginate(50);
+
+        $drops_rate = config('drops.rate');
+
+        return view('balances.index', compact('drops', 'balance', 'balances', 'drops_rate'));
     }
 
     public function store(Request $request)
@@ -66,7 +71,6 @@ class BalanceController extends Controller
     }
 
     /**
-     * @throws \Laravel\Octane\Exceptions\DdException
      */
     public function show(Balance $balance)
     {
@@ -105,7 +109,7 @@ class BalanceController extends Controller
         // 检测订单是否已支付
         if ($balance->paid_at !== null) {
             // return $this->success('订单已支付');
-            return view('pay_process');
+            return view('balances.pay_process');
         }
 
         // try {
@@ -128,10 +132,40 @@ class BalanceController extends Controller
         //     throw new ChargeException('商户不匹配');
         // }
 
-        if ((new \App\Http\Controllers\Api\BalanceController())->checkAndCharge($balance, true)) {
-            return view('pay_process');
-        } else {
-            abort(500, '支付失败');
+        return view('pay_process');
+
+        //
+        // if ((new \App\Jobs\CheckAndChargeBalance())->checkAndCharge($balance, true)) {
+        //     return view('pay_process');
+        // } else {
+        //     abort(500, '支付失败');
+        // }
+    }
+
+    /**
+     * 获取交易记录
+     *
+     * @param mixed $request
+     *
+     * @return View
+     */
+    public function transactions(Request $request): View
+    {
+
+        $modules = Module::all();
+
+        $transactions = Transaction::where('user_id', auth()->id());
+
+        if ($request->has('type')) {
+            $transactions = $transactions->where('type', $request->type);
         }
+
+        if ($request->has('payment')) {
+            $transactions = $transactions->where('payment', $request->payment);
+        }
+
+        $transactions = $transactions->latest()->paginate(30);
+
+        return view('balances.transactions', compact('transactions', 'modules'));
     }
 }

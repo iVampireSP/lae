@@ -35,10 +35,13 @@
                 <!-- Left Side Of Navbar -->
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('index') }}">首页</a>
+                        <a class="nav-link" href="{{ route('index') }}">密钥</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('balances.index') }}">余额</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('transactions') }}">交易记录</a>
                     </li>
                 </ul>
 

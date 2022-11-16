@@ -1,19 +1,21 @@
-<!DOCTYPE html>
-<html>
+@extends('layouts.app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>您已被封禁</title>
-</head>
+@section('title', '您已被封禁')
 
-<body>
-<h1>很抱歉，您可能违反了我们的规定。</h1>
-<p>{{ auth()->user()->banned_reason }}</p>
+@section('content')
 
-<a href="{{ route('logout') }}">更换账号</a>
-</body>
+    @if (auth()->user()->banned_at)
+        <h3>很抱歉，您可能违反了我们的规定。</h3>
+        <p>{{ auth()->user()->banned_reason }}</p>
 
-</html>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST">
+            @csrf
+            <button class="btn btn-primary">退出登录</button>
+        </form>
+    @else
+        <h3>您的账号正常。</h3>
+        <a href="{{ route('index') }}">返回首页</a>
+
+    @endif
+
+@endsection

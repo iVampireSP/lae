@@ -21,7 +21,7 @@
 
 
         <p>嗨, {{ auth('web')->user()->name }}
-        <p>在这里，你可以获取新的 Token 来对接其他应用程序。</p>
+        <p>在这里，你可以获取新的 Token 来对接其他应用程序或者访问 控制面板。</p>
 
         <form action="{{ route('newToken') }}" name="newToken" method="POST">
             @csrf
