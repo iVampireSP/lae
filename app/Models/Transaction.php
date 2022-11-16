@@ -144,7 +144,7 @@ class Transaction extends Model
         $user = User::find($user_id);
 
         $current = [
-            'balances' => $user->balances,
+            'balances' => $user->balance,
             'drops' => $this->getDrops($user_id),
             'user_id' => intval($user_id),
         ];
@@ -345,7 +345,7 @@ class Transaction extends Model
             'type' => 'income',
             'payment' => $payment,
             'description' => $description,
-            'income' => (float)$amount,
+            'income' => (float) $amount,
             'income_drops' => 0,
             'outcome' => 0,
             'outcome_drops' => 0,
