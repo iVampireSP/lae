@@ -132,7 +132,7 @@ class BalanceController extends Controller
         //     throw new ChargeException('商户不匹配');
         // }
 
-        return view('pay_process');
+        return view('balances.process');
 
         //
         // if ((new \App\Jobs\CheckAndChargeBalance())->checkAndCharge($balance, true)) {

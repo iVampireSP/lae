@@ -6,6 +6,8 @@
 
 // Bootstrap
 @import "bootstrap/scss/bootstrap";
+//@import "bootstrap-dark.min.css";
+
 
 h1,
 h2,
@@ -23,4 +25,61 @@ h6 {
 
 .mb-0 {
     margin-bottom: 0 !important;
+}
+
+//
+//@media (prefers-color-scheme: dark) {
+//    /* .background-container {
+//      background: url('/assets/images/bg-dark.jpg');
+//      filter: brightness(0.6);
+//    } */
+//
+//    .lae-logo {
+//        background-image: url('/assets/lae-white.png');
+//    }
+//
+//    .text-auto {
+//        color: #fff;
+//    }
+//
+//    .text-auto:hover {
+//        color: #fff !important;
+//    }
+//
+//    .active {
+//        color: #fff !important;
+//    }
+//
+//    .v-md-editor {
+//        background-color: #3b3b3b !important;
+//    }
+//    .v-md-editor__toolbar-item--active,
+//    .v-md-editor__toolbar-item--active:hover {
+//        background: #323232 !important;
+//    }
+//
+//    .v-md-editor__toolbar {
+//        border-bottom: 1px solid #606060 !important;
+//    }
+//
+//    .v-md-editor__toolbar-divider::before {
+//        border-left: 1px solid #606060 !important;
+//    }
+//
+//    .v-md-editor--editable .v-md-editor__editor-wrapper {
+//        border-right: 1px solid #606060 !important;
+//    }
+//
+//    .v-md-textarea-editor pre,
+//    .v-md-textarea-editor textarea {
+//        color: #cacaca !important;
+//    }
+//}
+
+.placeholder {
+    /* --smooth-corners: 100.00;
+    mask-image: paint(smooth-corners);
+    -webkit-mask-image: paint(smooth-corners); */
+
+    border-radius: 8px;
 }
