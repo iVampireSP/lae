@@ -164,7 +164,7 @@ class Transaction extends Model
         $user = User::find($user_id);
 
         $current = [
-            'balances' => $user->balance,
+            'balance' => $user->balance,
             'drops' => $this->getDrops($user_id),
             'user_id' => intval($user_id),
         ];
@@ -198,7 +198,7 @@ class Transaction extends Model
         return $drops['drops'];
     }
 
-    public function addIncomeDrops($user_id, $amount, $description, $payment = 'balances')
+    public function addIncomeDrops($user_id, $amount, $description, $payment = 'balance')
     {
         $data = [
             'type' => 'income',
@@ -232,8 +232,6 @@ class Transaction extends Model
         } finally {
             optional($lock)->release();
         }
-
-        return false;
     }
 
     public function addPayoutBalance($user_id, $amount, $description, $module_id = null)
@@ -280,8 +278,6 @@ class Transaction extends Model
         } finally {
             optional($lock)->release();
         }
-
-        return false;
     }
 
     public function reduceHostAmount($user_id, $host_id, $module_id, $amount = 0, $description = '扣除费用请求。')
@@ -303,15 +299,13 @@ class Transaction extends Model
         } finally {
             optional($lock)->release();
         }
-
-        return false;
     }
 
     public function addHostPayoutBalance($user_id, $host_id, $module_id, $amount, $description)
     {
         $data = [
             'type' => 'payout',
-            'payment' => 'balances',
+            'payment' => 'balance',
             'description' => $description,
             'income' => 0,
             'income_drops' => 0,
@@ -355,8 +349,6 @@ class Transaction extends Model
         } finally {
             optional($lock)->release();
         }
-
-        return false;
     }
 
     public function addIncomeBalance($user_id, $payment, $amount, $description)

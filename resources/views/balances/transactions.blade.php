@@ -55,7 +55,7 @@
                     </td>
 
                     <td>
-                        {{ $t->balances }} 元
+                        {{ $t->balance }} 元
                         <br/>
                         {{ $t->drops }} Drops
                     </td>
