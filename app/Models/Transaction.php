@@ -47,6 +47,7 @@ class Transaction extends Model
 
         // 可用余额
         'balances',
+        'balance',
 
         // 可用 Drops
         'drops',
@@ -110,8 +111,9 @@ class Transaction extends Model
     {
         $user = User::find($user_id);
 
+
         $current = [
-            'balance' => $user->balance,
+            'balance' => (float) $user->balance,
             'drops' => $this->getDrops($user_id),
             'user_id' => intval($user_id),
         ];
@@ -121,7 +123,6 @@ class Transaction extends Model
 
         // add expired at
         $data['expired_at'] = now()->addSeconds(7);
-
 
         return $this->create($data);
     }
@@ -160,11 +161,11 @@ class Transaction extends Model
 
         Cache::forever($cache_key, $current_drops);
 
-        if ($auto) {
-            $description = '平台按时间自动扣费。';
-        } else {
-            $description = '集成模块发起的扣费。';
-        }
+        // if ($auto) {
+        //     $description = '平台按时间自动扣费。';
+        // } else {
+        //     $description = '集成模块发起的扣费。';
+        // }
 
         // $this->addPayoutDrops($user_id, $amount, $description, $host_id, $module_id);
     }
@@ -183,11 +184,11 @@ class Transaction extends Model
             $user->save();
 
             $this->addPayoutBalance($user_id, $amount, $description);
-
-            return $user->balance;
         } finally {
             optional($lock)->release();
         }
+
+        return $user->balance;
     }
 
     public function addPayoutBalance($user_id, $amount, $description, $module_id = null)
@@ -229,11 +230,11 @@ class Transaction extends Model
             $user->save();
 
             $this->addPayoutBalance($user_id, $amount, $description, $module_id);
-
-            return $user->balance;
         } finally {
             optional($lock)->release();
         }
+
+        return $user->balance;
     }
 
     public function reduceHostAmount($user_id, $host_id, $module_id, $amount = 0, $description = '扣除费用请求。')
@@ -250,11 +251,11 @@ class Transaction extends Model
             $user->save();
 
             $this->addHostPayoutBalance($user_id, $host_id, $module_id, $amount, $description);
-
-            return $user->balance;
         } finally {
             optional($lock)->release();
         }
+
+        return $user->balance;
     }
 
     public function addHostPayoutBalance($user_id, $host_id, $module_id, $amount, $description)
@@ -297,14 +298,14 @@ class Transaction extends Model
             }
 
             $this->addIncomeBalance($user_id, $payment, $amount, $description);
-
-            return $left_balance;
         } catch (LockTimeoutException $e) {
             Log::error($e);
             throw new ChargeException('充值失败，请稍后再试。');
         } finally {
             optional($lock)->release();
         }
+
+        return $left_balance;
     }
 
     public function addIncomeBalance($user_id, $payment, $amount, $description)
@@ -322,7 +323,7 @@ class Transaction extends Model
         return $this->addLog($user_id, $data);
     }
 
-    public function transfer(User $user, User $to, float $amount, string $description): float
+    public function transfer(User $user, User $to, float $amount, string|null $description): float
     {
         $lock = Cache::lock("user_balance_lock_" . $user->id, 10);
         $lock_to = Cache::lock("user_balance_lock_" . $to->id, 10);
@@ -337,6 +338,10 @@ class Transaction extends Model
             $to->balance += $amount;
             $to->save();
 
+            if (!$description) {
+                $description = '完成。';
+            }
+
             $description_new = "转账给 {$to->name}({$to->email}) {$amount} 元，{$description}";
 
             $this->addPayoutBalance($user->id, $amount, $description_new);
@@ -344,13 +349,12 @@ class Transaction extends Model
             $description_new = "收到来自 {$user->name}($user->email) 转来的 {$amount} 元， $description";
 
             $this->addIncomeBalance($to->id, 'transfer', $amount, $description_new);
-
-            return $user->balance;
         } finally {
             optional($lock)->release();
             optional($lock_to)->release();
         }
 
+        return $user->balance;
     }
 
     public function transferDrops(User $user, User $to, float $amount, string|null $description = null): bool
@@ -373,8 +377,6 @@ class Transaction extends Model
         $this->increaseDrops($to->id, $amount, $description_new, 'transfer');
 
         return true;
-
-
     }
 
     public function reduceDropsWithoutHost($user_id, $amount = 0, $description = null)
