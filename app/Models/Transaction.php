@@ -71,7 +71,7 @@ class Transaction extends Model
     }
 
 
-    public function getDrops($user_id = null)
+    public function getDrops($user_id = null): float
     {
         //
         if (!$user_id) {
@@ -146,7 +146,7 @@ class Transaction extends Model
             'income' => 0,
             'income_drops' => 0,
             'outcome' => 0,
-            'outcome_drops' => (float) $amount,
+            'outcome_drops' => (float)$amount,
             'host_id' => $host_id,
             'module_id' => $module_id,
         ];
@@ -171,7 +171,7 @@ class Transaction extends Model
             'payment' => 'balances',
             'description' => $description,
             'income' => 0,
-            'income_drops' => (float) $amount,
+            'income_drops' => (float)$amount,
             'outcome' => 0,
             'outcome_drops' => 0,
         ];
@@ -179,13 +179,13 @@ class Transaction extends Model
         return $this->addLog($user_id, $data);
     }
 
-    public function addIncomeBalance($user_id, $payment, $amount, $description)
+    public function addIncomeBalances($user_id, $payment, $amount, $description)
     {
         $data = [
             'type' => 'income',
             'payment' => $payment,
             'description' => $description,
-            'income' => (float) $amount,
+            'income' => (float)$amount,
             'income_drops' => 0,
             'outcome' => 0,
             'outcome_drops' => 0,
@@ -194,7 +194,7 @@ class Transaction extends Model
         return $this->addLog($user_id, $data);
     }
 
-    public function addPayoutBalance($user_id, $amount, $description, $module_id = null)
+    public function addPayoutBalances($user_id, $amount, $description, $module_id = null)
     {
         $data = [
             'type' => 'payout',
@@ -202,7 +202,7 @@ class Transaction extends Model
             'description' => $description,
             'income' => 0,
             'income_drops' => 0,
-            'outcome' => (float) $amount,
+            'outcome' => (float)$amount,
             'outcome_drops' => 0
         ];
 
@@ -213,7 +213,7 @@ class Transaction extends Model
         return $this->addLog($user_id, $data);
     }
 
-    public function addHostPayoutBalance($user_id, $host_id, $module_id, $amount, $description)
+    public function addHostPayoutBalances($user_id, $host_id, $module_id, $amount, $description)
     {
         $data = [
             'type' => 'payout',
@@ -221,7 +221,7 @@ class Transaction extends Model
             'description' => $description,
             'income' => 0,
             'income_drops' => 0,
-            'outcome' => (float) $amount,
+            'outcome' => (float)$amount,
             'outcome_drops' => 0,
             'host_id' => $host_id,
             'module_id' => $module_id,
@@ -231,23 +231,22 @@ class Transaction extends Model
     }
 
 
-
     public function reduceAmount($user_id, $amount = 0, $description = '扣除费用请求。')
     {
 
-        $lock = Cache::lock("user_balance_lock_" . $user_id, 10);
+        $lock = Cache::lock("user_balances_lock_" . $user_id, 10);
         try {
 
             $lock->block(5);
 
             $user = User::findOrFail($user_id);
 
-            $user->balance -= $amount;
+            $user->balances -= $amount;
             $user->save();
 
-            $this->addPayoutBalance($user_id, $amount, $description);
+            $this->addPayoutBalances($user_id, $amount, $description);
 
-            return $user->balance;
+            return $user->balances;
         } finally {
             optional($lock)->release();
         }
@@ -258,25 +257,25 @@ class Transaction extends Model
     public function reduceAmountModuleFail($user_id, $module_id, $amount = 0, $description = '扣除费用请求。')
     {
 
-        $lock = Cache::lock("user_balance_lock_" . $user_id, 10);
+        $lock = Cache::lock("user_balances_lock_" . $user_id, 10);
         try {
 
             $lock->block(5);
 
             $user = User::findOrFail($user_id);
 
-            $user->balance -= $amount;
+            $user->balances -= $amount;
 
             // if balances < 0
-            if ($user->balance < 0) {
+            if ($user->balances < 0) {
                 throw new BalanceNotEnoughException('余额不足。');
             }
 
             $user->save();
 
-            $this->addPayoutBalance($user_id, $amount, $description, $module_id);
+            $this->addPayoutBalances($user_id, $amount, $description, $module_id);
 
-            return $user->balance;
+            return $user->balances;
         } finally {
             optional($lock)->release();
         }
@@ -288,19 +287,19 @@ class Transaction extends Model
     public function reduceHostAmount($user_id, $host_id, $module_id, $amount = 0, $description = '扣除费用请求。')
     {
 
-        $lock = Cache::lock("user_balance_lock_" . $user_id, 10);
+        $lock = Cache::lock("user_balances_lock_" . $user_id, 10);
         try {
 
             $lock->block(5);
 
             $user = User::findOrFail($user_id);
 
-            $user->balance -= $amount;
+            $user->balances -= $amount;
             $user->save();
 
-            $this->addHostPayoutBalance($user_id, $host_id, $module_id, $amount, $description);
+            $this->addHostPayoutBalances($user_id, $host_id, $module_id, $amount, $description);
 
-            return $user->balance;
+            return $user->balances;
         } finally {
             optional($lock)->release();
         }
@@ -308,18 +307,21 @@ class Transaction extends Model
         return false;
     }
 
+    /**
+     * @throws ChargeException
+     */
     public function addAmount($user_id, $payment = 'console', $amount = 0, $description = null)
     {
-        $lock = Cache::lock("user_balance_lock_" . $user_id, 10);
+        $lock = Cache::lock("user_balances_lock_" . $user_id, 10);
         try {
 
             $lock->block(5);
 
             $user = User::findOrFail($user_id);
 
-            $left_balance = $user->balance + $amount;
+            $left_balances = $user->balances + $amount;
 
-            $user->increment('balance', $amount);
+            $user->increment('balances', $amount);
 
             if (!$description) {
                 $description = '充值金额。';
@@ -327,9 +329,9 @@ class Transaction extends Model
                 $description = '充值 ' . $amount . ' 元';
             }
 
-            $this->addIncomeBalance($user_id, $payment, $amount, $description);
+            $this->addIncomeBalances($user_id, $payment, $amount, $description);
 
-            return $left_balance;
+            return $left_balances;
         } catch (LockTimeoutException $e) {
             Log::error($e);
             throw new ChargeException('充值失败，请稍后再试。');
@@ -346,7 +348,7 @@ class Transaction extends Model
         $user = User::find($user_id);
 
         $current = [
-            'balances' => $user->balance,
+            'balances' => $user->balances,
             'drops' => $this->getDrops($user_id),
             'user_id' => intval($user_id),
         ];
