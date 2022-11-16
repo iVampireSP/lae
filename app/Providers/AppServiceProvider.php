@@ -37,7 +37,8 @@ class AppServiceProvider extends ServiceProvider
             // 关闭证书验证
             return Http::withoutVerifying()->withHeaders([
                 'X-Module-Api-Token' => $api_token,
-                'Content-Type' => 'application/json'
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
             ])->withOptions([
                 'version' => 2,
             ])->baseUrl($url);
