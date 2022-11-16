@@ -47,7 +47,7 @@ class Transaction extends Model
         'outcome_drops',
 
         // 可用余额
-        'balance',
+        'balances',
 
         // 可用 Drops
         'drops',
@@ -168,7 +168,7 @@ class Transaction extends Model
     {
         $data = [
             'type' => 'income',
-            'payment' => 'balance',
+            'payment' => 'balances',
             'description' => $description,
             'income' => 0,
             'income_drops' => (float) $amount,
@@ -198,7 +198,7 @@ class Transaction extends Model
     {
         $data = [
             'type' => 'payout',
-            'payment' => 'balance',
+            'payment' => 'balances',
             'description' => $description,
             'income' => 0,
             'income_drops' => 0,
@@ -217,7 +217,7 @@ class Transaction extends Model
     {
         $data = [
             'type' => 'payout',
-            'payment' => 'balance',
+            'payment' => 'balances',
             'description' => $description,
             'income' => 0,
             'income_drops' => 0,
@@ -267,7 +267,7 @@ class Transaction extends Model
 
             $user->balance -= $amount;
 
-            // if balance < 0
+            // if balances < 0
             if ($user->balance < 0) {
                 throw new BalanceNotEnoughException('余额不足。');
             }
@@ -346,7 +346,7 @@ class Transaction extends Model
         $user = User::find($user_id);
 
         $current = [
-            'balance' => $user->balance,
+            'balances' => $user->balance,
             'drops' => $this->getDrops($user_id),
             'user_id' => intval($user_id),
         ];
