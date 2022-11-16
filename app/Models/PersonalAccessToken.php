@@ -16,7 +16,8 @@ class PersonalAccessToken extends SanctumPersonalAccessToken
      * the last_used_at column that has changed. It prevents extra DB writes
      * since we aren't going to use that column for anything.
      *
-     * @param  array  $options
+     * @param array $options
+     *
      * @return bool
      */
     public function save(array $options = [])

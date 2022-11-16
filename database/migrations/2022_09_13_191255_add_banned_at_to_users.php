@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -15,7 +14,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             //
-            $table->dateTime('banned_at')->nullable()->comment('封禁时间')->after('balance');
+            $table->dateTime('banned_at')->nullable()->comment('封禁时间')->after('balances');
             // reason
             $table->string('banned_reason')->nullable()->after('banned_at');
         });

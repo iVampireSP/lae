@@ -6,8 +6,10 @@ use Closure;
 use Illuminate\Contracts\Cache\LockTimeoutException;
 use Illuminate\Support\Facades\Cache;
 
-trait Lock {
-    public function await($name, Closure $callback) {
+trait Lock
+{
+    public function await($name, Closure $callback)
+    {
         // if env is local
         if (env('APP_ENV') == 'local') {
             return $callback();

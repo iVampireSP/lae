@@ -13,13 +13,12 @@ class Module extends Authenticatable
 {
     use Cachable;
 
-    protected $table = 'modules';
+    public $incrementing = false;
 
     // primary key
-    public $incrementing = false;
-    protected $keyType = 'string';
     public $timestamps = false;
-
+    protected $table = 'modules';
+    protected $keyType = 'string';
     protected $fillable = [
         'id',
         'name',
@@ -32,6 +31,16 @@ class Module extends Authenticatable
         'wecom_key'
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+        static::creating(function ($model) {
+            // if local
+            if (!app()->environment('local')) {
+                $model->api_token = Str::random(60);
+            }
+        });
+    }
 
     public function remoteHost($host_id, $func, $requests)
     {
@@ -44,6 +53,9 @@ class Module extends Authenticatable
         return [$json, $status];
     }
 
+
+    // post, get, patch, delete 等请求
+
     public function remote($func, $requests)
     {
         $http = Http::module($this->api_token, $this->url);
@@ -55,8 +67,6 @@ class Module extends Authenticatable
         return [$json, $status];
     }
 
-
-    // post, get, patch, delete 等请求
     public function remoteRequest($method, $path, $requests)
     {
         $user = auth()->user();
@@ -115,8 +125,6 @@ class Module extends Authenticatable
         ];
     }
 
-
-
     public function remotePost($path = '', $data = [])
     {
         $http = Http::module($this->api_token, $this->url);
@@ -127,6 +135,15 @@ class Module extends Authenticatable
 
         return [$json, $status];
     }
+
+
+    // // get cached modules
+    // public static function cached_modules()
+    // {
+    //     return Cache::remember('modules', 600, function () {
+    //         return Module::all();
+    //     });
+    // }
 
     public function check($module_id = null)
     {
@@ -149,25 +166,5 @@ class Module extends Authenticatable
         } else {
             return false;
         }
-    }
-
-
-    // // get cached modules
-    // public static function cached_modules()
-    // {
-    //     return Cache::remember('modules', 600, function () {
-    //         return Module::all();
-    //     });
-    // }
-
-    protected static function boot()
-    {
-        parent::boot();
-        static::creating(function ($model) {
-            // if local
-            if (!app()->environment('local')) {
-                $model->api_token = Str::random(60);
-            }
-        });
     }
 }

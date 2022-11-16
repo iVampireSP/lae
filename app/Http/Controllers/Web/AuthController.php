@@ -1,15 +1,22 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
 // use App\Helpers\ApiResponse;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use function back;
+use function config;
+use function now;
+use function redirect;
+use function session;
+use function view;
 
 class AuthController extends Controller
 {

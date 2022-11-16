@@ -58,13 +58,13 @@ class Count extends Command
 
         $this->info('正在获取主机数量...');
         $hosts = Host::count();
-        
+
         $this->info('正在获取部署中的主机数量...');
         $pending_hosts = Host::where('status', 'pending')->count();
-        
+
         $this->info('正在获取已停止的主机数量...');
         $stopped_hosts = Host::where('status', 'stopped')->count();
-         
+
         $this->info('正在获取部署失败的主机数量...');
         $error_hosts = Host::where('status', 'error')->count();
 

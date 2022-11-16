@@ -72,7 +72,7 @@ class HostController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  Host $host
+     * @param Host $host
      *
      * @return JsonResponse
      */
@@ -89,7 +89,7 @@ class HostController extends Controller
      * Update the specified resource in storage.
      *
      * @param Request $request
-     * @param  Host   $host
+     * @param Host    $host
      *
      * @return JsonResponse
      */

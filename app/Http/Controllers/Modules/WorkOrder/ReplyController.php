@@ -25,6 +25,7 @@ class ReplyController extends Controller
      * Store a newly created resource in storage.
      *
      * @param Request $request
+     *
      * @return JsonResponse
      */
     public function store(Request $request)

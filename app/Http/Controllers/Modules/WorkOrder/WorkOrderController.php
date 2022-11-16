@@ -10,7 +10,8 @@ use Illuminate\Http\Request;
 class WorkOrderController extends Controller
 {
     //
-    public function index(Request $request, WorkOrder $workOrder) {
+    public function index(Request $request, WorkOrder $workOrder)
+    {
         // $work_orders = new WorkOrder();
         // // if route has user
         // if ($request->route('user')) {
@@ -28,7 +29,8 @@ class WorkOrderController extends Controller
 
     // }
 
-    public function show(WorkOrderRequest $request, WorkOrder $workOrder) {
+    public function show(WorkOrderRequest $request, WorkOrder $workOrder)
+    {
         return $this->success($workOrder);
     }
 

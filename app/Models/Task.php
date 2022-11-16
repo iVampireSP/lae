@@ -16,43 +16,21 @@ class Task extends Model
 {
     use HasFactory, Cachable;
 
+    public $incrementing = false;
     protected $fillable = [
         'host_id',
         'title',
         'progress',
         'status',
     ];
-
     protected $casts = [
         'id' => 'string',
         'progress' => 'integer',
     ];
 
-    public $incrementing = false;
-
     // key type string
     protected $keyType = 'string';
 
-    public function scopeUser($query)
-    {
-        return $query->where('user_id', auth()->id());
-    }
-
-
-    public function getCurrentUserTasks()
-    {
-        return Cache::remember('user_tasks_' . auth()->id(), 3600, function () {
-            return $this->user()->with('host')->latest()->get();
-        });
-    }
-
-
-    public function host()
-    {
-        return $this->belongsTo(Host::class);
-    }
-
-    // before create
     protected static function boot()
     {
         parent::boot();
@@ -80,7 +58,6 @@ class Task extends Model
                 // $host = Host::where('id', $model->host_id)->first();
 
                 // dd($host);
-
 
 
                 $model->user_id = $model->host->user_id;
@@ -116,5 +93,24 @@ class Task extends Model
 
             broadcast(new UserEvent($model->user_id, 'tasks.deleted', $model));
         });
+    }
+
+    public function scopeUser($query)
+    {
+        return $query->where('user_id', auth()->id());
+    }
+
+    public function getCurrentUserTasks()
+    {
+        return Cache::remember('user_tasks_' . auth()->id(), 3600, function () {
+            return $this->user()->with('host')->latest()->get();
+        });
+    }
+
+    // before create
+
+    public function host()
+    {
+        return $this->belongsTo(Host::class);
     }
 }

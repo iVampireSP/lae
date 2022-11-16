@@ -25,11 +25,11 @@
 
         <form action="{{ route('newToken') }}" name="newToken" method="POST">
             @csrf
-            <input type="text" name="token_name" placeholder="Token 名字" />
+            <input type="text" name="token_name" placeholder="Token 名字"/>
             <button class="btn btn-primary" type="submit">获取新的 Token</button>
         </form>
 
-        <hr />
+        <hr/>
         <p>如果你需要撤销对所有应用程序的授权，你可以在这里吊销所有 Token</p>
         <form action="{{ route('deleteAll') }}" method="post">
             @csrf
@@ -38,7 +38,7 @@
         </form>
         <p class="text-danger">*如果您的 Token 被泄漏，您应该立即吊销所有 Token</p>
 
-        <hr />
+        <hr/>
         <form action="{{ route('logout') }}" method="post">
             @csrf
             <button class="btn btn-danger" type="submit">退出登录</button>

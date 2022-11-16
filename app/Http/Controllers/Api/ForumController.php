@@ -23,13 +23,6 @@ class ForumController extends Controller
         $this->http = Http::baseUrl($this->baseUrl . '/api')->throw();
     }
 
-    public function get($url)
-    {
-        $resp = $this->http->get($url)->json()['data'];
-        return $resp;
-    }
-
-
     public function announcements()
     {
         $resp = $this->cache(function () {
@@ -38,16 +31,6 @@ class ForumController extends Controller
 
         return $this->resp($resp);
     }
-
-    public function pinned()
-    {
-        $resp = $this->cache(function () {
-            return $this->get('discussions?filter[tag]=pinned&page[offset]=0&sort=-createdAt');
-        });
-
-        return $this->resp($resp);
-    }
-
 
     public function cache(Closure $callback)
     {
@@ -59,11 +42,25 @@ class ForumController extends Controller
         });
     }
 
+    public function get($url)
+    {
+        $resp = $this->http->get($url)->json()['data'];
+        return $resp;
+    }
 
     public function resp($data)
     {
         $data['base_url'] = $this->baseUrl;
 
         return $this->success($data);
+    }
+
+    public function pinned()
+    {
+        $resp = $this->cache(function () {
+            return $this->get('discussions?filter[tag]=pinned&page[offset]=0&sort=-createdAt');
+        });
+
+        return $this->resp($resp);
     }
 }

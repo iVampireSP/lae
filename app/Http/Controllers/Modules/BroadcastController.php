@@ -25,6 +25,13 @@ class BroadcastController extends Controller
 
     }
 
+    private function rules()
+    {
+        return [
+            'message' => 'required',
+        ];
+    }
+
     public function broadcast_to_host(Request $request, Host $host)
     {
         $this->validate($request, $this->rules());
@@ -36,11 +43,5 @@ class BroadcastController extends Controller
         ]));
 
         return $this->created($request->message);
-    }
-
-    private function rules() {
-        return [
-            'message' => 'required',
-        ];
     }
 }

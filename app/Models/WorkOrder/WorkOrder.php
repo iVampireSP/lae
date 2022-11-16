@@ -26,41 +26,7 @@ class WorkOrder extends Model
     ];
 
     // user
-    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
 
-    // replies
-    public function replies(): \Illuminate\Database\Eloquent\Relations\HasMany
-    {
-        return $this->hasMany(Reply::class);
-    }
-
-    // host
-    public function host(): \Illuminate\Database\Eloquent\Relations\BelongsTo
-    {
-        return $this->belongsTo(Host::class);
-    }
-
-    public function module(): \Illuminate\Database\Eloquent\Relations\BelongsTo
-    {
-        return $this->belongsTo(Module::class);
-    }
-
-    // scope
-    public function scopeThisModule($query)
-    {
-        return $query->where('module_id', auth('module')->id());
-    }
-
-    public function scopeThisUser($query)
-    {
-        return $query->where('user_id', auth()->id());
-    }
-
-
-    // on create
     protected static function boot()
     {
         parent::boot();
@@ -103,5 +69,44 @@ class WorkOrder extends Model
         static::updated(function ($model) {
             dispatch(new \App\Jobs\Module\WorkOrder\WorkOrder($model, 'put'));
         });
+    }
+
+    // replies
+
+    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    // host
+
+    public function replies(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Reply::class);
+    }
+
+    public function host(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Host::class);
+    }
+
+    // scope
+
+    public function module(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Module::class);
+    }
+
+    public function scopeThisModule($query)
+    {
+        return $query->where('module_id', auth('module')->id());
+    }
+
+
+    // on create
+
+    public function scopeThisUser($query)
+    {
+        return $query->where('user_id', auth()->id());
     }
 }

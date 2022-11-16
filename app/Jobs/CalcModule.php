@@ -37,8 +37,8 @@ class CalcModule extends Job
                 $this_month = Transaction::where('module_id', $module->id)->where('type', 'payout')->whereBetween('created_at', [$beginOfMonth, $endOfMonth]);
 
                 // this month transactions
-                $this_month =  [
-                    'balance' => $this_month->sum('outcome'),
+                $this_month = [
+                    'balances' => $this_month->sum('outcome'),
                     'drops' => $this_month->sum('outcome_drops')
                 ];
 
@@ -47,8 +47,8 @@ class CalcModule extends Job
                 // last month transactions
                 $last_moth = Transaction::where('module_id', $module->id)->where('type', 'payout')->whereBetween('created_at', [$beginOfMonth, $endOfMonth]);
 
-                $last_moth =  [
-                    'balance' => $last_moth->sum('outcome'),
+                $last_moth = [
+                    'balances' => $last_moth->sum('outcome'),
                     'drops' => $last_moth->sum('outcome_drops')
                 ];
 

@@ -2,12 +2,12 @@
 <html>
 
 <head>
-    <meta charset="utf-8" />
+    <meta charset="utf-8"/>
     <title>支付订单</title>
 </head>
 
 <body>
-    {!! $html !!}
+{!! $html !!}
 </body>
 
 </html>

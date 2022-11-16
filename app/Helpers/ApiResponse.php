@@ -5,6 +5,25 @@ namespace App\Helpers;
 trait ApiResponse
 {
     // RESTful API response
+    public function remoteResponse($response, $status = 200)
+    {
+        return response()->json($response, $status)->setEncodingOptions(JSON_UNESCAPED_UNICODE);
+    }
+
+    public function notFound($message = 'Not found')
+    {
+        return $this->error($message, 404);
+    }
+
+    // success
+
+    public function error($message = '', $code = 400)
+    {
+        return $this->apiResponse($message, $code);
+    }
+
+    // error
+
     public function apiResponse($data = [], $status = 200)
     {
         // if data is paginated, return paginated data
@@ -34,55 +53,44 @@ trait ApiResponse
         return response()->json($data, $status)->setEncodingOptions(JSON_UNESCAPED_UNICODE);
     }
 
-    public function remoteResponse($response, $status = 200)
-    {
-        return response()->json($response, $status)->setEncodingOptions(JSON_UNESCAPED_UNICODE);
-    }
-
-    // success
-    public function success($data = [])
-    {
-        return $this->apiResponse($data, 200);
-    }
-
-    // error
-    public function error($message = '', $code = 400)
-    {
-        return $this->apiResponse($message, $code);
-    }
-
 
     // not found
-    public function notFound($message = 'Not found')
-    {
-        return $this->error($message, 404);
-    }
 
-    // forbidden
     public function forbidden($message = 'Forbidden')
     {
         return $this->error($message, 403);
     }
 
-    // unauthorized
+    // forbidden
+
     public function unauthorized($message = 'Unauthorized')
     {
         return $this->error($message, 401);
     }
 
-    // bad request
+    // unauthorized
+
     public function badRequest($message = 'Bad request')
     {
         return $this->error($message, 400);
     }
 
-    // created
+    // bad request
+
     public function created($message = 'Created')
     {
         return $this->success($message, 201);
     }
 
+    // created
+
+    public function success($data = [])
+    {
+        return $this->apiResponse($data, 200);
+    }
+
     // accepted
+
     public function accepted($message = 'Accepted')
     {
         return $this->success($message, 202);

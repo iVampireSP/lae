@@ -22,23 +22,6 @@ class Reply extends Model
         'is_pending',
     ];
 
-    public function workOrder()
-    {
-        return $this->belongsTo(WorkOrder::class, 'work_order_id', 'id');
-    }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    public function scopeWorkOrderId($query, $work_order_id)
-    {
-        return $query->where('work_order_id', $work_order_id);
-    }
-
-
-    // before create
     protected static function boot()
     {
         parent::boot();
@@ -78,5 +61,23 @@ class Reply extends Model
             dispatch(new \App\Jobs\Module\WorkOrder\Reply($model));
             dispatch(new \App\Jobs\Module\WorkOrder\WorkOrder($model->workOrder, 'put'));
         });
+    }
+
+    public function workOrder()
+    {
+        return $this->belongsTo(WorkOrder::class, 'work_order_id', 'id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+
+    // before create
+
+    public function scopeWorkOrderId($query, $work_order_id)
+    {
+        return $query->where('work_order_id', $work_order_id);
     }
 }

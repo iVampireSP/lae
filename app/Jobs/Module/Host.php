@@ -17,6 +17,7 @@ class Host implements ShouldQueue
 
     public HostModel $host;
     public string $type;
+
     /**
      * Create a new job instance.
      *

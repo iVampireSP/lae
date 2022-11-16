@@ -44,7 +44,21 @@ class User extends Authenticatable
         'banned_at' => 'datetime',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
 
+        static::updating(function ($model) {
+
+            // balance 四舍五入
+            $model->balance = round($model->balance, 2);
+        });
+    }
+
+    /**
+     * @throws CommonException
+     * @throws BalanceNotEnoughException
+     */
     public function toDrops($amount = 1)
     {
 
@@ -97,16 +111,5 @@ class User extends Authenticatable
         }
 
         return $this;
-    }
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::updating(function ($model) {
-
-            // balance 四舍五入
-            $model->balance = round($model->balance, 2);
-        });
     }
 }

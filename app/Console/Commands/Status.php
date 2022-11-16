@@ -109,7 +109,6 @@ class Status extends Command
         $this->info('Redis 总命令数: ' . $redis_total_commands_processed);
 
 
-
         $this->warn('===== 莱云 统计 =====');
         $this->warn('要获取 莱云 统计信息，请运行 count 命令。');
 

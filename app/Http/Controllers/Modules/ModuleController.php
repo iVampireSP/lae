@@ -19,13 +19,29 @@ class ModuleController extends Controller
 
         $data = [
             'module' => $module,
-            'rate' => (int) config('drops.module_rate'),
+            'rate' => (int)config('drops.module_rate'),
         ];
 
         // merge
         $data = array_merge($data, $calc);
 
         return $this->success($data);
+    }
+
+    public function calcModule(Module|Authenticatable $module): array
+    {
+
+        $default = [
+            'balance' => 0,
+            'drops' => 0,
+        ];
+
+        return [
+            'transactions' => [
+                'this_month' => Cache::get('this_month_balance_and_drops_' . $module->id, $default),
+                'last_month' => Cache::get('last_month_balance_and_drops_' . $module->id, $default),
+            ]
+        ];
     }
 
     public function call(Request $request, Module $module)
@@ -58,7 +74,6 @@ class ModuleController extends Controller
         return $this->remoteResponse($response['json'], $response['status']);
     }
 
-
     public function exportCall(Request $request, Module $module): \Illuminate\Http\Response|\Illuminate\Http\JsonResponse|\Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory
     {
         $path = request()->path();
@@ -75,22 +90,5 @@ class ModuleController extends Controller
         }
 
         return $this->remoteResponse($response['json'], $response['status']);
-    }
-
-
-    public function calcModule(Module|Authenticatable $module): array
-    {
-
-        $default = [
-            'balance' => 0,
-            'drops' => 0,
-        ];
-
-        return [
-            'transactions' => [
-                'this_month' => Cache::get('this_month_balance_and_drops_' . $module->id, $default),
-                'last_month' => Cache::get('last_month_balance_and_drops_' . $module->id, $default),
-            ]
-        ];
     }
 }

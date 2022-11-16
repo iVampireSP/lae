@@ -39,7 +39,7 @@ class CalcModule extends Command
      */
     public function handle()
     {
-        $moduleController =  new ModuleController();
+        $moduleController = new ModuleController();
         $rate = config('drops.module_rate');
 
 

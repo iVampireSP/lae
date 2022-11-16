@@ -17,6 +17,7 @@ class Reply implements ShouldQueue
     use InteractsWithQueue, Queueable, SerializesModels;
 
     protected $reply;
+
     /**
      * Create a new job instance.
      *

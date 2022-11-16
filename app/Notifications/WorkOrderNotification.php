@@ -28,7 +28,8 @@ class WorkOrderNotification extends Notification implements ShouldQueue
     /**
      * Get the notification's delivery channels.
      *
-     * @param  mixed  $notifiable
+     * @param mixed $notifiable
+     *
      * @return array
      */
     public function via($notifiable)
@@ -49,7 +50,7 @@ class WorkOrderNotification extends Notification implements ShouldQueue
             $workOrder->load(['module', 'user']);
 
             $module = $workOrder->module;
-        } elseif ($notifiable instanceof Reply) {
+        } else if ($notifiable instanceof Reply) {
 
             $view = 'notifications.work_order.reply';
 

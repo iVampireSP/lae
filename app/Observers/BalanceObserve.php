@@ -10,33 +10,36 @@ class BalanceObserve
     /**
      * Handle the Balance "created" event.
      *
-     * @param  \App\Models\Balance  $balance
+     * @param \App\Models\Balance $balance
+     *
      * @return void
      */
     public function created(Balance $balance)
     {
         //
         return (new UserBalanceNotification())
-        ->toGroup($balance);
+            ->toGroup($balance);
     }
 
     /**
      * Handle the Balance "updated" event.
      *
-     * @param  \App\Models\Balance  $balance
+     * @param \App\Models\Balance $balance
+     *
      * @return void
      */
     public function updated(Balance $balance)
     {
         //
         return (new UserBalanceNotification())
-        ->toGroup($balance);
+            ->toGroup($balance);
     }
 
     /**
      * Handle the Balance "deleted" event.
      *
-     * @param  \App\Models\Balance  $balance
+     * @param \App\Models\Balance $balance
+     *
      * @return void
      */
     public function deleted(Balance $balance)
@@ -47,7 +50,8 @@ class BalanceObserve
     /**
      * Handle the Balance "restored" event.
      *
-     * @param  \App\Models\Balance  $balance
+     * @param \App\Models\Balance $balance
+     *
      * @return void
      */
     public function restored(Balance $balance)
@@ -58,7 +62,8 @@ class BalanceObserve
     /**
      * Handle the Balance "force deleted" event.
      *
-     * @param  \App\Models\Balance  $balance
+     * @param \App\Models\Balance $balance
+     *
      * @return void
      */
     public function forceDeleted(Balance $balance)

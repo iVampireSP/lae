@@ -15,7 +15,7 @@ class HostController extends Controller
 {
     public function index(): JsonResponse
     {
-        $hosts =  Host::where('user_id', auth()->id())->with('module', function ($query) {
+        $hosts = Host::where('user_id', auth()->id())->with('module', function ($query) {
             $query->select(['id', 'name']);
         })->get();
 

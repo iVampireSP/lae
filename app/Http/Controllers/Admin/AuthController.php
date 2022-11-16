@@ -20,7 +20,8 @@ class AuthController extends Controller
         }
     }
 
-    public function login(Request $request) {
+    public function login(Request $request)
+    {
         if (auth('admin')->attempt($request->only('email', 'password'))) {
             return redirect()->route('admin.index');
         } else {

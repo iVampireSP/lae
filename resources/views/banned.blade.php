@@ -10,10 +10,10 @@
 </head>
 
 <body>
-    <h1>很抱歉，您可能违反了我们的规定。</h1>
-    <p>{{ auth()->user()->banned_reason }}</p>
+<h1>很抱歉，您可能违反了我们的规定。</h1>
+<p>{{ auth()->user()->banned_reason }}</p>
 
-    <a href="{{ route('logout') }}">更换账号</a>
+<a href="{{ route('logout') }}">更换账号</a>
 </body>
 
 </html>

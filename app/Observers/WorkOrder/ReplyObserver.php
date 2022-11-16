@@ -10,7 +10,8 @@ class ReplyObserver
     /**
      * Handle the Reply "created" event.
      *
-     * @param  \App\Models\WorkOrder\Reply  $reply
+     * @param \App\Models\WorkOrder\Reply $reply
+     *
      * @return void
      */
     public function created(Reply $reply)
@@ -23,7 +24,8 @@ class ReplyObserver
     /**
      * Handle the Reply "updated" event.
      *
-     * @param  \App\Models\WorkOrder\Reply  $reply
+     * @param \App\Models\WorkOrder\Reply $reply
+     *
      * @return void
      */
     public function updated(Reply $reply)
@@ -34,7 +36,8 @@ class ReplyObserver
     /**
      * Handle the Reply "deleted" event.
      *
-     * @param  \App\Models\WorkOrder\Reply  $reply
+     * @param \App\Models\WorkOrder\Reply $reply
+     *
      * @return void
      */
     public function deleted(Reply $reply)
@@ -45,7 +48,8 @@ class ReplyObserver
     /**
      * Handle the Reply "restored" event.
      *
-     * @param  \App\Models\WorkOrder\Reply  $reply
+     * @param \App\Models\WorkOrder\Reply $reply
+     *
      * @return void
      */
     public function restored(Reply $reply)
@@ -56,7 +60,8 @@ class ReplyObserver
     /**
      * Handle the Reply "force deleted" event.
      *
-     * @param  \App\Models\WorkOrder\Reply  $reply
+     * @param \App\Models\WorkOrder\Reply $reply
+     *
      * @return void
      */
     public function forceDeleted(Reply $reply)
