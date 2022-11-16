@@ -1,7 +1,5 @@
 @extends('layouts.app')
 
-@section('title', '密钥管理')
-
 @section('content')
 
     @guest
