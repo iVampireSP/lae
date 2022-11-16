@@ -109,7 +109,7 @@ class BalanceController extends Controller
         // 检测订单是否已支付
         if ($balance->paid_at !== null) {
             // return $this->success('订单已支付');
-            return view('balances.process')->with('success', '我们成功处理了您的订单。');
+            return view('balances.process', compact('balance'));
         }
 
         // try {
