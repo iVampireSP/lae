@@ -25,7 +25,7 @@ class BalanceController extends Controller
 
         $balance = $request->user()->balance;
 
-        $balances = Balance::thisUser()->latest()->paginate(50);
+        $balances = Balance::thisUser()->latest()->paginate(100);
 
         $drops_rate = config('drops.rate');
 
@@ -164,7 +164,7 @@ class BalanceController extends Controller
             $transactions = $transactions->where('payment', $request->payment);
         }
 
-        $transactions = $transactions->latest()->paginate(30);
+        $transactions = $transactions->latest()->paginate(100)->withQueryString();
 
         return view('balances.transactions', compact('transactions', 'modules'));
     }
