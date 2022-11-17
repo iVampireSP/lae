@@ -1,19 +1,19 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\Admin;
 
 use App\Models\Admin;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Command\Command as CommandAlias;
 
-class CreateAdmin extends Command
+class Create extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'create:admin';
+    protected $signature = 'admin:create';
 
     /**
      * The console command description.
