@@ -5,6 +5,10 @@
 @section('content')
     <h2>交易记录</h2>
 
+    <a href="?type=income">收入</a>
+    <a href="?type=payout">支出</a>
+    <a href="?payment=transfer">转账记录</a>
+
     <div class="overflow-auto">
         <table class="table">
             <thead>
