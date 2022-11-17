@@ -25,7 +25,7 @@ class BalanceController extends Controller
 
         $balance = $request->user()->balance;
 
-        $balances = Balance::thisUser()->latest()->paginate(50);
+        $balances = Balance::thisUser()->latest()->paginate(100);
 
         $drops_rate = config('drops.rate');
 
@@ -107,10 +107,13 @@ class BalanceController extends Controller
         }
 
         // 检测订单是否已支付
-        if ($balance->paid_at !== null) {
-            // return $this->success('订单已支付');
-            return view('balances.process', compact('balance'));
-        }
+        // if ($balance->paid_at !== null) {
+        //    // return $this->success('订单已支付');
+        //    return view('balances.process', compact('balance'));
+	// }
+
+
+        return view('balances.process', compact('balance'));
 
         // try {
         //     $data = Pay::alipay()->callback();
@@ -131,8 +134,6 @@ class BalanceController extends Controller
         // if ($data['app_id'] != config('balances.alipay.default.app_id')) {
         //     throw new ChargeException('商户不匹配');
         // }
-
-        return view('balances.process');
 
         //
         // if ((new \App\Jobs\CheckAndChargeBalance())->checkAndCharge($balance, true)) {
@@ -164,7 +165,7 @@ class BalanceController extends Controller
             $transactions = $transactions->where('payment', $request->payment);
         }
 
-        $transactions = $transactions->latest()->paginate(30);
+        $transactions = $transactions->latest()->paginate(100)->withQueryString();
 
         return view('balances.transactions', compact('transactions', 'modules'));
     }
