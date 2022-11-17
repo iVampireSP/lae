@@ -22,12 +22,12 @@
             @foreach ($transactions as $t)
                 <tr>
 
-                    <td>
-                        @if ($t->type = 'payout')
+		    <td>
+                        @if ($t->type === 'payout')
                             <span class="text-danger">
                                 支出
                             </span>
-                        @else($t->type = 'payin')
+                        @elseif($t->type === 'income')
                             <span class="text-success">
                                 收入
                             </span>
