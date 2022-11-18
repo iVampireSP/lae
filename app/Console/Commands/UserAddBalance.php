@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Exceptions\ChargeException;
-use App\Models\Balance;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Console\Command;
@@ -50,31 +49,20 @@ class UserAddBalance extends Command
         // find user
         $user = User::findOrFail($user_id);
 
-
-        $balance = new Balance();
-
         $this->info($user->name . ', 当前余额: ' . $user->balance . ' 元');
 
         $this->info('充值后余额: ' . ($user->balance + $amount) . ' 元');
         if (!$this->confirm('确认充值 ' . $amount . ' 元?')) {
             $this->info('已取消。');
-            return;
+            return 0;
         }
-
-        $data = [
-            'user_id' => $user->id,
-            'amount' => $amount,
-            'payment' => 'console',
-        ];
-
-        $balance = $balance->create($data);
 
         $transaction = new Transaction();
 
         $description = '控制台充值 ' . $amount . ' 元';
 
         try {
-            $transaction->addAmount($user->id, 'console', $amount, $description);
+            $transaction->addAmount($user->id, 'console', $amount, $description, true);
 
             $this->info('充值成功。');
 
@@ -84,5 +72,8 @@ class UserAddBalance extends Command
 
             return $this->error($e->getMessage());
         }
+
+        return 1;
+
     }
 }

@@ -113,7 +113,7 @@ class Transaction extends Model
 
 
         $current = [
-            'balance' => (float) $user->balance,
+            'balance' => (float)$user->balance,
             'drops' => $this->getDrops($user_id),
             'user_id' => intval($user_id),
         ];
@@ -278,7 +278,7 @@ class Transaction extends Model
     /**
      * @throws ChargeException
      */
-    public function addAmount($user_id, $payment = 'console', $amount = 0, $description = null)
+    public function addAmount($user_id, $payment = 'console', $amount = 0, $description = null, $add_to_balances = false)
     {
         $lock = Cache::lock("user_balance_lock_" . $user_id, 10);
         try {
@@ -295,6 +295,16 @@ class Transaction extends Model
                 $description = '充值金额。';
             } else {
                 $description = '充值 ' . $amount . ' 元';
+            }
+
+            if ($add_to_balances) {
+                $data = [
+                    'user_id' => $user_id,
+                    'amount' => $amount,
+                    'payment' => $payment,
+                ];
+
+                Balance::create($data);
             }
 
             $this->addIncomeBalance($user_id, $payment, $amount, $description);
