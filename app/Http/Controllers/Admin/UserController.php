@@ -101,6 +101,11 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         //
+        $request->validate([
+
+            'balance' => 'nullable|numeric|min:0.01|max:1000',
+            'drops' => 'nullable|numeric|min:1|max:10000',
+        ]);
 
         $transaction = new Transaction();
 

@@ -19,12 +19,12 @@
             @foreach ($hosts as $host)
                 <tr>
                     <td>
-                        <a href="{{ route('admin.hosts.show', $host) }}">
+                        <a href="{{ route('admin.hosts.edit', $host) }}">
                             {{ $host->id }}
                         </a>
                     </td>
                     <td>
-                        <span class="module_name" module="{{ $host->module_id }}">{{ $host->module_id }}</span>
+                        <a href="{{ route('admin.hosts.edit', $host) }}" class="module_name" module="{{ $host->module_id }}">{{ $host->module_id }}</a>
                     </td>
                     <td>
                         {{ $host->name }}

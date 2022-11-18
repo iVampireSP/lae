@@ -11,7 +11,7 @@
             <th>ID</th>
             <th>用户名</th>
             <th>邮箱</th>
-            <th>金额</th>
+            <th>余额</th>
             <th>注册时间</th>
             <th>操作</th>
             </thead>

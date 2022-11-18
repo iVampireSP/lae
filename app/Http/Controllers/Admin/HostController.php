@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Host;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class HostController extends Controller
 {
@@ -58,9 +59,11 @@ class HostController extends Controller
      * @param  \App\Models\Host  $host
      * @return \Illuminate\Http\Response
      */
-    public function edit(Host $host)
+    public function edit(Host $host): View
     {
         //
+
+        return view('admin.hosts.edit', compact('host'));
     }
 
     /**
@@ -73,6 +76,15 @@ class HostController extends Controller
     public function update(Request $request, Host $host)
     {
         //
+
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'managed_price' => 'nullable|numeric',
+        ]);
+
+        $host->update($request->all());
+
+        return back()->with('success', '此主机已更新。');
     }
 
     /**

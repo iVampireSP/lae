@@ -38,57 +38,6 @@ class Host extends Model
     ];
 
 
-    // get user hosts
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::created(function ($model) {
-            broadcast(new UserEvent($model->user_id, 'hosts.created', $model));
-        });
-
-        static::updating(function ($model) {
-
-            if ($model->isDirty('status')) {
-                if ($model->status == 'suspended') {
-                    $model->suspended_at = now();
-                } else {
-                    $model->suspended_at = null;
-                }
-            }
-
-            broadcast(new UserEvent($model->user_id, 'hosts.updating', $model));
-        });
-
-        // when Updated
-        static::updated(function ($model) {
-            dispatch(new \App\Jobs\Module\Host($model, 'patch'));
-
-            Cache::forget('user_hosts_' . $model->user_id);
-            Cache::forget('user_tasks_' . $model->user_id);
-
-
-            broadcast(new UserEvent($model->user_id, 'hosts.updated', $model));
-        });
-
-        //
-        // static::deleting(function ($model) {
-        //     broadcast(new UserEvent($model->user_id, 'hosts.deleting', $model));
-        // });
-
-        static::deleting(function ($model) {
-            Cache::forget('user_tasks_' . $model->user_id);
-        });
-
-        static::deleted(function ($model) {
-            broadcast(new UserEvent($model->user_id, 'hosts.deleted', $model));
-            Cache::forget('user_tasks_' . $model->user_id);
-            Cache::forget('user_hosts_' . $model->user_id);
-        });
-    }
-
-
     // user
 
     public function getUserHosts($user_id = null)
@@ -121,7 +70,7 @@ class Host extends Model
 
     public function scopeActive($query)
     {
-        return $query->where('status', 'running')->where('price', '!=', 0);
+        return $query->whereIn('status', ['running', 'stopped'])->where('price', '!=', 0)->where('managed_price', '!=', 0);
     }
 
 
@@ -147,7 +96,12 @@ class Host extends Model
         if ($price !== null) {
             $real_price = $price;
         } else {
-            $real_price = $this->price;
+            if ($this->managed_price === null) {
+                $real_price = $this->price;
+            } else {
+                $real_price = $this->managed_price;
+
+            }
         }
 
         if ($real_price == 0) {
@@ -238,5 +192,53 @@ class Host extends Model
         }
 
         return true;
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($model) {
+            broadcast(new UserEvent($model->user_id, 'hosts.created', $model));
+        });
+
+        static::updating(function ($model) {
+
+            if ($model->isDirty('status')) {
+                if ($model->status == 'suspended') {
+                    $model->suspended_at = now();
+                } else {
+                    $model->suspended_at = null;
+                }
+            }
+
+            broadcast(new UserEvent($model->user_id, 'hosts.updating', $model));
+        });
+
+        // when Updated
+        static::updated(function ($model) {
+            dispatch(new \App\Jobs\Module\Host($model, 'patch'));
+
+            Cache::forget('user_hosts_' . $model->user_id);
+            Cache::forget('user_tasks_' . $model->user_id);
+
+
+            broadcast(new UserEvent($model->user_id, 'hosts.updated', $model));
+        });
+
+        //
+        // static::deleting(function ($model) {
+        //     broadcast(new UserEvent($model->user_id, 'hosts.deleting', $model));
+        // });
+
+        static::deleting(function ($model) {
+            Cache::forget('user_tasks_' . $model->user_id);
+        });
+
+        static::deleted(function ($model) {
+            broadcast(new UserEvent($model->user_id, 'hosts.deleted', $model));
+            Cache::forget('user_tasks_' . $model->user_id);
+            Cache::forget('user_hosts_' . $model->user_id);
+        });
     }
 }

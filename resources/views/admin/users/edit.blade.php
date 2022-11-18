@@ -4,7 +4,7 @@
 
 @section('content')
     <h3>{{ $user->name }}</h3>
-    <a href="{{ route('admin.users.show', $user) }}">切换到 {{ $user->name }}</a>
+    <a href="{{ route('admin.users.show', $user) }}">作为 {{ $user->name }} 登录</a>
 
     @if ($user->banned_at)
         <p class="text-danger">已被封禁，原因: {{ $user->banned_reason }}</p>
@@ -44,13 +44,13 @@
                 </td>
                 <td>{{ $host->name }}</td>
                 <td>
-                    <span>{{ $host->price }} Drops</span>
+                    <span>{{ $host->managed_price ?? $host->price }} Drops</span>
                     ≈
-                    <span>{{ round($host->price / $drops_rage * (30 * 24 * 60 / 5), 2) }} 元 / 月</span>
+                    <span>{{ round($host->managed_price ?? $host->price / $drops_rage * (30 * 24 * 60 / 5), 2) }} 元 / 月</span>
 
                 </td>
                 <td>
-                    <a href="{{ route('admin.hosts.show', $host) }}" class="btn btn-primary btn-sm">查看</a>
+                    <a href="{{ route('admin.hosts.edit', $host) }}" class="btn btn-primary btn-sm">查看</a>
                 </td>
             </tr>
         </tbody>
@@ -79,7 +79,7 @@
                     <x-work-order-status :status="$workOrder->status"/>
                 </td>
                 <td>
-                    <a href="{{ route('admin.work-orders.show', $host) }}" class="btn btn-primary btn-sm">查看</a>
+                    <a href="{{ route('admin.work-orders.show', $host) }}" class="btn btn-primary btn-sm">编辑</a>
                 </td>
             </tr>
         @endforeach
@@ -136,12 +136,12 @@
 
         <div class="form-group">
             <label for="balance">充值余额(元)</label>
-            <input type="number" class="form-control" id="balance" name="balance" placeholder="充值金额">
+            <input type="text" class="form-control" id="balance" name="balance" placeholder="充值金额">
         </div>
 
         <div class="form-group">
             <label for="drops">充值 Drops</label>
-            <input type="number" class="form-control" id="drops" name="drops" placeholder="充值 Drops">
+            <input type="text" class="form-control" id="drops" name="drops" placeholder="充值 Drops">
         </div>
 
         {{-- 封禁 --}}
