@@ -76,30 +76,7 @@
     {{ $transactions->links() }}
 
 
-    <script>
-        let modules = {!! $modules !!},
-            display_name = "{{ config('app.display_name') }}"
-
-        let m = {}
-        modules.forEach((module) => {
-            //    转换成 key value
-            m[module.id] = module.name
-
-        })
-
-        window.onload = () => {
-            document.querySelectorAll('.module_name').forEach((node) => {
-                let module = node.getAttribute('module')
-
-                if (module == null || module === "") {
-                    node.innerText = display_name
-                } else {
-                    console.log(module)
-                    node.innerText = m[module] ?? '模块'
-                }
-            })
-        }
-    </script>
+    <x-module-script />
 
 
 @endsection
