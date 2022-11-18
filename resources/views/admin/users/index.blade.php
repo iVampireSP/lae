@@ -8,6 +8,7 @@
     <div class="overflow-auto">
         <table class="table table-hover">
             <thead>
+            <th>ID</th>
             <th>用户名</th>
             <th>邮箱</th>
             <th>金额</th>
@@ -19,7 +20,12 @@
             @foreach ($users as $user)
                 <tr>
                     <td>
-                        <a href="{{ route('admin.users.edit', $user) }}">
+                        <a href="{{ route('admin.users.show', $user) }}" title="切换到 {{ $user->name }}">
+                            {{ $user->id }}
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{{ route('admin.users.edit', $user) }}" title="显示和编辑 {{ $user->name }} 的资料">
                             {{ $user->name }}
                         </a>
                     </td>
