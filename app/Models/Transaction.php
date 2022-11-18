@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Exceptions\ChargeException;
 use App\Exceptions\User\BalanceNotEnoughException;
+use Carbon\Carbon;
 use Illuminate\Contracts\Cache\LockTimeoutException;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -302,6 +303,7 @@ class Transaction extends Model
                     'user_id' => $user_id,
                     'amount' => $amount,
                     'payment' => $payment,
+                    'paid_at' => Carbon::now(),
                 ];
 
                 Balance::create($data);

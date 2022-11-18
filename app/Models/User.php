@@ -8,6 +8,7 @@ use App\Exceptions\User\BalanceNotEnoughException;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Contracts\Cache\LockTimeoutException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
@@ -44,6 +45,11 @@ class User extends Authenticatable
         'banned_at' => 'datetime',
     ];
 
+    public function hosts(): HasMany
+    {
+        return $this->hasMany(Host::class);
+    }
+
     protected static function boot()
     {
         parent::boot();
@@ -51,17 +57,19 @@ class User extends Authenticatable
         static::updating(function ($model) {
 
             // balance 四舍五入
-            $model->balance = round($model->balance, 2);
 
-            if ($model->banned_at) {
-                Host::where('user_id', $model->id)->update([
-                    'status' => 'suspended',
-                    'suspended_at' => now()
-                ]);
-
-                $model->tokens()->delete();
+            if ($model->isDirty('balance')) {
+                $model->balance = round($model->balance, 2);
             }
 
+            if ($model->isDirty('banned_at')) {
+                if ($model->banned_at) {
+                    $model->tokens()->delete();
+                    $model->hosts()->update(['status' => 'suspended', 'suspended_at' => now()]);
+                } else {
+                    $model->hosts()->update(['status' => 'stopped']);
+                }
+            }
         });
     }
 

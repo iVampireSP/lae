@@ -28,6 +28,7 @@ class Host extends Model
         'configuration',
         'status',
         'managed_price',
+        'suspended_at',
     ];
 
     protected $casts = [
@@ -48,10 +49,13 @@ class Host extends Model
         });
 
         static::updating(function ($model) {
-            if ($model->status == 'suspended') {
-                $model->suspended_at = now();
-            } else if ($model->status == 'running') {
-                $model->suspended_at = null;
+
+            if ($model->isDirty('status')) {
+                if ($model->status == 'suspended') {
+                    $model->suspended_at = now();
+                } else {
+                    $model->suspended_at = null;
+                }
             }
 
             broadcast(new UserEvent($model->user_id, 'hosts.updating', $model));

@@ -11,10 +11,10 @@
     <title>@yield('title', '莱云')</title>
 
     <!-- Fonts -->
-    {{-- <link rel="dns-prefetch" href="//fonts.gstatic.com"> --}}
-    {{-- <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet"> --}}
+{{-- <link rel="dns-prefetch" href="//fonts.gstatic.com"> --}}
+{{-- <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet"> --}}
 
-    <!-- Scripts -->
+<!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 
@@ -51,13 +51,19 @@
 
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ms-auto">
+                    @if (Auth::guard('admin')->check())
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               href="{{ route('admin.index') }}">切换到 {{ Auth::guard('admin')->user()->email }}</a>
+                        </li>
+                    @endif
+
                     <!-- Authentication Links -->
                     @guest
-                        @if (Route::has('admin.login'))
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                            </li>
-                        @endif
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                        </li>
+
                     @else
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"

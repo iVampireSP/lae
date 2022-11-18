@@ -11,10 +11,10 @@
     <title>@yield('title', '管理员')</title>
 
     <!-- Fonts -->
-    {{-- <link rel="dns-prefetch" href="//fonts.gstatic.com"> --}}
-    {{-- <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet"> --}}
+{{-- <link rel="dns-prefetch" href="//fonts.gstatic.com"> --}}
+{{-- <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet"> --}}
 
-    <!-- Scripts -->
+<!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 
@@ -37,6 +37,15 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('admin.users.index') }}">用户</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.hosts.index') }}">主机</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.modules.index') }}">模块</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.work-orders.index') }}">工单</a>
+                    </li>
                 </ul>
 
                 <!-- Right Side Of Navbar -->
@@ -49,6 +58,11 @@
                             </li>
                         @endif
                     @else
+                        @if (Auth::guard('web')->check())
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('index') }}">切换到 {{ Auth::guard('web')->user()->name }}</a>
+                            </li>
+                        @endif
                         <li class="nav-item dropdown">
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
