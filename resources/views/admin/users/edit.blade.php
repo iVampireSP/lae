@@ -4,6 +4,7 @@
 
 @section('content')
     <h3>{{ $user->name }}</h3>
+    <a href="{{ route('admin.users.show', $user) }}">切换到 {{ $user->name }}</a>
 
 
     <p>余额: {{ $user->balance }} 元, {{ $drops }} Drops</p>
@@ -11,6 +12,8 @@
     <p>注册时间: {{ $user->created_at }}</p>
 
     <p>邮箱: {{ $user->email }}</p>
+
+
 
 
     {{--  hosts  --}}
@@ -108,7 +111,7 @@
     {{ $balances->links() }}
 
 
-{{--    transactions_page--}}
+    {{--    transactions_page--}}
 
 
 

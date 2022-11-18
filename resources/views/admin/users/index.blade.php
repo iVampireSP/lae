@@ -19,7 +19,7 @@
             @foreach ($users as $user)
                 <tr>
                     <td>
-                        <a href="{{ route('admin.users.show', $user) }}">
+                        <a href="{{ route('admin.users.edit', $user) }}">
                             {{ $user->name }}
                         </a>
                     </td>
