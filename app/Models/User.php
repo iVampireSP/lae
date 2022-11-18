@@ -52,6 +52,16 @@ class User extends Authenticatable
 
             // balance 四舍五入
             $model->balance = round($model->balance, 2);
+
+            if ($model->banned_at) {
+                Host::where('user_id', $model->id)->update([
+                    'status' => 'suspended',
+                    'suspended_at' => now()
+                ]);
+
+                $model->tokens()->delete();
+            }
+
         });
     }
 

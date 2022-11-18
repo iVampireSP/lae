@@ -49,23 +49,14 @@ class BanUser extends Command
 
         $this->info('封禁: ' . $user->name);
 
-        $this->confirm('确定要继续吗？如果继续，将会暂停所有的 Host。');
+        $this->confirm('确定要继续吗？如果继续，将会暂停所有的 Host，并且吊销所有 Token。');
 
         $user->banned_at = now();
         $user->banned_reason = $reason;
         $user->save();
 
-        $this->info('正在暂停所有的 Host...');
-        Host::where('user_id', $user_id)->update([
-            'status' => 'suspended',
-            'suspended_at' => now()
-        ]);
-
-        $this->info('正在吊销所有 Token...');
-
-        $user->tokens()->delete();
-
         $this->info('封禁用户成功。');
 
+        return 0;
     }
 }
