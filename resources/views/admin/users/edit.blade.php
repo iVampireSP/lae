@@ -79,7 +79,7 @@
                     <x-work-order-status :status="$workOrder->status"/>
                 </td>
                 <td>
-                    <a href="{{ route('admin.work-orders.show', $host) }}" class="btn btn-primary btn-sm">编辑</a>
+                    <a href="{{ route('admin.work-orders.show', $workOrder) }}" class="btn btn-primary btn-sm">编辑</a>
                 </td>
             </tr>
         @endforeach

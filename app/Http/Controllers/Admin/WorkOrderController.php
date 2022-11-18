@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\WorkOrder\Reply;
 use App\Models\WorkOrder\WorkOrder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -48,9 +49,15 @@ class WorkOrderController extends Controller
      * @param  \App\Models\WorkOrder\WorkOrder  $workOrder
      * @return Response
      */
-    public function show(WorkOrder $workOrder)
+    public function show(WorkOrder $workOrder): View
     {
         //
+
+        $workOrder->load(['user', 'module']);
+
+        $replies = Reply::where('work_order_id', $workOrder->id)->paginate(100);
+
+        return view('admin.work-orders.show', compact('workOrder', 'replies'));
 
     }
 
