@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\WorkOrder\Reply;
 use Illuminate\Http\Request;
 
 class ReplyController extends Controller
@@ -41,10 +42,10 @@ class ReplyController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\WorkOrder\Reply  $reply
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Reply $reply)
     {
         //
     }
@@ -52,10 +53,10 @@ class ReplyController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\WorkOrder\Reply  $reply
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Reply $reply)
     {
         //
     }
@@ -64,10 +65,10 @@ class ReplyController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\WorkOrder\Reply  $reply
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Reply $reply)
     {
         //
     }
@@ -75,10 +76,10 @@ class ReplyController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\WorkOrder\Reply  $reply
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Reply $reply)
     {
         //
     }

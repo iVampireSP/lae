@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Host;
 use Illuminate\Http\Request;
 
 class HostController extends Controller
@@ -12,13 +13,11 @@ class HostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Host $host)
     {
-        //
+        $hosts = $host->paginate(100);
 
-        // $price = 0.01;
-        // // 一个月多少个 5 分钟
-        // $month = 60 * 24 * 30 / 5;
+        return view('admin.hosts.index', compact('hosts'));
     }
 
     /**
@@ -34,8 +33,7 @@ class HostController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     *
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -46,11 +44,10 @@ class HostController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param int $id
-     *
+     * @param  \App\Models\Host  $host
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Host $host)
     {
         //
     }
@@ -58,11 +55,10 @@ class HostController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param int $id
-     *
+     * @param  \App\Models\Host  $host
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Host $host)
     {
         //
     }
@@ -70,12 +66,11 @@ class HostController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param int                      $id
-     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Host  $host
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Host $host)
     {
         //
     }
@@ -83,11 +78,10 @@ class HostController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
-     *
+     * @param  \App\Models\Host  $host
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Host $host)
     {
         //
     }

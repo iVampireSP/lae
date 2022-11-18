@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Module;
 use Illuminate\Http\Request;
 
 class ModuleController extends Controller
@@ -12,9 +13,11 @@ class ModuleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Module $module)
     {
-        //
+        $modules = $module->paginate(100);
+
+        return view('admin.modules.index', compact('modules'));
     }
 
     /**
@@ -41,10 +44,10 @@ class ModuleController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Module  $module
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Module $module)
     {
         //
     }
@@ -52,10 +55,10 @@ class ModuleController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  \App\Models\Module  $module
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Module $module)
     {
         //
     }
@@ -64,10 +67,10 @@ class ModuleController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Module  $module
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Module $module)
     {
         //
     }
@@ -75,10 +78,10 @@ class ModuleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  \App\Models\Module  $module
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Module $module)
     {
         //
     }

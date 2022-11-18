@@ -26,4 +26,6 @@ Route::group([
     Route::resource('hosts', HostController::class);
     Route::resource('work-orders', WorkOrderController::class);
     Route::resource('work-orders.replies', ReplyController::class);
+
+    Route::view('commands', 'admin.commands')->name('commands');
 });

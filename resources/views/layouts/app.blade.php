@@ -58,7 +58,7 @@
                         </li>
                     @endif
 
-                    <!-- Authentication Links -->
+                <!-- Authentication Links -->
                     @guest
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
@@ -99,6 +99,9 @@
             @yield('content')
         </div>
     </main>
+
+    <x-module-script/>
+
 </div>
 </body>
 

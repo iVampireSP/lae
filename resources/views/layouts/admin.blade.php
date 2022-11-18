@@ -46,6 +46,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('admin.work-orders.index') }}">工单</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.commands') }}">命令速查表</a>
+                    </li>
                 </ul>
 
                 <!-- Right Side Of Navbar -->
@@ -60,7 +63,8 @@
                     @else
                         @if (Auth::guard('web')->check())
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('index') }}">切换到 {{ Auth::guard('web')->user()->name }}</a>
+                                <a class="nav-link"
+                                   href="{{ route('index') }}">切换到 {{ Auth::guard('web')->user()->name }}</a>
                             </li>
                         @endif
                         <li class="nav-item dropdown">
@@ -97,6 +101,9 @@
             @yield('content')
         </div>
     </main>
+
+    <x-module-script/>
+
 </div>
 </body>
 

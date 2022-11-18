@@ -6,6 +6,10 @@
     <h3>{{ $user->name }}</h3>
     <a href="{{ route('admin.users.show', $user) }}">切换到 {{ $user->name }}</a>
 
+    @if ($user->banned_at)
+        <p class="text-danger">已被封禁，原因: {{ $user->banned_reason }}</p>
+    @endif
+
 
     <p>余额: {{ $user->balance }} 元, {{ $drops }} Drops</p>
 
@@ -21,6 +25,7 @@
     <table class="table table-hover">
         <thead>
         <th>ID</th>
+        <th>模块</th>
         <th>名称</th>
         <th>价格 / 5 分钟</th>
         <th>操作</th>
@@ -31,7 +36,12 @@
 
         @foreach($hosts as $host)
             <tr>
-                <td>{{ $host->id }}</td>
+                <td>
+                    {{ $host->id }}
+                </td>
+                <td>
+                    <span class="module_name" module="{{ $host->module_id }}">{{ $host->module_id }}</span>
+                </td>
                 <td>{{ $host->name }}</td>
                 <td>
                     <span>{{ $host->price }} Drops</span>
@@ -53,6 +63,7 @@
     <table class="table table-hover">
         <thead>
         <th>ID</th>
+        <th>模块</th>
         <th>标题</th>
         <th>状态</th>
         <th>操作</th>
@@ -61,6 +72,8 @@
         @foreach($workOrders as $workOrder)
             <tr>
                 <td>{{ $workOrder->id }}</td>
+                <td><span class="module_name" module="{{ $workOrder->module_id }}">{{ $workOrder->module_id }}</span>
+                </td>
                 <td>{{ $workOrder->title }}</td>
                 <td>
                     <x-work-order-status :status="$workOrder->status"/>
@@ -160,7 +173,5 @@
 
         <button type="submit" class="btn btn-primary mt-3">提交</button>
     </form>
-
-
 
 @endsection
