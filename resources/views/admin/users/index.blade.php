@@ -33,7 +33,7 @@
                         {{ $user->created_at }}
                     </td>
                     <td>
-                        <a href="{{ route('admin.users.show', $user) }}" class="btn btn-primary btn-sm">编辑</a>
+                        <a href="{{ route('admin.users.edit', $user) }}" class="btn btn-primary btn-sm">编辑</a>
                     </td>
                 </tr>
 
