@@ -31,10 +31,10 @@ class UserBalanceNotification extends Notification implements ShouldQueue
      *
      * @return array
      */
-    public function via($notifiable)
-    {
-        return [WeComRobotChannel::class];
-    }
+    // public function via($notifiable)
+    // {
+    //     // return [WeComRobotChannel::class];
+    // }
 
     public function toGroup($notifiable)
     {
@@ -50,7 +50,7 @@ class UserBalanceNotification extends Notification implements ShouldQueue
 
 
                 $data = [
-                    'balances' => $notifiable,
+                    'balance' => $notifiable,
                     'user' => $user,
                 ];
 
