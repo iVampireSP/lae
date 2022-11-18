@@ -73,7 +73,7 @@ class UserAddBalance extends Command
             return $this->error($e->getMessage());
         }
 
-        return 1;
+        return 0;
 
     }
 }
