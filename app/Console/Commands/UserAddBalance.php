@@ -14,7 +14,7 @@ class UserAddBalance extends Command
      *
      * @var string
      */
-    protected $signature = 'user:charge {user_id} {amount}';
+    protected $signature = 'user:add-balance {user_id} {amount}';
 
     /**
      * The console command description.
