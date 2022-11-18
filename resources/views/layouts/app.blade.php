@@ -54,7 +54,7 @@
                     @if (Auth::guard('admin')->check())
                         <li class="nav-item">
                             <a class="nav-link"
-                               href="{{ route('admin.index') }}">返回到 {{ Auth::guard('admin')->user()->email }}</a>
+                               href="{{ route('admin.users.edit', Auth::guard('admin')->id()) }}">返回到 {{ Auth::guard('admin')->user()->email }}</a>
                         </li>
                     @endif
 
