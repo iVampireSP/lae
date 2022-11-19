@@ -42,6 +42,12 @@ class WorkOrder implements ShouldQueue
         $http = Http::module($this->workOrder->module->api_token, $this->workOrder->module->url);
         if ($this->type == 'put') {
             $response = $http->put('work-orders/' . $this->workOrder->id, $this->workOrder->toArray());
+        } else if ($this->type == 'delete') {
+            $response = $http->delete('work-orders/' . $this->workOrder->id);
+
+            if ($response->successful()) {
+                $this->workOrder->delete();
+            }
         } else {
             $response = $http->post('work-orders', $this->workOrder->toArray());
         }
@@ -51,7 +57,11 @@ class WorkOrder implements ShouldQueue
                 'status' => 'error'
             ]);
         } else {
-            broadcast(new UserEvent($this->workOrder->user_id, 'work-order.updated', $this->workOrder));
+            if ($this->type == 'delete') {
+                broadcast(new UserEvent($this->workOrder->user_id, 'work-order.deleted', $this->workOrder));
+            } else {
+                broadcast(new UserEvent($this->workOrder->user_id, 'work-order.updated', $this->workOrder));
+            }
         }
 
     }

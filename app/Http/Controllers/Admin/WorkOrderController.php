@@ -102,8 +102,11 @@ class WorkOrderController extends Controller
      * @param  \App\Models\WorkOrder\WorkOrder  $workOrder
      * @return Response
      */
-    public function destroy(WorkOrder $workOrder)
+    public function destroy(WorkOrder $workOrder): RedirectResponse
     {
         //
+        $workOrder->safeDelete();
+
+        return redirect()->route('admin.work-orders.index')->with('success', '正在排队删除工单。');
     }
 }

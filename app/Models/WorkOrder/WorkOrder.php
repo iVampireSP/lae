@@ -9,6 +9,7 @@ use App\Models\User;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Jobs\Module\WorkOrder\WorkOrder as WorkOrderJob;
 
 class WorkOrder extends Model
 {
@@ -25,7 +26,16 @@ class WorkOrder extends Model
         'status',
     ];
 
-    // user
+    public function safeDelete(): bool
+    {
+        if ($this->status == 'pending') {
+            throw new CommonException('工单状态是 pending，无法删除');
+        }
+
+        dispatch(new WorkOrderJob($this, 'delete'));
+
+        return true;
+    }
 
     protected static function boot()
     {
