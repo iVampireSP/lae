@@ -59,7 +59,7 @@ class HostController extends Controller
             'name' => $name,
             'status' => $request->status,
             'price' => $request->price,
-            'managed_price' => $request->managed_price ?? 0,
+            'managed_price' => $request->managed_price,
             'user_id' => $user->id,
             'module_id' => auth('module')->id()
         ];
