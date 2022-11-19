@@ -4,6 +4,7 @@ namespace App\Notifications;
 
 use App\Models\Module;
 use Illuminate\Bus\Queueable;
+use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -29,30 +30,46 @@ class ModuleEarnings extends Notification
      *
      * @param mixed $notifiable
      *
-     * @return \Illuminate\Notifications\Messages\MailMessage
+     * @return MailMessage
      */
     public function toGroup($notifiable)
     {
-        if (!isset($notifiable['transactions'])) {
-            return;
-        }
-
         $module = $this->module;
-
-        $view = 'notifications.module.earnings';
 
         // make wecom_key visible
         $wecom_key = $module->wecom_key ?? config('settings.wecom.robot_hook.billing');
 
+
+        $text = "# {$module->name} 收益";
+        foreach ($notifiable as $year => $months) {
+            // 排序 months 从小到大
+            ksort($months);
+
+            $total = 0;
+            $total_should = 0;
+
+            foreach ($months as $month => $m) {
+                $total += $m['balance'];
+                $total_should += $m['should_balance'];
+                $text .= <<<EOF
+
+==========
+{$year}年 {$month}月
+实收: {$total}元
+应得: {$total_should} 元
+
+EOF;
+            }
+        }
+
+
         $resp = Http::post('https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=' . $wecom_key, [
             'msgtype' => 'markdown',
             'markdown' => [
-                'content' => view($view, [
-                    'module' => $module,
-                    'data' => $notifiable,
-                ])->render(),
+                'content' => $text,
             ],
         ]);
+
 
         if ($resp->failed()) {
             Log::error('发送模块盈利到企业微信时失败', [

@@ -2,6 +2,6 @@
 
 return [
     'rate' => 1000,
-    'decimal' => 100000,
-    'module_rate' => 825,
+    // 提成
+    'commission' => 0.1,
 ];

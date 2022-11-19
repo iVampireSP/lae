@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Http\Controllers\Modules\ModuleController;
 use App\Models\Module;
 use Illuminate\Console\Command;
 
@@ -39,37 +38,33 @@ class CalcModule extends Command
      */
     public function handle()
     {
-        $moduleController = new ModuleController();
-        $rate = config('drops.module_rate');
-
-
         $this->warn('开始计算集成模块收益。');
         $this->warn('当前时间: ' . now());
-        $this->warn('比例: 1:' . $rate . ' (1 元 = ' . $rate . ' Drops)');
 
 
-        Module::chunk(100, function ($modules) use ($rate, $moduleController) {
+        Module::chunk(100, function ($modules) {
             foreach ($modules as $module) {
-                $report = $moduleController->calcModule($module);
+                $this->warn('模块: ' . $module->name);
+                $years = $module->calculate();
 
+                foreach ($years as $year => $months) {
+                    // 排序 months 从小到大
+                    ksort($months);
 
-                $income = $report['transactions']['this_month']['drops'] / $rate;
+                    $total = 0;
+                    $total_should = 0;
 
-                if ($income < 0) {
-                    $income = 0;
+                    foreach ($months as $month => $m) {
+                        $total += $m['balance'];
+                        $total_should += $m['should_balance'];
+                        $this->info("{$module->name} {$year}年 {$month}月 实收: {$total}元 应得: {$total_should} 元");
+                    }
                 }
-
-                // 取 2 位
-                $income = round($income, 2);
-
-                $text = $module->name . " 收益 {$income} 元 ";
-                $this->info($text);
             }
         });
 
         $this->warn('计算模块收益完成。');
         $this->warn('完成时间: ' . now());
-        $this->warn('比例: 1:' . $rate . ' (1 元 = ' . $rate . ' Drops)');
 
         return 1;
     }

@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo as BelongsToAlias;
 use Illuminate\Database\Eloquent\Relations\HasMany as HasManyAlias;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 // use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -156,6 +157,54 @@ class Host extends Model
         Cache::put($month_cache_key, $hosts_drops, 604800);
 
         $transaction->reduceDrops($this->user_id, $this->id, $this->module_id, $auto, $real_price);
+
+
+        /** 统计收益开始 */
+        $current_month = now()->month;
+        $current_year = now()->year;
+
+        $cache_key = 'module_earning_' . $this->module_id;
+
+
+        $rate = (int)config('drops.rate');
+        $commission = (float)config('drops.commission');
+
+        // 换成 余额
+        $balance = round($real_price / $rate, 2);
+
+        $should_balance = round($balance * $commission, 2);
+
+        // 应得的余额
+        $should_balance = $balance - $should_balance;
+
+        $earnings = Cache::get($cache_key, []);
+
+        if (!isset($earnings[$current_year])) {
+            $earnings[$current_year] = [];
+        }
+        if (isset($earnings[$current_year][$current_month])) {
+            $earnings[$current_year][$current_month]['balance'] += $balance;
+            $earnings[$current_year][$current_month]['should_balance'] += $should_balance;
+            $earnings[$current_year][$current_month]['drops'] += $real_price;
+        } else {
+            $earnings[$current_year][$current_month] = [
+                'balance' => $balance,
+                // 应得（交了手续费）
+                'should_balance' => $should_balance,
+                'drops' => $real_price
+            ];
+        }
+
+        // 删除 前 3 年的数据
+        if (count($earnings) > 3) {
+            $earnings = array_slice($earnings, -3, 3, true);
+
+        }
+
+        // 保存 1 年
+        Cache::put($cache_key, $earnings, 24 * 60 * 60 * 365);
+
+        /** 统计收益结束 */
 
         broadcast(new UserEvent($this->user_id, 'balances.drops.reduced', $this->user));
 

@@ -162,13 +162,11 @@ class Transaction extends Model
 
         Cache::forever($cache_key, $current_drops);
 
-        // if ($auto) {
-        //     $description = '平台按时间自动扣费。';
-        // } else {
-        //     $description = '集成模块发起的扣费。';
-        // }
+        if (!$auto) {
+            $description = '集成模块发起的扣费。';
+            $this->addPayoutDrops($user_id, $amount, $description, $host_id, $module_id);
+        }
 
-        // $this->addPayoutDrops($user_id, $amount, $description, $host_id, $module_id);
     }
 
     public function reduceAmount($user_id, $amount = 0, $description = '扣除费用请求。')

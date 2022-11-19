@@ -172,17 +172,8 @@ class Module extends Authenticatable
     #[ArrayShape(['transactions' => "array"])]
     public function calculate(): array
     {
+        $cache_key = 'module_earning_' . $this->id;
 
-        $default = [
-            'balance' => 0,
-            'drops' => 0,
-        ];
-
-        return [
-            'transactions' => [
-                'this_month' => Cache::get('this_month_balance_and_drops_' . $this->id, $default),
-                'last_month' => Cache::get('last_month_balance_and_drops_' . $this->id, $default),
-            ]
-        ];
+        return Cache::get($cache_key, []);
     }
 }
