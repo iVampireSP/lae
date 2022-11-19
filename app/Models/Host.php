@@ -219,7 +219,7 @@ class Host extends Model
         return true;
     }
 
-    public function addLog($type = 'drops', float $amount = 0)
+    public function addLog($type = 'drops', float $amount = 0): bool
     {
         if ($amount == 0) {
             return false;
