@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo as BelongsToAlias;
 use Illuminate\Database\Eloquent\Relations\HasMany as HasManyAlias;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 // use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -121,7 +122,7 @@ class Host extends Model
 
     public function scopeActive($query)
     {
-        return $query->whereIn('status', ['running', 'stopped'])->where('price', '!=', 0)->where('managed_price', '!=', 0)->whereNotNull('managed_price');
+        return $query->whereIn('status', ['running', 'stopped'])->where('price', '!=', 0)->orWhereNotNull('managed_price');
     }
 
     public function scopeThisUser($query, $module = null)
@@ -141,19 +142,20 @@ class Host extends Model
 
     public function cost($price = null, $auto = true): bool
     {
+
+        Log::debug('Host::cost()');
         $this->load('user');
 
         $transaction = new Transaction();
 
         $drops = $transaction->getDrops($this->user_id);
 
-        if ($price !== null) {
-            $real_price = $price;
-        } else {
-            if ($this->managed_price !== null) {
-                $real_price = $this->managed_price;
-            }
+        $real_price = $price ?? $this->price;
+
+        if (!$price) {
+            $real_price = $this->managed_price;
         }
+
 
         if ($real_price == 0) {
             return true;
