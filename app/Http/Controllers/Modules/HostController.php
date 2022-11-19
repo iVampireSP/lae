@@ -48,8 +48,10 @@ class HostController extends Controller
         //
         $user = User::findOrFail($request->user_id);
 
-        if ($user->balance < 1) {
-            return $this->error('此用户余额不足，无法开设计费项目。');
+        if ($request->price > 0) {
+            if ($user->balance < 1) {
+                return $this->error('此用户余额不足，无法开设计费项目。');
+            }
         }
 
         // 如果没有 name，则随机
