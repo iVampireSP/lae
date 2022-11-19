@@ -55,8 +55,8 @@ class CalcModule extends Command
                     $total_should = 0;
 
                     foreach ($months as $month => $m) {
-                        $total += $m['balance'];
-                        $total_should += $m['should_balance'];
+                        $total += round($m['balance'], 2);
+                        $total_should += round($m['should_balance'], 2);
                         $this->info("{$module->name} {$year}年 {$month}月 实收: {$total}元 应得: {$total_should} 元");
                     }
                 }

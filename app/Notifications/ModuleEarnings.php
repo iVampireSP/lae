@@ -49,8 +49,8 @@ class ModuleEarnings extends Notification
             $total_should = 0;
 
             foreach ($months as $month => $m) {
-                $total += $m['balance'];
-                $total_should += $m['should_balance'];
+                $total += round($m['balance'], 2);
+                $total_should += round($m['should_balance'], 2);
                 $text .= <<<EOF
 
 ==========
