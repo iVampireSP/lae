@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo as BelongsToAlias;
 use Illuminate\Database\Eloquent\Relations\HasMany as HasManyAlias;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 
 // use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -220,41 +219,6 @@ class Host extends Model
         return true;
     }
 
-    public function costBalance($amount = 1): bool
-    {
-        $transaction = new Transaction();
-
-        $month = now()->month;
-
-        $month_cache_key = 'user_' . $this->user_id . '_month_' . $month . '_hosts_balances';
-        $hosts_drops = Cache::get($month_cache_key, []);
-
-        // 统计 Host 消耗的 Drops
-        if (isset($hosts_drops[$this->id])) {
-            $hosts_drops[$this->id] += $amount;
-        } else {
-            $hosts_drops[$this->id] = $amount;
-        }
-
-        Cache::put($month_cache_key, $hosts_drops, 604800);
-
-        $left = $transaction->reduceHostAmount($this->user_id, $this->id, $this->module_id, $amount);
-
-        $this->addLog('balance', $amount);
-
-
-        broadcast(new UserEvent($this->user_id, 'balances.amount.reduced', $this->user));
-
-        if ($left < 0) {
-            $this->update([
-                'status' => 'suspended',
-            ]);
-        }
-
-        return true;
-    }
-
-
     public function addLog($type = 'drops', float $amount = 0)
     {
         if ($amount == 0) {
@@ -328,6 +292,40 @@ class Host extends Model
         Cache::put($cache_key, $earnings, 24 * 60 * 60 * 365);
 
         /** 统计收益结束 */
+
+        return true;
+    }
+
+    public function costBalance($amount = 1): bool
+    {
+        $transaction = new Transaction();
+
+        $month = now()->month;
+
+        $month_cache_key = 'user_' . $this->user_id . '_month_' . $month . '_hosts_balances';
+        $hosts_drops = Cache::get($month_cache_key, []);
+
+        // 统计 Host 消耗的 Drops
+        if (isset($hosts_drops[$this->id])) {
+            $hosts_drops[$this->id] += $amount;
+        } else {
+            $hosts_drops[$this->id] = $amount;
+        }
+
+        Cache::put($month_cache_key, $hosts_drops, 604800);
+
+        $left = $transaction->reduceHostAmount($this->user_id, $this->id, $this->module_id, $amount);
+
+        $this->addLog('balance', $amount);
+
+
+        broadcast(new UserEvent($this->user_id, 'balances.amount.reduced', $this->user));
+
+        if ($left < 0) {
+            $this->update([
+                'status' => 'suspended',
+            ]);
+        }
 
         return true;
     }

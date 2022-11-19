@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exceptions\CommonException;
 use App\Http\Controllers\Controller;
 use App\Models\WorkOrder\Reply;
 use App\Models\WorkOrder\WorkOrder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\View\View;
 
 class WorkOrderController extends Controller
@@ -24,33 +24,11 @@ class WorkOrderController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      *
-     * @param \App\Models\WorkOrder\WorkOrder $workOrder
+     * @param WorkOrder $workOrder
      *
-     * @return Response
+     * @return View
      */
     public function show(WorkOrder $workOrder): View
     {
@@ -67,7 +45,7 @@ class WorkOrderController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Models\WorkOrder\WorkOrder $workOrder
+     * @param WorkOrder $workOrder
      *
      * @return View
      */
@@ -81,8 +59,8 @@ class WorkOrderController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request        $request
-     * @param \App\Models\WorkOrder\WorkOrder $workOrder
+     * @param Request   $request
+     * @param WorkOrder $workOrder
      *
      * @return RedirectResponse
      */
@@ -102,14 +80,18 @@ class WorkOrderController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Models\WorkOrder\WorkOrder $workOrder
+     * @param WorkOrder $workOrder
      *
-     * @return Response
+     * @return RedirectResponse
      */
     public function destroy(WorkOrder $workOrder): RedirectResponse
     {
         //
-        $workOrder->safeDelete();
+        try {
+            $workOrder->safeDelete();
+        } catch (CommonException $e) {
+            return back()->with('error', $e->getMessage());
+        }
 
         return redirect()->route('admin.work-orders.index')->with('success', '正在排队删除工单。');
     }

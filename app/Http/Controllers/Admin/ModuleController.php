@@ -15,9 +15,11 @@ class ModuleController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Response
+     * @param Module $module
+     *
+     * @return View
      */
-    public function index(Module $module)
+    public function index(Module $module): View
     {
         $modules = $module->paginate(100);
 
@@ -39,11 +41,11 @@ class ModuleController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request $request
      *
-     * @return Response
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         //
 
@@ -64,10 +66,19 @@ class ModuleController extends Controller
 
     }
 
+    private function rules(): array
+    {
+        return [
+            'id' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
+            'url' => 'required|url',
+        ];
+    }
+
     /**
      * Display the specified resource.
      *
-     * @param \App\Models\Module $module
+     * @param Module $module
      *
      * @return View
      */
@@ -81,7 +92,7 @@ class ModuleController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param \App\Models\Module $module
+     * @param Module $module
      *
      * @return Response
      */
@@ -95,8 +106,8 @@ class ModuleController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param \App\Models\Module       $module
+     * @param Request $request
+     * @param Module  $module
      *
      * @return Response
      */
@@ -131,25 +142,16 @@ class ModuleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Models\Module $module
+     * @param Module $module
      *
-     * @return Response
+     * @return RedirectResponse
      */
-    public function destroy(Module $module)
+    public function destroy(Module $module): RedirectResponse
     {
         //
 
         $module->delete();
 
         return redirect()->route('admin.modules.index')->with('success', '模块已删除。');
-    }
-
-    private function rules(): array
-    {
-        return [
-            'id' => 'required|string|max:255',
-            'name' => 'required|string|max:255',
-            'url' => 'required|url',
-        ];
     }
 }

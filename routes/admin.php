@@ -3,7 +3,6 @@
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\HostController;
 use App\Http\Controllers\Admin\ModuleController;
-use App\Http\Controllers\Admin\ReplyController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\WorkOrderController;
 use Illuminate\Support\Facades\Route;
@@ -23,9 +22,8 @@ Route::group([
 ], function () {
     Route::resource('users', UserController::class)->only(['index', 'show', 'edit', 'update']);
     Route::resource('modules', ModuleController::class);
-    Route::resource('hosts', HostController::class);
-    Route::resource('work-orders', WorkOrderController::class);
-    Route::resource('work-orders.replies', ReplyController::class);
+    Route::resource('hosts', HostController::class)->only(['index', 'edit', 'update', 'destroy']);
+    Route::resource('work-orders', WorkOrderController::class)->only(['index', 'show', 'edit', 'update', 'destroy']);
 
     Route::view('commands', 'admin.commands')->name('commands');
 });
