@@ -157,11 +157,6 @@ class Host extends Model
             }
         }
 
-
-        Log::debug('Host Cost', [
-            'real_price' => $real_price,
-        ]);
-
         if ($real_price == 0) {
             return true;
         }
