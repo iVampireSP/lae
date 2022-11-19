@@ -4,6 +4,8 @@
 
 @section('content')
 
+    <h3>模块</h3>
+    <a href="{{ route('admin.modules.create') }}">新建模块</a>
     <div class="overflow-auto">
         <table class="table table-hover">
             <thead>
@@ -24,6 +26,7 @@
                         {{ $module->name }}
                     </td>
                     <td>
+                        <a href="{{ route('admin.modules.show', $module) }}" class="btn btn-primary btn-sm">查看</a>
                         <a href="{{ route('admin.modules.edit', $module) }}" class="btn btn-primary btn-sm">编辑</a>
                     </td>
                 </tr>
