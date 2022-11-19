@@ -24,13 +24,13 @@
             <select class="form-control" id="status" name="status">
                 <option value="open" {{ $workOrder->status == 'open' ? 'selected' : '' }}>已开启</option>
                 <option value="closed" {{ $workOrder->status == 'closed' ? 'selected' : '' }}>关闭</option>
-                <option value="user_read" {{ $workOrder->status == 'closed' ? 'selected' : '' }}>用户已读</option>
-                <option value="user_replied" {{ $workOrder->status == 'closed' ? 'selected' : '' }}>用户已回复</option>
+                <option value="user_read" {{ $workOrder->status == 'user_read' ? 'selected' : '' }}>用户已读</option>
+                <option value="user_replied" {{ $workOrder->status == 'user_replied' ? 'selected' : '' }}>用户已回复</option>
 
-                <option value="replied" {{ $workOrder->status == 'closed' ? 'selected' : '' }}>已回复</option>
-                <option value="read" {{ $workOrder->status == 'closed' ? 'selected' : '' }}>已读</option>
+                <option value="replied" {{ $workOrder->status == 'replied' ? 'selected' : '' }}>已回复</option>
+                <option value="read" {{ $workOrder->status == 'read' ? 'selected' : '' }}>已读</option>
 
-                <option value="in_progress" {{ $workOrder->status == 'closed' ? 'selected' : '' }}>处理中</option>
+                <option value="in_progress" {{ $workOrder->status == 'in_progress' ? 'selected' : '' }}>处理中</option>
             </select>
         </div>
 
