@@ -49,18 +49,12 @@ class GetUser extends Command
 
         $transaction = new Transaction();
 
-        $drops = $transaction->getDrops($user->id);
-
-
         $this->warn('用户基本信息');
 
         $this->info('用户 ID: ' . $user->id);
         $this->info('名称: ' . $user->name);
         $this->info('邮箱: ' . $user->email);
         $this->info('余额：' . $user->balance . ' 元');
-
-        $this->info('Drops：' . $drops);
-
 
         $this->warn('前 10 条充值记录');
 
@@ -77,7 +71,9 @@ class GetUser extends Command
 
         // 倒序
         foreach (array_reverse($hosts->toArray()) as $host) {
-            $this->info('[' . $host['module']['name'] . '](' . $host['price'] . ' Drops) ' . $host['name']);
+            $this->info('[' . $host['module']['name'] . '](' . $host['price'] . ' 元) ' . $host['name']);
         }
+
+        return 0;
     }
 }

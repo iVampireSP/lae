@@ -62,14 +62,13 @@ class HostController extends Controller
     {
         $month = now()->month;
 
-        $month_cache_key = 'user_' . auth()->id() . '_month_' . $month . '_hosts_drops';
-        $hosts_drops = Cache::get($month_cache_key, []);
+        // $month_cache_key = 'user_' . auth()->id() . '_month_' . $month . '_hosts_drops';
+        // $hosts_drops = Cache::get($month_cache_key, []);
 
         $month_cache_key = 'user_' . auth()->id() . '_month_' . $month . '_hosts_balances';
         $hosts_balances = Cache::get($month_cache_key, []);
 
         return $this->success([
-            'drops' => $hosts_drops,
             'balances' => $hosts_balances
         ]);
     }

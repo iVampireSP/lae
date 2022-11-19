@@ -48,20 +48,14 @@
                     </td>
                     <td class="text-success">
                         {{ $t->income }} 元
-                        <br/>
-                        {{ $t->income_drops }} Drops
                     </td>
 
                     <td class="text-danger">
                         {{ $t->outcome }} 元
-                        <br/>
-                        {{ $t->outcome_drops }} Drops
                     </td>
 
                     <td>
                         {{ $t->balance ?? $t->balances }} 元
-                        <br/>
-                        {{ $t->drops }} Drops
                     </td>
                     <td>
                         {{ $t->created_at }}

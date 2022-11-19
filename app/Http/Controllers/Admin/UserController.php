@@ -55,16 +55,12 @@ class UserController extends Controller
     {
         //
 
-        $transaction = new Transaction();
-
-        $drops = $transaction->getDrops($user->id);
-
         $hosts = Host::where('user_id', $user->id)->latest()->paginate(50, ['*'], 'hosts_page');
         $workOrders = WorkOrder::where('user_id', $user->id)->latest()->paginate(50, ['*'], 'workOrders_page');
         $balances = Balance::where('user_id', $user->id)->latest()->paginate(50, ['*'], 'balances_page');
 
 
-        return view('admin.users.edit', compact('user', 'drops', 'hosts', 'workOrders', 'balances'));
+        return view('admin.users.edit', compact('user', 'hosts', 'workOrders', 'balances'));
     }
 
     /**
@@ -79,9 +75,7 @@ class UserController extends Controller
     {
         //
         $request->validate([
-
             'balance' => 'nullable|numeric|min:0.01|max:1000',
-            'drops' => 'nullable|numeric|min:1|max:10000',
         ]);
 
         $transaction = new Transaction();
@@ -90,10 +84,6 @@ class UserController extends Controller
 
         if ($request->filled('balance')) {
             $transaction->addAmount($user->id, 'console', $request->balance, '管理员汇入', true);
-        }
-
-        if ($request->filled('drops')) {
-            $transaction->increaseDrops($user->id, $request->drops, '管理员汇入', 'console');
         }
 
         if ($request->is_banned) {

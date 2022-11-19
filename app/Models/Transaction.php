@@ -38,26 +38,15 @@ class Transaction extends Model
         // 入账
         'income',
 
-        // 入账 Drops
-        'income_drops',
-
         // 出账
         'outcome',
-        // 出账 Drops
-        'outcome_drops',
 
         // 可用余额
         'balances',
         'balance',
 
-        // 可用 Drops
-        'drops',
-
         // 赠送金额
         'gift',
-
-        // 赠送 Drops
-        'gift_drops',
 
         'user_id',
         'host_id',
@@ -71,51 +60,12 @@ class Transaction extends Model
         return $query->where('user_id', auth()->id());
     }
 
-    public function increaseCurrentUserDrops($amount = 0)
-    {
-        return $this->increaseDrops(auth()->id(), $amount);
-    }
-
-    public function increaseDrops($user_id, $amount, $description = null, $payment = null)
-    {
-        $cache_key = 'user_drops_' . $user_id;
-
-        $current_drops = Cache::get($cache_key, [
-            'drops' => 0,
-        ]);
-
-        $current_drops['drops'] += $amount;
-
-        Cache::forever($cache_key, $current_drops);
-
-        $this->addIncomeDrops($user_id, $amount, $description, $payment);
-
-        return $current_drops['drops'];
-    }
-
-    public function addIncomeDrops($user_id, $amount, $description, $payment = 'balance')
-    {
-        $data = [
-            'type' => 'income',
-            'payment' => $payment,
-            'description' => $description,
-            'income' => 0,
-            'income_drops' => (float)$amount,
-            'outcome' => 0,
-            'outcome_drops' => 0,
-        ];
-
-        return $this->addLog($user_id, $data);
-    }
-
     private function addLog($user_id, $data)
     {
         $user = User::find($user_id);
 
-
         $current = [
             'balance' => (float)$user->balance,
-            'drops' => $this->getDrops($user_id),
             'user_id' => intval($user_id),
         ];
 
@@ -126,73 +76,6 @@ class Transaction extends Model
         $data['expired_at'] = now()->addSeconds(7);
 
         return $this->create($data);
-    }
-
-    public function getDrops($user_id = null): float
-    {
-        //
-        if (!$user_id) {
-            $user_id = auth()->id();
-        }
-
-        $cache_key = 'user_drops_' . $user_id;
-
-        $drops = Cache::get($cache_key, [
-            'drops' => 0,
-        ]);
-
-        // 保留 8 位
-        $drops['drops'] = round($drops['drops'], 8);
-
-        return $drops['drops'];
-    }
-
-    public function reduceDrops($user_id, $host_id, $module_id, $auto = 1, $amount = 0)
-    {
-
-        $cache_key = 'user_drops_' . $user_id;
-
-        $current_drops = Cache::get($cache_key, [
-            'drops' => 0,
-        ]);
-
-        $current_drops['drops'] = $current_drops['drops'] - $amount;
-
-        $current_drops['drops'] = round($current_drops['drops'], 5);
-
-        Cache::forever($cache_key, $current_drops);
-
-        if (!$auto) {
-            $description = '集成模块发起的扣费。';
-            $this->addPayoutDrops($user_id, $amount, $description, $host_id, $module_id);
-        }
-
-    }
-
-    public function addPayoutDrops($user_id, $amount, $description, $host_id, $module_id)
-    {
-        $data = [
-            'type' => 'payout',
-            'payment' => 'drops',
-            'description' => $description,
-            'income' => 0,
-            'income_drops' => 0,
-            'outcome' => 0,
-            'outcome_drops' => (float)$amount,
-            'host_id' => $host_id,
-            'module_id' => $module_id,
-        ];
-
-
-        // $amount = (double) $amount;
-
-        // Log::debug($amount);
-
-        // $month = now()->month;
-
-        // Cache::increment('user_' . $user_id . '_month_' . $month . '_drops', $amount);
-
-        return $this->addLog($user_id, $data);
     }
 
     public function reduceAmount($user_id, $amount = 0, $description = '扣除费用请求。')
@@ -223,9 +106,7 @@ class Transaction extends Model
             'payment' => 'balance',
             'description' => $description,
             'income' => 0,
-            'income_drops' => 0,
             'outcome' => (float)$amount,
-            'outcome_drops' => 0
         ];
 
         if ($module_id) {
@@ -290,9 +171,7 @@ class Transaction extends Model
             'payment' => 'balance',
             'description' => $description,
             'income' => 0,
-            'income_drops' => 0,
             'outcome' => (float)$amount,
-            'outcome_drops' => 0,
             'host_id' => $host_id,
             'module_id' => $module_id,
         ];
@@ -351,9 +230,7 @@ class Transaction extends Model
             'payment' => $payment,
             'description' => $description,
             'income' => (float)$amount,
-            'income_drops' => 0,
             'outcome' => 0,
-            'outcome_drops' => 0,
         ];
 
         return $this->addLog($user_id, $data);
@@ -393,43 +270,4 @@ class Transaction extends Model
         return $user->balance;
     }
 
-    public function transferDrops(User $user, User $to, float $amount, string|null $description = null): bool
-    {
-
-        $user_drops = $this->getDrops($user->id);
-
-        // if drops not enough
-        if ($user_drops < $amount) {
-            return false;
-        }
-
-        $description_new = "转账给 {$to->name}($to->email)  {$amount} Drops， $description";
-
-        $this->reduceDropsWithoutHost($user->id, $amount, $description_new);
-
-        $description_new = "收到来自 {$to->name}($to->email) 转来的 {$amount} Drops， $description";
-
-
-        $this->increaseDrops($to->id, $amount, $description_new, 'transfer');
-
-        return true;
-    }
-
-    public function reduceDropsWithoutHost($user_id, $amount = 0, $description = null)
-    {
-
-        $cache_key = 'user_drops_' . $user_id;
-
-        $current_drops = Cache::get($cache_key, [
-            'drops' => 0,
-        ]);
-
-        $current_drops['drops'] = $current_drops['drops'] - $amount;
-
-        $current_drops['drops'] = round($current_drops['drops'], 5);
-
-        Cache::forever($cache_key, $current_drops);
-
-        $this->addPayoutDrops($user_id, $amount, $description, null, null);
-    }
 }

@@ -5,7 +5,7 @@
 @section('content')
     <h2>转账</h2>
     <p>将您的余额转入到其他莱云账号，并且无需对方确认。</p>
-    <p>您有: {{ $balance }} 元，以及 {{ $drops }} Drops </p>
+    <p>您有: {{ $balance }} 元。 </p>
 
     <form method="post" action="{{ route('transfer') }}" onsubmit="return beforeContinue()">
         @csrf
@@ -15,12 +15,6 @@
         </div>
 
         <div class="form-group">
-            <label for="type">类型</label>
-            <select class="form-control" id="type" name="type">
-                <option value="balance">余额</option>
-                <option value="drops">Drops</option>
-            </select>
-
             <div class="form-group">
                 <label for="amount">金额</label>
                 <input type="number" class="form-control" id="amount" name="amount" placeholder="请输入转账金额" min="1"

@@ -29,7 +29,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('sanctum:prune-expired --hours=24')->daily();
 
         // 扣费
-        $schedule->job(new HostCost())->everyFiveMinutes();
+        $schedule->job(new HostCost(now()->hour))->hourly()->withoutOverlapping()->onOneServer();
 
         // 获取模块暴露的信息（服务器等）
         $schedule->job(new FetchModule())->withoutOverlapping()->everyMinute();

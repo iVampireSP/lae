@@ -7,7 +7,6 @@
 
 
     <p>您的余额: {{ $balance }} 元 </p>
-    <p>Drops: {{ $drops }} </p>
 
     <h2>添加到余额</h2>
     <form name="charge" method="POST" target="_blank" action="{{ route('balances.store') }}"
@@ -16,7 +15,6 @@
         <input type="number" id="amount" name="amount" value="10" min="1" max="1000"/>元
         <button type="submit" class="btn btn-primary">充值</button>
     </form>
-    <span>≈ <span id="to_drops"></span> Drops</span>
 
     <div class="mt-2">
         <div>
@@ -86,7 +84,7 @@
     {{ $balances->links() }}
 
 
-    <script>
+    {{-- <script>
         let rate = {{ $drops_rate }};
         let to_drops = document.querySelector('#to_drops')
         let amount = document.querySelector('#amount')
@@ -100,6 +98,6 @@
         calc(amount)
 
 
-    </script>
+    </script> --}}
 
 @endsection

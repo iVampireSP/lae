@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Events\UserEvent;
-use App\Exceptions\User\BalanceNotEnoughException;
 use App\Models\WorkOrder\WorkOrder;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,7 +10,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo as BelongsToAlias;
 use Illuminate\Database\Eloquent\Relations\HasMany as HasManyAlias;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 
 // use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -140,87 +138,87 @@ class Host extends Model
         return true;
     }
 
-    public function cost($price = null, $auto = true): bool
+    // public function cost($price = null, $auto = true): bool
+    // {
+    //     $this->load('user');
+    //
+    //     $transaction = new Transaction();
+    //
+    //     $drops = $transaction->getDrops($this->user_id);
+    //
+    //     $real_price = $price ?? $this->price;
+    //
+    //     if (!$price) {
+    //
+    //         if ($this->managed_price) {
+    //             $real_price = $this->managed_price;
+    //         }
+    //     }
+    //
+    //     if ($real_price == 0) {
+    //         return true;
+    //     }
+    //
+    //     $real_price = round($real_price ?? 0, 8);
+    //
+    //     $amount = $price / config('drops.rate') + 1;
+    //
+    //     // if drops <= price
+    //     if ($drops < $real_price) {
+    //         try {
+    //             // 算出需要补充多少 Drops
+    //             $need = $real_price - $drops;
+    //
+    //             // 算出需要补充多少余额
+    //             $need_amount = $need / config('drops.rate') + 1;
+    //
+    //             $this->user->toDrops($amount + $need_amount);
+    //         } catch (BalanceNotEnoughException) {
+    //             $this->update([
+    //                 'status' => 'suspended',
+    //             ]);
+    //
+    //             return false;
+    //         }
+    //     } else if ($this->status == 'suspended') {
+    //         $this->update([
+    //             'status' => 'stopped',
+    //         ]);
+    //     }
+    //
+    //     $month = now()->month;
+    //
+    //     $month_cache_key = 'user_' . $this->user_id . '_month_' . $month . '_hosts_drops';
+    //     $hosts_drops = Cache::get($month_cache_key, []);
+    //
+    //     // 统计 Host 消耗的 Drops
+    //     if (isset($hosts_drops[$this->id])) {
+    //         $hosts_drops[$this->id] += $real_price;
+    //     } else {
+    //         $hosts_drops[$this->id] = $real_price;
+    //     }
+    //
+    //     Cache::put($month_cache_key, $hosts_drops, 604800);
+    //
+    //     $transaction->reduceDrops($this->user_id, $this->id, $this->module_id, $auto, $real_price);
+    //
+    //     $this->addLog('drops', $real_price);
+    //
+    //     broadcast(new UserEvent($this->user_id, 'balances.drops.reduced', $this->user));
+    //
+    //     // 检测用户余额是否足够
+    //     if ($this->user->balance < 0) {
+    //         $this->update([
+    //             'status' => 'suspended',
+    //         ]);
+    //     }
+    //
+    //     return true;
+    // }
+
+    public function addLog($type = 'drops', float|null $amount = 0): bool
     {
-        $this->load('user');
-
-        $transaction = new Transaction();
-
-        $drops = $transaction->getDrops($this->user_id);
-
-        $real_price = $price ?? $this->price;
-
-        if (!$price) {
-
-            if ($this->managed_price) {
-                $real_price = $this->managed_price;
-            }
-        }
-
-        if ($real_price == 0) {
-            return true;
-        }
-
-        $real_price = round($real_price ?? 0, 8);
-
-        $amount = $price / config('drops.rate') + 1;
-
-        // if drops <= price
-        if ($drops < $real_price) {
-            try {
-                // 算出需要补充多少 Drops
-                $need = $real_price - $drops;
-
-                // 算出需要补充多少余额
-                $need_amount = $need / config('drops.rate') + 1;
-
-                $this->user->toDrops($amount + $need_amount);
-            } catch (BalanceNotEnoughException) {
-                $this->update([
-                    'status' => 'suspended',
-                ]);
-
-                return false;
-            }
-        } else if ($this->status == 'suspended') {
-            $this->update([
-                'status' => 'stopped',
-            ]);
-        }
-
-        $month = now()->month;
-
-        $month_cache_key = 'user_' . $this->user_id . '_month_' . $month . '_hosts_drops';
-        $hosts_drops = Cache::get($month_cache_key, []);
-
-        // 统计 Host 消耗的 Drops
-        if (isset($hosts_drops[$this->id])) {
-            $hosts_drops[$this->id] += $real_price;
-        } else {
-            $hosts_drops[$this->id] = $real_price;
-        }
-
-        Cache::put($month_cache_key, $hosts_drops, 604800);
-
-        $transaction->reduceDrops($this->user_id, $this->id, $this->module_id, $auto, $real_price);
-
-        $this->addLog('drops', $real_price);
-
-        broadcast(new UserEvent($this->user_id, 'balances.drops.reduced', $this->user));
-
-        // 检测用户余额是否足够
-        if ($this->user->balance < 0) {
-            $this->update([
-                'status' => 'suspended',
-            ]);
-        }
-
-        return true;
-    }
-
-    public function addLog($type = 'drops', float $amount = 0): bool
-    {
-        if ($amount == 0) {
+        if ($amount === 0 || $amount === null) {
             return false;
         }
 
@@ -230,24 +228,7 @@ class Host extends Model
 
         $cache_key = 'module_earning_' . $this->module_id;
 
-
-        $rate = (int)config('drops.rate');
-        $commission = (float)config('drops.commission');
-
-
-        if ($type == 'drops') {
-            // 换成 余额
-
-            $amount = $amount / $rate;
-        }
-
-        // $amount = round($amount, 2);
-        // Log::debug('addLog', [
-        //     'amount' => $amount,
-        //     'rate' => $rate,
-        //     'commission' => $commission,
-        // ]);
-
+        $commission = (float)config('billing.commission');
 
         $should_amount = round($amount * $commission, 2);
 
@@ -260,24 +241,15 @@ class Host extends Model
             $earnings[$current_year] = [];
         }
 
-        if ($type == 'drops') {
-            $drops = $amount;
-        } else {
-            $drops = 0;
-        }
-
-
         if (isset($earnings[$current_year][$current_month])) {
             $earnings[$current_year][$current_month]['balance'] += $amount;
             $earnings[$current_year][$current_month]['should_balance'] += $should_balance;
-            $earnings[$current_year][$current_month]['drops'] += $drops;
         } else {
 
             $earnings[$current_year][$current_month] = [
                 'balance' => $amount,
                 // 应得（交了手续费）
                 'should_balance' => $should_balance,
-                'drops' => $drops
             ];
         }
 
@@ -295,8 +267,29 @@ class Host extends Model
         return true;
     }
 
-    public function costBalance($amount = 1): bool
+    public function cost($amount = null, $auto = true): bool
     {
+
+        $this->load('user');
+
+        $real_price = $amount ?? $this->price;
+
+        if (!$amount) {
+            if ($this->managed_price) {
+                $real_price = $this->managed_price;
+            }
+        }
+
+        if ($real_price == 0) {
+            return true;
+        }
+
+        $real_price = round($real_price ?? 0, 2);
+
+        if ($real_price < 0.01) {
+            return true;
+        }
+
         $transaction = new Transaction();
 
         $month = now()->month;
@@ -304,19 +297,24 @@ class Host extends Model
         $month_cache_key = 'user_' . $this->user_id . '_month_' . $month . '_hosts_balances';
         $hosts_drops = Cache::get($month_cache_key, []);
 
-        // 统计 Host 消耗的 Drops
+        // 统计 Host 消耗的 Balance
         if (isset($hosts_drops[$this->id])) {
-            $hosts_drops[$this->id] += $amount;
+            $hosts_drops[$this->id] += $real_price;
         } else {
-            $hosts_drops[$this->id] = $amount;
+            $hosts_drops[$this->id] = $real_price;
         }
 
         Cache::put($month_cache_key, $hosts_drops, 604800);
 
-        $left = $transaction->reduceHostAmount($this->user_id, $this->id, $this->module_id, $amount);
+        $description = '模块发起的扣费。';
 
-        $this->addLog('balance', $amount);
+        if ($auto) {
+            $description = '自动扣费。';
+        }
 
+        $left = $transaction->reduceHostAmount($this->user_id, $this->id, $this->module_id, $real_price, $description);
+
+        $this->addLog('balance', $real_price);
 
         broadcast(new UserEvent($this->user_id, 'balances.amount.reduced', $this->user));
 

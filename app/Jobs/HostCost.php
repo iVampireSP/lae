@@ -13,16 +13,17 @@ class HostCost implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels, Lock;
 
-    public $cache_key, $cache, $user;
+    public $hour, $cache, $user;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($hour)
     {
         //
+        $this->hour = $hour;
     }
 
     /**
@@ -32,10 +33,8 @@ class HostCost implements ShouldQueue
      */
     public function handle()
     {
-        // $this->cache = new Cache();
-
         // chunk hosts and load user
-        Host::whereIn('status', ['running', 'stopped'])->with('user')->chunk(1000, function ($hosts) {
+        Host::where('hour', $this->hour)->whereIn('status', ['running', 'stopped'])->with('user')->chunk(1000, function ($hosts) {
             foreach ($hosts as $host) {
                 $host->cost();
             }

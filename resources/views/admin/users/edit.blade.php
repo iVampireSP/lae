@@ -11,7 +11,7 @@
     @endif
 
 
-    <p>余额: {{ $user->balance }} 元, {{ $drops }} Drops</p>
+    <p>余额: {{ $user->balance }} 元</p>
 
     <p>注册时间: {{ $user->created_at }}</p>
 
@@ -27,12 +27,10 @@
         <th>ID</th>
         <th>模块</th>
         <th>名称</th>
-        <th>价格 / 5 分钟</th>
+        <th>价格 / 月</th>
         <th>操作</th>
         </thead>
         <tbody>
-
-        @php($drops_rage = config('drops.rate'))
 
         @foreach($hosts as $host)
             <tr>
@@ -44,9 +42,9 @@
                 </td>
                 <td>{{ $host->name }}</td>
                 <td>
-                    <span>{{ $host->managed_price ?? $host->price }} Drops</span>
+                    <span>{{ $host->managed_price ?? $host->price }} 元</span>
                     ≈
-                    <span>{{ round($host->managed_price ?? $host->price / $drops_rage * (30 * 24 * 60 / 5), 2) }} 元 / 月</span>
+                    {{--                    <span>{{ round($host->managed_price ?? $host->price / $drops_rage * (30 * 24 * 60 / 5), 2) }} 元 / 月</span>--}}
 
                 </td>
                 <td>
@@ -137,11 +135,6 @@
         <div class="form-group">
             <label for="balance">充值余额(元)</label>
             <input type="text" class="form-control" id="balance" name="balance" placeholder="充值金额">
-        </div>
-
-        <div class="form-group">
-            <label for="drops">充值 Drops</label>
-            <input type="text" class="form-control" id="drops" name="drops" placeholder="充值 Drops">
         </div>
 
         {{-- 封禁 --}}

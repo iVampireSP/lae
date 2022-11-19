@@ -18,18 +18,11 @@ class BalanceController extends Controller
 
     public function index(Request $request): View
     {
-
-        $transaction = new Transaction();
-
-        $drops = $transaction->getDrops();
-
         $balance = $request->user()->balance;
 
         $balances = Balance::thisUser()->latest()->paginate(100);
 
-        $drops_rate = config('drops.rate');
-
-        return view('balances.index', compact('drops', 'balance', 'balances', 'drops_rate'));
+        return view('balances.index', compact('balance', 'balances'));
     }
 
     public function store(Request $request)

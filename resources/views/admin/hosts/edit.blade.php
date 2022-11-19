@@ -17,7 +17,7 @@
         {{--        </div>--}}
 
         <div class="form-group">
-            <label for="managed_price" class="col-sm-2 col-form-label">新的价格 (Drops)</label>
+            <label for="managed_price" class="col-sm-2 col-form-label">新的价格 (元)</label>
             <input type="text" class="form-control" id="managed_price" name="managed_price"
                    value="{{ $host->managed_price }}" placeholder="{{ $host->price }}">
             留空以使用默认价格

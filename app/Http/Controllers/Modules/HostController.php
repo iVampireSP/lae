@@ -103,12 +103,10 @@ class HostController extends Controller
         //
         $this->validate($request, [
             'status' => 'sometimes|in:running,stopped,error,suspended,pending',
-            // 'managed_price' => 'sometimes|numeric|nullable',
+            'managed_price' => 'sometimes|numeric|nullable',
 
             // 如果是立即扣费
             'cost_once' => 'sometimes|numeric|nullable',
-
-            'cost_balance' => 'sometimes|numeric|nullable',
         ]);
 
         // if has cost_once
@@ -117,13 +115,6 @@ class HostController extends Controller
 
             return $this->updated();
         }
-
-        if ($request->has('cost_balance')) {
-            $host->costBalance($request->cost_balance ?? 0);
-
-            return $this->updated();
-        }
-
 
         $update = $request->except(['module_id', 'user_id']);
 
