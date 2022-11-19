@@ -14,7 +14,7 @@ class WorkOrderRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        $work_order = $this->route('workOrder');
+        $work_order = $this->route('work_order');
 
         // if work_order is model
         if ($work_order instanceof WorkOrder) {
