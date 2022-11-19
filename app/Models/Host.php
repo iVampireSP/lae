@@ -121,7 +121,7 @@ class Host extends Model
 
     public function scopeActive($query)
     {
-        return $query->whereIn('status', ['running', 'stopped'])->where('price', '!=', 0)->where('managed_price', '!=', 0);
+        return $query->whereIn('status', ['running', 'stopped'])->where('price', '!=', 0)->where('managed_price', '!=', 0)->whereNotNull('managed_price');
     }
 
     public function scopeThisUser($query, $module = null)
