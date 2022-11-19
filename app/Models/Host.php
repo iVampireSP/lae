@@ -276,19 +276,16 @@ class Host extends Model
             // 换成 余额
 
             // 如果小于 0.00，则不四舍五入
-            $c = $amount / $rate;
+            // $c = $amount / $rate;
+            //
+            // if ($c > 0.01) {
+            //     $amount = $amount / $rate;
+            // }
 
-            if ($c > 0.01) {
-                $amount = $amount / $rate;
-            }
+            $amount = $amount / $rate;
         }
 
         $amount = round($amount, 2);
-        Log::debug('addLog', [
-            'amount' => $amount,
-            'rate' => $rate,
-            'commission' => $commission,
-        ]);
 
 
         $should_amount = round($amount * $commission, 2);
