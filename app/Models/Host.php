@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo as BelongsToAlias;
 use Illuminate\Database\Eloquent\Relations\HasMany as HasManyAlias;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 // use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -254,8 +255,12 @@ class Host extends Model
     }
 
 
-    public function addLog($type = 'drops', $amount = 0)
+    public function addLog($type = 'drops', float $amount = 0)
     {
+        if ($amount == 0) {
+            return false;
+        }
+
         /** 统计收益开始 */
         $current_month = now()->month;
         $current_year = now()->year;
@@ -270,8 +275,21 @@ class Host extends Model
         if ($type == 'drops') {
             // 换成 余额
 
-            $amount = round($amount / $rate, 2);
+            // 如果小于 0.00，则不四舍五入
+            $c = $amount / $rate;
+
+            if ($c > 0.01) {
+                $amount = $amount / $rate;
+            }
         }
+
+        $amount = round($amount, 2);
+        Log::debug('addLog', [
+            'amount' => $amount,
+            'rate' => $rate,
+            'commission' => $commission,
+        ]);
+
 
         $should_amount = round($amount * $commission, 2);
 
