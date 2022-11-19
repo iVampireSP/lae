@@ -26,7 +26,7 @@
             @foreach ($transactions as $t)
                 <tr>
 
-		    <td>
+                    <td>
                         @if ($t->type === 'payout')
                             <span class="text-danger">
                                 支出

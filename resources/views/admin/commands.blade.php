@@ -72,18 +72,18 @@
         <br/>
         然后，安装依赖
         <code>composer install --no-dev</code>
-        <br />
+        <br/>
         接着，升级数据库（只需要在一台节点上执行）
         <code>art migrate</code>
-        <br />
+        <br/>
         最后，清除缓存
         <code>art optimize</code>
-        <br />
+        <br/>
 
         如果是非 Web 节点，需要重启全部或者对应服务，比如 队列，计划任务
         <code>supervisorctl restart all</code>
 
-        <br />
+        <br/>
         如果是 Web 节点，需要简单重启即可
         <code>supervisorctl restart lae-web</code>
 

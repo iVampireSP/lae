@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Host;
 use App\Models\User;
 use Illuminate\Console\Command;
 

@@ -110,7 +110,7 @@ class BalanceController extends Controller
         // if ($balance->paid_at !== null) {
         //    // return $this->success('订单已支付');
         //    return view('balances.process', compact('balance'));
-	// }
+        // }
 
 
         return view('balances.process', compact('balance'));

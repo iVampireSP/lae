@@ -11,10 +11,10 @@
         @csrf
         @method('PUT')
 
-{{--        <div class="form-group">--}}
-{{--            <label for="name" class="col-sm-2 col-form-label">名称</label>--}}
-{{--            <input type="text" class="form-control" id="name" name="name" value="{{ $host->name }}">--}}
-{{--        </div>--}}
+        {{--        <div class="form-group">--}}
+        {{--            <label for="name" class="col-sm-2 col-form-label">名称</label>--}}
+        {{--            <input type="text" class="form-control" id="name" name="name" value="{{ $host->name }}">--}}
+        {{--        </div>--}}
 
         <div class="form-group">
             <label for="managed_price" class="col-sm-2 col-form-label">新的价格 (Drops)</label>

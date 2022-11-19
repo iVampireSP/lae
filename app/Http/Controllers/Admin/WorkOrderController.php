@@ -22,6 +22,7 @@ class WorkOrderController extends Controller
         $workOrders = $workOrder->with('user')->paginate(100);
         return view('admin.work-orders.index', compact('workOrders'));
     }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -35,7 +36,8 @@ class WorkOrderController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return Response
      */
     public function store(Request $request)
@@ -46,7 +48,8 @@ class WorkOrderController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\WorkOrder\WorkOrder  $workOrder
+     * @param \App\Models\WorkOrder\WorkOrder $workOrder
+     *
      * @return Response
      */
     public function show(WorkOrder $workOrder): View
@@ -99,7 +102,8 @@ class WorkOrderController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\WorkOrder\WorkOrder  $workOrder
+     * @param \App\Models\WorkOrder\WorkOrder $workOrder
+     *
      * @return Response
      */
     public function destroy(WorkOrder $workOrder): RedirectResponse

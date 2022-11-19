@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo as BelongsToAlias;
 use Illuminate\Database\Eloquent\Relations\HasMany as HasManyAlias;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 
 // use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -41,6 +40,56 @@ class Host extends Model
 
     // user
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($model) {
+            broadcast(new UserEvent($model->user_id, 'hosts.created', $model));
+        });
+
+        static::updating(function ($model) {
+
+            if ($model->isDirty('status')) {
+                if ($model->status == 'suspended') {
+                    $model->suspended_at = now();
+                } else {
+                    $model->suspended_at = null;
+                }
+            }
+
+            broadcast(new UserEvent($model->user_id, 'hosts.updating', $model));
+        });
+
+        // when Updated
+        static::updated(function ($model) {
+            dispatch(new \App\Jobs\Module\Host($model, 'patch'));
+
+            Cache::forget('user_hosts_' . $model->user_id);
+            Cache::forget('user_tasks_' . $model->user_id);
+
+
+            broadcast(new UserEvent($model->user_id, 'hosts.updated', $model));
+        });
+
+        //
+        // static::deleting(function ($model) {
+        //     broadcast(new UserEvent($model->user_id, 'hosts.deleting', $model));
+        // });
+
+        static::deleting(function ($model) {
+            Cache::forget('user_tasks_' . $model->user_id);
+        });
+
+        static::deleted(function ($model) {
+            broadcast(new UserEvent($model->user_id, 'hosts.deleted', $model));
+            Cache::forget('user_tasks_' . $model->user_id);
+            Cache::forget('user_hosts_' . $model->user_id);
+        });
+    }
+
+    // module
+
     public function getUserHosts($user_id = null)
     {
         return $this->where('user_id', $user_id)->with('module', function ($query) {
@@ -48,34 +97,32 @@ class Host extends Model
         })->get();
     }
 
-    // module
+    // workOrders
 
     public function user(): BelongsToAlias
     {
         return $this->belongsTo(User::class);
     }
 
-    // workOrders
+    // scope
 
     public function module(): BelongsToAlias
     {
         return $this->belongsTo(Module::class);
     }
 
-    // scope
-
     public function workOrders(): HasManyAlias
     {
         return $this->hasMany(WorkOrder::class);
     }
 
+
+    // cost
+
     public function scopeActive($query)
     {
         return $query->whereIn('status', ['running', 'stopped'])->where('price', '!=', 0)->where('managed_price', '!=', 0);
     }
-
-
-    // cost
 
     public function scopeThisUser($query, $module = null)
     {
@@ -247,53 +294,5 @@ class Host extends Model
         }
 
         return true;
-    }
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::created(function ($model) {
-            broadcast(new UserEvent($model->user_id, 'hosts.created', $model));
-        });
-
-        static::updating(function ($model) {
-
-            if ($model->isDirty('status')) {
-                if ($model->status == 'suspended') {
-                    $model->suspended_at = now();
-                } else {
-                    $model->suspended_at = null;
-                }
-            }
-
-            broadcast(new UserEvent($model->user_id, 'hosts.updating', $model));
-        });
-
-        // when Updated
-        static::updated(function ($model) {
-            dispatch(new \App\Jobs\Module\Host($model, 'patch'));
-
-            Cache::forget('user_hosts_' . $model->user_id);
-            Cache::forget('user_tasks_' . $model->user_id);
-
-
-            broadcast(new UserEvent($model->user_id, 'hosts.updated', $model));
-        });
-
-        //
-        // static::deleting(function ($model) {
-        //     broadcast(new UserEvent($model->user_id, 'hosts.deleting', $model));
-        // });
-
-        static::deleting(function ($model) {
-            Cache::forget('user_tasks_' . $model->user_id);
-        });
-
-        static::deleted(function ($model) {
-            broadcast(new UserEvent($model->user_id, 'hosts.deleted', $model));
-            Cache::forget('user_tasks_' . $model->user_id);
-            Cache::forget('user_hosts_' . $model->user_id);
-        });
     }
 }

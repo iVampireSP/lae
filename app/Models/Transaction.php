@@ -169,6 +169,32 @@ class Transaction extends Model
 
     }
 
+    public function addPayoutDrops($user_id, $amount, $description, $host_id, $module_id)
+    {
+        $data = [
+            'type' => 'payout',
+            'payment' => 'drops',
+            'description' => $description,
+            'income' => 0,
+            'income_drops' => 0,
+            'outcome' => 0,
+            'outcome_drops' => (float)$amount,
+            'host_id' => $host_id,
+            'module_id' => $module_id,
+        ];
+
+
+        // $amount = (double) $amount;
+
+        // Log::debug($amount);
+
+        // $month = now()->month;
+
+        // Cache::increment('user_' . $user_id . '_month_' . $month . '_drops', $amount);
+
+        return $this->addLog($user_id, $data);
+    }
+
     public function reduceAmount($user_id, $amount = 0, $description = '扣除费用请求。')
     {
 
@@ -405,31 +431,5 @@ class Transaction extends Model
         Cache::forever($cache_key, $current_drops);
 
         $this->addPayoutDrops($user_id, $amount, $description, null, null);
-    }
-
-    public function addPayoutDrops($user_id, $amount, $description, $host_id, $module_id)
-    {
-        $data = [
-            'type' => 'payout',
-            'payment' => 'drops',
-            'description' => $description,
-            'income' => 0,
-            'income_drops' => 0,
-            'outcome' => 0,
-            'outcome_drops' => (float)$amount,
-            'host_id' => $host_id,
-            'module_id' => $module_id,
-        ];
-
-
-        // $amount = (double) $amount;
-
-        // Log::debug($amount);
-
-        // $month = now()->month;
-
-        // Cache::increment('user_' . $user_id . '_month_' . $month . '_drops', $amount);
-
-        return $this->addLog($user_id, $data);
     }
 }

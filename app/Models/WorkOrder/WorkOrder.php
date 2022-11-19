@@ -3,13 +3,13 @@
 namespace App\Models\WorkOrder;
 
 use App\Exceptions\CommonException;
+use App\Jobs\Module\WorkOrder\WorkOrder as WorkOrderJob;
 use App\Models\Host;
 use App\Models\Module;
 use App\Models\User;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Jobs\Module\WorkOrder\WorkOrder as WorkOrderJob;
 
 class WorkOrder extends Model
 {
@@ -25,17 +25,6 @@ class WorkOrder extends Model
         'module_id',
         'status',
     ];
-
-    public function safeDelete(): bool
-    {
-        if ($this->status == 'pending') {
-            throw new CommonException('工单状态是 pending，无法删除');
-        }
-
-        dispatch(new WorkOrderJob($this, 'delete'));
-
-        return true;
-    }
 
     protected static function boot()
     {
@@ -79,6 +68,17 @@ class WorkOrder extends Model
         static::updated(function ($model) {
             dispatch(new \App\Jobs\Module\WorkOrder\WorkOrder($model, 'put'));
         });
+    }
+
+    public function safeDelete(): bool
+    {
+        if ($this->status == 'pending') {
+            throw new CommonException('工单状态是 pending，无法删除');
+        }
+
+        dispatch(new WorkOrderJob($this, 'delete'));
+
+        return true;
     }
 
     // replies

@@ -45,11 +45,6 @@ class User extends Authenticatable
         'banned_at' => 'datetime',
     ];
 
-    public function hosts(): HasMany
-    {
-        return $this->hasMany(Host::class);
-    }
-
     protected static function boot()
     {
         parent::boot();
@@ -71,6 +66,11 @@ class User extends Authenticatable
                 }
             }
         });
+    }
+
+    public function hosts(): HasMany
+    {
+        return $this->hasMany(Host::class);
     }
 
     /**
