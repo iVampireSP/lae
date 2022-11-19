@@ -333,5 +333,7 @@ class Host extends Model
         Cache::put($cache_key, $earnings, 24 * 60 * 60 * 365);
 
         /** 统计收益结束 */
+
+        return true;
     }
 }
