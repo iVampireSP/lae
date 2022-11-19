@@ -15,15 +15,8 @@ class ModuleController extends Controller
 
         $calc = $module->calculate();
 
-        $data = [
-            'module' => $module,
-            'rate' => (int)config('drops.module_rate'),
-        ];
 
-        // merge
-        $data = array_merge($data, $calc);
-
-        return $this->success($data);
+        return $this->success($calc);
     }
 
     public function call(Request $request, Module $module)
