@@ -5,9 +5,11 @@ namespace App\Models;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use GuzzleHttp\Exception\ConnectException;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use JetBrains\PhpStorm\ArrayShape;
 
 class Module extends Authenticatable
 {
@@ -71,8 +73,7 @@ class Module extends Authenticatable
     {
         $user = auth()->user();
 
-        $http = Http::module($this->api_token, $this->url)
-            ->accept('application/json');
+        $http = Http::module($this->api_token, $this->url);
 
         // add Headers
         $http->withHeaders([
@@ -166,5 +167,22 @@ class Module extends Authenticatable
         } else {
             return false;
         }
+    }
+
+    #[ArrayShape(['transactions' => "array"])]
+    public function calculate(): array
+    {
+
+        $default = [
+            'balance' => 0,
+            'drops' => 0,
+        ];
+
+        return [
+            'transactions' => [
+                'this_month' => Cache::get('this_month_balance_and_drops_' . $this->id, $default),
+                'last_month' => Cache::get('last_month_balance_and_drops_' . $this->id, $default),
+            ]
+        ];
     }
 }
