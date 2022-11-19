@@ -11,10 +11,10 @@
         @csrf
         @method('PUT')
 
-        <div class="form-group">
-            <label for="name" class="col-sm-2 col-form-label">名称</label>
-            <input type="text" class="form-control" id="name" name="name" value="{{ $host->name }}">
-        </div>
+{{--        <div class="form-group">--}}
+{{--            <label for="name" class="col-sm-2 col-form-label">名称</label>--}}
+{{--            <input type="text" class="form-control" id="name" name="name" value="{{ $host->name }}">--}}
+{{--        </div>--}}
 
         <div class="form-group">
             <label for="managed_price" class="col-sm-2 col-form-label">新的价格 (Drops)</label>
@@ -25,6 +25,13 @@
 
         <button type="submit" class="btn btn-primary mt-3">修改</button>
 
+    </form>
+
+
+    <form method="post" action="{{ route('admin.hosts.destroy', $host) }}">
+        @csrf
+        @method('DELETE')
+        <button type="submit" class="btn btn-danger mt-3">删除</button>
     </form>
 
 

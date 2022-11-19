@@ -85,6 +85,12 @@ class Host extends Model
         }
     }
 
+    public function safeDelete(): bool
+    {
+        dispatch(new \App\Jobs\Module\Host($this, 'delete'));
+        return true;
+    }
+
     public function cost($price = null, $auto = true): bool
     {
         $this->load('user');
