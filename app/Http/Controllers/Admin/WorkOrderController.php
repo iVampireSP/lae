@@ -15,6 +15,8 @@ class WorkOrderController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param WorkOrder $workOrder
+     *
      * @return View
      */
     public function index(WorkOrder $workOrder): View
