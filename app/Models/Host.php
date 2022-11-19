@@ -122,7 +122,7 @@ class Host extends Model
 
     public function scopeActive($query)
     {
-        return $query->whereIn('status', ['running', 'stopped'])->where('price', '!=', 0)->orWhereNotNull('managed_price');
+        return $query->whereIn('status', ['running', 'stopped']);
     }
 
     public function scopeThisUser($query, $module = null)
@@ -142,8 +142,6 @@ class Host extends Model
 
     public function cost($price = null, $auto = true): bool
     {
-
-        Log::debug('Host::cost()');
         $this->load('user');
 
         $transaction = new Transaction();
@@ -153,9 +151,16 @@ class Host extends Model
         $real_price = $price ?? $this->price;
 
         if (!$price) {
-            $real_price = $this->managed_price;
+
+            if ($this->managed_price) {
+                $real_price = $this->managed_price;
+            }
         }
 
+
+        Log::debug('Host Cost', [
+            'real_price' => $real_price,
+        ]);
 
         if ($real_price == 0) {
             return true;

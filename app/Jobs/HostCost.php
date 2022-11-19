@@ -35,7 +35,7 @@ class HostCost implements ShouldQueue
         // $this->cache = new Cache();
 
         // chunk hosts and load user
-        Host::active()->with('user')->chunk(1000, function ($hosts) {
+        Host::whereIn('status', ['running', 'stopped'])->with('user')->chunk(1000, function ($hosts) {
             foreach ($hosts as $host) {
                 $host->cost();
             }
