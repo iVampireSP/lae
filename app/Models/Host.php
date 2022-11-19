@@ -205,53 +205,7 @@ class Host extends Model
 
         $transaction->reduceDrops($this->user_id, $this->id, $this->module_id, $auto, $real_price);
 
-
-        /** 统计收益开始 */
-        $current_month = now()->month;
-        $current_year = now()->year;
-
-        $cache_key = 'module_earning_' . $this->module_id;
-
-
-        $rate = (int)config('drops.rate');
-        $commission = (float)config('drops.commission');
-
-        // 换成 余额
-        $balance = round($real_price / $rate, 2);
-
-        $should_balance = round($balance * $commission, 2);
-
-        // 应得的余额
-        $should_balance = $balance - $should_balance;
-
-        $earnings = Cache::get($cache_key, []);
-
-        if (!isset($earnings[$current_year])) {
-            $earnings[$current_year] = [];
-        }
-        if (isset($earnings[$current_year][$current_month])) {
-            $earnings[$current_year][$current_month]['balance'] += $balance;
-            $earnings[$current_year][$current_month]['should_balance'] += $should_balance;
-            $earnings[$current_year][$current_month]['drops'] += $real_price;
-        } else {
-            $earnings[$current_year][$current_month] = [
-                'balance' => $balance,
-                // 应得（交了手续费）
-                'should_balance' => $should_balance,
-                'drops' => $real_price
-            ];
-        }
-
-        // 删除 前 3 年的数据
-        if (count($earnings) > 3) {
-            $earnings = array_slice($earnings, -3, 3, true);
-
-        }
-
-        // 保存 1 年
-        Cache::put($cache_key, $earnings, 24 * 60 * 60 * 365);
-
-        /** 统计收益结束 */
+        $this->addLog('drops', $real_price);
 
         broadcast(new UserEvent($this->user_id, 'balances.drops.reduced', $this->user));
 
@@ -285,6 +239,9 @@ class Host extends Model
 
         $left = $transaction->reduceHostAmount($this->user_id, $this->id, $this->module_id, $amount);
 
+        $this->addLog('balance', $amount);
+
+
         broadcast(new UserEvent($this->user_id, 'balances.amount.reduced', $this->user));
 
         if ($left < 0) {
@@ -294,5 +251,69 @@ class Host extends Model
         }
 
         return true;
+    }
+
+
+    public function addLog($type = 'drops', $amount = 0)
+    {
+        /** 统计收益开始 */
+        $current_month = now()->month;
+        $current_year = now()->year;
+
+        $cache_key = 'module_earning_' . $this->module_id;
+
+
+        $rate = (int)config('drops.rate');
+        $commission = (float)config('drops.commission');
+
+
+        if ($type == 'drops') {
+            // 换成 余额
+
+            $amount = round($amount / $rate, 2);
+        }
+
+        $should_amount = round($amount * $commission, 2);
+
+        // 应得的余额
+        $should_balance = $amount - $should_amount;
+
+        $earnings = Cache::get($cache_key, []);
+
+        if (!isset($earnings[$current_year])) {
+            $earnings[$current_year] = [];
+        }
+
+        if ($type == 'drops') {
+            $drops = $amount;
+        } else {
+            $drops = 0;
+        }
+
+
+        if (isset($earnings[$current_year][$current_month])) {
+            $earnings[$current_year][$current_month]['balance'] += $amount;
+            $earnings[$current_year][$current_month]['should_balance'] += $should_balance;
+            $earnings[$current_year][$current_month]['drops'] += $drops;
+        } else {
+
+            $earnings[$current_year][$current_month] = [
+                'balance' => $amount,
+                // 应得（交了手续费）
+                'should_balance' => $should_balance,
+                'drops' => $drops
+            ];
+        }
+
+        // 删除 前 3 年的数据
+        if (count($earnings) > 3) {
+            $earnings = array_slice($earnings, -3, 3, true);
+
+        }
+
+        // 保存 1 年
+        Cache::put($cache_key, $earnings, 24 * 60 * 60 * 365);
+
+        /** 统计收益结束 */
     }
 }
