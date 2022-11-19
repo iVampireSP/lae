@@ -150,11 +150,8 @@ class Host extends Model
         if ($price !== null) {
             $real_price = $price;
         } else {
-            if ($this->managed_price === null) {
-                $real_price = $this->price;
-            } else {
+            if ($this->managed_price !== null) {
                 $real_price = $this->managed_price;
-
             }
         }
 
