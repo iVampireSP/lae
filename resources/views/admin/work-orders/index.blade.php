@@ -11,6 +11,7 @@
             <th>标题</th>
             <th>模块</th>
             <th>发起者</th>
+            <th>状态</th>
             <th>操作</th>
             </thead>
 
@@ -37,7 +38,9 @@
                     <td>
                         <a href="{{ route('admin.users.edit', $workOrder->user_id) }}">{{ $workOrder->user->name }}</a>
                     </td>
-
+                    <td>
+                        <x-work-order-status :status="$workOrder->status"></x-work-order-status>
+                    </td>
                     <td>
                         <a href="{{ route('admin.work-orders.edit', $workOrder) }}"
                            class="btn btn-primary btn-sm">编辑</a>

@@ -4,11 +4,11 @@
 
 @section('content')
     <h3>{{ $workOrder->title }}</h3>
+    <a href="{{ route('admin.work-orders.edit', $workOrder) }}">编辑此工单</a>
     <h5>{{ \Illuminate\Mail\Markdown::parse($workOrder->content) }}</h5>
 
     <x-work-order-status :status="$workOrder->status"></x-work-order-status>
 
-    <p>在这里，您无法回复工单，只能够查看。</p>
     <div class="mt-3">
         <!-- replies -->
         <h4>对话记录</h4>
@@ -31,4 +31,8 @@
             </div>
         @endforeach
     </div>
+
+
+    <p>在这里，您无法回复工单，只能够查看。</p>
+
 @endsection
