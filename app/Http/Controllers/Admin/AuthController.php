@@ -28,4 +28,10 @@ class AuthController extends Controller
             return redirect()->route('admin.login')->with('error', 'Invalid credentials');
         }
     }
+
+    public function logout()
+    {
+        auth('admin')->logout();
+        return redirect()->route('admin.login');
+    }
 }
