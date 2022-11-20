@@ -91,9 +91,7 @@
     </nav>
 
     <main class="py-4">
-        <div class="container">
-            <x-alert/>
-        </div>
+        <x-alert/>
 
         <div class="container">
             @yield('content')
