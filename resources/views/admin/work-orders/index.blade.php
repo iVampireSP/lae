@@ -41,7 +41,8 @@
                             <a
                                 href="{{ route('admin.hosts.edit', $workOrder->host_id) }}"
                                 class="host_name"
-                                host="{{ $workOrder->host_id }}">{{ $workOrder->host_id }}
+                                host="{{ $workOrder->host_id }}">
+                                {{ $workOrder->host->name }}
                             </a>
                         @else
                             无
