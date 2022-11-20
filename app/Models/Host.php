@@ -13,6 +13,65 @@ use Illuminate\Support\Facades\Cache;
 
 // use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * App\Models\Host
+ *
+ * @property int                                                       $id
+ * @property string                                                    $name
+ * @property string                                                    $module_id
+ * @property int                                                       $user_id
+ * @property float                                                     $price
+ * @property float|null                                                $managed_price
+ * @property mixed|null                                                $configuration
+ * @property string                                                    $status
+ * @property int|null                                                  $hour
+ * @property \Illuminate\Support\Carbon|null                           $suspended_at
+ * @property string|null                                               $deleted_at
+ * @property \Illuminate\Support\Carbon|null                           $created_at
+ * @property \Illuminate\Support\Carbon|null                           $updated_at
+ * @property-read \App\Models\Module                                   $module
+ * @property-read \App\Models\User                                     $user
+ * @property-read \Illuminate\Database\Eloquent\Collection|WorkOrder[] $workOrders
+ * @property-read int|null                                             $work_orders_count
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host active()
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host all($columns = [])
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host avg($column)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host cache(array $tags = [])
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host cachedValue(array $arguments, string $cacheKey)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host count($columns = '*')
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host disableCache()
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host disableModelCaching()
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host exists()
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host flushCache(array $tags = [])
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host
+ *         getModelCacheCooldown(\Illuminate\Database\Eloquent\Model $instance)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host inRandomOrder($seed = '')
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host insert(array $values)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host isCachable()
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host max($column)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host min($column)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host newModelQuery()
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host newQuery()
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host query()
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host sum($column)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host thisUser($module = null)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host truncate()
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host whereConfiguration($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host whereCreatedAt($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host whereDeletedAt($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host whereHour($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host whereId($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host whereManagedPrice($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host whereModuleId($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host whereName($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host wherePrice($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host whereStatus($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host whereSuspendedAt($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host whereUpdatedAt($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host whereUserId($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host withCacheCooldownSeconds(?int $seconds = null)
+ * @mixin \Eloquent
+ */
 class Host extends Model
 {
     use HasFactory, Cachable;
@@ -43,6 +102,20 @@ class Host extends Model
     {
         parent::boot();
 
+        static::creating(function ($model) {
+            $model->hour_at = now()->hour;
+
+            if ($model->price !== null) {
+                $model->price = $model->module->price;
+            }
+
+            if ($model->managed_price !== null) {
+                $model->managed_price = round($model->managed_price, 2);
+
+            }
+
+        });
+
         static::created(function ($model) {
             broadcast(new UserEvent($model->user_id, 'hosts.created', $model));
         });
@@ -55,6 +128,16 @@ class Host extends Model
                 } else {
                     $model->suspended_at = null;
                 }
+            }
+
+            if ($model->isDirty('price')) {
+                $model->price = round($model->price, 2);
+
+            }
+
+            if ($model->isDirty('managed_price') && $model->managed_price !== null) {
+                $model->managed_price = round($model->managed_price, 2);
+
             }
 
             broadcast(new UserEvent($model->user_id, 'hosts.updating', $model));
@@ -118,19 +201,19 @@ class Host extends Model
 
     // cost
 
-    public function scopeActive($query)
-    {
-        return $query->whereIn('status', ['running', 'stopped']);
-    }
-
-    public function scopeThisUser($query, $module = null)
-    {
-        if ($module) {
-            return $query->where('user_id', auth()->id())->where('module_id', $module);
-        } else {
-            return $query->where('user_id', auth()->id());
-        }
-    }
+    // public function scopeActive($query)
+    // {
+    //     return $query->whereIn('status', ['running', 'stopped']);
+    // }
+    //
+    // public function scopeThisUser($query, $module = null)
+    // {
+    //     if ($module) {
+    //         return $query->where('user_id', auth()->id())->where('module_id', $module);
+    //     } else {
+    //         return $query->where('user_id', auth()->id());
+    //     }
+    // }
 
     public function safeDelete(): bool
     {
@@ -216,7 +299,77 @@ class Host extends Model
     //     return true;
     // }
 
-    public function addLog($type = 'drops', float|null $amount = 0): bool
+    public function cost($amount = null, $auto = true): bool
+    {
+
+        $this->load('user');
+
+        $real_price = $amount ?? $this->price;
+
+        if (!$amount) {
+            if ($this->managed_price) {
+                $real_price = $this->managed_price;
+            }
+        }
+
+        // 测试 余额支付
+        echo '拿到的价格' . $real_price . '元' . PHP_EOL;
+
+        if ($auto) {
+            // 获取本月天数
+            $days = now()->daysInMonth;
+
+            // 本月每天的每小时的价格
+            $real_price = $real_price / $days / 24;
+
+            echo '计算' . $real_price . '元' . PHP_EOL;
+
+        }
+
+        if ($real_price == 0) {
+            return true;
+        }
+
+        $real_price = round($real_price ?? 0, 8);
+
+        $transaction = new Transaction();
+
+        $month = now()->month;
+
+        $month_cache_key = 'user_' . $this->user_id . '_month_' . $month . '_hosts_balances';
+        $hosts_drops = Cache::get($month_cache_key, []);
+
+        // 统计 Host 消耗的 Balance
+        if (isset($hosts_drops[$this->id])) {
+            $hosts_drops[$this->id] += $real_price;
+        } else {
+            $hosts_drops[$this->id] = $real_price;
+        }
+
+        Cache::put($month_cache_key, $hosts_drops, 604800);
+
+        $description = '模块发起的扣费。';
+
+        if ($auto) {
+            $description = '自动扣费。';
+        }
+
+        $left = $transaction->reduceHostAmount($this->user_id, $this->id, $this->module_id, $real_price, $description);
+
+        $this->addLog($real_price);
+
+        broadcast(new UserEvent($this->user_id, 'balances.amount.reduced', $this->user));
+
+        if ($left < 0) {
+            $this->update([
+                'status' => 'suspended',
+            ]);
+        }
+
+        return true;
+    }
+
+    public function addLog(float|null $amount = 0): bool
     {
         if ($amount === 0 || $amount === null) {
             return false;
@@ -263,66 +416,6 @@ class Host extends Model
         Cache::put($cache_key, $earnings, 24 * 60 * 60 * 365);
 
         /** 统计收益结束 */
-
-        return true;
-    }
-
-    public function cost($amount = null, $auto = true): bool
-    {
-
-        $this->load('user');
-
-        $real_price = $amount ?? $this->price;
-
-        if (!$amount) {
-            if ($this->managed_price) {
-                $real_price = $this->managed_price;
-            }
-        }
-
-        if ($real_price == 0) {
-            return true;
-        }
-
-        $real_price = round($real_price ?? 0, 2);
-
-        if ($real_price < 0.01) {
-            return true;
-        }
-
-        $transaction = new Transaction();
-
-        $month = now()->month;
-
-        $month_cache_key = 'user_' . $this->user_id . '_month_' . $month . '_hosts_balances';
-        $hosts_drops = Cache::get($month_cache_key, []);
-
-        // 统计 Host 消耗的 Balance
-        if (isset($hosts_drops[$this->id])) {
-            $hosts_drops[$this->id] += $real_price;
-        } else {
-            $hosts_drops[$this->id] = $real_price;
-        }
-
-        Cache::put($month_cache_key, $hosts_drops, 604800);
-
-        $description = '模块发起的扣费。';
-
-        if ($auto) {
-            $description = '自动扣费。';
-        }
-
-        $left = $transaction->reduceHostAmount($this->user_id, $this->id, $this->module_id, $real_price, $description);
-
-        $this->addLog('balance', $real_price);
-
-        broadcast(new UserEvent($this->user_id, 'balances.amount.reduced', $this->user));
-
-        if ($left < 0) {
-            $this->update([
-                'status' => 'suspended',
-            ]);
-        }
 
         return true;
     }
