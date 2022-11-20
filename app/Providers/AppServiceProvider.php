@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use App\Models\PersonalAccessToken;
-use Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\ServiceProvider;
