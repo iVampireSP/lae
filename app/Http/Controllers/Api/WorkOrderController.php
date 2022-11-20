@@ -10,10 +10,8 @@ use function auth;
 
 class WorkOrderController extends Controller
 {
-    //
     public function index(WorkOrder $workOrder): JsonResponse
     {
-
         $workOrder = $workOrder->thisUser()->with(['user', 'module', 'host'])->simplePaginate(100);
 
         return $this->success($workOrder);
@@ -31,6 +29,7 @@ class WorkOrderController extends Controller
             'host_id' => 'nullable|sometimes|exists:hosts,id',
         ]);
 
+        // 这里无法直接调用，得先转换成 Array
 
         $request_data = $request->toArray();
 
@@ -65,7 +64,6 @@ class WorkOrderController extends Controller
      */
     public function update(Request $request, WorkOrder $workOrder)
     {
-
         if (auth()->id() !== $workOrder->user_id) {
             return $this->notFound('无法找到对应的工单。');
         }

@@ -41,7 +41,6 @@ class HostController extends Controller
             'user_id' => 'required|integer|exists:users,id',
         ]);
 
-        //
         $user = User::findOrFail($request->user_id);
 
         if ($request->price > 0) {

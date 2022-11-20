@@ -10,8 +10,6 @@ use Illuminate\Http\Request;
 
 class BroadcastController extends Controller
 {
-    //
-
     public function broadcast_to_user(Request $request, User $user)
     {
         $this->validate($request, $this->rules());
@@ -22,7 +20,6 @@ class BroadcastController extends Controller
         ]));
 
         return $this->created($request->message);
-
     }
 
     private function rules()
@@ -35,7 +32,6 @@ class BroadcastController extends Controller
     public function broadcast_to_host(Request $request, Host $host)
     {
         $this->validate($request, $this->rules());
-
 
         broadcast(new UserEvent($host->user_id, 'modules.hosts.event', [
             'host' => $host,

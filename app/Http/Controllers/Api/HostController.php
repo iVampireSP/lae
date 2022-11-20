@@ -39,9 +39,7 @@ class HostController extends Controller
     public function destroy(Host $host)
     {
         if ($host->user_id == auth()->id()) {
-
             if ($host->status == 'pending') {
-
                 // 如果上次更新时间大于 5min
                 if (time() - strtotime($host->updated_at) > 300) {
                     $host->delete();
@@ -61,9 +59,6 @@ class HostController extends Controller
     public function usages(): JsonResponse
     {
         $month = now()->month;
-
-        // $month_cache_key = 'user_' . auth()->id() . '_month_' . $month . '_hosts_drops';
-        // $hosts_drops = Cache::get($month_cache_key, []);
 
         $month_cache_key = 'user_' . auth()->id() . '_month_' . $month . '_hosts_balances';
         $hosts_balances = Cache::get($month_cache_key, []);

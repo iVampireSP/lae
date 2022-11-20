@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Events\UserEvent;
 use App\Models\WorkOrder\WorkOrder;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo as BelongsToAlias;
@@ -13,23 +14,23 @@ use Illuminate\Support\Facades\Cache;
 /**
  * App\Models\Host
  *
- * @property int                                                       $id
- * @property string                                                    $name
- * @property string                                                    $module_id
- * @property int                                                       $user_id
- * @property float                                                     $price
- * @property float|null                                                $managed_price
- * @property mixed|null                                                $configuration
- * @property string                                                    $status
- * @property int|null                                                  $hour
- * @property \Illuminate\Support\Carbon|null                           $suspended_at
- * @property string|null                                               $deleted_at
- * @property \Illuminate\Support\Carbon|null                           $created_at
- * @property \Illuminate\Support\Carbon|null                           $updated_at
- * @property-read \App\Models\Module                                   $module
- * @property-read \App\Models\User                                     $user
- * @property-read \Illuminate\Database\Eloquent\Collection|WorkOrder[] $workOrders
- * @property-read int|null                                             $work_orders_count
+ * @property int                             $id
+ * @property string                          $name
+ * @property string                          $module_id
+ * @property int                             $user_id
+ * @property float                           $price
+ * @property float|null                      $managed_price
+ * @property mixed|null                      $configuration
+ * @property string                          $status
+ * @property int|null                        $hour
+ * @property \Illuminate\Support\Carbon|null $suspended_at
+ * @property string|null                     $deleted_at
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Module         $module
+ * @property-read \App\Models\User           $user
+ * @property-read Collection|WorkOrder[]     $workOrders
+ * @property-read int|null                   $work_orders_count
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host active()
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host all($columns = [])
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host avg($column)
@@ -157,7 +158,7 @@ class Host extends Model
         });
     }
 
-    public function getUserHosts($user_id = null)
+    public function getUserHosts($user_id = null): array|Collection
     {
         return $this->where('user_id', $user_id)->with('module', function ($query) {
             $query->select(['id', 'name']);
@@ -182,19 +183,19 @@ class Host extends Model
 
     // cost
 
-    // public function scopeActive($query)
-    // {
-    //     return $query->whereIn('status', ['running', 'stopped']);
-    // }
-    //
-    // public function scopeThisUser($query, $module = null)
-    // {
-    //     if ($module) {
-    //         return $query->where('user_id', auth()->id())->where('module_id', $module);
-    //     } else {
-    //         return $query->where('user_id', auth()->id());
-    //     }
-    // }
+    public function scopeActive($query)
+    {
+        return $query->whereIn('status', ['running', 'stopped']);
+    }
+
+    public function scopeThisUser($query, $module = null)
+    {
+        if ($module) {
+            return $query->where('user_id', auth()->id())->where('module_id', $module);
+        } else {
+            return $query->where('user_id', auth()->id());
+        }
+    }
 
     public function safeDelete(): bool
     {

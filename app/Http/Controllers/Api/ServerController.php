@@ -10,9 +10,7 @@ class ServerController extends Controller
 {
     public function __invoke(Request $request)
     {
-
         $servers = Cache::get('servers', []);
-        //
 
         if ($request->has('module_id')) {
             // 查找指定 module_id

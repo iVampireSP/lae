@@ -7,6 +7,7 @@ use App\Exceptions\CommonException;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\Cache;
 use Ramsey\Uuid\Uuid;
 use function auth;
@@ -83,6 +84,10 @@ class Task extends Model
             // id 为 uuid
             $model->id = Uuid::uuid4()->toString();
 
+            // 如果是模块创建的任务
+            if (auth('module')->check()) {
+                $model->module_id = auth('module')->id();
+            }
 
             // host_id 和 user_id 至少存在一个
             if (!$model->host_id && !$model->user_id) {
@@ -96,14 +101,6 @@ class Task extends Model
                 if ($model->host === null) {
                     throw new CommonException('host_id 不存在');
                 }
-
-                // dd($model);
-
-                // dd($model->host_id);
-                // $host = Host::where('id', $model->host_id)->first();
-
-                // dd($host);
-
 
                 $model->user_id = $model->host->user_id;
 
@@ -134,27 +131,16 @@ class Task extends Model
 
 
         static::deleted(function ($model) {
-            // Cache::forget('user_tasks_' . $model->user_id);
-
             broadcast(new UserEvent($model->user_id, 'tasks.deleted', $model));
         });
     }
 
-    public function scopeUser($query)
-    {
-        return $query->where('user_id', auth()->id());
-    }
+    // public function scopeUser($query)
+    // {
+    //     return $query->where('user_id', auth()->id());
+    // }
 
-    public function getCurrentUserTasks()
-    {
-        return Cache::remember('user_tasks_' . auth()->id(), 3600, function () {
-            return $this->user()->with('host')->latest()->get();
-        });
-    }
-
-    // before create
-
-    public function host()
+    public function host(): BelongsTo
     {
         return $this->belongsTo(Host::class);
     }

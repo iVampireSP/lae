@@ -7,25 +7,24 @@ use App\Models\Task;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Validation\ValidationException;
 
 class TaskController extends Controller
 {
-    public $user_id, $host_id;
-
+    public int $user_id, $host_id;
 
     /**
      * Display a listing of the resource.
      *
-     * @return Response|null
+     * @param Request $request
+     *
+     * @return JsonResponse
      */
-    public function index(Request $request): ?Response
+    public function index(Request $request): JsonResponse
     {
-        //
-        // $this->assignId($request);
+        $modules = Task::where('module_id', $request->user('module')->id())->simplePaginate(100);
 
-        // return $this->getTasks();
-
-        return null;
+        return $this->success($modules);
     }
 
     /**
@@ -34,7 +33,7 @@ class TaskController extends Controller
      * @param Request $request
      *
      * @return JsonResponse
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     public function store(Request $request): JsonResponse
     {
@@ -57,7 +56,7 @@ class TaskController extends Controller
      * @param Task    $task
      *
      * @return JsonResponse
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     public function update(Request $request, Task $task): JsonResponse
     {

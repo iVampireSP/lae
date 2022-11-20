@@ -18,7 +18,6 @@ class ForumController extends Controller
     public function __construct()
     {
         $this->baseUrl = config('forum.base_url');
-
         $this->http = Http::baseUrl($this->baseUrl . '/api')->throw();
     }
 
@@ -43,8 +42,7 @@ class ForumController extends Controller
 
     public function get($url)
     {
-        $resp = $this->http->get($url)->json()['data'];
-        return $resp;
+        return $this->http->get($url)->json()['data'];
     }
 
     public function resp($data)

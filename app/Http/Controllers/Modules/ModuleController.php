@@ -14,16 +14,13 @@ class ModuleController extends Controller
     public function index()
     {
         $module = auth('module')->user()->calculate();
-
         return $this->success($module);
     }
 
     public function call(Request $request, Module $module)
     {
         $path = request()->path();
-
         $path = substr($path, strlen('/api/modules/' . $module->id));
-
         $path = preg_replace('/[^a-zA-Z0-9\/]/', '', $path);
 
         $method = Str::lower($request->method());

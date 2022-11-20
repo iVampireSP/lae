@@ -54,11 +54,10 @@ class Transaction extends Model
     ];
 
 
-    // scope this user
-    // public function scopeThisUser($query)
-    // {
-    //     return $query->where('user_id', auth()->id());
-    // }
+    public function scopeThisUser($query)
+    {
+        return $query->where('user_id', auth()->id());
+    }
 
     private function addLog($user_id, $data)
     {

@@ -11,8 +11,6 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    //
-
     public function index(Request $request)
     {
         $this->validate($request, [
@@ -47,8 +45,6 @@ class UserController extends Controller
 
     public function show(User $user)
     {
-        $transaction = new Transaction();
-
         return $this->success($user);
     }
 
@@ -67,7 +63,6 @@ class UserController extends Controller
         ]);
 
         $module = auth('module')->user();
-
         $transaction = new Transaction();
 
         try {
