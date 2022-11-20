@@ -32,7 +32,8 @@ class AuthController extends Controller
      * @param Request $request
      *
      * @return RedirectResponse
-     */public function login(Request $request): RedirectResponse
+     */
+    public function login(Request $request): RedirectResponse
     {
         if (auth('admin')->attempt($request->only('email', 'password'), $request->has('remember'))) {
             return redirect()->route('admin.index');
