@@ -3,13 +3,21 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
+/**
+ *
+ */
 class AuthController extends Controller
 {
     //
 
-    public function index()
+    /**
+     * @return View|RedirectResponse
+     */
+    public function index(): View|RedirectResponse
     {
         // if not authed
 
@@ -20,7 +28,11 @@ class AuthController extends Controller
         }
     }
 
-    public function login(Request $request)
+    /**
+     * @param Request $request
+     *
+     * @return RedirectResponse
+     */public function login(Request $request): RedirectResponse
     {
         if (auth('admin')->attempt($request->only('email', 'password'), $request->has('remember'))) {
             return redirect()->route('admin.index');
@@ -29,7 +41,10 @@ class AuthController extends Controller
         }
     }
 
-    public function logout()
+    /**
+     * @return RedirectResponse
+     */
+    public function logout(): RedirectResponse
     {
         auth('admin')->logout();
         return redirect()->route('admin.login');
