@@ -15,15 +15,15 @@ use function broadcast;
 /**
  * App\Models\Task
  *
- * @property string $id
- * @property string $title
- * @property int $progress
- * @property string $status
- * @property int $user_id
- * @property int $host_id
+ * @property string                          $id
+ * @property string                          $title
+ * @property int                             $progress
+ * @property string                          $status
+ * @property int                             $user_id
+ * @property int                             $host_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Host $host
+ * @property-read \App\Models\Host           $host
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task all($columns = [])
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task avg($column)
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task cache(array $tags = [])
@@ -33,7 +33,8 @@ use function broadcast;
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task disableModelCaching()
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task exists()
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task flushCache(array $tags = [])
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task getModelCacheCooldown(\Illuminate\Database\Eloquent\Model $instance)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task
+ *         getModelCacheCooldown(\Illuminate\Database\Eloquent\Model $instance)
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task inRandomOrder($seed = '')
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task insert(array $values)
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task isCachable()

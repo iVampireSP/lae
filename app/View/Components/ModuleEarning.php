@@ -8,6 +8,7 @@ use Illuminate\View\Component;
 class ModuleEarning extends Component
 {
     private Module $module;
+
     /**
      * Create a new component instance.
      *

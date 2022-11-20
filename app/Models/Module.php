@@ -14,8 +14,8 @@ use JetBrains\PhpStorm\ArrayShape;
 /**
  * App\Models\Module
  *
- * @property string $id
- * @property string $name
+ * @property string      $id
+ * @property string      $name
  * @property string|null $api_token
  * @property string|null $url
  * @property string|null $wecom_key 企业微信机器人 key
@@ -28,7 +28,8 @@ use JetBrains\PhpStorm\ArrayShape;
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Module disableModelCaching()
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Module exists()
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Module flushCache(array $tags = [])
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Module getModelCacheCooldown(\Illuminate\Database\Eloquent\Model $instance)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Module
+ *         getModelCacheCooldown(\Illuminate\Database\Eloquent\Model $instance)
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Module inRandomOrder($seed = '')
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Module insert(array $values)
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Module isCachable()

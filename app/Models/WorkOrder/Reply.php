@@ -12,14 +12,14 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * App\Models\WorkOrder\Reply
  *
- * @property int $id
- * @property string $content
- * @property int $work_order_id
- * @property int|null $user_id
- * @property int $is_pending
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read User|null $user
+ * @property int                                  $id
+ * @property string                               $content
+ * @property int                                  $work_order_id
+ * @property int|null                             $user_id
+ * @property int                                  $is_pending
+ * @property \Illuminate\Support\Carbon|null      $created_at
+ * @property \Illuminate\Support\Carbon|null      $updated_at
+ * @property-read User|null                       $user
  * @property-read \App\Models\WorkOrder\WorkOrder $workOrder
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply all($columns = [])
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply avg($column)
@@ -30,7 +30,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply disableModelCaching()
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply exists()
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply flushCache(array $tags = [])
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply getModelCacheCooldown(\Illuminate\Database\Eloquent\Model $instance)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply
+ *         getModelCacheCooldown(\Illuminate\Database\Eloquent\Model $instance)
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply inRandomOrder($seed = '')
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply insert(array $values)
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply isCachable()

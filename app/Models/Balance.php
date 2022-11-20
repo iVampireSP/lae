@@ -11,17 +11,17 @@ use function auth;
 /**
  * App\Models\Balance
  *
- * @property int $id
- * @property string|null $order_id
- * @property string|null $trade_id
- * @property string|null $payment
- * @property string $amount
- * @property string $remaining_amount
- * @property string|null $paid_at
- * @property int|null $user_id
+ * @property int                             $id
+ * @property string|null                     $order_id
+ * @property string|null                     $trade_id
+ * @property string|null                     $payment
+ * @property string                          $amount
+ * @property string                          $remaining_amount
+ * @property string|null                     $paid_at
+ * @property int|null                        $user_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\User|null $user
+ * @property-read \App\Models\User|null      $user
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Balance all($columns = [])
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Balance avg($column)
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Balance cache(array $tags = [])
@@ -31,7 +31,8 @@ use function auth;
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Balance disableModelCaching()
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Balance exists()
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Balance flushCache(array $tags = [])
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Balance getModelCacheCooldown(\Illuminate\Database\Eloquent\Model $instance)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Balance
+ *         getModelCacheCooldown(\Illuminate\Database\Eloquent\Model $instance)
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Balance inRandomOrder($seed = '')
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Balance insert(array $values)
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Balance isCachable()

@@ -8,27 +8,29 @@ use Laravel\Sanctum\PersonalAccessToken as SanctumPersonalAccessToken;
 /**
  * App\Models\PersonalAccessToken
  *
- * @property int $id
- * @property string $tokenable_type
- * @property int $tokenable_id
- * @property string $name
- * @property string $token
- * @property array|null $abilities
- * @property \Illuminate\Support\Carbon|null $last_used_at
- * @property \Illuminate\Support\Carbon|null $expires_at
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property int                                                $id
+ * @property string                                             $tokenable_type
+ * @property int                                                $tokenable_id
+ * @property string                                             $name
+ * @property string                                             $token
+ * @property array|null                                         $abilities
+ * @property \Illuminate\Support\Carbon|null                    $last_used_at
+ * @property \Illuminate\Support\Carbon|null                    $expires_at
+ * @property \Illuminate\Support\Carbon|null                    $created_at
+ * @property \Illuminate\Support\Carbon|null                    $updated_at
  * @property-read \Illuminate\Database\Eloquent\Model|\Eloquent $tokenable
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|PersonalAccessToken all($columns = [])
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|PersonalAccessToken avg($column)
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|PersonalAccessToken cache(array $tags = [])
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|PersonalAccessToken cachedValue(array $arguments, string $cacheKey)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|PersonalAccessToken cachedValue(array $arguments, string
+ *         $cacheKey)
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|PersonalAccessToken count($columns = '*')
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|PersonalAccessToken disableCache()
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|PersonalAccessToken disableModelCaching()
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|PersonalAccessToken exists()
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|PersonalAccessToken flushCache(array $tags = [])
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|PersonalAccessToken getModelCacheCooldown(\Illuminate\Database\Eloquent\Model $instance)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|PersonalAccessToken
+ *         getModelCacheCooldown(\Illuminate\Database\Eloquent\Model $instance)
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|PersonalAccessToken inRandomOrder($seed = '')
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|PersonalAccessToken insert(array $values)
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|PersonalAccessToken isCachable()
@@ -49,7 +51,8 @@ use Laravel\Sanctum\PersonalAccessToken as SanctumPersonalAccessToken;
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|PersonalAccessToken whereTokenableId($value)
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|PersonalAccessToken whereTokenableType($value)
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|PersonalAccessToken whereUpdatedAt($value)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|PersonalAccessToken withCacheCooldownSeconds(?int $seconds = null)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|PersonalAccessToken withCacheCooldownSeconds(?int
+ *         $seconds = null)
  * @mixin \Eloquent
  */
 class PersonalAccessToken extends SanctumPersonalAccessToken
