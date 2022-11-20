@@ -16,15 +16,17 @@ return new class extends Migration {
         Schema::table('hosts', function (Blueprint $table) {
             //
 
-            $table->tinyInteger('hour')->index()->nullable()->after('status');
+            $table->tinyInteger('hour_at')->index()->nullable()->after('status');
         });
 
+        echo PHP_EOL . '将开始刷新主机的小时数...';
         Host::chunk(100, function ($hosts) {
             foreach ($hosts as $host) {
-                $host->hour = $host->created_at->hour;
+                $host->hour_at = $host->created_at->hour;
                 $host->save();
             }
         });
+        echo ' 完成!' . PHP_EOL;
     }
 
     /**
@@ -37,7 +39,7 @@ return new class extends Migration {
         Schema::table('hosts', function (Blueprint $table) {
             //
 
-            $table->dropColumn('hour');
+            $table->dropColumn('hour_at');
         });
     }
 };
