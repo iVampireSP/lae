@@ -21,7 +21,7 @@ class WorkOrderController extends Controller
      */
     public function index(WorkOrder $workOrder): View
     {
-        $workOrders = $workOrder->with('user')->paginate(100);
+        $workOrders = $workOrder->with('user')->latest()->paginate(100);
         return view('admin.work-orders.index', compact('workOrders'));
     }
 
@@ -38,7 +38,7 @@ class WorkOrderController extends Controller
 
         $workOrder->load(['user', 'module']);
 
-        $replies = Reply::where('work_order_id', $workOrder->id)->paginate(100);
+        $replies = Reply::where('work_order_id', $workOrder->id)->latest()->paginate(100);
 
         return view('admin.work-orders.show', compact('workOrder', 'replies'));
 
