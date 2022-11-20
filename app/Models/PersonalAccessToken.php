@@ -22,8 +22,7 @@ use Laravel\Sanctum\PersonalAccessToken as SanctumPersonalAccessToken;
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|PersonalAccessToken all($columns = [])
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|PersonalAccessToken avg($column)
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|PersonalAccessToken cache(array $tags = [])
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|PersonalAccessToken cachedValue(array $arguments, string
- *         $cacheKey)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|PersonalAccessToken cachedValue(array $arguments, string $cacheKey)
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|PersonalAccessToken count($columns = '*')
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|PersonalAccessToken disableCache()
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|PersonalAccessToken disableModelCaching()
@@ -51,8 +50,7 @@ use Laravel\Sanctum\PersonalAccessToken as SanctumPersonalAccessToken;
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|PersonalAccessToken whereTokenableId($value)
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|PersonalAccessToken whereTokenableType($value)
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|PersonalAccessToken whereUpdatedAt($value)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|PersonalAccessToken withCacheCooldownSeconds(?int
- *         $seconds = null)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|PersonalAccessToken withCacheCooldownSeconds(?int $seconds = null)
  * @mixin \Eloquent
  */
 class PersonalAccessToken extends SanctumPersonalAccessToken
