@@ -10,6 +10,7 @@
             <th>ID</th>
             <th>标题</th>
             <th>模块</th>
+            <th>主机</th>
             <th>发起者</th>
             <th>状态</th>
             <th>操作</th>
@@ -34,6 +35,17 @@
                             class="module_name"
                             module="{{ $workOrder->module_id }}">{{ $workOrder->module_id }}
                         </a>
+                    </td>
+                    <td>
+                        @if ($workOrder->host_id)
+                            <a
+                                href="{{ route('admin.hosts.edit', $workOrder->host_id) }}"
+                                class="host_name"
+                                host="{{ $workOrder->host_id }}">{{ $workOrder->host_id }}
+                            </a>
+                        @else
+                            无
+                        @endif
                     </td>
                     <td>
                         <a href="{{ route('admin.users.edit', $workOrder->user_id) }}">{{ $workOrder->user->name }}</a>

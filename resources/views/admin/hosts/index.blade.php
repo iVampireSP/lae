@@ -25,7 +25,7 @@
                         </a>
                     </td>
                     <td>
-                        <a href="{{ route('admin.hosts.edit', $host) }}" class="module_name"
+                        <a href="{{ route('admin.modules.show', $host->module_id) }}" class="module_name"
                            module="{{ $host->module_id }}">{{ $host->module_id }}</a>
                     </td>
                     <td>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Host;
 use App\Models\Module;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -86,7 +87,9 @@ class ModuleController extends Controller
     {
         $years = $module->calculate();
 
-        return view('admin.modules.show', compact('module', 'years'));
+        $hosts = Host::where('module_id', $module->id)->latest()->paginate(50);
+
+        return view('admin.modules.show', compact('module', 'years', 'hosts'));
     }
 
     /**
