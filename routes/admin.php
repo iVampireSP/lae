@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\HostController;
 use App\Http\Controllers\Admin\ModuleController;
 use App\Http\Controllers\Admin\UserController;
@@ -13,9 +14,7 @@ Route::withoutMiddleware(['auth'])->group(function () {
 });
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-
-Route::view('/', 'admin.index')->name('index')->middleware('auth:admin');
-
+Route::get('/', [HomeController::class, 'index'])->name('index')->middleware('auth:admin');
 
 Route::group([
     'middleware' => 'auth:admin',
