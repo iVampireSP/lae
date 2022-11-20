@@ -14,6 +14,61 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
 use Laravel\Sanctum\HasApiTokens;
 
+/**
+ * App\Models\User
+ *
+ * @property int $id
+ * @property string $name
+ * @property string $email
+ * @property \Illuminate\Support\Carbon|null $email_verified_at
+ * @property string|null $password
+ * @property float $balance
+ * @property \Illuminate\Support\Carbon|null $banned_at 封禁时间
+ * @property string|null $banned_reason
+ * @property string|null $remember_token
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Host[] $hosts
+ * @property-read int|null $hosts_count
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property-read int|null $notifications_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\PersonalAccessToken[] $tokens
+ * @property-read int|null $tokens_count
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User all($columns = [])
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User avg($column)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User cache(array $tags = [])
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User cachedValue(array $arguments, string $cacheKey)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User count($columns = '*')
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User disableCache()
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User disableModelCaching()
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User exists()
+ * @method static \Database\Factories\UserFactory factory(...$parameters)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User flushCache(array $tags = [])
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User getModelCacheCooldown(\Illuminate\Database\Eloquent\Model $instance)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User inRandomOrder($seed = '')
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User insert(array $values)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User isCachable()
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User max($column)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User min($column)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User newModelQuery()
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User newQuery()
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User query()
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User sum($column)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User truncate()
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User whereBalance($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User whereBannedAt($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User whereBannedReason($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User whereCreatedAt($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User whereEmail($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User whereEmailVerifiedAt($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User whereId($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User whereName($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User wherePassword($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User whereRememberToken($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User whereUpdatedAt($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User withCacheCooldownSeconds(?int $seconds = null)
+ * @mixin \Eloquent
+ */
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, Cachable;

@@ -11,6 +11,57 @@ use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * App\Models\WorkOrder\WorkOrder
+ *
+ * @property int $id
+ * @property string $title
+ * @property string $content
+ * @property int $user_id
+ * @property string $module_id
+ * @property int|null $host_id
+ * @property string $status
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read Host|null $host
+ * @property-read Module $module
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\WorkOrder\Reply[] $replies
+ * @property-read int|null $replies_count
+ * @property-read User $user
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder all($columns = [])
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder avg($column)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder cache(array $tags = [])
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder cachedValue(array $arguments, string $cacheKey)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder count($columns = '*')
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder disableCache()
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder disableModelCaching()
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder exists()
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder flushCache(array $tags = [])
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder getModelCacheCooldown(\Illuminate\Database\Eloquent\Model $instance)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder inRandomOrder($seed = '')
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder insert(array $values)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder isCachable()
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder max($column)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder min($column)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder newModelQuery()
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder newQuery()
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder query()
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder sum($column)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder thisModule()
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder thisUser()
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder truncate()
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder whereContent($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder whereCreatedAt($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder whereHostId($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder whereId($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder whereModuleId($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder whereStatus($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder whereTitle($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder whereUpdatedAt($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder whereUserId($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder withCacheCooldownSeconds(?int $seconds = null)
+ * @mixin \Eloquent
+ */
 class WorkOrder extends Model
 {
     use HasFactory, Cachable;

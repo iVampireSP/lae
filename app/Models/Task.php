@@ -12,6 +12,50 @@ use Ramsey\Uuid\Uuid;
 use function auth;
 use function broadcast;
 
+/**
+ * App\Models\Task
+ *
+ * @property string $id
+ * @property string $title
+ * @property int $progress
+ * @property string $status
+ * @property int $user_id
+ * @property int $host_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Host $host
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task all($columns = [])
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task avg($column)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task cache(array $tags = [])
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task cachedValue(array $arguments, string $cacheKey)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task count($columns = '*')
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task disableCache()
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task disableModelCaching()
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task exists()
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task flushCache(array $tags = [])
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task getModelCacheCooldown(\Illuminate\Database\Eloquent\Model $instance)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task inRandomOrder($seed = '')
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task insert(array $values)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task isCachable()
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task max($column)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task min($column)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task newModelQuery()
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task newQuery()
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task query()
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task sum($column)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task truncate()
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task user()
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task whereCreatedAt($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task whereHostId($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task whereId($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task whereProgress($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task whereStatus($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task whereTitle($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task whereUpdatedAt($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task whereUserId($value)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task withCacheCooldownSeconds(?int $seconds = null)
+ * @mixin \Eloquent
+ */
 class Task extends Model
 {
     use HasFactory, Cachable;
