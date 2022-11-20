@@ -193,10 +193,10 @@ class Host extends Model
         return $this->belongsTo(Module::class);
     }
 
-    public function workOrders(): HasManyAlias
-    {
-        return $this->hasMany(WorkOrder::class);
-    }
+    // public function workOrders(): HasManyAlias
+    // {
+    //     return $this->hasMany(WorkOrder::class);
+    // }
 
 
     // cost
@@ -313,7 +313,7 @@ class Host extends Model
         }
 
         // 测试 余额支付
-        echo '拿到的价格' . $real_price . '元' . PHP_EOL;
+        // echo '拿到的价格' . $real_price . '元' . PHP_EOL;
 
         if ($auto) {
             // 获取本月天数
@@ -322,7 +322,7 @@ class Host extends Model
             // 本月每天的每小时的价格
             $real_price = $real_price / $days / 24;
 
-            echo '计算' . $real_price . '元' . PHP_EOL;
+            // echo '计算' . $real_price . '元' . PHP_EOL;
 
         }
 
