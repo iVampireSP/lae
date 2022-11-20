@@ -80,8 +80,6 @@ class UserController extends Controller
 
         $transaction = new Transaction();
 
-        // 检测是否为空
-
         if ($request->filled('balance')) {
             $transaction->addAmount($user->id, 'console', $request->balance, '管理员汇入', true);
         }
@@ -110,7 +108,6 @@ class UserController extends Controller
         }
         $user->save();
 
-        // if dirty, save
         if ($user->isDirty()) {
             $user->save();
         }

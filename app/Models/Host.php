@@ -8,10 +8,7 @@ use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo as BelongsToAlias;
-use Illuminate\Database\Eloquent\Relations\HasMany as HasManyAlias;
 use Illuminate\Support\Facades\Cache;
-
-// use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * App\Models\Host
@@ -92,11 +89,7 @@ class Host extends Model
     protected $casts = [
         // 'configuration' => 'array',
         'suspended_at' => 'datetime',
-
     ];
-
-
-    // user
 
     protected static function boot()
     {
@@ -112,7 +105,6 @@ class Host extends Model
             if ($model->managed_price !== null) {
                 $model->managed_price = round($model->managed_price, 2);
             }
-
         });
 
         static::created(function ($model) {
@@ -303,12 +295,8 @@ class Host extends Model
         if ($auto) {
             // 获取本月天数
             $days = now()->daysInMonth;
-
             // 本月每天的每小时的价格
             $real_price = $real_price / $days / 24;
-
-            // echo '计算' . $real_price . '元' . PHP_EOL;
-
         }
 
         if ($real_price == 0) {
@@ -383,7 +371,6 @@ class Host extends Model
             $earnings[$current_year][$current_month]['balance'] += $amount;
             $earnings[$current_year][$current_month]['should_balance'] += $should_balance;
         } else {
-
             $earnings[$current_year][$current_month] = [
                 'balance' => $amount,
                 // 应得（交了手续费）
@@ -394,7 +381,6 @@ class Host extends Model
         // 删除 前 3 年的数据
         if (count($earnings) > 3) {
             $earnings = array_slice($earnings, -3, 3, true);
-
         }
 
         // 保存 1 年

@@ -4,17 +4,16 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Closure;
+use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use function config;
 
-// use Exception;
-// use Illuminate\Http\Request;
-
 class ForumController extends Controller
 {
 
-    private $http, $baseUrl;
+    private mixed $baseUrl;
+    private PendingRequest $http;
 
     public function __construct()
     {

@@ -72,7 +72,6 @@ class HostController extends Controller
      */
     public function destroy(Host $host): RedirectResponse
     {
-        //
         $host->safeDelete();
 
         return redirect()->route('admin.hosts.index')->with('success', '正在排队删除此主机。');

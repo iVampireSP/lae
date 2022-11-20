@@ -7,8 +7,6 @@ use App\Models\Module;
 
 class HomeController extends Controller
 {
-    //
-
     public function index()
     {
         $modules = Module::paginate(10);

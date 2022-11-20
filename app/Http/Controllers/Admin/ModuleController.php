@@ -152,7 +152,6 @@ class ModuleController extends Controller
     public function destroy(Module $module): RedirectResponse
     {
         //
-
         $module->delete();
 
         return redirect()->route('admin.modules.index')->with('success', '模块已删除。');

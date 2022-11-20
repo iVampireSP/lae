@@ -7,20 +7,13 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-/**
- *
- */
 class AuthController extends Controller
 {
-    //
-
     /**
      * @return View|RedirectResponse
      */
     public function index(): View|RedirectResponse
     {
-        // if not authed
-
         if (!auth('admin')->check()) {
             return view('admin.login');
         } else {
