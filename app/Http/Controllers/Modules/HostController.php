@@ -5,27 +5,23 @@ namespace App\Http\Controllers\Modules;
 use App\Http\Controllers\Controller;
 use App\Models\Host;
 use App\Models\User;
+use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 use function auth;
 
-// use Illuminate\Support\Facades\Log;
-
 class HostController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
-     * @return Response|null
+     * @return Paginator
      */
-    public function index(): ?Response
+    public function index(): Paginator
     {
-        //
-        // Host::all();
-
-        return null;
+        return Host::where('module_id', auth('module')->user()->module_id)->simplePaginate(100);
     }
 
     /**
