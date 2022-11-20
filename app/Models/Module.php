@@ -4,6 +4,7 @@ namespace App\Models;
 
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use GuzzleHttp\Exception\ConnectException;
+use Illuminate\Http\Client\Response;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -81,44 +82,31 @@ class Module extends Authenticatable
         });
     }
 
-    public function remoteHost($host_id, $func, $requests)
-    {
-        $http = Http::module($this->api_token, $this->url);
-        $response = $http->post("hosts/{$host_id}/functions/" . $func, $requests);
-
-        $json = $response->json();
-        $status = $response->status();
-
-        return [$json, $status];
-    }
+    // public function moduleHostFunctions($host_id, $func, $requests): array
+    // {
+    //     $http = Http::module($this->api_token, $this->url);
+    //     $response = $http->post("hosts/{$host_id}/functions/" . $func, $requests);
+    //
+    //     return $this->getResponse($response);
+    // }
 
 
     // post, get, patch, delete 等请求
-
-    public function remote($func, $requests)
+    public function remote($func, $requests): array
     {
         $http = Http::module($this->api_token, $this->url);
         $response = $http->post('functions/' . $func, $requests);
 
-        $json = $response->json();
-        $status = $response->status();
-
-        return [$json, $status];
+        return $this->getResponse($response);
     }
 
-    public function remoteRequest($method, $path, $requests)
+    public function request($method, $path, $requests): array
     {
         $user = auth()->user();
 
         $http = Http::module($this->api_token, $this->url);
 
-        // add Headers
-        $http->withHeaders([
-            'X-User' => $user->id
-        ]);
-
         $requests['user_id'] = $user->id;
-
 
         if ($method == 'post') {
             // add user to requests
@@ -127,18 +115,10 @@ class Module extends Authenticatable
 
         $response = $http->{$method}("functions/{$path}", $requests);
 
-        $json = $response->json();
-
-        $status = $response->status();
-
-        return [
-            'body' => $response->body(),
-            'json' => $json,
-            'status' => $status
-        ];
+        return $this->getResponse($response);
     }
 
-    public function moduleRequest($method, $path, $requests)
+    public function moduleRequest($method, $path, $requests): array
     {
         $module_id = auth('module')->id();
 
@@ -153,9 +133,14 @@ class Module extends Authenticatable
 
         $response = $http->{$method}("exports/{$path}", $requests);
 
-        $json = $response->json();
+        return $this->getResponse($response);
+    }
 
+    private function getResponse(Response $response): array
+    {
+        $json = $response->json();
         $status = $response->status();
+
         return [
             'body' => $response->body(),
             'json' => $json,
@@ -163,27 +148,7 @@ class Module extends Authenticatable
         ];
     }
 
-    public function remotePost($path = '', $data = [])
-    {
-        $http = Http::module($this->api_token, $this->url);
-        $response = $http->post($path, $data);
-
-        $json = $response->json();
-        $status = $response->status();
-
-        return [$json, $status];
-    }
-
-
-    // // get cached modules
-    // public static function cached_modules()
-    // {
-    //     return Cache::remember('modules', 600, function () {
-    //         return Module::all();
-    //     });
-    // }
-
-    public function check($module_id = null)
+    public function check($module_id = null): bool
     {
         if ($module_id) {
             $module = Module::find($module_id);
@@ -191,26 +156,27 @@ class Module extends Authenticatable
             $module = $this;
         }
 
+        $http = Http::module($module->api_token, $module->url);
+
+        $success = 0;
+
         try {
-            $http = Http::module($module->api_token, $module->url);
-            // dd($module->url);
             $response = $http->get('remote');
+
+            if ($response->status() == 200) {
+                $success = 1;
+            }
         } catch (ConnectException $e) {
             Log::error($e->getMessage());
         }
 
-        if ($response->status() == 200) {
-            return true;
-        } else {
-            return false;
-        }
+        return $success;
     }
 
     #[ArrayShape(['transactions' => "array"])]
     public function calculate(): array
     {
         $cache_key = 'module_earning_' . $this->id;
-
         return Cache::get($cache_key, []);
     }
 }
