@@ -55,10 +55,10 @@ class Transaction extends Model
 
 
     // scope this user
-    public function scopeThisUser($query)
-    {
-        return $query->where('user_id', auth()->id());
-    }
+    // public function scopeThisUser($query)
+    // {
+    //     return $query->where('user_id', auth()->id());
+    // }
 
     private function addLog($user_id, $data)
     {
@@ -182,7 +182,7 @@ class Transaction extends Model
     /**
      * @throws ChargeException
      */
-    public function addAmount($user_id, $payment = 'console', $amount = 0, $description = null, $add_to_balances = false)
+    public function addAmount($user_id, $payment = 'console', $amount = 0, $description = null, $add_charge_log = false)
     {
         $lock = Cache::lock("user_balance_lock_" . $user_id, 10);
         try {
@@ -196,12 +196,10 @@ class Transaction extends Model
             $user->increment('balance', $amount);
 
             if (!$description) {
-                $description = '充值金额。';
-            } else {
                 $description = '充值 ' . $amount . ' 元';
             }
 
-            if ($add_to_balances) {
+            if ($add_charge_log) {
                 $data = [
                     'user_id' => $user_id,
                     'amount' => $amount,
