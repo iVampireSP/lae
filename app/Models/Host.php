@@ -106,7 +106,7 @@ class Host extends Model
             $model->hour_at = now()->hour;
 
             if ($model->price !== null) {
-                $model->price = $model->module->price;
+                $model->price = round($model->price, 2);
             }
 
             if ($model->managed_price !== null) {
