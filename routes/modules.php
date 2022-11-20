@@ -10,6 +10,7 @@ use App\Http\Controllers\Modules\WorkOrderController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('modules', [ModuleController::class, 'index']);
+Route::get('/', [ModuleController::class, 'index']);
 
 Route::apiResource('hosts', HostController::class);
 
