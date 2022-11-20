@@ -111,7 +111,6 @@ class Host extends Model
 
             if ($model->managed_price !== null) {
                 $model->managed_price = round($model->managed_price, 2);
-
             }
 
         });
@@ -121,7 +120,6 @@ class Host extends Model
         });
 
         static::updating(function ($model) {
-
             if ($model->isDirty('status')) {
                 if ($model->status == 'suspended') {
                     $model->suspended_at = now();
@@ -132,12 +130,10 @@ class Host extends Model
 
             if ($model->isDirty('price')) {
                 $model->price = round($model->price, 2);
-
             }
 
             if ($model->isDirty('managed_price') && $model->managed_price !== null) {
                 $model->managed_price = round($model->managed_price, 2);
-
             }
 
             broadcast(new UserEvent($model->user_id, 'hosts.updating', $model));
@@ -149,7 +145,6 @@ class Host extends Model
 
             Cache::forget('user_hosts_' . $model->user_id);
             Cache::forget('user_tasks_' . $model->user_id);
-
 
             broadcast(new UserEvent($model->user_id, 'hosts.updated', $model));
         });
@@ -170,8 +165,6 @@ class Host extends Model
         });
     }
 
-    // module
-
     public function getUserHosts($user_id = null)
     {
         return $this->where('user_id', $user_id)->with('module', function ($query) {
@@ -179,14 +172,10 @@ class Host extends Model
         })->get();
     }
 
-    // workOrders
-
     public function user(): BelongsToAlias
     {
         return $this->belongsTo(User::class);
     }
-
-    // scope
 
     public function module(): BelongsToAlias
     {
@@ -301,7 +290,6 @@ class Host extends Model
 
     public function cost($amount = null, $auto = true): bool
     {
-
         $this->load('user');
 
         $real_price = $amount ?? $this->price;
@@ -311,9 +299,6 @@ class Host extends Model
                 $real_price = $this->managed_price;
             }
         }
-
-        // 测试 余额支付
-        // echo '拿到的价格' . $real_price . '元' . PHP_EOL;
 
         if ($auto) {
             // 获取本月天数
