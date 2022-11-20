@@ -31,8 +31,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder all($columns = [])
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder avg($column)
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder cache(array $tags = [])
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder cachedValue(array $arguments, string
- *         $cacheKey)
+ * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder cachedValue(array $arguments, string $cacheKey)
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder count($columns = '*')
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder disableCache()
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder disableModelCaching()
