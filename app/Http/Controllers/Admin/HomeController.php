@@ -20,23 +20,21 @@ class HomeController extends Controller
     {
         $transactions = new Transaction();
 
-        // query
-        if ($request->has('user_id')) {
+        if ($request->filled('user_id')) {
             $transactions = $transactions->where('user_id', intval($request->input('user_id')));
         }
 
-        if ($request->has('module_id')) {
+        if ($request->filled('module_id')) {
             $transactions = $transactions->where('module_id', intval($request->input('module_id')));
         }
 
-        if ($request->has('host_id')) {
+        if ($request->filled('host_id')) {
             $transactions = $transactions->where('host_id', intval($request->input('host_id')));
         }
 
-        if ($request->has('payment')) {
+        if ($request->filled('payment')) {
             $transactions = $transactions->where('payment', $request->input('payment'));
         }
-
 
         $transactions = $transactions->latest()->paginate(50);
 

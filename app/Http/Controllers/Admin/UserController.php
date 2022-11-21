@@ -21,11 +21,23 @@ class UserController extends Controller
      *
      * @return View
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        //
+        $users = new User();
 
-        $users = User::paginate(100);
+        if ($request->filled('id')) {
+            $users = $users->where('id', $request->id);
+        }
+
+        if ($request->filled('name')) {
+            $users = $users->where('name', 'like', '%' . $request->name . '%');
+        }
+
+        if ($request->filled('email')) {
+            $users = $users->where('email', 'like', '%' . $request->email . '%');
+        }
+
+        $users = $users->paginate(50);
 
         return view('admin.users.index', compact('users'));
     }

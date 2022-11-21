@@ -4,6 +4,31 @@
 
 @section('content')
 
+    {{--  搜索  --}}
+    <div class="row">
+        <div class="col-12">
+            <form action="{{ route('admin.users.index') }}" method="get">
+                <div class="form-row row">
+                    <div class="col-2">
+                        <input type="text" class="form-control" name="id" placeholder="用户 ID"
+                               value="{{ request('id') }}">
+                    </div>
+                    <div class="col-2">
+                        <input type="text" class="form-control" name="name" placeholder="用户名"
+                               value="{{ request('name') }}">
+                    </div>
+                    <div class="col-2">
+                        <input type="text" class="form-control" name="email" placeholder="邮箱"
+                               value="{{ request('email') }}">
+                    </div>
+                    <div class="col-2">
+                        <button type="submit" class="btn btn-primary">搜索</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
     {{-- 用户列表 --}}
     <div class="overflow-auto">
         <table class="table table-hover">
@@ -50,6 +75,5 @@
 
     {{-- 分页 --}}
     {{ $users->links() }}
-
 
 @endsection
