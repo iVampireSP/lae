@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\HostController;
@@ -19,6 +20,7 @@ Route::get('/', [HomeController::class, 'index'])->name('index')->middleware('au
 Route::group([
     'middleware' => 'auth:admin',
 ], function () {
+    Route::resource('admins', AdminController::class)->except('show');
     Route::resource('users', UserController::class)->only(['index', 'show', 'edit', 'update']);
     Route::resource('modules', ModuleController::class);
     Route::resource('hosts', HostController::class)->only(['index', 'edit', 'update', 'destroy']);
