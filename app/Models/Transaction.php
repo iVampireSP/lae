@@ -12,8 +12,6 @@ use Jenssegers\Mongodb\Eloquent\Model;
 
 class Transaction extends Model
 {
-    // $t = (new App\Models\Transaction)->create(['name' => 1])
-
     const UPDATED_AT = null;
     protected $connection = 'mongodb';
 
@@ -52,7 +50,6 @@ class Transaction extends Model
         'host_id',
         'module_id',
     ];
-
 
     public function scopeThisUser($query)
     {

@@ -22,7 +22,7 @@ class ModuleController extends Controller
      */
     public function index(Module $module): View
     {
-        $modules = $module->paginate(100);
+        $modules = $module->paginate(50);
 
         return view('admin.modules.index', compact('modules'));
     }

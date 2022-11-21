@@ -20,7 +20,7 @@ class HostController extends Controller
     public function index(Host $host): View
     {
         $host->load('user');
-        $hosts = $host->paginate(100);
+        $hosts = $host->paginate(50);
 
         return view('admin.hosts.index', compact('hosts'));
     }

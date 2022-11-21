@@ -25,4 +25,6 @@ Route::group([
     Route::resource('work-orders', WorkOrderController::class)->only(['index', 'show', 'edit', 'update', 'destroy']);
 
     Route::view('commands', 'admin.commands')->name('commands');
+
+    Route::get('transactions', [HomeController::class, 'transactions'])->name('transactions');
 });

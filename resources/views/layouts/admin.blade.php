@@ -11,10 +11,10 @@
     <title>@yield('title', '管理员')</title>
 
     <!-- Fonts -->
-{{-- <link rel="dns-prefetch" href="//fonts.gstatic.com"> --}}
-{{-- <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet"> --}}
+    {{-- <link rel="dns-prefetch" href="//fonts.gstatic.com"> --}}
+    {{-- <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet"> --}}
 
-<!-- Scripts -->
+    <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 
@@ -45,6 +45,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('admin.work-orders.index') }}">工单</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.transactions') }}">交易记录</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('admin.commands') }}">命令速查表</a>
