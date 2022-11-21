@@ -13,14 +13,12 @@ class HostController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param Host $host
      *
      * @return View
      */
-    public function index(Host $host): View
+    public function index(): View
     {
-        $host->load('user');
-        $hosts = $host->paginate(50);
+        $hosts = Host::with('user')->paginate(100);
 
         return view('admin.hosts.index', compact('hosts'));
     }
