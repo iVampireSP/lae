@@ -19,7 +19,7 @@ class CalcModule extends Command
      *
      * @var string
      */
-    protected $description = '计算模块的本月收益。';
+    protected $description = '获取模块的最近收益。';
 
     /**
      * Create a new command instance.
