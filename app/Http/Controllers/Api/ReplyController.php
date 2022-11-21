@@ -46,7 +46,7 @@ class ReplyController extends Controller
 
 
         $reply = Reply::create([
-            'content' => $request->toArray()['content'],
+            'content' => $request->input('content'),
             'work_order_id' => $workOrder->id,
         ]);
 
