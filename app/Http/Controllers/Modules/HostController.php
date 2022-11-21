@@ -127,14 +127,13 @@ class HostController extends Controller
      */
     public function destroy($host): JsonResponse
     {
-        if ($host instanceof Host) {
-            $host->delete();
-        } else {
+        // if host not instance of Host
+        if (!$host instanceof Host) {
             $host = Host::findOrFail($host);
-
-            $host?->delete();
         }
 
-        return $this->deleted($host);
+        $host?->delete();
+
+        return $this->deleted();
     }
 }
