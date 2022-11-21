@@ -29,20 +29,16 @@ class WorkOrderController extends Controller
             'host_id' => 'nullable|sometimes|exists:hosts,id',
         ]);
 
-        // 这里无法直接调用，得先转换成 Array
-
-        $request_data = $request->toArray();
-
         // module_id 和 host_id 必须有个要填写
-        if (isset($request_data['module_id']) && isset($request_data['host_id'])) {
+        if (isset($request->module_id) && isset($request->host_id)) {
             return $this->error('module_id 和 host_id 至少要填写一个');
         }
 
         $workOrder = WorkOrder::create([
-            'title' => $request_data['title'],
-            'content' => $request_data['content'],
-            'module_id' => $request_data['module_id'] ?? null,
-            'host_id' => $request_data['host_id'] ?? null,
+            'title' => $request->title,
+            'content' => $request->input('content'),
+            'module_id' => $request->module_id,
+            'host_id' => $request->host_id,
             'status' => 'pending',
         ]);
 
