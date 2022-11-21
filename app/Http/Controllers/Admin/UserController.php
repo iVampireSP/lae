@@ -37,7 +37,7 @@ class UserController extends Controller
             $users = $users->where('email', 'like', '%' . $request->email . '%');
         }
 
-        $users = $users->paginate(50);
+        $users = $users->paginate(100);
 
         return view('admin.users.index', compact('users'));
     }
