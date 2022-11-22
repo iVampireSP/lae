@@ -71,10 +71,12 @@ class WorkOrderController extends Controller
         //
 
         $request->validate([
-            'title' => 'required|string|max:255',
+            'status' => 'required|string|in:open,closed,read,user_read,replied,user_replied,on_hold,in_progress',
         ]);
 
-        $workOrder->update($request->all());
+	$workOrder->update([
+	    'status' => $request->status
+	]);
 
         return back()->with('success', '工单更新成功');
     }
