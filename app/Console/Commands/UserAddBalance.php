@@ -69,8 +69,7 @@ class UserAddBalance extends Command
             $user->refresh();
             $this->info($user->name . ', 当前余额: ' . $user->balance);
         } catch (ChargeException $e) {
-
-            return $this->error($e->getMessage());
+            $this->error('充值失败: ' . $e->getMessage());
         }
 
         return 0;

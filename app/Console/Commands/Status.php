@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use DB;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Redis;
 
@@ -48,6 +48,7 @@ class Status extends Command
 
         // get mysql version
         $mysql_version = DB::select('select version() as version')[0]->version;
+
 
 
         $this->warn('MySQL 版本: ' . $mysql_version);
@@ -111,6 +112,8 @@ class Status extends Command
 
         $this->warn('===== 莱云 统计 =====');
         $this->warn('要获取 莱云 统计信息，请运行 count 命令。');
+
+        return 0;
 
     }
 }
