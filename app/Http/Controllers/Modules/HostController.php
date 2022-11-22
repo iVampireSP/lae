@@ -19,9 +19,9 @@ class HostController extends Controller
      *
      * @return Paginator
      */
-    public function index(): Paginator
+    public function index(Request $request): Paginator
     {
-        return Host::where('module_id', auth('module')->user()->module_id)->simplePaginate(100);
+        return Host::where('module_id', $request->user('module')->id)->simplePaginate(100);
     }
 
     /**
