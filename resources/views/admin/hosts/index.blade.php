@@ -35,8 +35,12 @@
                     <td>
                         <a href="{{ route('admin.users.edit', $host->user_id) }}"> {{ $host->user->name }}</a>
                     </td>
-                    <td>
-                        {{ $host->price }} 元
+		    <td>
+			@if ($host->managed_price !== null)
+				<span class="text-danger">{{ $host->managed_price }}</span>
+			@else
+				{{ $host->price }} 元
+			@endif
                     </td>
                     <td>
                         {{ $host->created_at }}
