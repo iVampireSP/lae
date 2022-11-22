@@ -199,6 +199,11 @@ class Host extends Model
 
     public function safeDelete(): bool
     {
+        // 如果创建时间大于大于 1 小时
+        if ($this->created_at->diffInHours(now()) > 1) {
+            $this->cost();
+        }
+
         dispatch(new \App\Jobs\Module\Host($this, 'delete'));
         return true;
     }
