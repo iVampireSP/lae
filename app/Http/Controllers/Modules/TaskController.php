@@ -22,7 +22,7 @@ class TaskController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $modules = Task::where('module_id', $request->user('module')->id())->simplePaginate(100);
+        $modules = Task::where('module_id', $request->user('module')->id)->simplePaginate(100);
 
         return $this->success($modules);
     }
