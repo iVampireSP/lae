@@ -60,7 +60,7 @@ use function broadcast;
  */
 class Task extends Model
 {
-    use HasFactory, Cachable;
+    use HasFactory;
 
     public $incrementing = false;
     protected $fillable = [
