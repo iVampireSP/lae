@@ -30,6 +30,11 @@ class HostController extends Controller
         ]);
 
         $user = $request->user();
+
+        if ($user->balances < 1) {
+            return $this->error('余额不足，无法开启计费项目。');
+        }
+
         if ($host->user_id == $user->id) {
             $host->update([
                 'status' => $request->status,
