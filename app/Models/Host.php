@@ -182,7 +182,9 @@ class Host extends Model
     // }
 
 
-    // cost
+    public function getPrice() {
+        return $this->managed_price ?? $this->price;
+    }
 
     public function scopeActive($query)
     {
