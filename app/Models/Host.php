@@ -98,7 +98,7 @@ class Host extends Model
 
         static::creating(function ($model) {
             $model->hour_at = now()->hour;
-            $model->minute_at = now()->minute_at;
+            $model->minute_at = now()->minute;
 
             if ($model->price !== null) {
                 $model->price = round($model->price, 2);
@@ -182,7 +182,8 @@ class Host extends Model
     // }
 
 
-    public function getPrice() {
+    public function getPrice(): float
+    {
         return $this->managed_price ?? $this->price;
     }
 
