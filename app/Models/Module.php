@@ -106,6 +106,10 @@ class Module extends Authenticatable
 
         $http = Http::module($this->api_token, $this->url);
 
+        $http->withHeaders([
+            'X-User-id' => $user->id,
+        ]);
+
         $requests['user_id'] = $user->id;
 
         if ($method == 'post') {
