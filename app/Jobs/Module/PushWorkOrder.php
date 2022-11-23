@@ -38,9 +38,12 @@ class PushWorkOrder implements ShouldQueue
         WorkOrder::whereIn('status', ['pending', 'error'])->with(['module', 'user', 'host', 'replies'])->chunk(100, function ($workOrders) {
             foreach ($workOrders as $workOrder) {
 
-                if ($workOrder->host->status === 'pending') {
-                    continue;
+                if ($workOrder->host) {
+                    if ($workOrder->host->status === 'pending') {
+                        continue;
+                    }
                 }
+
 
                 if ($workOrder->status === 'error') {
                     // 如果 created_at 超过 3 天 use Carbon
