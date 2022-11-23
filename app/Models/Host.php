@@ -332,7 +332,7 @@ class Host extends Model
             $hosts_balances[$this->id] = $real_price;
         }
 
-        $hosts_balances[$this->id] = round($hosts_balances[$this->id], 8);
+        $hosts_balances[$this->id] = round($hosts_balances[$this->id], 4);
 
         Cache::put($month_cache_key, $hosts_balances, 604800);
 
