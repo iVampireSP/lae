@@ -22,12 +22,17 @@ class HostController extends Controller
         return $this->success($hosts);
     }
 
+    //
     public function update(Request $request, Host $host): JsonResponse
     {
+        $request->validate([
+            'status' => 'required|in:running,stopped',
+        ]);
+
         $user = $request->user();
         if ($host->user_id == $user->id) {
             $host->update([
-                'status' => 'running'
+                'status' => $request->status,
             ]);
 
             return $this->updated($host);
