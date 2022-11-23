@@ -40,6 +40,8 @@ return new class extends Migration
     {
         Schema::table('hosts', function (Blueprint $table) {
             //
+
+            $table->dropColumn('minute_at');
         });
     }
 };
