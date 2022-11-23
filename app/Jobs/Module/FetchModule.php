@@ -36,13 +36,13 @@ class FetchModule implements ShouldQueue
     {
         // 获取运行完成的时间
 
-        $last_run = Cache::get('servers_updated_at', false);
-        if ($last_run !== false) {
-            // 如果和上次运行时间间隔小于一分钟，则不运行
-            if (now()->diffInMinutes($last_run) < 1) {
-                return;
-            }
-        }
+        // $last_run = Cache::get('servers_updated_at', false);
+        // if ($last_run !== false) {
+        //     // 如果和上次运行时间间隔小于一分钟，则不运行
+        //     if (now()->diffInMinutes($last_run) < 1) {
+        //         return;
+        //     }
+        // }
 
         //
         Module::where('status', '!=', 'maintenance')->whereNotNull('url')->chunk(100, function ($modules) {
@@ -106,7 +106,7 @@ class FetchModule implements ShouldQueue
             }
 
             // 缓存运行完成的时间
-            Cache::put('servers_updated_at', now(), now()->addMinutes(10));
+            // Cache::put('servers_updated_at', now(), now()->addMinutes(10));
         });
     }
 }
