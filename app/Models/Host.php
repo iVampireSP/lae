@@ -98,6 +98,7 @@ class Host extends Model
 
         static::creating(function ($model) {
             $model->hour_at = now()->hour;
+            $model->minute_at = now()->minute_at;
 
             if ($model->price !== null) {
                 $model->price = round($model->price, 2);
