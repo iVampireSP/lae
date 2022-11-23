@@ -316,7 +316,7 @@ class Host extends Model
             return true;
         }
 
-        $real_price = round($real_price ?? 0, 8);
+        $real_price = round($real_price ?? 0, 4);
 
         $transaction = new Transaction();
 
