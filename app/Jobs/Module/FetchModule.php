@@ -62,9 +62,7 @@ class FetchModule implements ShouldQueue
 
                     // 如果模块状态为 down，则更新为 up
                     if ($module->status === 'down') {
-                        $module->update([
-                            'status' => 'up'
-                        ]);
+                        $module->status = 'up';
                     }
 
                     $json = $response->json();
@@ -91,15 +89,13 @@ class FetchModule implements ShouldQueue
 
                     // if module return maintenance, then set module status to maintenance
                     if ($response->status() == 503) {
-                        $module->update([
-                            'status' => 'maintenance'
-                        ]);
+                        $module->status = 'maintenance';
                     } else {
-                        $module->update([
-                            'status' => 'down'
-                        ]);
+                        $module->status = 'down';
                     }
                 }
+
+                $module->save();
             }
 
             // if local
