@@ -32,11 +32,15 @@ class CheckHostIfExistsOnModule implements ShouldQueue
      */
     public function handle()
     {
-        // now 添加1.5小时
-
-        //
+        // 删除所有模块中不存在的主机
         Host::with('module')->where('created_at', '<', now()->subHour())->chunk(100, function ($hosts) {
             foreach ($hosts as $host) {
+
+                // 忽略维护中的模块
+                if ($host->module->status !== 'up') {
+                    continue;
+                }
+
                 $http = Http::module($host->module->api_token, $host->module->url);
                 $response = $http->get('hosts/' . $host->id);
 

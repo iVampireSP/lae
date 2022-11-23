@@ -98,6 +98,7 @@ class Host extends Model
 
         static::creating(function ($model) {
             $model->hour_at = now()->hour;
+            $model->minute_at = now()->minute_at;
 
             if ($model->price !== null) {
                 $model->price = round($model->price, 2);
@@ -201,7 +202,10 @@ class Host extends Model
     {
         // 如果创建时间大于大于 1 小时
         if ($this->created_at->diffInHours(now()) > 1) {
-            $this->cost();
+            // 如果当前时间比扣费时间小，则说明没有扣费。执行扣费。
+            if (now()->minute < $this->minute_at) {
+                $this->cost();
+            }
         }
 
         dispatch(new \App\Jobs\Module\Host($this, 'delete'));

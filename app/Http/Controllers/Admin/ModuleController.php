@@ -61,19 +61,12 @@ class ModuleController extends Controller
         $module->name = $request->name;
         $module->api_token = $api_token;
         $module->url = $request->url;
+        $module->status = $request->status;
+
         $module->save();
 
         return redirect()->route('admin.modules.index')->with('success', '模块创建成功, 请重置以获得 API Token。');
 
-    }
-
-    private function rules(): array
-    {
-        return [
-            'id' => 'required|string|max:255',
-            'name' => 'required|string|max:255',
-            'url' => 'required|url',
-        ];
     }
 
     /**
@@ -128,6 +121,7 @@ class ModuleController extends Controller
         $module->id = $request->id;
         $module->name = $request->name;
         $module->url = $request->url;
+        $module->status = $request->status;
 
         $module->save();
 
@@ -156,4 +150,15 @@ class ModuleController extends Controller
 
         return redirect()->route('admin.modules.index')->with('success', '模块已删除。');
     }
+
+    private function rules(): array
+    {
+        return [
+            'id' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
+            'url' => 'required|url',
+            'status' => 'required|string|in:up,down,maintenance',
+        ];
+    }
+
 }

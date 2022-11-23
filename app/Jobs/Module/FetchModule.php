@@ -36,13 +36,13 @@ class FetchModule implements ShouldQueue
     {
         // 获取运行完成的时间
 
-        $last_run = Cache::get('servers_updated_at', false);
-        if ($last_run !== false) {
-            // 如果和上次运行时间间隔小于一分钟，则不运行
-            if (now()->diffInMinutes($last_run) < 1) {
-                return;
-            }
-        }
+        // $last_run = Cache::get('servers_updated_at', false);
+        // if ($last_run !== false) {
+        //     // 如果和上次运行时间间隔小于一分钟，则不运行
+        //     if (now()->diffInMinutes($last_run) < 1) {
+        //         return;
+        //     }
+        // }
 
         //
         Module::whereNotNull('url')->chunk(100, function ($modules) {
@@ -58,8 +58,13 @@ class FetchModule implements ShouldQueue
                     continue;
                 }
 
-
                 if ($response->successful()) {
+
+                    // 如果模块状态不为 up，则更新为 up
+                    if ($module->status !== 'up') {
+                        $module->status = 'up';
+                    }
+
                     $json = $response->json();
 
                     if (isset($json['data']['servers']) && is_array($json['data']['servers'])) {
@@ -79,10 +84,18 @@ class FetchModule implements ShouldQueue
 
                         broadcast(new ServerEvent($servers));
                     }
-                    // $module->update([
-                    //     'data' => $response->json()
-                    // ]);
+
+                } else {
+
+                    // if module return maintenance, then set module status to maintenance
+                    if ($response->status() == 503) {
+                        $module->status = 'maintenance';
+                    } else {
+                        $module->status = 'down';
+                    }
                 }
+
+                $module->save();
             }
 
             // if local
@@ -93,7 +106,7 @@ class FetchModule implements ShouldQueue
             }
 
             // 缓存运行完成的时间
-            Cache::put('servers_updated_at', now(), now()->addMinutes(10));
+            // Cache::put('servers_updated_at', now(), now()->addMinutes(10));
         });
     }
 }
