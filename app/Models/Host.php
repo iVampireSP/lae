@@ -316,6 +316,11 @@ class Host extends Model
             return true;
         }
 
+        // 如果太小，则重置为 0.9999
+        if ($real_price < 0.9999) {
+            $real_price = 0.9999;
+        }
+
         $real_price = round($real_price ?? 0, 4);
 
         $transaction = new Transaction();
