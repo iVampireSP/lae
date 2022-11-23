@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::table('modules', function (Blueprint $table) {
             //
-            $table->enum('status', ['up', 'down', 'maintenance'])->index()->default('down');
+            $table->enum('status', ['up', 'down', 'maintenance'])->index()->default('down')->after('url');
         });
     }
 
