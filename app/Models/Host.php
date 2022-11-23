@@ -322,16 +322,18 @@ class Host extends Model
         $month = now()->month;
 
         $month_cache_key = 'user_' . $this->user_id . '_month_' . $month . '_hosts_balances';
-        $hosts_drops = Cache::get($month_cache_key, []);
+        $hosts_balances = Cache::get($month_cache_key, []);
 
         // 统计 Host 消耗的 Balance
-        if (isset($hosts_drops[$this->id])) {
-            $hosts_drops[$this->id] += $real_price;
+        if (isset($hosts_balances[$this->id])) {
+            $hosts_balances[$this->id] += $real_price;
         } else {
-            $hosts_drops[$this->id] = $real_price;
+            $hosts_balances[$this->id] = $real_price;
         }
 
-        Cache::put($month_cache_key, $hosts_drops, 604800);
+        $hosts_balances[$this->id] = round($hosts_balances[$this->id], 8);
+
+        Cache::put($month_cache_key, $hosts_balances, 604800);
 
         $description = '模块发起的扣费。';
 
