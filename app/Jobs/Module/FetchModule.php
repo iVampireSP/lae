@@ -58,7 +58,6 @@ class FetchModule implements ShouldQueue
                     continue;
                 }
 
-
                 if ($response->successful()) {
                     $json = $response->json();
 
@@ -82,6 +81,18 @@ class FetchModule implements ShouldQueue
                     // $module->update([
                     //     'data' => $response->json()
                     // ]);
+                } else {
+
+                    // if module return maintenance, then set module status to maintenance
+                    if ($response->status() == 503) {
+                        $module->update([
+                            'status' => 'maintenance'
+                        ]);
+                    } else {
+                        $module->update([
+                            'status' => 'down'
+                        ]);
+                    }
                 }
             }
 
