@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Module;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 use Illuminate\Http\Request;
 
 class ModuleController extends Controller
@@ -16,7 +17,7 @@ class ModuleController extends Controller
         return $this->success($modules);
     }
 
-    public function call(Request $request, Module $module): JsonResponse
+    public function call(Request $request, Module $module): JsonResponse|Response
     {
         return (new \App\Http\Controllers\Modules\ModuleController())->call($request, $module);
     }
