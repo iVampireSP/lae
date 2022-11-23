@@ -45,7 +45,7 @@ class FetchModule implements ShouldQueue
         // }
 
         //
-        Module::where('status', '!=', 'maintenance')->whereNotNull('url')->chunk(100, function ($modules) {
+        Module::whereNotNull('url')->chunk(100, function ($modules) {
             $servers = [];
 
             foreach ($modules as $module) {
@@ -60,8 +60,8 @@ class FetchModule implements ShouldQueue
 
                 if ($response->successful()) {
 
-                    // 如果模块状态为 down，则更新为 up
-                    if ($module->status === 'down') {
+                    // 如果模块状态不为 up，则更新为 up
+                    if ($module->status !== 'up') {
                         $module->status = 'up';
                     }
 
