@@ -17,9 +17,6 @@
 
     <p>邮箱: {{ $user->email }}</p>
 
-
-
-
     {{--  hosts  --}}
     <h3>主机列表</h3>
     <table class="table table-hover">
@@ -43,9 +40,6 @@
                 <td>{{ $host->name }}</td>
                 <td>
                     <span>{{ $host->managed_price ?? $host->price }} 元</span>
-                    ≈
-                    {{--                    <span>{{ round($host->managed_price ?? $host->price / $drops_rage * (30 * 24 * 60 / 5), 2) }} 元 / 月</span>--}}
-
                 </td>
                 <td>
                     <a href="{{ route('admin.hosts.edit', $host) }}" class="btn btn-primary btn-sm">查看</a>
