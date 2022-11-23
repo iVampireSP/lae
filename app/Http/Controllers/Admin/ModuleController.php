@@ -48,10 +48,7 @@ class ModuleController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        //
-
         $request->validate($this->rules());
-
 
         $api_token = Str::random(60);
 
@@ -65,7 +62,7 @@ class ModuleController extends Controller
 
         $module->save();
 
-        return redirect()->route('admin.modules.index')->with('success', '模块创建成功, 请重置以获得 API Token。');
+        return redirect()->route('admin.modules.edit', $module)->with('success', '模块创建成功, 请重置以获得 API Token。');
 
     }
 
