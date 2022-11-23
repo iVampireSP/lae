@@ -20,6 +20,4 @@ class ModuleController extends Controller
     {
         return (new \App\Http\Controllers\Modules\ModuleController())->call($request, $module);
     }
-
-
 }
