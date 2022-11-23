@@ -45,7 +45,7 @@ class FetchModule implements ShouldQueue
         }
 
         //
-        Module::whereNotNull('url')->chunk(100, function ($modules) {
+        Module::where('status', '!=', 'maintenance')->whereNotNull('url')->chunk(100, function ($modules) {
             $servers = [];
 
             foreach ($modules as $module) {
@@ -59,6 +59,14 @@ class FetchModule implements ShouldQueue
                 }
 
                 if ($response->successful()) {
+
+                    // 如果模块状态为 down，则更新为 up
+                    if ($module->status === 'down') {
+                        $module->update([
+                            'status' => 'up'
+                        ]);
+                    }
+
                     $json = $response->json();
 
                     if (isset($json['data']['servers']) && is_array($json['data']['servers'])) {
@@ -78,9 +86,7 @@ class FetchModule implements ShouldQueue
 
                         broadcast(new ServerEvent($servers));
                     }
-                    // $module->update([
-                    //     'data' => $response->json()
-                    // ]);
+
                 } else {
 
                     // if module return maintenance, then set module status to maintenance
