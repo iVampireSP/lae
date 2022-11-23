@@ -39,7 +39,7 @@
                 </td>
                 <td>{{ $host->name }}</td>
                 <td>
-                    <span>{{ $host->managed_price ?? $host->price }} 元</span>
+                    <span>{{ $host->getPrice() }} 元</span>
                 </td>
                 <td>
                     <a href="{{ route('admin.hosts.edit', $host) }}" class="btn btn-primary btn-sm">查看</a>
