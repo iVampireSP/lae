@@ -77,7 +77,7 @@ class ModuleController extends Controller
     {
         $years = $module->calculate();
 
-        $hosts = Host::where('module_id', $module->id)->latest()->paginate(50);
+        $hosts = Host::where('module_id', $module->id)->with('user')->latest()->paginate(50);
 
         return view('admin.modules.show', compact('module', 'years', 'hosts'));
     }
