@@ -25,6 +25,7 @@
         <th>模块</th>
         <th>名称</th>
         <th>价格 / 月</th>
+        <th>状态</th>
         <th>操作</th>
         </thead>
         <tbody>
@@ -40,6 +41,9 @@
                 <td>{{ $host->name }}</td>
                 <td>
                     <span>{{ $host->getPrice() }} 元</span>
+                </td>
+                <td>
+                    <x-host-status :status="$host->status" />
                 </td>
                 <td>
                     <a href="{{ route('admin.hosts.edit', $host) }}" class="btn btn-primary btn-sm">查看</a>
