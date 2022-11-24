@@ -17,6 +17,6 @@
         @break
 
         @default
-            <span class="badge bg-secondary">{{ $status_str }}</span>
+            <span class="badge bg-secondary">{{ $status }}</span>
     @endswitch
 </span>
