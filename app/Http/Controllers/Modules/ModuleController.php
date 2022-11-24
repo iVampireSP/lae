@@ -19,9 +19,7 @@ class ModuleController extends Controller
 
     public function call(Request $request, Module $module)
     {
-        $path = request()->path();
-        $path = substr($path, strlen('/api/modules/' . $module->id));
-        $path = preg_replace('/[^a-zA-Z0-9\/]/', '', $path);
+        $path = $this->fixPath($request, $module, 'api');
 
         $method = Str::lower($request->method());
 
@@ -45,11 +43,7 @@ class ModuleController extends Controller
 
     public function exportCall(Request $request, Module $module): Response|JsonResponse
     {
-        $path = request()->path();
-
-        $path = substr($path, strlen('/modules/modules/' . $module->id));
-        $path = preg_replace('/[^a-zA-Z0-9\/]/', '', $path);
-
+        $path = $this->fixPath($request, $module, 'modules');
         $method = Str::lower($request->method());
 
         $response = $module->moduleRequest($method, $path, $request->all());
@@ -59,5 +53,11 @@ class ModuleController extends Controller
         }
 
         return $this->moduleResponse($response['json'], $response['status']);
+    }
+
+    private function fixPath(Request $request, Module $module, $prefix): string
+    {
+        $path = substr($request->path(), strlen("/{$prefix}/modules/{$module->id}"));
+        return preg_replace('/[^a-zA-Z0-9\/]/', '', $path);
     }
 }
