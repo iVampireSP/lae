@@ -47,7 +47,7 @@ class ModuleController extends Controller
     {
         $path = request()->path();
 
-        $path = substr($path, strlen('/remote/modules/' . $module->id));
+        $path = substr($path, strlen('/modules/modules/' . $module->id));
         $path = preg_replace('/[^a-zA-Z0-9\/]/', '', $path);
 
         $method = Str::lower($request->method());
