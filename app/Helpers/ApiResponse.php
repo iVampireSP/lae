@@ -26,7 +26,7 @@ trait ApiResponse
             429 => $this->tooManyRequests(),
             500 => $this->serverError(),
 
-            default => response()->json($response['data'], $status),
+            default => response()->json($response['data'] ?? $response, $status),
         };
     }
 
