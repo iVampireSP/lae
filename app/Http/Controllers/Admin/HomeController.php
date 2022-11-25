@@ -36,7 +36,7 @@ class HomeController extends Controller
             $transactions = $transactions->where('payment', $request->input('payment'));
         }
 
-        $transactions = $transactions->latest()->paginate(50);
+        $transactions = $transactions->latest()->paginate(100)->withQueryString();
 
         return view('admin.transactions', compact('transactions'));
     }
