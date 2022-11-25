@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Requests\User\WorkOrder;
+namespace App\Http\Requests\User;
 
-use App\Models\WorkOrder\WorkOrder;
 use Illuminate\Foundation\Http\FormRequest;
 
-class WorkOrderRequest extends FormRequest
+class HostRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,10 +13,10 @@ class WorkOrderRequest extends FormRequest
      */
     public function authorize(): bool
     {
+        $host = $this->route('host');
 
-        $work_order = $this->route('workOrder');
-
-        return $work_order->user_id == auth()->id();
+        // 检测是否是自己的主机
+        return $host->user_id == auth()->id();
     }
 
     /**
@@ -25,7 +24,7 @@ class WorkOrderRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules(): array
+    public function rules()
     {
         return [
             //

@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\HostRequest;
 use App\Models\Host;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use function auth;
 use function dispatch;
@@ -23,7 +23,7 @@ class HostController extends Controller
     }
 
     //
-    public function update(Request $request, Host $host): JsonResponse
+    public function update(HostRequest $request, Host $host): JsonResponse
     {
         $request->validate([
             'status' => 'required|in:running,stopped',
@@ -35,33 +35,25 @@ class HostController extends Controller
             return $this->error('余额不足，无法开启计费项目。');
         }
 
-        if ($host->user_id == $user->id) {
-            $host->update([
-                'status' => $request->status,
-            ]);
+        $host->update([
+            'status' => $request->status,
+        ]);
 
-            return $this->updated($host);
-        } else {
-            return $this->error('无权操作');
-        }
+        return $this->updated($host);
     }
 
-    public function destroy(Host $host)
+    public function destroy(HostRequest $host)
     {
-        if ($host->user_id == auth()->id()) {
-            if ($host->status == 'pending') {
-                // 如果上次更新时间大于 5min
-                if (time() - strtotime($host->updated_at) > 300) {
-                    $host->delete();
-                } else {
-                    return $this->error('请等待 5 分钟后再试');
-                }
+        if ($host->status == 'pending') {
+            // 如果上次更新时间大于 5min
+            if (time() - strtotime($host->updated_at) > 300) {
+                $host->delete();
+            } else {
+                return $this->error('请等待 5 分钟后再试');
             }
-
-            dispatch(new \App\Jobs\Module\Host($host, 'delete'));
-        } else {
-            return $this->error('无权操作');
         }
+
+        dispatch(new \App\Jobs\Module\Host($host, 'delete'));
 
         return $this->deleted($host);
     }
