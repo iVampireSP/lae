@@ -37,6 +37,7 @@
                 <option value="0">否</option>
                 <option value="1" @if ($user_group->exempt) selected @endif>是</option>
             </select>
+            <small class="form-text text-muted">暂停 / 终止豁免权后，用户将不再参与计费。</small>
         </div>
 
         <button type="submit" class="btn btn-primary mt-3">提交</button>
