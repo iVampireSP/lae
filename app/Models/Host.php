@@ -236,9 +236,11 @@ class Host extends Model
             }
         }
 
+        $append_description = '';
         if ($user_group) {
             if ($user_group->discount !== 100 && $user_group->discount !== null) {
                 $real_price = $real_price * ($user_group->discount / 100);
+                $append_description = ' (折扣 ' . $user_group->discount . '%)';
             }
         }
 
@@ -283,6 +285,10 @@ class Host extends Model
 
         if ($auto) {
             $description = '自动扣费。';
+        }
+
+        if ($append_description) {
+            $description .= $append_description;
         }
 
         $left = $transaction->reduceHostAmount($this->user_id, $this->id, $this->module_id, $real_price, $description);
