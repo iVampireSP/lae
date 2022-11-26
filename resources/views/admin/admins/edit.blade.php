@@ -1,9 +1,9 @@
 @extends('layouts.admin')
 
-@section('title', '管理员:' . $admin->name)
+@section('title', '管理员:' . $admin->email)
 
 @section('content')
-    <h3>{{ $admin->name }}</h3>
+    <h3>{{ $admin->email }}</h3>
 
     <form method="POST" action="{{ route('admin.admins.update', $admin)}}">
         @csrf
