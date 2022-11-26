@@ -25,6 +25,7 @@
         "yansongda/laravel-pay": "~3.2.0"
     },
     "require-dev": {
+        "beyondcode/laravel-query-detector": "^1.6",
         "fakerphp/faker": "^1.9.1",
         "jetbrains/phpstorm-attributes": "^1.0",
         "laravel/pint": "^1.0",
