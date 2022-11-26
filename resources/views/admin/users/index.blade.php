@@ -37,6 +37,7 @@
             <th>用户名</th>
             <th>邮箱</th>
             <th>余额</th>
+            <th>用户组</th>
             <th>注册时间</th>
             <th>操作</th>
             </thead>
@@ -59,6 +60,15 @@
                     </td>
                     <td>
                         {{ $user->balance }} 元
+                    </td>
+                    <td>
+                        @if ($user->group_id)
+                            <a href="{{ route('admin.user-groups.show', $user->user_group_id) }}">
+                                {{ $user->user_group->name }}
+                            </a>
+                        @else
+                            无
+                        @endif
                     </td>
                     <td>
                         {{ $user->created_at }}

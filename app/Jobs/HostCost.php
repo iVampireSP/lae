@@ -34,7 +34,14 @@ class HostCost implements ShouldQueue
     public function handle()
     {
         // chunk hosts and load user
-        Host::where('minute_at', $this->minute)->whereIn('status', ['running', 'stopped'])->with('user')->chunk(500, function ($hosts) {
+        $host = new Host();
+
+        // if env not local, then use minute_at
+        if (app()->environment() != 'local') {
+            $host = $host->where('minute_at', $this->minute);
+        }
+
+        $host->whereIn('status', ['running', 'stopped'])->with('user')->chunk(500, function ($hosts) {
             foreach ($hosts as $host) {
                 $host->cost();
             }

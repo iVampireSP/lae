@@ -218,6 +218,15 @@ class Host extends Model
     public function cost($amount = null, $auto = true): bool
     {
         $this->load('user');
+        $user = $this->user;
+        $user->load('user_group');
+        $user_group = $user->user_group;
+
+        if ($user_group) {
+            if ($user_group->exempt) {
+                return true;
+            }
+        }
 
         $real_price = $amount ?? $this->price;
 
@@ -226,6 +235,13 @@ class Host extends Model
                 $real_price = $this->managed_price;
             }
         }
+
+        if ($user_group) {
+            if ($user_group->discount !== 100 && $user_group->discount !== null) {
+                $real_price = $real_price * ($user_group->discount / 100);
+            }
+        }
+
 
         if ($auto) {
             // 获取本月天数

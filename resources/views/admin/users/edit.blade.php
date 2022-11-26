@@ -43,7 +43,7 @@
                     <span>{{ $host->getPrice() }} 元</span>
                 </td>
                 <td>
-                    <x-host-status :status="$host->status" />
+                    <x-host-status :status="$host->status"/>
                 </td>
                 <td>
                     <a href="{{ route('admin.hosts.edit', $host) }}" class="btn btn-primary btn-sm">查看</a>
@@ -159,6 +159,27 @@
                 <option value="clear_all_keys">清除所有密钥</option>
                 <option value="suspend_all_hosts">暂停所有主机(3天后不恢复，将会自动删除)</option>
                 <option value="stop_all_hosts">停止所有主机(从暂停中恢复或者将其设置为 停止，需要用户手动启动)</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">提交</button>
+    </form>
+
+
+    {{--  用户组  --}}
+    <h3 class="mt-3">用户组</h3>
+    <form action="{{ route('admin.users.update', $user) }}" method="post">
+        @csrf
+        @method('PATCH')
+
+        <div class="form-group">
+            <label for="group_id">用户组</label>
+            <select class="form-control" id="group_id" name="user_group_id">
+                <option value="">无</option>
+                @foreach($groups as $group)
+                    <option value="{{ $group->id }}"
+                            @if ($user->user_group_id == $group->id) selected @endif>{{ $group->name }}</option>
+                @endforeach
             </select>
         </div>
 

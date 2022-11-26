@@ -7,6 +7,7 @@ use App\Models\Balance;
 use App\Models\Host;
 use App\Models\Transaction;
 use App\Models\User;
+use App\Models\UserGroup;
 use App\Models\WorkOrder\WorkOrder;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
@@ -37,7 +38,7 @@ class UserController extends Controller
             $users = $users->where('email', 'like', '%' . $request->email . '%');
         }
 
-        $users = $users->paginate(100);
+        $users = $users->with('user_group')->paginate(100);
 
         return view('admin.users.index', compact('users'));
     }
@@ -70,9 +71,9 @@ class UserController extends Controller
         $hosts = Host::where('user_id', $user->id)->latest()->paginate(50, ['*'], 'hosts_page');
         $workOrders = WorkOrder::where('user_id', $user->id)->latest()->paginate(50, ['*'], 'workOrders_page');
         $balances = Balance::where('user_id', $user->id)->latest()->paginate(50, ['*'], 'balances_page');
+        $groups = UserGroup::all();
 
-
-        return view('admin.users.edit', compact('user', 'hosts', 'workOrders', 'balances'));
+        return view('admin.users.edit', compact('user', 'hosts', 'workOrders', 'balances', 'groups'));
     }
 
     /**
@@ -118,7 +119,10 @@ class UserController extends Controller
             }
 
         }
-        $user->save();
+
+        if ($request->has('user_group_id')) {
+            $user->user_group_id = $request->user_group_id;
+        }
 
         if ($user->isDirty()) {
             $user->save();

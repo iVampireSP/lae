@@ -7,6 +7,7 @@ use App\Exceptions\CommonException;
 use App\Exceptions\User\BalanceNotEnoughException;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -142,6 +143,11 @@ class User extends Authenticatable
     public function hosts(): HasMany
     {
         return $this->hasMany(Host::class);
+    }
+
+    public function user_group(): BelongsTo
+    {
+        return $this->belongsTo(UserGroup::class);
     }
 
     /**
