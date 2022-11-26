@@ -62,7 +62,7 @@
                         {{ $user->balance }} 元
                     </td>
                     <td>
-                        @if ($user->group_id)
+                        @if ($user->user_group_id)
                             <a href="{{ route('admin.user-groups.show', $user->user_group_id) }}">
                                 {{ $user->user_group->name }}
                             </a>
