@@ -38,8 +38,4 @@
     {{-- 分页 --}}
     {{ $modules->links() }}
 
-
-
-
-
 @endsection

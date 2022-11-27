@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 
-@section('title', '模块:' . $module->name)
+@section('title', '模块: ' . $module->name)
 
 @section('content')
 <h3>{{ $module->name }}</h3>

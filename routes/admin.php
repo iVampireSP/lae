@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\ApplicationController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\HostController;
@@ -24,6 +25,7 @@ Route::group([
     Route::resource('admins', AdminController::class)->except('show');
     Route::resource('users', UserController::class)->only(['index', 'show', 'edit', 'update']);
     Route::resource('modules', ModuleController::class);
+    Route::resource('applications', ApplicationController::class);
     Route::resource('hosts', HostController::class)->only(['index', 'edit', 'update', 'destroy']);
     Route::resource('work-orders', WorkOrderController::class)->only(['index', 'show', 'edit', 'update', 'destroy']);
 

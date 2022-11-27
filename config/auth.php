@@ -51,6 +51,11 @@ return [
             'provider' => 'modules',
         ],
 
+        'application' => [
+            'driver' => 'token',
+            'provider' => 'applications',
+        ],
+
         'api' => [
             'driver' => 'api'
         ],
@@ -87,6 +92,11 @@ return [
         'modules' => [
             'driver' => 'eloquent',
             'model' => App\Models\Module::class,
+        ],
+
+        'applications' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Application::class,
         ],
     ],
 
