@@ -86,15 +86,58 @@
         <br/>
         如果是 Web 节点，需要简单重启即可
         <code>supervisorctl restart lae-web</code>
-
     </x-basic-card>
-
-
-
 
     <h5 class="mt-3">用户相关</h5>
 
+    <h5 class="mt-3">应用程序</h5>
+    <x-basic-card title="应用程序">
+        <h5>要为外部程序服务，你需要先创建一个应用程序。</h5>
+        应用程序的登录验证方式是 Bearer + Token。
+    </x-basic-card>
 
+    <h5 class="mt-3">MQTT</h5>
+    <x-basic-card title="EMQX 认证配置">
+        <h3>创建认证</h3>
+        <p>在这之前，我们推荐你创建一个 Password-Based 的认证，选 Built-in Database 。</p>
+        <p>创建一个 HTTP Server 的数据源，请求方式为 POST。</p>
 
+        URL 填 <strong>{{ route('applications.mqtt.authentication') }}</strong>
+        <br/>
+        Header 中增加一个 <strong>Authorization</strong>，值为 <strong>Bearer + 应用程序的密钥</strong>。注意空格。
+        <br/>
+        认证中的 Body 填写:
+        <br/>
+        <pre readonly>{
+  "client_id": "${clientid}",
+  "password": "${password}",
+  "username": "${username}"
+}
+        </pre>
+        之后，保存即可。接着，将你添加的认证设置放在 Built-in Database 下面。
+    </x-basic-card>
+
+    <x-basic-card title="EMQX 授权配置">
+        <h3>创建授权</h3>
+        <p>此操作将判断客户端是否有指定的权限。</p>
+
+        <p>在这之前，我们推荐你创建一个 Built-in Database 的授权，之后关闭 File 授权。</p>
+        <p>创建一个 Password-Based 的认证，服务选择 HTTP Server，请求方式为 POST。</p>
+
+        URL 填 <strong>{{ route('applications.mqtt.authorization') }}</strong>
+        <br/>
+        Header 中增加一个 <strong>Authorization</strong>，值为 <strong>Bearer + 应用程序的密钥</strong>。注意空格。
+        <br/>
+        认证中的 Body 填写:
+        <br/>
+        <pre readonly>{
+  "action": "${action}",
+  "client_id": "${clientid}",
+  "topic": "${topic}",
+  "username": "${username}"
+}
+        </pre>
+        之后，保存即可。接着，将你添加的认证设置放在 Built-in Database 之前（确保 Built-in Database 在 HTTP Server 下面）。
+    </x-basic-card>
 
 @endsection
