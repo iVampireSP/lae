@@ -42,8 +42,10 @@ class HostController extends Controller
         return $this->updated($host);
     }
 
-    public function destroy(HostRequest $host)
+    public function destroy(HostRequest $request, Host $host): JsonResponse
     {
+        unset($request);
+
         if ($host->status == 'pending') {
             // 如果上次更新时间大于 5min
             if (time() - strtotime($host->updated_at) > 300) {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\User;
 
+use App\Models\Host;
 use Illuminate\Foundation\Http\FormRequest;
 
 class HostRequest extends FormRequest
@@ -15,8 +16,16 @@ class HostRequest extends FormRequest
     {
         $host = $this->route('host');
 
-        // 检测是否是自己的主机
-        return $host->user_id == auth()->id();
+        if (!($host instanceof Host)) {
+            $host = Host::where('id', $host)->first();
+        }
+
+        if ($host->user_id ?? 0 == $this->user()->id) {
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
     /**
