@@ -75,6 +75,10 @@ class MqttAuthController extends Controller
         $username = $request->input('username');
         $topic = $request->input('topic');
 
+        if ($topic === '#') {
+            return $this->deny();
+        }
+
         // 使用 / 分割 topic
         $topics = explode('/', $topic);
 
