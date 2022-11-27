@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Application;
 use App\Http\Controllers\Controller;
 use App\Models\Module;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
 class MqttAuthController extends Controller
 {
