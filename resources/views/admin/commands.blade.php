@@ -99,7 +99,7 @@
     <h5 class="mt-3">MQTT</h5>
     <x-basic-card title="EMQX 认证配置">
         <h3>创建认证</h3>
-        <p>在这之前，我们推荐你创建一个 Password-Based 的认证，选 Built-in Database 。</p>
+        <p>在这之前，我们推荐你创建一个 Password-Based 的认证，选 Built-in Database ，账号类型选择 username。</p>
         <p>创建一个 HTTP Server 的数据源，请求方式为 POST。</p>
 
         URL 填 <strong>{{ route('applications.mqtt.authentication') }}</strong>
@@ -114,6 +114,7 @@
   "username": "${username}"
 }
         </pre>
+        <p>如果 EMQX 启用了 TLS，则你需要勾选 "TLS 配置" 下面的 "启用 TLS"，并且关闭 "验证服务器证书"。</p>
         之后，保存即可。接着，将你添加的认证设置放在 Built-in Database 下面。
     </x-basic-card>
 
@@ -137,6 +138,7 @@
   "username": "${username}"
 }
         </pre>
+        <p>如果 EMQX 启用了 TLS，则你需要勾选 "TLS 配置" 下面的 "启用 TLS"，并且关闭 "验证服务器证书"。</p>
         之后，保存即可。接着，将你添加的认证设置放在 Built-in Database 之前（确保 Built-in Database 在 HTTP Server 下面）。
     </x-basic-card>
 
