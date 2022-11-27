@@ -4,6 +4,8 @@
 
 @section('content')
     <h3>应用程序</h3>
+    <p>要为外部程序服务，你需要先创建一个应用程序。</p>
+
     <a href="{{ route('admin.applications.create') }}">新建应用</a>
     <div class="overflow-auto">
         <table class="table table-hover">
