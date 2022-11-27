@@ -4,8 +4,8 @@ namespace App\Models;
 
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use GuzzleHttp\Exception\ConnectException;
-use Illuminate\Http\Client\Response;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -102,22 +102,27 @@ class Module extends Authenticatable
 
     public function request($method, $path, $requests): array
     {
-        $user = auth()->user();
+        return $this->baseRequest($method, "functions/{$path}", $requests);
+    }
+
+    public function baseRequest($method, $path, $requests): array
+    {
+        $user = auth('sanctum')->user();
 
         $http = Http::module($this->api_token, $this->url);
 
-        $http->withHeaders([
-            'X-User-id' => $user->id,
-        ]);
-
-        $requests['user_id'] = $user->id;
-
-        if ($method == 'post') {
-            // add user to requests
-            $requests['user'] = $user;
+        if ($user) {
+            $http->withHeaders([
+                'X-User-id' => $user->id,
+            ]);
+            $requests['user_id'] = $user->id;
+            if ($method == 'post') {
+                // add user to requests
+                $requests['user'] = $user;
+            }
         }
 
-        $response = $http->{$method}("functions/{$path}", $requests);
+        $response = $http->{$method}($path, $requests);
 
         return $this->getResponse($response);
     }
