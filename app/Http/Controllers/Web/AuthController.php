@@ -27,19 +27,27 @@ class AuthController extends Controller
         // if logged in
         if ($request->callback) {
 
+            session(['callback' => $request->callback]);
+
+
             if (Auth::check()) {
-
-                // create token
-                $token = $request->user()->createToken('Auto login at ' . now());
-
-                return redirect($request->callback . '?token=' . $token->plainTextToken);
+                return redirect()->route('confirm_redirect');
             } else {
-                session(['callback' => $request->callback]);
                 return redirect()->route('login');
             }
         }
 
         return view('index');
+    }
+
+    public function confirm_redirect(Request $request)
+    {
+        // create token
+
+        $callback = $request->callback ?? session('callback');
+
+
+        return view('confirm_redirect', compact('callback'));
     }
 
     public function redirect(Request $request)

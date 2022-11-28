@@ -9,6 +9,7 @@ Route::middleware(['auth', 'banned'])->group(function () {
     Route::view('banned', 'banned')->name('banned')->withoutMiddleware('banned');
     Route::post('logout', [AuthController::class, 'logout'])->name('logout')->withoutMiddleware('banned');
 
+    Route::get('confirm_redirect', [AuthController::class, 'confirm_redirect'])->name('confirm_redirect');
     Route::post('newToken', [AuthController::class, 'newToken'])->name('newToken');
     Route::delete('deleteAll', [AuthController::class, 'deleteAll'])->name('deleteAll');
 
