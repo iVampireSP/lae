@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\ApplicationController;
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\DeviceController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\HostController;
 use App\Http\Controllers\Admin\ModuleController;
@@ -30,6 +31,8 @@ Route::group([
     Route::resource('work-orders', WorkOrderController::class)->only(['index', 'show', 'edit', 'update', 'destroy']);
 
     Route::resource('user-groups', UserGroupController::class);
+
+    Route::resource('devices', DeviceController::class)->only(['index', 'destroy']);
 
 
     Route::view('commands', 'admin.commands')->name('commands');

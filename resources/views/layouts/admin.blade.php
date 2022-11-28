@@ -59,6 +59,9 @@
                         <a class="nav-link" href="{{ route('admin.applications.index') }}">应用程序</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.devices.index') }}">物联设备</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="{{ route('admin.commands') }}">速查表</a>
                     </li>
                 </ul>
