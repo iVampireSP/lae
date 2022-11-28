@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Support\EmqxSupport;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
 
 class DeviceController extends Controller
 {
@@ -14,8 +15,13 @@ class DeviceController extends Controller
     {
         $emqx = new EmqxSupport();
 
-        $clients = $emqx->clients($request->all());
+        $clients = $emqx->clients([
+            'clientid' => $request->client_id,
+            'username' => $request->username,
+            'page' => $request->page,
+        ]);
 
+        // dd($clients);
         return view('admin.device.index', compact('clients'));
     }
 

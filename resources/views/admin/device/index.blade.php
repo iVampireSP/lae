@@ -84,4 +84,22 @@
         </tbody>
     </table>
 
+    <div class="d-none flex-sm-fill d-sm-flex align-items-sm-center justify-content-sm-end">
+        <div>
+            <ul class="pagination">
+                @if ($clients['meta']['page'] > 1)
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ $clients['meta']['page'] - 1 }}">上一页</a>
+                    </li>
+                @endif
+
+
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ $clients['meta']['page'] + 1}}" rel="next"
+                       aria-label="下一页 &raquo;">下一页</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
 @endsection

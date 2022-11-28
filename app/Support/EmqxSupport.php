@@ -2,6 +2,7 @@
 
 namespace App\Support;
 
+use App\Exceptions\EmqxSupportException;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
 
@@ -12,6 +13,9 @@ class EmqxSupport
         return Http::baseUrl(config('emqx.api_url'))->withBasicAuth(config('emqx.api_key'), config('emqx.api_secret'));
     }
 
+    /**
+     * @throws EmqxSupportException
+     */
     public function clients($params = [])
     {
         //    merge params
@@ -25,7 +29,7 @@ class EmqxSupport
         if ($response->successful()) {
             return $response->json();
         } else {
-            return false;
+            throw new EmqxSupportException('无法获取客户端列表。');
         }
     }
 
