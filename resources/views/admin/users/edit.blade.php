@@ -130,11 +130,6 @@
         @csrf
         @method('PATCH')
 
-        <div class="form-group">
-            <label for="balance">充值余额(元)</label>
-            <input type="text" class="form-control" id="balance" name="balance" placeholder="充值金额">
-        </div>
-
         {{-- 封禁 --}}
         <div class="form-group">
             <label for="is_banned">封禁</label>
@@ -151,11 +146,19 @@
                    value="{{ $user->banned_reason }}">
         </div>
 
+
+        <div class="form-group">
+            <label for="balance">余额(元)</label>
+            <input type="text" class="form-control" id="balance" name="balance" placeholder="需要在下方选择一次性操作。">
+        </div>
+
         {{-- 一次性操作 --}}
         <div class="form-group">
             <label for="one_time_action">一次性操作</label>
             <select class="form-control" id="one_time_action" name="one_time_action">
                 <option value="">无</option>
+                <option value="add_balance">充值余额</option>
+                <option value="reduce_balance">扣除余额</option>
                 <option value="clear_all_keys">清除所有密钥</option>
                 <option value="suspend_all_hosts">暂停所有主机(3天后不恢复，将会自动删除)</option>
                 <option value="stop_all_hosts">停止所有主机(从暂停中恢复或者将其设置为 停止，需要用户手动启动)</option>

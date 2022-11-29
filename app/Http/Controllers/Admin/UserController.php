@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exceptions\ChargeException;
 use App\Http\Controllers\Controller;
 use App\Models\Balance;
 use App\Models\Host;
@@ -93,10 +94,6 @@ class UserController extends Controller
 
         $transaction = new Transaction();
 
-        if ($request->filled('balance')) {
-            $transaction->addAmount($user->id, 'console', $request->balance, '管理员汇入', true);
-        }
-
         if ($request->is_banned) {
             $user->banned_at = Carbon::now();
 
@@ -116,6 +113,14 @@ class UserController extends Controller
                 $user->hosts()->update(['status' => 'suspended', 'suspended_at' => now()]);
             } else if ($request->one_time_action == 'stop_all_hosts') {
                 $user->hosts()->update(['status' => 'stopped', 'suspended_at' => null]);
+            } else if ($request->one_time_action == 'add_balance') {
+                try {
+                    $transaction->addAmount($user->id, 'console', $request->balance ?? 0, '管理员添加。');
+                } catch (ChargeException $e) {
+                    return back()->with('error', $e->getMessage());
+                }
+            } else if ($request->one_time_action == 'reduce_balance') {
+                $transaction->reduceAmount($user->id, $request->balance ?? 0, '管理员扣除。');
             }
 
         }
