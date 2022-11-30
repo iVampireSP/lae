@@ -23,6 +23,10 @@ class Transaction extends Model
         'paid_at',
     ];
 
+    protected $casts = [
+        'balance' => 'decimal:2',
+    ];
+
     protected $fillable = [
         // 交易类型
         'type',

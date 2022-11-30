@@ -113,7 +113,7 @@ class User extends Authenticatable
 
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'balance' => 'float',
+        'balance' => 'decimal:2',
         'banned_at' => 'datetime',
     ];
 
@@ -125,9 +125,9 @@ class User extends Authenticatable
 
             // balance 四舍五入
 
-            if ($model->isDirty('balance')) {
-                $model->balance = round($model->balance, 2, PHP_ROUND_HALF_DOWN);
-            }
+            // if ($model->isDirty('balance')) {
+            //     $model->balance = round($model->balance, 2, PHP_ROUND_HALF_DOWN);
+            // }
 
             if ($model->isDirty('banned_at')) {
                 if ($model->banned_at) {
