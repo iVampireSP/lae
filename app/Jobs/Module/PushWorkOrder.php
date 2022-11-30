@@ -53,10 +53,9 @@ class PushWorkOrder implements ShouldQueue
                     }
                 }
 
-                $http = Http::module($workOrder->module->api_token, $workOrder->module->url);
                 $workOrder->status = 'open';
 
-                $response = $http->post('work-orders', $workOrder->toArray());
+                $response = $workOrder->module->http()->post('work-orders', $workOrder->toArray());
 
                 if (!$response->successful()) {
                     Log::error('推送工单失败', [

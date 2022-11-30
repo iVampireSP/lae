@@ -41,8 +41,7 @@ class CheckHostIfExistsOnModule implements ShouldQueue
                     continue;
                 }
 
-                $http = Http::module($host->module->api_token, $host->module->url);
-                $response = $http->get('hosts/' . $host->id);
+                $response = $host->module->http()->get('hosts/' . $host->id);
 
                 if ($response->status() === 404) {
                     Log::warning($host->module->name . ' ' . $host->name . ' ' . $host->id . ' 不存在，删除。');

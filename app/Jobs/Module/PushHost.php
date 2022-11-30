@@ -35,10 +35,9 @@ class PushHost implements ShouldQueue
         //
         Host::whereIn('status', ['pending', 'error'])->with(['module', 'user'])->chunk(100, function ($hosts) {
             foreach ($hosts as $host) {
-                $http = Http::module($host->module->api_token, $host->module->url);
                 $host->status = 'running';
 
-                $response = $http->post('hosts', $host->toArray());
+                $response = $host->module->http()->post('hosts', $host->toArray());
 
                 if (!$response->successful()) {
                     $host->status = 'error';

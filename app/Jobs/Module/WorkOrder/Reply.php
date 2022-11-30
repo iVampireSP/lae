@@ -40,11 +40,9 @@ class Reply implements ShouldQueue
         $this->reply->load(['workOrder', 'user']);
         $this->reply->workOrder->load(['module']);
 
-        $http = Http::module($this->reply->workOrder->module->api_token, $this->reply->workOrder->module->url);
-
         $reply = $this->reply->toArray();
 
-        $response = $http->post('work-orders/' . $this->reply->workOrder->id . '/replies', $reply);
+        $response = $this->reply->workOrder->module->http()->post('work-orders/' . $this->reply->workOrder->id . '/replies', $reply);
 
         if ($response->successful()) {
             $this->reply->update([

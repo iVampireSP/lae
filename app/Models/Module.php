@@ -5,6 +5,7 @@ namespace App\Models;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use GuzzleHttp\Exception\ConnectException;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -94,8 +95,7 @@ class Module extends Authenticatable
     // post, get, patch, delete 等请求
     public function remote($func, $requests): array
     {
-        $http = Http::module($this->api_token, $this->url);
-        $response = $http->post('functions/' . $func, $requests);
+        $response = $this->http()->post('functions/' . $func, $requests);
 
         return $this->getResponse($response);
     }
@@ -109,10 +109,8 @@ class Module extends Authenticatable
     {
         $user = auth('sanctum')->user();
 
-        $http = Http::module($this->api_token, $this->url);
-
         if ($user) {
-            $http->withHeaders([
+            $this->http()->withHeaders([
                 'X-User-id' => $user->id,
             ]);
             $requests['user_id'] = $user->id;
@@ -122,7 +120,7 @@ class Module extends Authenticatable
             }
         }
 
-        $response = $http->{$method}($path, $requests);
+        $response = $this->http()->{$method}($path, $requests);
 
         return $this->getResponse($response);
     }
@@ -131,16 +129,13 @@ class Module extends Authenticatable
     {
         $module_id = auth('module')->id();
 
-        $http = Http::module($this->api_token, $this->url)
-            ->accept('application/json');
-
-        $http->withHeaders([
+        $this->http()->withHeaders([
             'X-Module' => $module_id
         ]);
 
         $requests['module_id'] = $module_id;
 
-        $response = $http->{$method}("exports/{$path}", $requests);
+        $response = $this->http()->{$method}("exports/{$path}", $requests);
 
         return $this->getResponse($response);
     }
@@ -165,12 +160,10 @@ class Module extends Authenticatable
             $module = $this;
         }
 
-        $http = Http::module($module->api_token, $module->url);
-
         $success = 0;
 
         try {
-            $response = $http->get('remote');
+            $response = $this->http()->get('remote');
 
             if ($response->status() == 200) {
                 $success = 1;
@@ -180,6 +173,11 @@ class Module extends Authenticatable
         }
 
         return $success;
+    }
+
+    public function http(): PendingRequest
+    {
+        return Http::module($this->api_token, $this->url)->acceptJson();
     }
 
     #[ArrayShape(['transactions' => "array"])]

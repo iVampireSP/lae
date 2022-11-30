@@ -39,17 +39,16 @@ class WorkOrder implements ShouldQueue
     {
         $this->workOrder->load(['module']);
 
-        $http = Http::module($this->workOrder->module->api_token, $this->workOrder->module->url);
         if ($this->type == 'put') {
-            $response = $http->put('work-orders/' . $this->workOrder->id, $this->workOrder->toArray());
+            $response = $this->workOrder->module->http()->put('work-orders/' . $this->workOrder->id, $this->workOrder->toArray());
         } else if ($this->type == 'delete') {
-            $response = $http->delete('work-orders/' . $this->workOrder->id);
+            $response = $this->workOrder->module->http()->delete('work-orders/' . $this->workOrder->id);
 
             if ($response->successful()) {
                 $this->workOrder->delete();
             }
         } else {
-            $response = $http->post('work-orders', $this->workOrder->toArray());
+            $response = $this->workOrder->module->http()->post('work-orders', $this->workOrder->toArray());
         }
 
         if (!$response->successful()) {

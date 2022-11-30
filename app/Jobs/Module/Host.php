@@ -42,19 +42,17 @@ class Host implements ShouldQueue
         $host = $this->host;
         $host->load(['module']);
 
-        $http = Http::module($host->module->api_token, $host->module->url);
-
         switch ($this->type) {
             case 'patch':
-                $response = $http->patch('hosts/' . $host->id, $host->toArray());
+                $response = $host->module->http()->patch('hosts/' . $host->id, $host->toArray());
 
                 break;
             case 'post':
-                $response = $http->post('hosts', $host->toArray());
+                $response = $host->module->http()->post('hosts', $host->toArray());
 
                 break;
             case 'delete':
-                $response = $http->delete('hosts/' . $host->id);
+                $response = $host->module->http()->delete('hosts/' . $host->id);
 
                 // if successful
                 if ($response->successful() || $response->status() === 404) {
