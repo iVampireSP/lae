@@ -90,6 +90,8 @@ class Host extends Model
     protected $casts = [
         // 'configuration' => 'array',
         'suspended_at' => 'datetime',
+        'price' => 'decimal:2',
+        'managed_price' => 'decimal:2',
     ];
 
     protected static function boot()
@@ -122,13 +124,13 @@ class Host extends Model
                 }
             }
 
-            if ($model->isDirty('price')) {
-                $model->price = round($model->price, 2);
-            }
+            // if ($model->isDirty('price')) {
+            //     $model->price = round($model->price, 2);
+            // }
 
-            if ($model->isDirty('managed_price') && $model->managed_price !== null) {
-                $model->managed_price = round($model->managed_price, 2);
-            }
+            // if ($model->isDirty('managed_price') && $model->managed_price !== null) {
+            //     $model->managed_price = round($model->managed_price, 2);
+            // }
 
             broadcast(new UserEvent($model->user_id, 'hosts.updating', $model));
         });
