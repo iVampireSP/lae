@@ -50,9 +50,7 @@ class FetchModule implements ShouldQueue
 
             foreach ($modules as $module) {
                 try {
-                    $http = Http::module($module->api_token, $module->url);
-                    // dd($module->url);
-                    $response = $http->get('remote');
+                    $response = $module->http()->get('remote');
                 } catch (ConnectException $e) {
                     Log::error($e->getMessage());
                     continue;
@@ -68,11 +66,12 @@ class FetchModule implements ShouldQueue
                     $json = $response->json();
 
                     if (isset($json['data']['servers']) && is_array($json['data']['servers'])) {
-                        // 只保留 name, status
+                        // 只保留 name, status, meta
                         $servers = array_merge($servers, array_map(function ($server) use ($module) {
                             return [
                                 'name' => $server['name'],
                                 'status' => $server['status'],
+                                'meta' => $server['meta'] ?? [],
                                 'created_at' => $server['created_at'] ?? now(),
                                 'updated_at' => $server['updated_at'] ?? now(),
                                 'module' => [
