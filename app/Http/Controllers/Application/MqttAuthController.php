@@ -103,12 +103,13 @@ class MqttAuthController extends Controller
             }
         }
 
+
         if (count($usernames) === 1) {
             // 是模块自己的连接
             return $this->allow();
         }
 
-        // Log::debug('联系模块。');
+        // 其他情况，让模块去验证
 
         // 联系模块，让模块去验证设备授权。
         $response = $module->baseRequest('post', 'mqtt/authorization', [
