@@ -28,6 +28,7 @@
                     <td>
                         <a href="{{ route('admin.modules.show', $module) }}" class="btn btn-primary btn-sm">查看</a>
                         <a href="{{ route('admin.modules.edit', $module) }}" class="btn btn-primary btn-sm">编辑</a>
+                        <a href="{{ route('admin.modules.allows', $module) }}" class="btn btn-primary btn-sm">MQTT 授权</a>
                     </td>
                 </tr>
             @endforeach

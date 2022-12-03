@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Host;
 use App\Models\Module;
+use App\Models\ModuleAllow;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -156,6 +157,34 @@ class ModuleController extends Controller
             'url' => 'required|url',
             'status' => 'required|string|in:up,down,maintenance',
         ];
+    }
+
+    public function allows(Module $module)
+    {
+        $allows = ModuleAllow::where('module_id', $module->id)->with('allowed_module')->paginate(50);
+
+        return view('admin.modules.allows', compact('module', 'allows'));
+    }
+
+    public function allows_store(Request $request, Module $module)
+    {
+        $request->validate([
+            'allowed_module_id' => 'required|string|max:255|exists:modules,id',
+        ]);
+
+        ModuleAllow::where('module_id', $module->id)->where('allowed_module_id', $request->allow_module_id)->firstOrCreate([
+            'module_id' => $module->id,
+            'allowed_module_id' => $request->get('allowed_module_id'),
+        ]);
+
+        return back()->with('success', '已信任该模块。');
+    }
+
+    public function allows_destroy(Module $module, ModuleAllow $allow)
+    {
+        $allow->delete();
+
+        return redirect()->route('admin.modules.allows', $module)->with('success', '取消信任完成。');
     }
 
 }

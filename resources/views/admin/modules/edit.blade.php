@@ -5,6 +5,7 @@
 @section('content')
 <h3>{{ $module->name }}</h3>
 <a class="mt-3" href="{{ route('admin.modules.show', $module) }}">查看</a>
+<a class="mt-3" href="{{ route('admin.modules.allows', $module) }}">MQTT 授权</a>
 
 <form method="POST" action="{{ route('admin.modules.update', $module)}}">
     @csrf

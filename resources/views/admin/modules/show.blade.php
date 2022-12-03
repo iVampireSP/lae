@@ -6,6 +6,7 @@
 <h3>{{ $module->name }}</h3>
 <p>状态: {{ $module->status }}</p>
 <a class="mt-3" href="{{ route('admin.modules.edit', $module) }}">编辑</a>
+<a class="mt-3" href="{{ route('admin.modules.allows', $module) }}">MQTT 授权</a>
 <h4 class="mt-2">收益</h4>
 <div>
     <x-module-earning :module="$module" />

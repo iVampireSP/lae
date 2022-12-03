@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Application;
 
 use App\Http\Controllers\Controller;
 use App\Models\Module;
+use App\Models\ModuleAllow;
 use Illuminate\Http\Request;
 
 class MqttAuthController extends Controller
@@ -98,8 +99,12 @@ class MqttAuthController extends Controller
         // 设备只能在自己的模块下发布消息
         if ($action == 'publish') {
             if ($topics[0] !== $module_id) {
-                // Log::debug('设备只能在自己的模块下发布消息');
-                return $this->deny();
+                // 但是，在拒绝之前，应该检查一下，是否有允许的模块
+                $allow = ModuleAllow::where('module_id', $topics[0])->where('allowed_module_id', $module_id)->exists();
+
+                if (!$allow) {
+                    return $this->deny();
+                }
             }
         }
 
