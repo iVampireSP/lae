@@ -10,11 +10,15 @@
 
     <title>@yield('title', '莱云')</title>
 
-    <!-- Fonts -->
-{{-- <link rel="dns-prefetch" href="//fonts.gstatic.com"> --}}
-{{-- <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet"> --}}
 
-<!-- Scripts -->
+    <link rel="icon" href="/images/fav.jpg" />
+    <link rel="apple-touch-icon" href="/images/fav.jpg" />
+
+    <!-- Fonts -->
+    {{-- <link rel="dns-prefetch" href="//fonts.gstatic.com"> --}}
+    {{-- <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet"> --}}
+
+    <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 
@@ -58,7 +62,7 @@
                         </li>
                     @endif
 
-                <!-- Authentication Links -->
+                    <!-- Authentication Links -->
                     @guest
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>

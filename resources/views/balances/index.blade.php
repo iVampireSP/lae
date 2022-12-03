@@ -4,11 +4,10 @@
 
 @section('content')
     <h2>余额</h2>
+    <p>您的余额: {{ $balance }} 元 <small class="text-danger"><i class="bi bi-exclamation-circle"></i> 余额不可用于提现</small></p>
 
 
-    <p>您的余额: {{ $balance }} 元 </p>
-
-    <h2>添加到余额</h2>
+    <h2>充值余额</h2>
     <form name="charge" method="POST" target="_blank" action="{{ route('balances.store') }}"
           onsubmit="return confirm('请注意: 由于计费方式的特殊性，我们不支持退款，请合理充值。')">
         @csrf
@@ -17,26 +16,6 @@
     </form>
 
     <div class="mt-2">
-        <div>
-            请注意: 由于计费方式的特殊性，我们不支持退款，请合理充值。
-            <br/>
-            <a
-                target="_blank"
-                href="https://forum.laecloud.com/d/4-wo-chong-zhi-hou-jin-e-mei-you-li-ji-dao-zhang"
-            >
-                必看! 充值后金额没有立即到账的原因。
-            </a>
-        </div>
-        <div>
-            请注意: 由于计费方式的特殊性，我们不支持退款，请合理充值。
-            <br/>
-            <a
-                target="_blank"
-                href="https://forum.laecloud.com/d/4-wo-chong-zhi-hou-jin-e-mei-you-li-ji-dao-zhang"
-            >
-                必看! 充值后金额没有立即到账的原因。
-            </a>
-        </div>
         <div>
             请注意: 由于计费方式的特殊性，我们不支持退款，请合理充值。
             <br/>
