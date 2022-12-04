@@ -48,11 +48,16 @@ class HostController extends Controller
 
         if ($host->status == 'pending') {
             // 如果上次更新时间大于 5min
-            if (time() - strtotime($host->updated_at) > 300) {
+            if ($host->updated_at->diffInMinutes(now()) > 5) {
                 $host->delete();
             } else {
                 return $this->error('请等待 5 分钟后再试');
             }
+        }
+
+        // 如果时间大于 5 分钟，不满 1 小时
+        if (now()->diffInMinutes($host->updated_at) > 5 && now()->diffInMinutes($host->updated_at) < 60) {
+            $host->cost();
         }
 
         dispatch(new \App\Jobs\Module\Host($host, 'delete'));
