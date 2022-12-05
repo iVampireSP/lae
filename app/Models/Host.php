@@ -258,7 +258,7 @@ class Host extends Model
             return true;
         }
 
-        // 如果太小，则重置为 0.9999
+        // 如果太小，则重置为 0.0001
         if ($real_price < 0.0001) {
             $real_price = 0.0001;
         }
