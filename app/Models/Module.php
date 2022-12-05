@@ -3,11 +3,10 @@
 namespace App\Models;
 
 use App\Exceptions\ModuleRequestException;
+use Exception;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use GuzzleHttp\Exception\ConnectException;
-use GuzzleHttp\Exception\RequestException;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Cache;
@@ -185,7 +184,7 @@ class Module extends Authenticatable
     {
         try {
             return Http::module($this->api_token, $this->url)->acceptJson()->timeout(5);
-        } catch (ConnectException|RequestException|ConnectionException $e) {
+        } catch (Exception $e) {
             throw new ModuleRequestException($e->getMessage());
         }
     }
