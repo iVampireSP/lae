@@ -3,6 +3,7 @@
 namespace App\Jobs\Module;
 
 use App\Events\ServerEvent;
+use App\Exceptions\ModuleRequestException;
 use App\Models\Module;
 use GuzzleHttp\Exception\ConnectException;
 use Illuminate\Bus\Queueable;
@@ -50,7 +51,7 @@ class FetchModule implements ShouldQueue
             foreach ($modules as $module) {
                 try {
                     $response = $module->http()->get('remote');
-                } catch (ConnectException $e) {
+                } catch (ModuleRequestException $e) {
                     Log::error('无法连接到模块:' . $module->name, ['error', $e->getMessage()]);
                     continue;
                 }
