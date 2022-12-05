@@ -177,7 +177,7 @@ class Module extends Authenticatable
 
     public function http(): PendingRequest
     {
-        return Http::module($this->api_token, $this->url)->acceptJson();
+        return Http::module($this->api_token, $this->url)->acceptJson()->timeout(5);
     }
 
     #[ArrayShape(['transactions' => "array"])]
