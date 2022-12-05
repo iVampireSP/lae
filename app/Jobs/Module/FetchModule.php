@@ -10,7 +10,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class FetchModule implements ShouldQueue
@@ -52,7 +51,7 @@ class FetchModule implements ShouldQueue
                 try {
                     $response = $module->http()->get('remote');
                 } catch (ConnectException $e) {
-                    Log::error($e->getMessage());
+                    Log::error('无法连接到模块:' . $module->name, ['error', $e->getMessage()]);
                     continue;
                 }
 
