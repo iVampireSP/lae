@@ -51,7 +51,7 @@ class FetchModule implements ShouldQueue
             foreach ($modules as $module) {
                 try {
                     $response = $module->http()->get('remote');
-                } catch (ConnectException $e) {
+                } catch (\Exception $e) {
                     Log::error($e->getMessage());
                     continue;
                 }
