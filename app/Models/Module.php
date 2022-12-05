@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use App\Exceptions\ModuleRequestException;
-use Exception;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use GuzzleHttp\Exception\ConnectException;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -177,16 +175,9 @@ class Module extends Authenticatable
         return $success;
     }
 
-    /**
-     * @throws ModuleRequestException
-     */
     public function http(): PendingRequest
     {
-        try {
-            return Http::module($this->api_token, $this->url)->acceptJson()->timeout(5);
-        } catch (Exception $e) {
-            throw new ModuleRequestException($e->getMessage());
-        }
+        return Http::module($this->api_token, $this->url)->acceptJson();
     }
 
     #[ArrayShape(['transactions' => "array"])]
