@@ -9,6 +9,8 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        return $this->success($request->user());
+        $user = $request->user()->load('user_group');
+
+        return $this->success($user);
     }
 }
