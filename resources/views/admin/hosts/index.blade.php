@@ -38,7 +38,7 @@
                     </td>
                     <td>
                         @if ($host->managed_price !== null)
-                            <span class="text-danger">{{ $host->managed_price }}</span>
+                            <span class="text-danger">{{ $host->managed_price }} 元</span>
                         @else
                             {{ $host->price }} 元
                         @endif
