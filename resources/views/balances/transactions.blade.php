@@ -10,7 +10,7 @@
     <a href="?payment=transfer">转账记录</a>
 
     <div class="overflow-auto">
-        <table class="table">
+        <table class="table table-hover">
             <thead>
             <tr>
                 <th scope="col">类型与模块</th>

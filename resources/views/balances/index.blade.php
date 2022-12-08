@@ -31,7 +31,7 @@
 
     <h2 class="mt-3">充值记录</h2>
     <div class="overflow-auto">
-        <table class="table">
+        <table class="table table-hover">
             <thead>
             <tr>
                 <th scope="col">订单号</th>
