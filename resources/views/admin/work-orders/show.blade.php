@@ -43,7 +43,4 @@
         <button type="submit" class="btn btn-primary mt-3 mb-3">提交</button>
     </form>
 
-
-    <p>在这里，您无法回复工单，只能够查看。</p>
-
 @endsection
