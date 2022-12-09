@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Host;
 use App\Models\Module;
 use App\Models\ModuleAllow;
+use App\Models\WorkOrder\Reply;
+use App\Models\WorkOrder\WorkOrder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -88,7 +90,7 @@ class ModuleController extends Controller
      *
      * @param Module $module
      *
-     * @return Response
+     * @return View
      */
     public function edit(Module $module): View
     {
@@ -103,7 +105,7 @@ class ModuleController extends Controller
      * @param Request $request
      * @param Module  $module
      *
-     * @return Response
+     * @return RedirectResponse
      */
     public function update(Request $request, Module $module): RedirectResponse
     {

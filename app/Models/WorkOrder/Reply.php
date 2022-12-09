@@ -8,6 +8,7 @@ use App\Models\User;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
  * App\Models\WorkOrder\Reply
@@ -55,7 +56,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Reply extends Model
 {
-    use HasFactory, Cachable;
+    use Cachable;
 
     protected $table = 'work_order_replies';
 
@@ -86,7 +87,7 @@ class Reply extends Model
                 $model->workOrder->status = 'user_replied';
             }
 
-            if (auth('module')->check()) {
+            if (auth('module')->check() || auth('admin')->check()) {
                 $model->user_id = null;
                 $model->workOrder->status = 'replied';
 
@@ -107,12 +108,12 @@ class Reply extends Model
         });
     }
 
-    public function workOrder()
+    public function workOrder(): BelongsTo
     {
         return $this->belongsTo(WorkOrder::class, 'work_order_id', 'id');
     }
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }

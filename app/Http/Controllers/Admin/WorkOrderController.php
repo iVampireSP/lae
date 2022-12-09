@@ -99,4 +99,18 @@ class WorkOrderController extends Controller
 
         return redirect()->route('admin.work-orders.index')->with('success', '正在排队删除工单。');
     }
+
+    public function reply(Request $request, WorkOrder $workOrder): RedirectResponse
+    {
+        $request->validate([
+            'content' => 'required|string',
+        ]);
+
+        Reply::create([
+            'content' => $request->input('content'),
+            'work_order_id' => $workOrder->id
+        ]);
+
+        return back()->with('success', '回复成功，请等待同步。');
+    }
 }

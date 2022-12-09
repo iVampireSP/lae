@@ -35,7 +35,9 @@ Route::group([
 
     Route::resource('applications', ApplicationController::class);
     Route::resource('hosts', HostController::class)->only(['index', 'edit', 'update', 'destroy']);
+
     Route::resource('work-orders', WorkOrderController::class)->only(['index', 'show', 'edit', 'update', 'destroy']);
+    Route::post('work-orders/{work_order}/replies', [WorkOrderController::class, 'reply'])->name('work-orders.replies.store');
 
     Route::resource('user-groups', UserGroupController::class);
 

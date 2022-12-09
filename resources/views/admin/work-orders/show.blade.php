@@ -10,7 +10,6 @@
     <x-work-order-status :status="$workOrder->status"></x-work-order-status>
 
     <div class="mt-3">
-        <!-- replies -->
         <h4>对话记录</h4>
 
         @foreach($replies as $reply)
@@ -31,6 +30,18 @@
             </div>
         @endforeach
     </div>
+
+    <h4 class="mt-3">您的回复</h4>
+    <form method="POST" action="{{ route('admin.work-orders.replies.store', $workOrder->id) }}">
+        @csrf
+        {{-- label --}}
+        <div class="form-group">
+            <label for="content">内容</label>
+            <textarea class="form-control" id="content" name="content" rows="10" placeholder="代替模块的回复。"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3 mb-3">提交</button>
+    </form>
 
 
     <p>在这里，您无法回复工单，只能够查看。</p>
