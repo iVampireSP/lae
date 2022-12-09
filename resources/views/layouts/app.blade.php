@@ -11,8 +11,8 @@
     <title>@yield('title', '莱云')</title>
 
 
-    <link rel="icon" href="/images/fav.jpg" />
-    <link rel="apple-touch-icon" href="/images/fav.jpg" />
+    <link rel="icon" href="/images/fav.jpg"/>
+    <link rel="apple-touch-icon" href="/images/fav.jpg"/>
 
     <!-- Fonts -->
     {{-- <link rel="dns-prefetch" href="//fonts.gstatic.com"> --}}
@@ -56,10 +56,18 @@
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ms-auto">
                     @if (Auth::guard('admin')->check())
+
                         <li class="nav-item">
-                            <a class="nav-link"
-                               href="{{ route('admin.users.edit', Auth::guard('web')->id()) }}">返回到 {{ Auth::guard('admin')->user()->email }}</a>
+
+                            @if(Auth::guard('web')->check())
+                                <a class="nav-link"
+                                   href="{{ route('admin.users.edit', Auth::guard('web')->id()) }}">返回到后台</a>
+                            @else
+                                <a class="nav-link"
+                                   href="{{ route('admin.index') }}">切换到后台</a>
+                            @endif
                         </li>
+
                     @endif
 
                     <!-- Authentication Links -->
