@@ -29,6 +29,8 @@
                         <a href="{{ route('admin.modules.show', $module) }}" class="btn btn-primary btn-sm">查看</a>
                         <a href="{{ route('admin.modules.edit', $module) }}" class="btn btn-primary btn-sm">编辑</a>
                         <a href="{{ route('admin.modules.allows', $module) }}" class="btn btn-primary btn-sm">MQTT 授权</a>
+                        <a href="{{ route('admin.modules.fast-login', $module) }}" target="_blank" class="btn btn-primary btn-sm">快速登录</a>
+
                     </td>
                 </tr>
             @endforeach

@@ -12,13 +12,13 @@ use App\Http\Controllers\Admin\UserGroupController;
 use App\Http\Controllers\Admin\WorkOrderController;
 use Illuminate\Support\Facades\Route;
 
-Route::withoutMiddleware(['auth'])->group(function () {
+Route::withoutMiddleware(['auth', 'admin.validateReferer'])->group(function () {
     Route::get('/login', [AuthController::class, 'index'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
 });
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::get('/', [HomeController::class, 'index'])->name('index')->middleware('auth:admin');
+Route::get('/', [HomeController::class, 'index'])->name('index')->middleware('auth:admin')->withoutMiddleware('admin.validateReferer');
 
 Route::group([
     'middleware' => 'auth:admin',
@@ -32,6 +32,8 @@ Route::group([
     Route::get('modules/{module}/allows', [ModuleController::class, 'allows'])->name('modules.allows');
     Route::post('modules/{module}/allows', [ModuleController::class, 'allows_store'])->name('modules.allows.store');
     Route::delete('modules/{module}/allows/{allow}', [ModuleController::class, 'allows_destroy'])->name('modules.allows.destroy');
+
+    Route::get('modules/{module}/fast-login', [ModuleController::class, 'fast_login'])->name('modules.fast-login');
 
     Route::resource('applications', ApplicationController::class);
     Route::resource('hosts', HostController::class)->only(['index', 'edit', 'update', 'destroy']);

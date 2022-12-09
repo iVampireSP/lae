@@ -145,10 +145,18 @@ class Module extends Authenticatable
         $json = $response->json();
         $status = $response->status();
 
+        $success = true;
+
+        // if status code is not 20x
+        if ($status < 200 || $status >= 300) {
+            $success = false;
+        }
+
         return [
             'body' => $response->body(),
             'json' => $json,
-            'status' => $status
+            'status' => $status,
+            'success' => $success,
         ];
     }
 

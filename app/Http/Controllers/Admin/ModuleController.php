@@ -6,11 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Host;
 use App\Models\Module;
 use App\Models\ModuleAllow;
-use App\Models\WorkOrder\Reply;
-use App\Models\WorkOrder\WorkOrder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -187,6 +184,20 @@ class ModuleController extends Controller
         $allow->delete();
 
         return redirect()->route('admin.modules.allows', $module)->with('success', '取消信任完成。');
+    }
+
+
+    // fast login
+    public function fast_login(Module $module): View|RedirectResponse
+    {
+        $resp = $module->baseRequest('post', 'fast-login', []);
+
+        if ($resp['success']) {
+            $resp = $resp['json']['data'];
+            return view('admin.modules.login', compact('module', 'resp'));
+        } else {
+            return redirect()->route('admin.modules.show', $module)->with('error', '快速登录失败，可能是模块不支持。');
+        }
     }
 
 }
