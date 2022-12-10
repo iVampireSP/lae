@@ -71,13 +71,10 @@ class Reply extends Model
     {
         parent::boot();
         static::creating(function ($model) {
-
             $model->is_pending = 1;
-
 
             // load work order
             $model->load(['workOrder']);
-
 
             throw_if($model->workOrder->status == 'pending' || $model->workOrder->status == 'error', CommonException::class, '工单状态不正确');
 

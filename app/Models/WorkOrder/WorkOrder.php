@@ -10,6 +10,8 @@ use App\Models\User;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * App\Models\WorkOrder\WorkOrder
@@ -65,7 +67,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class WorkOrder extends Model
 {
-    use HasFactory, Cachable;
+    use Cachable;
 
     protected $table = 'work_orders';
 
@@ -122,6 +124,9 @@ class WorkOrder extends Model
         });
     }
 
+    /**
+     * @throws CommonException
+     */
     public function safeDelete(): bool
     {
         if ($this->status == 'pending') {
@@ -135,26 +140,26 @@ class WorkOrder extends Model
 
     // replies
 
-    public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
     // host
 
-    public function replies(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function replies(): HasMany
     {
         return $this->hasMany(Reply::class);
     }
 
-    public function host(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function host(): BelongsTo
     {
         return $this->belongsTo(Host::class);
     }
 
     // scope
 
-    public function module(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function module(): BelongsTo
     {
         return $this->belongsTo(Module::class);
     }
