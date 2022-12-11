@@ -31,7 +31,7 @@ class HostCost implements ShouldQueue
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         // chunk hosts and load user
         $host = new Host();

@@ -26,7 +26,7 @@ class CheckAndChargeBalance extends Job
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         Balance::where('paid_at', null)->chunk(100, function ($balances) {
             foreach ($balances as $balance) {

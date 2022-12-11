@@ -30,7 +30,7 @@ class CheckHostIfExistsOnModule implements ShouldQueue
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         // 删除所有模块中不存在的主机
         Host::with('module')->where('created_at', '<', now()->subHour())->chunk(100, function ($hosts) {

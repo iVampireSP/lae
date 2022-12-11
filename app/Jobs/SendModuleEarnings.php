@@ -22,11 +22,8 @@ class SendModuleEarnings extends Job
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
-        //
-
-
         Module::chunk(100, function ($modules) {
             foreach ($modules as $module) {
                 (new ModuleEarnings($module))

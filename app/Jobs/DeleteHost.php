@@ -29,11 +29,9 @@ class DeleteHost implements ShouldQueue
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
-        //
-
-        // 查找暂停时间超过3天以上的 host
+        // 查找暂停时间超过 3 天的 host
         Host::where('status', 'suspended')->where('suspended_at', '<', now()->subDays(3))->chunk(100, function ($hosts) {
             foreach ($hosts as $host) {
                 dispatch(new \App\Jobs\Module\Host($host, 'delete'));
