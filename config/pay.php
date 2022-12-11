@@ -10,13 +10,13 @@ return [
             // 必填-支付宝分配的 app_id
             'app_id' => env('ALIPAY_APP_ID'),
             // 必填-应用私钥 字符串或路径
-            'app_secret_cert' => trim(file_get_contents(env('ALIPAY_APP_SECERT_CERT_PATH'))),
+            'app_secret_cert' => trim(file_get_contents(config_path('secrets/alipayAppPriv.key'))),
             // 必填-应用公钥证书 路径
-            'app_public_cert_path' => env('ALIPAY_APP_PUBLIC_CERT_PATH'),
+            'app_public_cert_path' => config_path('secrets/appCertPublicKey.crt'),
             // 必填-支付宝公钥证书 路径
-            'alipay_public_cert_path' => env('ALIPAY_PUBLIC_CERT_PATH'),
+            'alipay_public_cert_path' => config_path('secrets/alipayCertPublicKey_RSA2.crt'),
             // 必填-支付宝根证书 路径
-            'alipay_root_cert_path' => env('ALIPAY_ROOT_CERT_PATH'),
+            'alipay_root_cert_path' => config_path('secrets/alipayRootCert.crt'),
             'return_url' => env('ALIPAY_CALLBACK_RETURN_URL'),
             'notify_url' => env('ALIPAY_CALLBACK_NOTIFY_URL'),
             // 选填-服务商模式下的服务商 id，当 mode 为 Pay::MODE_SERVICE 时使用该参数
