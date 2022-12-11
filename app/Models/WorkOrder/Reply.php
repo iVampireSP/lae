@@ -76,6 +76,10 @@ class Reply extends Model
             // load work order
             $model->load(['workOrder']);
 
+            // throw if work order is null
+            if (is_null($model->workOrder)) {
+                throw new CommonException('Work order not found');
+            }
             throw_if($model->workOrder->status == 'pending' || $model->workOrder->status == 'error', CommonException::class, '工单状态不正确');
 
             // change work order status
