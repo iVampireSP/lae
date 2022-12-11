@@ -17,7 +17,7 @@ class ServerEvent extends Event implements ShouldBroadcast
         $this->data = $servers;
     }
 
-    public function broadcastOn()
+    public function broadcastOn(): Channel
     {
         return new Channel('servers');
     }

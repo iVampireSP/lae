@@ -44,12 +44,12 @@ class UserEvent extends Event implements ShouldBroadcastNow
         }
     }
 
-    public function broadcastOn()
+    public function broadcastOn(): PrivateChannel
     {
         return new PrivateChannel('users.' . $this->user_id);
     }
 
-    public function broadcastAs()
+    public function broadcastAs(): string
     {
         return 'user';
     }
