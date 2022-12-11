@@ -56,7 +56,7 @@ class Mqtt extends Command
                 $mqtt->subscribe('some/topic', function (string $topic, string $message) {
                     echo sprintf('Received QoS level 1 message on topic [%s]: %s', $topic, $message) . PHP_EOL;
                 }, 1);
-                $mqtt->loop(true);
+                $mqtt->loop();
 
                 return true;
             },

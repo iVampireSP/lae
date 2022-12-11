@@ -25,7 +25,7 @@ return new class extends Migration {
             $table->string('payment')->nullable()->index();
 
             // amount
-            $table->decimal('amount', 10, 2)->default(0);
+            $table->decimal('amount', 10)->default(0);
 
             // paid_at
             $table->timestamp('paid_at')->nullable();

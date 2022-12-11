@@ -12,7 +12,7 @@ class ReplyObserver
      *
      * @param \App\Models\WorkOrder\Reply $reply
      *
-     * @return void
+     * @return void|null
      */
     public function created(Reply $reply)
     {

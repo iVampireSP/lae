@@ -17,7 +17,7 @@ class HostController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Paginator
+     *
      */
     public function index(Request $request): Paginator
     {

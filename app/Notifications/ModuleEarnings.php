@@ -30,7 +30,7 @@ class ModuleEarnings extends Notification
      *
      * @param mixed $notifiable
      *
-     * @return MailMessage
+     * @return void
      */
     public function toGroup($notifiable)
     {

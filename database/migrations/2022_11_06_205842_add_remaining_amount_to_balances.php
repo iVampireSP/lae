@@ -14,7 +14,7 @@ return new class extends Migration {
     {
         Schema::table('balances', function (Blueprint $table) {
             //
-            $table->decimal('remaining_amount', 10, 2)->default(0)->after('amount');
+            $table->decimal('remaining_amount', 10)->default(0)->after('amount');
         });
     }
 

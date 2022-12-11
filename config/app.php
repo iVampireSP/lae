@@ -214,10 +214,10 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
-    'instance_id' => env('INSTANCE_ID', null),
+    'instance_id' => env('INSTANCE_ID'),
 
     'instance_type' => env('INSTANCE_TYPE', 'primary'),
 
-    'instance_address' => env('INSTANCE_address', null),
+    'instance_address' => env('INSTANCE_address'),
 
 ];

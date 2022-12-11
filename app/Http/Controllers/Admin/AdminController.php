@@ -49,7 +49,7 @@ class AdminController extends Controller
         ]);
 
         // 随机密码
-        $password = Str::random(16);
+        $password = Str::random();
 
         $admin = Admin::create([
             'email' => $request->email,
@@ -89,7 +89,7 @@ class AdminController extends Controller
 
         if ($request->filled('reset_password')) {
             // 随机密码
-            $password = Str::random(16);
+            $password = Str::random();
 
             $msg .= '，新的密码为：' . $password;
 

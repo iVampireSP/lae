@@ -82,7 +82,7 @@ trait ApiResponse
 
     public function badRequest($message = 'Bad request'): JsonResponse
     {
-        return $this->error($message, 400);
+        return $this->error($message);
     }
 
     // bad request
@@ -94,9 +94,9 @@ trait ApiResponse
 
     // created
 
-    public function success($data = []): JsonResponse
+    public function success($data = [], $status = 200): JsonResponse
     {
-        return $this->apiResponse($data, 200);
+        return $this->apiResponse($data, $status);
     }
 
     // accepted

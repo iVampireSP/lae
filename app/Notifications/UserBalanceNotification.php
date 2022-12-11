@@ -2,7 +2,6 @@
 
 namespace App\Notifications;
 
-use App\Broadcasting\WeComRobotChannel;
 use App\Models\Balance;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -29,14 +28,14 @@ class UserBalanceNotification extends Notification implements ShouldQueue
      *
      * @param mixed $notifiable
      *
-     * @return array
+     * @return void
      */
     // public function via($notifiable)
     // {
     //     // return [WeComRobotChannel::class];
     // }
 
-    public function toGroup($notifiable)
+    public function toGroup(mixed $notifiable): void
     {
         if ($notifiable instanceof Balance) {
 

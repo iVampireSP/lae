@@ -62,13 +62,9 @@ class CheckAndChargeBalance extends Job
             $balance->update([
                 'paid_at' => now()
             ]);
-        } catch (InvalidResponseException $e) {
+        } catch (InvalidResponseException|ChargeException $e) {
             Log::error($e->getMessage());
             return false;
-        } catch (ChargeException $e) {
-            Log::error($e->getMessage());
-            return false;
-
         }
 
         return true;

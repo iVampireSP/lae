@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\WorkOrder\Reply;
 use App\Models\WorkOrder\WorkOrder;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use function auth;
 
 class ReplyController extends Controller
@@ -29,9 +31,10 @@ class ReplyController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param Request   $request
+     * @param WorkOrder $workOrder
      *
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\Response
+     * @return JsonResponse|Response
      */
     public function store(Request $request, WorkOrder $workOrder)
     {

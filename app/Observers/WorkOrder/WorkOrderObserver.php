@@ -13,7 +13,7 @@ class WorkOrderObserver
      *
      * @param \App\Models\WorkOrder\WorkOrder $workOrder
      *
-     * @return void
+     * @return void|null
      */
     public function created(WorkOrder $workOrder)
     {
@@ -27,7 +27,7 @@ class WorkOrderObserver
      *
      * @param \App\Models\WorkOrder\WorkOrder $workOrder
      *
-     * @return void
+     * @return void|null
      */
     public function updated(WorkOrder $workOrder)
     {

@@ -12,7 +12,7 @@ class BalanceObserve
      *
      * @param \App\Models\Balance $balance
      *
-     * @return void
+     * @return array
      */
     public function created(Balance $balance)
     {
@@ -26,7 +26,7 @@ class BalanceObserve
      *
      * @param \App\Models\Balance $balance
      *
-     * @return void
+     * @return array
      */
     public function updated(Balance $balance)
     {
