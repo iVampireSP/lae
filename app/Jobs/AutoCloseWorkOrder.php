@@ -23,7 +23,7 @@ class AutoCloseWorkOrder extends Job
      */
     public function handle()
     {
-        // closed replied after 1 days
-        WorkOrder::where('status', 'replied')->where('updated_at', '<=', now()->subDays())->update(['status' => 'closed']);
+        // closed replied after 1 day
+        WorkOrder::where('status', 'replied')->where('updated_at', '<=', now()->subDay())->update(['status' => 'closed']);
     }
 }
