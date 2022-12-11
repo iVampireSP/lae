@@ -20,4 +20,4 @@ rr
 .rr.yaml
 .DS_Store
 /config/secrets
-config/secrets
+config/secrets/*

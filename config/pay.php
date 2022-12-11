@@ -4,13 +4,20 @@ declare(strict_types=1);
 
 use Yansongda\Pay\Pay;
 
+$secret_file = env('ALIPAY_APP_SECERT_CERT_PATH', config_path('secrets/alipayAppPriv.key'));
+if (!file_exists($secret_file)) {
+    $secret_file = '';
+} else {
+    $secret_file = file_get_contents($secret_file);
+}
+
 return [
     'alipay' => [
         'default' => [
             // 必填-支付宝分配的 app_id
             'app_id' => env('ALIPAY_APP_ID'),
             // 必填-应用私钥 字符串或路径
-            'app_secret_cert' => trim(file_get_contents(config_path('secrets/alipayAppPriv.key'))),
+            'app_secret_cert' => $secret_file,
             // 必填-应用公钥证书 路径
             'app_public_cert_path' => config_path('secrets/appCertPublicKey.crt'),
             // 必填-支付宝公钥证书 路径
