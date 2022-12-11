@@ -8,7 +8,7 @@ $secret_file = env('ALIPAY_APP_SECERT_CERT_PATH', config_path('secrets/alipayApp
 if (!file_exists($secret_file)) {
     $secret_file = '';
 } else {
-    $secret_file = file_get_contents($secret_file);
+    $secret_file = trim(file_get_contents($secret_file));
 }
 
 return [
