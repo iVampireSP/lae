@@ -68,11 +68,10 @@ use Illuminate\Support\Facades\Cache;
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host whereUpdatedAt($value)
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host whereUserId($value)
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host withCacheCooldownSeconds(?int $seconds = null)
- * @mixin \Eloquent
  */
 class Host extends Model
 {
-    use HasFactory, Cachable;
+    use Cachable;
 
     protected $table = 'hosts';
 
@@ -350,7 +349,7 @@ class Host extends Model
         }
 
         // 保存 1 年
-        Cache::put($cache_key, $earnings, 24 * 60 * 60 * 365);
+        Cache::forever($cache_key, $earnings);
 
         /** 统计收益结束 */
 
