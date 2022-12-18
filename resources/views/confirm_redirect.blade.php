@@ -10,14 +10,6 @@
 
             <h3>带你去目标站点...</h3>
 
-
-            <form action="{{ route('deleteAll') }}" method="post" class="mt-5">
-                @csrf
-                @method('delete')
-                <p>如果您反悔了，您还可以吊销全部 Token。</p>
-                <button class="btn btn-danger" type="submit">吊销全部 Token</button>
-            </form>
-
             @php
                 session()->forget('callback');
             @endphp
@@ -25,7 +17,7 @@
             <script>
                 setTimeout(function () {
                     window.location.href = "{{ $callback . '?token=' . session('token')}}";
-                }, 3000);
+                }, 1000);
             </script>
         @else
 
