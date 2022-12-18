@@ -14,11 +14,22 @@ class HostController extends Controller
      * Display a listing of the resource.
      *
      *
+     * @param Request $request
+     *
      * @return View
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        $hosts = Host::with('user')->paginate(100);
+        $hosts = Host::with('user');
+
+        // 遍历所有的搜索条件
+        foreach (['name', 'module_id', 'status', 'user_id'] as $field) {
+            if ($request->has($field)) {
+                $hosts->where($field, 'like', '%' . $request->input($field) . '%');
+            }
+        }
+
+        $hosts = $hosts->paginate(100);
 
         return view('admin.hosts.index', compact('hosts'));
     }
