@@ -23,7 +23,7 @@ class HostController extends Controller
         $hosts = Host::with('user');
 
         // 遍历所有的搜索条件
-        foreach (['name', 'module_id', 'status', 'user_id'] as $field) {
+        foreach (['name', 'module_id', 'status', 'user_id', 'price', 'managed_price', 'created_at', 'updated_at'] as $field) {
             if ($request->has($field)) {
                 $hosts->where($field, 'like', '%' . $request->input($field) . '%');
             }
