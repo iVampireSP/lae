@@ -6,6 +6,7 @@
         <p>嗨，游客</p>
         <p>您需要先登录，才能继续使用 莱云。</p>
 
+        <p>如果您继续登录，则代表您已经阅读并同意 <a href="/static/tos.html" target="_blank">莱云 TOS</a></p>
         <a href="{{ route('login') }}" class="btn btn-primary">登录</a>
     @endguest
 

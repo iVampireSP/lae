@@ -29,8 +29,9 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::get('/', [AuthController::class, 'index'])->name('index')->middleware('banned');
-Route::view('not_verified', 'not_verified')->name('not_verified');
 
+// 静态页面
+Route::view('not_verified', 'not_verified')->name('not_verified');
 
 Route::get('/balances/{balances}', [BalanceController::class, 'show'])->name('balances.balances.show');
 Route::get('/balances/alipay/notify', [BalanceController::class, 'notify'])->name('balances.alipay.notify');
