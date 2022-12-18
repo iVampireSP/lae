@@ -193,7 +193,7 @@ class ModuleController extends Controller
         $resp = $module->baseRequest('post', 'fast-login', []);
 
         if ($resp['success']) {
-            $resp = $resp['json']['data'];
+            $resp = $resp['json'];
             return view('admin.modules.login', compact('module', 'resp'));
         } else {
             return redirect()->route('admin.modules.show', $module)->with('error', '快速登录失败，可能是模块不支持。');
