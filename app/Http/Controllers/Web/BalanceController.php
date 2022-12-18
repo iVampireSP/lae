@@ -29,7 +29,7 @@ class BalanceController extends Controller
     {
         // 充值
         $this->validate($request, [
-            'amount' => 'required|integer|min:1|max:10000',
+            'amount' => 'required|integer|min:0.1|max:10000',
         ]);
 
         $user = $request->user();
@@ -39,7 +39,7 @@ class BalanceController extends Controller
 
         $data = [
             'user_id' => $user->id,
-            'amount' => $request->amount,
+            'amount' => $request->input('amount'),
             'payment' => 'alipay',
         ];
 

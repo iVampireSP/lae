@@ -31,8 +31,8 @@ class HostController extends Controller
 
         $user = $request->user();
 
-        if ($user->balance < 1) {
-            return $this->error('余额不足，无法开启计费项目。');
+        if ($user->balance < 0.5) {
+            return $this->error('余额不足，无法开启计费项目。请确保您的余额至少为 0.5 元，您当前有 ' . $user->balance . ' 元。');
         }
 
         $host->update([
