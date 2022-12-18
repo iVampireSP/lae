@@ -19,28 +19,25 @@ class UserController extends Controller
             'name' => 'sometimes|string',
         ]);
 
-        // 如果什么都没有传递，返回用户列表
-        if (empty($request->except('page'))) {
-            $users = User::simplePaginate(10);
-            return $this->success($users);
-        }
 
-        if ($request->has('user_id')) {
-            return $this->success(User::find($request->user_id));
-        }
+        $users = User::query();
 
-        // 搜索用户
-        $user = User::query();
+        // 搜索 name, email, balance
+        if ($request->has('name')) {
+            $users->where('name', 'like', '%' . $request->input('name') . '%');
+        }
 
         if ($request->has('email')) {
-            $user->where('email', $request->email);
+            $users->where('email', 'like', '%' . $request->input('email') . '%');
         }
 
-        if ($request->has('name')) {
-            $user->where('name', $request->name);
+        if ($request->has('balance')) {
+            $users->where('balance', 'like', '%' . $request->input('balance') . '%');
         }
 
-        return $this->success($user->first());
+        $users = $users->simplePaginate(100);
+
+        return $this->success($users);
     }
 
     public function show(User $user)
