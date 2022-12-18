@@ -7,7 +7,7 @@ use Illuminate\Pagination\Paginator;
 
 trait ApiResponse
 {
-    // RESTful API response
+    // REST API response
     public function moduleResponse($response, int $status = 200): JsonResponse
     {
         return match ($status) {
