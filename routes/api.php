@@ -14,7 +14,7 @@ Route::get('user', [UserController::class, 'index']);
 Route::get('users', [UserController::class, 'index']);
 Route::get('servers', ServerController::class);
 Route::get('modules', [ModuleController::class, 'index']);
-Route::get('tasks', TaskController::class);
+Route::resource('tasks', TaskController::class)->only(['index', 'show']);
 
 Route::get('forum/announcements', [ForumController::class, 'pinned']);
 Route::get('forum/pinned', [ForumController::class, 'announcements']);
