@@ -20,7 +20,7 @@ trait ApiResponse
             404 => $this->notFound($response),
             405 => $this->methodNotAllowed(),
             429 => $this->tooManyRequests(),
-            500 => $this->serverError(),
+            500 => $this->serverError($response),
 
             default => response()->json($response, $status),
         };
