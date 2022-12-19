@@ -129,13 +129,13 @@ class Module extends Authenticatable
     {
         $module_id = auth('module')->id();
 
-        $this->http()->withHeaders([
+        $http = $this->http()->withHeaders([
             'X-Module' => $module_id
         ]);
 
         $requests['module_id'] = $module_id;
 
-        $response = $this->http()->{$method}("exports/{$path}", $requests);
+        $response = $http->{$method}("exports/{$path}", $requests);
 
         return $this->getResponse($response);
     }
