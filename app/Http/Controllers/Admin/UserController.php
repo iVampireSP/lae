@@ -105,27 +105,29 @@ class UserController extends Controller
             }
         }
 
+        $one_time_action = $request->input('one_time_action');
+
         if ($request->filled('one_time_action')) {
-            if ($request->one_time_action == 'clear_all_keys') {
+            if ($one_time_action == 'clear_all_keys') {
                 $user->tokens()->delete();
-            } else if ($request->one_time_action == 'suspend_all_hosts') {
+            } else if ($one_time_action == 'suspend_all_hosts') {
                 $user->hosts()->update(['status' => 'suspended', 'suspended_at' => now()]);
-            } else if ($request->one_time_action == 'stop_all_hosts') {
+            } else if ($one_time_action == 'stop_all_hosts') {
                 $user->hosts()->update(['status' => 'stopped', 'suspended_at' => null]);
-            } else if ($request->one_time_action == 'add_balance') {
+            } else if ($one_time_action == 'add_balance') {
                 try {
-                    $transaction->addAmount($user->id, 'console', $request->balance ?? 0, '管理员添加。');
+                    $transaction->addAmount($user->id, 'console', $request->balance ?? 0, '管理员添加。', true);
                 } catch (ChargeException $e) {
                     return back()->with('error', $e->getMessage());
                 }
-            } else if ($request->one_time_action == 'reduce_balance') {
+            } else if ($one_time_action == 'reduce_balance') {
                 $transaction->reduceAmount($user->id, $request->balance ?? 0, '管理员扣除。');
             }
 
         }
 
         if ($request->has('user_group_id')) {
-            $user->user_group_id = $request->user_group_id;
+            $user->user_group_id = $request->input('user_group_id');
         }
 
         if ($user->isDirty()) {
