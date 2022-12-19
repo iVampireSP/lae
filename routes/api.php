@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\ForumController;
 use App\Http\Controllers\Api\HostController;
+use App\Http\Controllers\Api\IndexController;
 use App\Http\Controllers\Api\ModuleController;
 use App\Http\Controllers\Api\ReplyController;
 use App\Http\Controllers\Api\ServerController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\WorkOrderController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/', IndexController::class);
 Route::get('user', [UserController::class, 'index']);
 Route::get('users', [UserController::class, 'index']);
 Route::get('servers', ServerController::class);

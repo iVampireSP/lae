@@ -11,7 +11,7 @@ class IndexController extends Controller
     public function __invoke(): JsonResponse
     {
         return $this->success([
-            'message' => 'Welcome to LoliArt LaeCloud API Server',
+            'message' => 'Welcome to LaeCloud API Server',
         ]);
     }
 }
