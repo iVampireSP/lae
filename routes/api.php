@@ -11,7 +11,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\WorkOrderController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', IndexController::class);
+Route::get('/', IndexController::class)->withoutMiddleware('auth:sanctum');
 Route::get('user', [UserController::class, 'index']);
 Route::get('users', [UserController::class, 'index']);
 Route::get('servers', ServerController::class);
