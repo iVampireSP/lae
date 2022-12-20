@@ -6,7 +6,7 @@
         <p>嗨，游客</p>
         <p>您需要先登录，才能继续使用 莱云。</p>
 
-        <p>如果您继续登录，则代表您已经阅读并同意 <a href="/static/tos.html" target="_blank">莱云 TOS</a></p>
+        <p>如果您继续登录，则代表您已经阅读并同意 <a href="https://www.laecloud.com/tos/" target="_blank" class="text-decoration-underline">服务条款</a></p>
         <a href="{{ route('login') }}" class="btn btn-primary">登录</a>
     @endguest
 
@@ -24,7 +24,8 @@
 
         <form action="{{ route('newToken') }}" name="newToken" method="POST">
             @csrf
-            <input type="text" name="token_name" placeholder="Token 名字"/>
+            <label for="token_name">Token 名称</label>
+            <input type="text" name="token_name" id="token_name" placeholder="Token 名字"/>
             <button class="btn btn-primary" type="submit">获取新的 Token</button>
         </form>
 
