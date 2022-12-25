@@ -38,6 +38,13 @@ trait ApiResponse
 
     public function apiResponse($data = [], $status = 200): JsonResponse
     {
+        // if data is string, then it is error message
+        if (is_string($data)) {
+            $data = [
+                'message' => $data,
+            ];
+        }
+
         return response()->json($data, $status)->setEncodingOptions(JSON_UNESCAPED_UNICODE);
     }
 
