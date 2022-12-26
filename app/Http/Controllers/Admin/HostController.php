@@ -29,7 +29,7 @@ class HostController extends Controller
             }
         }
 
-        $hosts = $hosts->paginate(100)->withQueryString();;
+        $hosts = $hosts->paginate(50)->withQueryString();;
 
         return view('admin.hosts.index', compact('hosts'));
     }
