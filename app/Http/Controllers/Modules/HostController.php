@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 use function auth;
 
 class HostController extends Controller
@@ -30,7 +31,7 @@ class HostController extends Controller
      * @param Request $request
      *
      * @return Response|JsonResponse
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     public function store(Request $request): Response|JsonResponse
     {
@@ -91,7 +92,7 @@ class HostController extends Controller
      * @param Host    $host
      *
      * @return JsonResponse
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     public function update(Request $request, Host $host): JsonResponse
     {
