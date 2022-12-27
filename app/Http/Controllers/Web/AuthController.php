@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use function back;
 use function config;
-use function now;
 use function redirect;
 use function session;
 use function view;

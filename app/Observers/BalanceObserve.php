@@ -10,7 +10,7 @@ class BalanceObserve
     /**
      * Handle the Balance "created" event.
      *
-     * @param \App\Models\Balance $balance
+     * @param Balance $balance
      *
      * @return array
      */
@@ -24,7 +24,7 @@ class BalanceObserve
     /**
      * Handle the Balance "updated" event.
      *
-     * @param \App\Models\Balance $balance
+     * @param Balance $balance
      *
      * @return array
      */
@@ -38,7 +38,7 @@ class BalanceObserve
     /**
      * Handle the Balance "deleted" event.
      *
-     * @param \App\Models\Balance $balance
+     * @param Balance $balance
      *
      * @return void
      */
@@ -50,7 +50,7 @@ class BalanceObserve
     /**
      * Handle the Balance "restored" event.
      *
-     * @param \App\Models\Balance $balance
+     * @param Balance $balance
      *
      * @return void
      */
@@ -62,7 +62,7 @@ class BalanceObserve
     /**
      * Handle the Balance "force deleted" event.
      *
-     * @param \App\Models\Balance $balance
+     * @param Balance $balance
      *
      * @return void
      */

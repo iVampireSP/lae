@@ -11,7 +11,7 @@ class WorkOrderObserver
     /**
      * Handle the WorkOrder "created" event.
      *
-     * @param \App\Models\WorkOrder\WorkOrder $workOrder
+     * @param WorkOrder $workOrder
      *
      * @return void|null
      */
@@ -25,7 +25,7 @@ class WorkOrderObserver
     /**
      * Handle the WorkOrder "updated" event.
      *
-     * @param \App\Models\WorkOrder\WorkOrder $workOrder
+     * @param WorkOrder $workOrder
      *
      * @return void|null
      */
@@ -41,7 +41,7 @@ class WorkOrderObserver
     /**
      * Handle the WorkOrder "deleted" event.
      *
-     * @param \App\Models\WorkOrder\WorkOrder $workOrder
+     * @param WorkOrder $workOrder
      *
      * @return void
      */
@@ -53,7 +53,7 @@ class WorkOrderObserver
     /**
      * Handle the WorkOrder "restored" event.
      *
-     * @param \App\Models\WorkOrder\WorkOrder $workOrder
+     * @param WorkOrder $workOrder
      *
      * @return void
      */
@@ -65,7 +65,7 @@ class WorkOrderObserver
     /**
      * Handle the WorkOrder "force deleted" event.
      *
-     * @param \App\Models\WorkOrder\WorkOrder $workOrder
+     * @param WorkOrder $workOrder
      *
      * @return void
      */

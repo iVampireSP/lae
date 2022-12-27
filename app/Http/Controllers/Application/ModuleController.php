@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Application;
 
 use App\Http\Controllers\Controller;
 use App\Models\Module;
-use Illuminate\Http\Request;
 
 class ModuleController extends Controller
 {
@@ -17,7 +16,8 @@ class ModuleController extends Controller
     // }
 
 
-    public function show(Module $module) {
+    public function show(Module $module)
+    {
 
 
         return $this->success($module);

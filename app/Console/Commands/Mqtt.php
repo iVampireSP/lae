@@ -89,8 +89,6 @@ class Mqtt extends Command
         }
 
 
-
-
         return Command::SUCCESS;
 
         // // 开启新的进程，处理 MQTT 消息

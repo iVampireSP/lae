@@ -24,6 +24,32 @@ class UserGroupController extends Controller
     }
 
     /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     *
+     * @return RedirectResponse
+     */
+    public function store(Request $request)
+    {
+        $request->validate($this->rules());
+
+        $user_group = UserGroup::create($request->all());
+
+        return redirect()->route('admin.user-groups.edit', $user_group)->with('success', '用户组新建成功。');
+    }
+
+    private function rules(): array
+    {
+        return [
+            'name' => 'required|string',
+            'color' => 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/',
+            'discount' => 'required|numeric|min:0|max:100',
+            'exempt' => 'required|boolean',
+        ];
+    }
+
+    /**
      * Show the form for creating a new resource.
      *
      * @return View
@@ -33,22 +59,6 @@ class UserGroupController extends Controller
         //
 
         return view('admin.user-groups.create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function store(Request $request)
-    {
-        $request->validate($this->rules());
-
-        $user_group = UserGroup::create($request->all());
-
-        return redirect()->route('admin.user-groups.edit', $user_group)->with('success', '用户组新建成功。');
     }
 
     /**
@@ -109,15 +119,5 @@ class UserGroupController extends Controller
         $user_group->delete();
 
         return redirect()->route('admin.user-groups.index')->with('success', '用户组删除成功。');
-    }
-
-    private function rules(): array
-    {
-        return [
-            'name' => 'required|string',
-            'color' => 'regex:/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/',
-            'discount' => 'required|numeric|min:0|max:100',
-            'exempt' => 'required|boolean',
-        ];
     }
 }

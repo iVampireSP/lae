@@ -60,24 +60,6 @@ class Transaction extends Model
         return $query->where('user_id', auth()->id());
     }
 
-    private function addLog($user_id, $data)
-    {
-        $user = User::find($user_id);
-
-        $current = [
-            'balance' => (float)$user->balance,
-            'user_id' => intval($user_id),
-        ];
-
-        // merge
-        $data = array_merge($data, $current);
-
-        // add expired at
-        $data['expired_at'] = now()->addSeconds(7);
-
-        return $this->create($data);
-    }
-
     public function reduceAmount($user_id, $amount = 0, $description = '扣除费用请求。')
     {
 
@@ -114,6 +96,24 @@ class Transaction extends Model
         }
 
         return $this->addLog($user_id, $data);
+    }
+
+    private function addLog($user_id, $data)
+    {
+        $user = User::find($user_id);
+
+        $current = [
+            'balance' => (float)$user->balance,
+            'user_id' => intval($user_id),
+        ];
+
+        // merge
+        $data = array_merge($data, $current);
+
+        // add expired at
+        $data['expired_at'] = now()->addSeconds(7);
+
+        return $this->create($data);
     }
 
     public function reduceAmountModuleFail($user_id, $module_id, $amount = 0, $description = '扣除费用请求。')

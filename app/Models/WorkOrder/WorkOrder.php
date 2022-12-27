@@ -7,63 +7,66 @@ use App\Jobs\Module\WorkOrder\WorkOrder as WorkOrderJob;
 use App\Models\Host;
 use App\Models\Module;
 use App\Models\User;
+use Eloquent;
+use GeneaLabs\LaravelModelCaching\CachedBuilder;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\WorkOrder\WorkOrder
  *
  * @property int                                                                         $id
- * @property string                                                                      $title
- * @property string                                                                      $content
- * @property int                                                                         $user_id
- * @property string                                                                      $module_id
- * @property int|null                                                                    $host_id
- * @property string                                                                      $status
- * @property \Illuminate\Support\Carbon|null                                             $created_at
- * @property \Illuminate\Support\Carbon|null                                             $updated_at
- * @property-read Host|null                                                              $host
- * @property-read Module                                                                 $module
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\WorkOrder\Reply[] $replies
- * @property-read int|null                                                               $replies_count
- * @property-read User                                                                   $user
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder all($columns = [])
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder avg($column)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder cache(array $tags = [])
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder cachedValue(array $arguments, string $cacheKey)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder count($columns = '*')
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder disableCache()
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder disableModelCaching()
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder exists()
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder flushCache(array $tags = [])
+ * @property string                                                $title
+ * @property string                                                $content
+ * @property int                                                   $user_id
+ * @property string                                                $module_id
+ * @property int|null                                              $host_id
+ * @property string                                                $status
+ * @property Carbon|null                       $created_at
+ * @property Carbon|null                       $updated_at
+ * @property-read Host|null                                        $host
+ * @property-read Module                                           $module
+ * @property-read Collection|Reply[] $replies
+ * @property-read int|null                                         $replies_count
+ * @property-read User                                             $user
+ * @method static CachedBuilder|WorkOrder all($columns = [])
+ * @method static CachedBuilder|WorkOrder avg($column)
+ * @method static CachedBuilder|WorkOrder cache(array $tags = [])
+ * @method static CachedBuilder|WorkOrder cachedValue(array $arguments, string $cacheKey)
+ * @method static CachedBuilder|WorkOrder count($columns = '*')
+ * @method static CachedBuilder|WorkOrder disableCache()
+ * @method static CachedBuilder|WorkOrder disableModelCaching()
+ * @method static CachedBuilder|WorkOrder exists()
+ * @method static CachedBuilder|WorkOrder flushCache(array $tags = [])
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder
  *         getModelCacheCooldown(\Illuminate\Database\Eloquent\Model $instance)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder inRandomOrder($seed = '')
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder insert(array $values)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder isCachable()
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder max($column)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder min($column)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder newModelQuery()
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder newQuery()
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder query()
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder sum($column)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder thisModule()
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder thisUser()
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder truncate()
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder whereContent($value)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder whereCreatedAt($value)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder whereHostId($value)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder whereId($value)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder whereModuleId($value)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder whereStatus($value)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder whereTitle($value)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder whereUpdatedAt($value)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder whereUserId($value)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder withCacheCooldownSeconds(?int $seconds = null)
- * @mixin \Eloquent
+ * @method static CachedBuilder|WorkOrder inRandomOrder($seed = '')
+ * @method static CachedBuilder|WorkOrder insert(array $values)
+ * @method static CachedBuilder|WorkOrder isCachable()
+ * @method static CachedBuilder|WorkOrder max($column)
+ * @method static CachedBuilder|WorkOrder min($column)
+ * @method static CachedBuilder|WorkOrder newModelQuery()
+ * @method static CachedBuilder|WorkOrder newQuery()
+ * @method static CachedBuilder|WorkOrder query()
+ * @method static CachedBuilder|WorkOrder sum($column)
+ * @method static CachedBuilder|WorkOrder thisModule()
+ * @method static CachedBuilder|WorkOrder thisUser()
+ * @method static CachedBuilder|WorkOrder truncate()
+ * @method static CachedBuilder|WorkOrder whereContent($value)
+ * @method static CachedBuilder|WorkOrder whereCreatedAt($value)
+ * @method static CachedBuilder|WorkOrder whereHostId($value)
+ * @method static CachedBuilder|WorkOrder whereId($value)
+ * @method static CachedBuilder|WorkOrder whereModuleId($value)
+ * @method static CachedBuilder|WorkOrder whereStatus($value)
+ * @method static CachedBuilder|WorkOrder whereTitle($value)
+ * @method static CachedBuilder|WorkOrder whereUpdatedAt($value)
+ * @method static CachedBuilder|WorkOrder whereUserId($value)
+ * @method static CachedBuilder|WorkOrder withCacheCooldownSeconds(?int $seconds = null)
+ * @mixin Eloquent
  */
 class WorkOrder extends Model
 {
@@ -120,7 +123,7 @@ class WorkOrder extends Model
 
         // updated
         static::updated(function ($model) {
-            dispatch(new \App\Jobs\Module\WorkOrder\WorkOrder($model, 'put'));
+            dispatch(new WorkOrderJob($model, 'put'));
         });
     }
 

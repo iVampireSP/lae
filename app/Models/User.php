@@ -5,12 +5,19 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Exceptions\CommonException;
 use App\Exceptions\User\BalanceNotEnoughException;
+use Database\Factories\UserFactory;
+use Eloquent;
+use GeneaLabs\LaravelModelCaching\CachedBuilder;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\DatabaseNotification;
+use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 use Laravel\Sanctum\HasApiTokens;
 
 /**
@@ -22,69 +29,69 @@ use Laravel\Sanctum\HasApiTokens;
  *               $name
  * @property string
  *               $email
- * @property \Illuminate\Support\Carbon|null
+ * @property Carbon|null
  *               $email_verified_at
  * @property string|null
  *               $password
  * @property float
  *               $balance
- * @property \Illuminate\Support\Carbon|null
+ * @property Carbon|null
  *               $banned_at 封禁时间
  * @property string|null
  *               $banned_reason
  * @property string|null
  *               $remember_token
- * @property \Illuminate\Support\Carbon|null
+ * @property Carbon|null
  *               $created_at
- * @property \Illuminate\Support\Carbon|null
+ * @property Carbon|null
  *               $updated_at
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Host[]
+ * @property-read Collection|Host[]
  *                    $hosts
  * @property-read int|null
  *                    $hosts_count
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[]
+ * @property-read DatabaseNotificationCollection|DatabaseNotification[]
  *                $notifications
  * @property-read int|null
  *                    $notifications_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\PersonalAccessToken[]
+ * @property-read Collection|PersonalAccessToken[]
  *                    $tokens
  * @property-read int|null
  *                    $tokens_count
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User all($columns = [])
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User avg($column)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User cache(array $tags = [])
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User cachedValue(array $arguments, string $cacheKey)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User count($columns = '*')
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User disableCache()
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User disableModelCaching()
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User exists()
- * @method static \Database\Factories\UserFactory factory(...$parameters)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User flushCache(array $tags = [])
+ * @method static CachedBuilder|User all($columns = [])
+ * @method static CachedBuilder|User avg($column)
+ * @method static CachedBuilder|User cache(array $tags = [])
+ * @method static CachedBuilder|User cachedValue(array $arguments, string $cacheKey)
+ * @method static CachedBuilder|User count($columns = '*')
+ * @method static CachedBuilder|User disableCache()
+ * @method static CachedBuilder|User disableModelCaching()
+ * @method static CachedBuilder|User exists()
+ * @method static UserFactory factory(...$parameters)
+ * @method static CachedBuilder|User flushCache(array $tags = [])
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User
  *         getModelCacheCooldown(\Illuminate\Database\Eloquent\Model $instance)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User inRandomOrder($seed = '')
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User insert(array $values)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User isCachable()
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User max($column)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User min($column)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User newModelQuery()
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User newQuery()
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User query()
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User sum($column)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User truncate()
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User whereBalance($value)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User whereBannedAt($value)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User whereBannedReason($value)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User whereCreatedAt($value)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User whereEmail($value)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User whereEmailVerifiedAt($value)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User whereId($value)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User whereName($value)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User wherePassword($value)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User whereRememberToken($value)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User whereUpdatedAt($value)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|User withCacheCooldownSeconds(?int $seconds = null)
- * @mixin \Eloquent
+ * @method static CachedBuilder|User inRandomOrder($seed = '')
+ * @method static CachedBuilder|User insert(array $values)
+ * @method static CachedBuilder|User isCachable()
+ * @method static CachedBuilder|User max($column)
+ * @method static CachedBuilder|User min($column)
+ * @method static CachedBuilder|User newModelQuery()
+ * @method static CachedBuilder|User newQuery()
+ * @method static CachedBuilder|User query()
+ * @method static CachedBuilder|User sum($column)
+ * @method static CachedBuilder|User truncate()
+ * @method static CachedBuilder|User whereBalance($value)
+ * @method static CachedBuilder|User whereBannedAt($value)
+ * @method static CachedBuilder|User whereBannedReason($value)
+ * @method static CachedBuilder|User whereCreatedAt($value)
+ * @method static CachedBuilder|User whereEmail($value)
+ * @method static CachedBuilder|User whereEmailVerifiedAt($value)
+ * @method static CachedBuilder|User whereId($value)
+ * @method static CachedBuilder|User whereName($value)
+ * @method static CachedBuilder|User wherePassword($value)
+ * @method static CachedBuilder|User whereRememberToken($value)
+ * @method static CachedBuilder|User whereUpdatedAt($value)
+ * @method static CachedBuilder|User withCacheCooldownSeconds(?int $seconds = null)
+ * @mixin Eloquent
  */
 class User extends Authenticatable
 {

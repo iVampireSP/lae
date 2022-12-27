@@ -24,16 +24,6 @@ class AdminController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return View
-     */
-    public function create(): View
-    {
-        return view('admin.admins.create');
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param Request $request
@@ -57,6 +47,16 @@ class AdminController extends Controller
         ]);
 
         return redirect()->route('admin.admins.edit', $admin)->with('success', '管理员创建成功，密码为：' . $password . '。');
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return View
+     */
+    public function create(): View
+    {
+        return view('admin.admins.create');
     }
 
     /**

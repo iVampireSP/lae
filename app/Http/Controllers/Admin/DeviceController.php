@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Support\EmqxSupport;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Request;
-use Illuminate\Pagination\Paginator;
 
 class DeviceController extends Controller
 {

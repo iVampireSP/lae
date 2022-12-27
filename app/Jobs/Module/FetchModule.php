@@ -4,13 +4,12 @@ namespace App\Jobs\Module;
 
 use App\Events\ServerEvent;
 use App\Models\Module;
-use GuzzleHttp\Exception\ConnectException;
+use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class FetchModule implements ShouldQueue
@@ -51,7 +50,7 @@ class FetchModule implements ShouldQueue
             foreach ($modules as $module) {
                 try {
                     $response = $module->http()->get('remote');
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     Log::error($e->getMessage());
                     continue;
                 }

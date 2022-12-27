@@ -2,6 +2,12 @@
 
 namespace App\Providers;
 
+use App\Models\Balance;
+use App\Models\WorkOrder\Reply;
+use App\Models\WorkOrder\WorkOrder;
+use App\Observers\BalanceObserve;
+use App\Observers\WorkOrder\ReplyObserver;
+use App\Observers\WorkOrder\WorkOrderObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -28,9 +34,9 @@ class EventServiceProvider extends ServiceProvider
     {
         //
 
-        \App\Models\WorkOrder\WorkOrder::observe(\App\Observers\WorkOrder\WorkOrderObserver::class);
-        \App\Models\WorkOrder\Reply::observe(\App\Observers\WorkOrder\ReplyObserver::class);
-        \App\Models\Balance::observe(\App\Observers\BalanceObserve::class);
+        WorkOrder::observe(WorkOrderObserver::class);
+        Reply::observe(ReplyObserver::class);
+        Balance::observe(BalanceObserve::class);
     }
 
     /**

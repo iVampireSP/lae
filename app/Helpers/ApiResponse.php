@@ -3,7 +3,6 @@
 namespace App\Helpers;
 
 use Illuminate\Http\JsonResponse;
-use Illuminate\Pagination\Paginator;
 
 trait ApiResponse
 {
@@ -26,14 +25,9 @@ trait ApiResponse
         };
     }
 
-    public function notFound($message = 'Not found'): JsonResponse
+    public function success($data = [], $status = 200): JsonResponse
     {
-        return $this->error($message, 404);
-    }
-
-    public function error($message = '', $code = 400): JsonResponse
-    {
-        return $this->apiResponse($message, $code);
+        return $this->apiResponse($data, $status);
     }
 
     public function apiResponse($data = [], $status = 200): JsonResponse
@@ -48,14 +42,14 @@ trait ApiResponse
         return response()->json($data, $status)->setEncodingOptions(JSON_UNESCAPED_UNICODE);
     }
 
-    public function forbidden($message = 'Forbidden'): JsonResponse
+    public function created($message = 'Created'): JsonResponse
     {
-        return $this->error($message, 403);
+        return $this->success($message, 201);
     }
 
-    public function unauthorized($message = 'Unauthorized'): JsonResponse
+    public function noContent($message = 'No content'): JsonResponse
     {
-        return $this->error($message, 401);
+        return $this->success($message, 204);
     }
 
     public function badRequest($message = 'Bad request'): JsonResponse
@@ -63,82 +57,97 @@ trait ApiResponse
         return $this->error($message);
     }
 
+    public function error($message = '', $code = 400): JsonResponse
+    {
+        return $this->apiResponse($message, $code);
+    }
+
     // bad request
 
-    public function created($message = 'Created'): JsonResponse
+    public function serviceUnavailable($message = 'Service unavailable'): JsonResponse
     {
-        return $this->success($message, 201);
+        return $this->error($message, 503);
     }
 
     // created
 
-    public function success($data = [], $status = 200): JsonResponse
+    public function forbidden($message = 'Forbidden'): JsonResponse
     {
-        return $this->apiResponse($data, $status);
+        return $this->error($message, 403);
     }
 
     // accepted
+
+    public function notFound($message = 'Not found'): JsonResponse
+    {
+        return $this->error($message, 404);
+    }
+
+    // no content
+
+    public function methodNotAllowed($message = 'Method not allowed'): JsonResponse
+    {
+        return $this->error($message, 405);
+    }
+
+    // updated
+
+    public function tooManyRequests($message = 'Too many requests'): JsonResponse
+    {
+        return $this->error($message, 429);
+    }
+
+    // deleted
+
+    public function serverError($message = 'Server error'): JsonResponse
+    {
+        return $this->error($message, 500);
+    }
+
+    // not allowed
+
+    public function unauthorized($message = 'Unauthorized'): JsonResponse
+    {
+        return $this->error($message, 401);
+    }
+
+    // conflict
 
     public function accepted($message = 'Accepted'): JsonResponse
     {
         return $this->success($message, 202);
     }
 
-    // no content
-    public function noContent($message = 'No content'): JsonResponse
-    {
-        return $this->success($message, 204);
-    }
+    // too many requests
 
-    // updated
     public function updated($message = 'Updated'): JsonResponse
     {
         return $this->success($message, 200);
     }
 
-    // deleted
+    // server error
+
     public function deleted($message = 'Deleted'): JsonResponse
     {
         return $this->success($message, 200);
     }
 
-    // not allowed
+    // service unavailable
+
     public function notAllowed($message = 'Not allowed'): JsonResponse
     {
         return $this->error($message, 405);
     }
 
-    // conflict
+    // method not allowed
+
     public function conflict($message = 'Conflict'): JsonResponse
     {
         return $this->error($message, 409);
     }
 
-    // too many requests
-    public function tooManyRequests($message = 'Too many requests'): JsonResponse
-    {
-        return $this->error($message, 429);
-    }
-
-    // server error
-    public function serverError($message = 'Server error'): JsonResponse
-    {
-        return $this->error($message, 500);
-    }
-
-    // service unavailable
-    public function serviceUnavailable($message = 'Service unavailable'): JsonResponse
-    {
-        return $this->error($message, 503);
-    }
-
-    // method not allowed
-    public function methodNotAllowed($message = 'Method not allowed'): JsonResponse
-    {
-        return $this->error($message, 405);
-    }
-
     // not acceptable
+
     public function notAcceptable($message = 'Not acceptable'): JsonResponse
     {
         return $this->error($message, 406);

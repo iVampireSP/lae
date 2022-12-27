@@ -63,6 +63,28 @@ class MqttAuthController extends Controller
         }
     }
 
+    private function ignore()
+    {
+        return response([
+            'result' => 'ignore',
+        ], 200);
+    }
+
+    private function allow()
+    {
+        return response([
+            'result' => 'allow',
+            'is_superuser' => false,
+        ], 200);
+    }
+
+    private function deny()
+    {
+        return response([
+            'result' => 'deny',
+        ], 200);
+    }
+
     public function authorization(Request $request)
     {
         // 禁止订阅保留的
@@ -129,27 +151,5 @@ class MqttAuthController extends Controller
         } else {
             return $this->deny();
         }
-    }
-
-    private function deny()
-    {
-        return response([
-            'result' => 'deny',
-        ], 200);
-    }
-
-    private function ignore()
-    {
-        return response([
-            'result' => 'ignore',
-        ], 200);
-    }
-
-    private function allow()
-    {
-        return response([
-            'result' => 'allow',
-            'is_superuser' => false,
-        ], 200);
     }
 }

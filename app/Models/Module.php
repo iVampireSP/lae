@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use Eloquent;
+use GeneaLabs\LaravelModelCaching\CachedBuilder;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use GuzzleHttp\Exception\ConnectException;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -21,34 +23,34 @@ use JetBrains\PhpStorm\ArrayShape;
  * @property string|null $api_token
  * @property string|null $url
  * @property string|null $wecom_key 企业微信机器人 key
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Module all($columns = [])
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Module avg($column)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Module cache(array $tags = [])
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Module cachedValue(array $arguments, string $cacheKey)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Module count($columns = '*')
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Module disableCache()
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Module disableModelCaching()
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Module exists()
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Module flushCache(array $tags = [])
+ * @method static CachedBuilder|Module all($columns = [])
+ * @method static CachedBuilder|Module avg($column)
+ * @method static CachedBuilder|Module cache(array $tags = [])
+ * @method static CachedBuilder|Module cachedValue(array $arguments, string $cacheKey)
+ * @method static CachedBuilder|Module count($columns = '*')
+ * @method static CachedBuilder|Module disableCache()
+ * @method static CachedBuilder|Module disableModelCaching()
+ * @method static CachedBuilder|Module exists()
+ * @method static CachedBuilder|Module flushCache(array $tags = [])
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Module
  *         getModelCacheCooldown(\Illuminate\Database\Eloquent\Model $instance)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Module inRandomOrder($seed = '')
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Module insert(array $values)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Module isCachable()
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Module max($column)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Module min($column)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Module newModelQuery()
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Module newQuery()
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Module query()
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Module sum($column)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Module truncate()
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Module whereApiToken($value)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Module whereId($value)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Module whereName($value)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Module whereUrl($value)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Module whereWecomKey($value)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Module withCacheCooldownSeconds(?int $seconds = null)
- * @mixin \Eloquent
+ * @method static CachedBuilder|Module inRandomOrder($seed = '')
+ * @method static CachedBuilder|Module insert(array $values)
+ * @method static CachedBuilder|Module isCachable()
+ * @method static CachedBuilder|Module max($column)
+ * @method static CachedBuilder|Module min($column)
+ * @method static CachedBuilder|Module newModelQuery()
+ * @method static CachedBuilder|Module newQuery()
+ * @method static CachedBuilder|Module query()
+ * @method static CachedBuilder|Module sum($column)
+ * @method static CachedBuilder|Module truncate()
+ * @method static CachedBuilder|Module whereApiToken($value)
+ * @method static CachedBuilder|Module whereId($value)
+ * @method static CachedBuilder|Module whereName($value)
+ * @method static CachedBuilder|Module whereUrl($value)
+ * @method static CachedBuilder|Module whereWecomKey($value)
+ * @method static CachedBuilder|Module withCacheCooldownSeconds(?int $seconds = null)
+ * @mixin Eloquent
  */
 class Module extends Authenticatable
 {
@@ -100,6 +102,31 @@ class Module extends Authenticatable
         return $this->getResponse($response);
     }
 
+    public function http(): PendingRequest
+    {
+        return Http::module($this->api_token, $this->url)->acceptJson()->timeout(5);
+    }
+
+    private function getResponse(Response $response): array
+    {
+        $json = $response->json();
+        $status = $response->status();
+
+        $success = true;
+
+        // if status code is not 20x
+        if ($status < 200 || $status >= 300) {
+            $success = false;
+        }
+
+        return [
+            'body' => $response->body(),
+            'json' => $json,
+            'status' => $status,
+            'success' => $success,
+        ];
+    }
+
     public function request($method, $path, $requests): array
     {
         return $this->baseRequest($method, "functions/{$path}", $requests);
@@ -140,26 +167,6 @@ class Module extends Authenticatable
         return $this->getResponse($response);
     }
 
-    private function getResponse(Response $response): array
-    {
-        $json = $response->json();
-        $status = $response->status();
-
-        $success = true;
-
-        // if status code is not 20x
-        if ($status < 200 || $status >= 300) {
-            $success = false;
-        }
-
-        return [
-            'body' => $response->body(),
-            'json' => $json,
-            'status' => $status,
-            'success' => $success,
-        ];
-    }
-
     public function check($module_id = null): bool
     {
         if ($module_id) {
@@ -181,11 +188,6 @@ class Module extends Authenticatable
         }
 
         return $success;
-    }
-
-    public function http(): PendingRequest
-    {
-        return Http::module($this->api_token, $this->url)->acceptJson()->timeout(5);
     }
 
     #[ArrayShape(['transactions' => "array"])]

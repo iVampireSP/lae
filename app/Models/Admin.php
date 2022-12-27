@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use Eloquent;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\Admin
@@ -13,18 +16,18 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  * @property string                          $email
  * @property string                          $password
  * @property string|null                     $remember_token
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|Admin newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Admin newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Admin query()
- * @method static \Illuminate\Database\Eloquent\Builder|Admin whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Admin whereEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Admin whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Admin wherePassword($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Admin whereRememberToken($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Admin whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @method static Builder|Admin newModelQuery()
+ * @method static Builder|Admin newQuery()
+ * @method static Builder|Admin query()
+ * @method static Builder|Admin whereCreatedAt($value)
+ * @method static Builder|Admin whereEmail($value)
+ * @method static Builder|Admin whereId($value)
+ * @method static Builder|Admin wherePassword($value)
+ * @method static Builder|Admin whereRememberToken($value)
+ * @method static Builder|Admin whereUpdatedAt($value)
+ * @mixin Eloquent
  */
 class Admin extends Authenticatable
 {

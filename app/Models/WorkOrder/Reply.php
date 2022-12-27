@@ -5,54 +5,56 @@ namespace App\Models\WorkOrder;
 use App\Events\UserEvent;
 use App\Exceptions\CommonException;
 use App\Models\User;
+use Eloquent;
+use GeneaLabs\LaravelModelCaching\CachedBuilder;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * App\Models\WorkOrder\Reply
  *
- * @property int                                  $id
- * @property string                               $content
- * @property int                                  $work_order_id
- * @property int|null                             $user_id
- * @property int                                  $is_pending
- * @property \Illuminate\Support\Carbon|null      $created_at
- * @property \Illuminate\Support\Carbon|null      $updated_at
- * @property-read User|null                       $user
- * @property-read \App\Models\WorkOrder\WorkOrder $workOrder
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply all($columns = [])
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply avg($column)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply cache(array $tags = [])
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply cachedValue(array $arguments, string $cacheKey)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply count($columns = '*')
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply disableCache()
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply disableModelCaching()
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply exists()
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply flushCache(array $tags = [])
+ * @property int                             $id
+ * @property string                          $content
+ * @property int                             $work_order_id
+ * @property int|null                        $user_id
+ * @property int                             $is_pending
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @property-read User|null                  $user
+ * @property-read WorkOrder                  $workOrder
+ * @method static CachedBuilder|Reply all($columns = [])
+ * @method static CachedBuilder|Reply avg($column)
+ * @method static CachedBuilder|Reply cache(array $tags = [])
+ * @method static CachedBuilder|Reply cachedValue(array $arguments, string $cacheKey)
+ * @method static CachedBuilder|Reply count($columns = '*')
+ * @method static CachedBuilder|Reply disableCache()
+ * @method static CachedBuilder|Reply disableModelCaching()
+ * @method static CachedBuilder|Reply exists()
+ * @method static CachedBuilder|Reply flushCache(array $tags = [])
  * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply
  *         getModelCacheCooldown(\Illuminate\Database\Eloquent\Model $instance)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply inRandomOrder($seed = '')
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply insert(array $values)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply isCachable()
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply max($column)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply min($column)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply newModelQuery()
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply newQuery()
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply query()
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply sum($column)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply truncate()
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply whereContent($value)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply whereCreatedAt($value)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply whereId($value)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply whereIsPending($value)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply whereUpdatedAt($value)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply whereUserId($value)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply whereWorkOrderId($value)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply withCacheCooldownSeconds(?int $seconds = null)
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Reply workOrderId($work_order_id)
- * @mixin \Eloquent
+ * @method static CachedBuilder|Reply inRandomOrder($seed = '')
+ * @method static CachedBuilder|Reply insert(array $values)
+ * @method static CachedBuilder|Reply isCachable()
+ * @method static CachedBuilder|Reply max($column)
+ * @method static CachedBuilder|Reply min($column)
+ * @method static CachedBuilder|Reply newModelQuery()
+ * @method static CachedBuilder|Reply newQuery()
+ * @method static CachedBuilder|Reply query()
+ * @method static CachedBuilder|Reply sum($column)
+ * @method static CachedBuilder|Reply truncate()
+ * @method static CachedBuilder|Reply whereContent($value)
+ * @method static CachedBuilder|Reply whereCreatedAt($value)
+ * @method static CachedBuilder|Reply whereId($value)
+ * @method static CachedBuilder|Reply whereIsPending($value)
+ * @method static CachedBuilder|Reply whereUpdatedAt($value)
+ * @method static CachedBuilder|Reply whereUserId($value)
+ * @method static CachedBuilder|Reply whereWorkOrderId($value)
+ * @method static CachedBuilder|Reply withCacheCooldownSeconds(?int $seconds = null)
+ * @method static CachedBuilder|Reply workOrderId($work_order_id)
+ * @mixin Eloquent
  */
 class Reply extends Model
 {

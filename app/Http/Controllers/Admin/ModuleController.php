@@ -66,6 +66,16 @@ class ModuleController extends Controller
 
     }
 
+    private function rules(): array
+    {
+        return [
+            'id' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
+            'url' => 'required|url',
+            'status' => 'required|string|in:up,down,maintenance',
+        ];
+    }
+
     /**
      * Display the specified resource.
      *
@@ -146,16 +156,6 @@ class ModuleController extends Controller
         $module->delete();
 
         return redirect()->route('admin.modules.index')->with('success', '模块已删除。');
-    }
-
-    private function rules(): array
-    {
-        return [
-            'id' => 'required|string|max:255',
-            'name' => 'required|string|max:255',
-            'url' => 'required|url',
-            'status' => 'required|string|in:up,down,maintenance',
-        ];
     }
 
     public function allows(Module $module)

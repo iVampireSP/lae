@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
 
 class Status extends Command
@@ -48,7 +48,6 @@ class Status extends Command
 
         // get mysql version
         $mysql_version = DB::select('select version() as version')[0]->version;
-
 
 
         $this->warn('MySQL 版本: ' . $mysql_version);

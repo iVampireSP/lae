@@ -8,7 +8,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 
 class CheckHostIfExistsOnModule implements ShouldQueue
@@ -45,7 +44,7 @@ class CheckHostIfExistsOnModule implements ShouldQueue
 
                 if ($response->status() === 404) {
                     Log::warning($host->module->name . ' ' . $host->name . ' ' . $host->id . ' 不存在，删除。');
-                    dispatch(new \App\Jobs\Module\Host($host, 'delete'));
+                    dispatch(new Module\Host($host, 'delete'));
                 }
             }
         });
