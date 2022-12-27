@@ -26,8 +26,7 @@ use Laravel\Sanctum\PersonalAccessToken as SanctumPersonalAccessToken;
  * @method static CachedBuilder|PersonalAccessToken all($columns = [])
  * @method static CachedBuilder|PersonalAccessToken avg($column)
  * @method static CachedBuilder|PersonalAccessToken cache(array $tags = [])
- * @method static CachedBuilder|PersonalAccessToken cachedValue(array $arguments, string
- *         $cacheKey)
+ * @method static CachedBuilder|PersonalAccessToken cachedValue(array $arguments, string $cacheKey)
  * @method static CachedBuilder|PersonalAccessToken count($columns = '*')
  * @method static CachedBuilder|PersonalAccessToken disableCache()
  * @method static CachedBuilder|PersonalAccessToken disableModelCaching()
@@ -55,8 +54,7 @@ use Laravel\Sanctum\PersonalAccessToken as SanctumPersonalAccessToken;
  * @method static CachedBuilder|PersonalAccessToken whereTokenableId($value)
  * @method static CachedBuilder|PersonalAccessToken whereTokenableType($value)
  * @method static CachedBuilder|PersonalAccessToken whereUpdatedAt($value)
- * @method static CachedBuilder|PersonalAccessToken withCacheCooldownSeconds(?int
- *         $seconds = null)
+ * @method static CachedBuilder|PersonalAccessToken withCacheCooldownSeconds(?int $seconds = null)
  * @mixin Eloquent
  */
 class PersonalAccessToken extends SanctumPersonalAccessToken
