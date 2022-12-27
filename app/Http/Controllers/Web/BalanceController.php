@@ -15,8 +15,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Yansongda\LaravelPay\Facades\Pay;
-use Yansongda\Pay\Exception\ContainerException;
-use Yansongda\Pay\Exception\InvalidParamsException;
 
 class BalanceController extends Controller
 {
@@ -220,16 +218,7 @@ class BalanceController extends Controller
 
 
         // 处理验证
-        if ($payment === 'alipay') {
-            try {
-                $pay = Pay::alipay()->callback();
-
-            } catch (ContainerException|InvalidParamsException $e) {
-                abort(500, $e->getMessage());
-            }
-
-            $is_paid = true;
-        } else if ($payment === 'wechat') {
+        if ($payment === 'wechat') {
             if (!($request->filled('hash') || $request->filled('trade_order_id'))) {
                 return $this->error('参数错误。');
             }
@@ -246,9 +235,6 @@ class BalanceController extends Controller
             if ($request->input('status') === 'OD') {
                 $is_paid = true;
             }
-
-        } else {
-            abort(400, '支付方式错误。');
         }
 
         if ($is_paid) {
@@ -280,8 +266,10 @@ class BalanceController extends Controller
      *
      * @return View
      */
-    public function transactions(Request $request): View
-    {
+    public
+    function transactions(
+        Request $request
+    ): View {
 
         $modules = Module::all();
 
