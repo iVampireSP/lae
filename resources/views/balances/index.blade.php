@@ -15,19 +15,22 @@
         <input type="radio" name="payment" value="wechat" checked> 微信支付
         <input type="radio" name="payment" value="alipay"> 支付宝
 
+        <div class="row col-6 col-lg-3">
+            <div class="input-group mt-2 mb-3 w-100 col-2">
+                <button class="btn btn-outline-secondary" type="submit">充值</button>
 
-        <div class="input-group mt-2 mb-3 w-25">
-            <button class="btn btn-outline-secondary" type="submit">充值</button>
 
+                <input type="number" id="amount" name="amount" value="10" min="1" max="1000"
+                       class="form-control text-center"
+                       aria-label="充值金额">
 
-            <input type="number" id="amount" name="amount" value="10" min="1" max="1000" class="form-control text-center"
-                   aria-label="充值金额">
+                <span class="input-group-text">元</span>
 
-            <span class="input-group-text">元</span>
+                <button class="btn btn-secondary" type="submit">充值</button>
 
-            <button class="btn btn-secondary" type="submit">充值</button>
-
+            </div>
         </div>
+
     </form>
 
     <div class="mt-2">
