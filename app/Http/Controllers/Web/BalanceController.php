@@ -105,9 +105,9 @@ class BalanceController extends Controller
             $order['subject'] = $subject;
             $order['total_amount'] = $balance->amount;
 
-            $pay = Pay::alipay()->scan($order);
+            $pay = Pay::alipay()->web($order);
 
-            $qr_code = $code->generate($pay->qr_code);
+            return view('balances.alipay', ['html' => (string)$pay->getBody()]);
         }
 
         if (!isset($qr_code)) {
