@@ -39,10 +39,10 @@
                 <!-- Left Side Of Navbar -->
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link text-auto" href="{{ route('index') }}">密钥</a>
+                        <a class="nav-link text-auto" href="{{ route('index') }}">密钥管理</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-auto" href="{{ route('balances.index') }}">余额</a>
+                        <a class="nav-link text-auto" href="{{ route('balances.index') }}">余额与充值</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-auto" href="{{ route('transfer') }}">转账</a>
@@ -55,6 +55,12 @@
 
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ms-auto">
+                    <a class="nav-link" target="_blank"
+                       href="https://dash.laecloud.com">仪表盘</a>
+
+                    <a class="nav-link"
+                       href="{{ route('contact') }}">联系我们</a>
+
                     @if (Auth::guard('admin')->check())
 
                         <li class="nav-item">

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Exceptions\ChargeException;
 use App\Http\Controllers\Controller;
 use App\Models\Balance;
 use App\Models\Module;
@@ -9,8 +10,13 @@ use App\Models\Transaction;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Yansongda\LaravelPay\Facades\Pay;
+use Yansongda\Pay\Exception\ContainerException;
+use Yansongda\Pay\Exception\InvalidParamsException;
 
 class BalanceController extends Controller
 {
@@ -30,25 +36,18 @@ class BalanceController extends Controller
         // 充值
         $this->validate($request, [
             'amount' => 'required|integer|min:0.1|max:10000',
+            'payment' => 'required|in:wechat,alipay',
         ]);
 
         $user = $request->user();
 
         $balance = new Balance();
 
-
         $data = [
             'user_id' => $user->id,
             'amount' => $request->input('amount'),
-            'payment' => 'alipay',
+            'payment' => $request->input('payment'),
         ];
-
-        // if local
-        // if (env('APP_ENV') == 'local') {
-        //     $data['payment'] = null;
-        //     $data['paid_at'] = now();
-        // }
-
 
         $balance = $balance->create($data);
 
@@ -58,82 +57,220 @@ class BalanceController extends Controller
 
         $balance->save();
 
-        // $balances['pay_url'] = route('balances.balances.show', ['balances' => $balances['order_id']]);
-
-        return redirect()->route('balances.balances.show', ['balances' => $balance->order_id]);
+        return redirect()->route('balances.show', compact('balance'));
     }
 
     /**
+     * 显示充值页面和状态(ajax)
      */
-    public function show(Balance $balance)
+    public function show(Request $request, Balance $balance)
     {
+
         if ($balance->paid_at !== null) {
-            return $this->error('订单已支付');
+            if ($request->ajax()) {
+                return $this->success($balance);
+            }
+
+            return view('balances.process', compact('balance'));
+        } else {
+            if ($request->ajax()) {
+                return $this->success($balance);
+            }
         }
+
 
         if (now()->diffInDays($balance->created_at) > 1) {
-            return $this->error('订单已失效');
+            if ($request->ajax()) {
+                return $this->forbidden($balance);
+            }
+
+            return redirect()->route('index')->with('error', '订单已逾期。');
         }
 
-        $web = Pay::alipay()->web([
-            'out_trade_no' => $balance->order_id,
-            'total_amount' => $balance->amount,
-            'subject' => config('app.display_name') . ' 充值',
-        ]);
+        $balance->load('user');
 
-        return view('balances.pay', ['html' => (string)$web->getBody()]);
+        $subject = config('app.display_name') . ' 充值';
+
+        $order = [
+            'out_trade_no' => $balance->order_id,
+        ];
+
+        $code = QrCode::size(150);
+
+        if ($balance->payment === 'wechat') {
+            $pay = $this->xunhu_wechat($balance, $subject);
+
+            $qr_code = $code->generate($pay['url']);
+        } else {
+            $order['subject'] = $subject;
+            $order['total_amount'] = $balance->amount;
+
+            $pay = Pay::alipay()->scan($order);
+
+            $qr_code = $code->generate($pay->qr_code);
+        }
+
+        if (!isset($qr_code)) {
+            abort(500, '支付方式错误');
+        }
+
+        return view('balances.pay', compact('balance', 'qr_code'));
+    }
+
+    private function xunhu_wechat(Balance $balance, $subject = '支付')
+    {
+        $data = [
+            'version' => '1.1',
+            'lang' => 'zh-cn',
+            'plugins' => config('app.name'),
+            'appid' => config('pay.xunhu.app_id'),
+            'trade_order_id' => $balance->order_id,
+            'payment' => 'wechat',
+            'type' => 'WAP',
+            'wap_url' => config('app.url'),
+            'wap_name' => config('app.display_name'),
+            'total_fee' => $balance->amount,
+            'title' => $subject,
+            'time' => time(),
+            'notify_url' => route('balances.notify', 'wechat'),
+            'return_url' => route('balances.notify', 'wechat'),
+            'callback_url' => route('balances.show', $balance),
+            'modal' => null,
+            'nonce_str' => str_shuffle(time()),
+        ];
+
+        $data['hash'] = $this->xunhu_hash($data);
+
+        $response = Http::post(config('pay.xunhu.gateway'), $data);
+
+        if (!$response->successful()) {
+            abort(500, '支付网关错误');
+        }
+
+        $response = $response->json();
+
+        $hash = $this->xunhu_hash($response);
+
+        if (!isset($response['hash']) || $response['hash'] !== $hash) {
+            abort(500, '无法校验支付网关返回数据');
+        }
+
+        return $response;
+    }
+
+    private function xunhu_hash(array $arr)
+    {
+        ksort($arr);
+
+        $pre = [];
+        foreach ($arr as $key => $data) {
+            if (is_null($data) || $data === '') {
+                continue;
+            }
+            if ($key == 'hash') {
+                continue;
+            }
+            $pre[$key] = stripslashes($data);
+        }
+
+        $arg = '';
+        $qty = count($pre);
+        $index = 0;
+
+        foreach ($pre as $key => $val) {
+            $arg .= "$key=$val";
+            if ($index++ < ($qty - 1)) {
+                $arg .= "&";
+            }
+        }
+
+        return md5($arg . config('pay.xunhu.app_secret'));
     }
 
     /**
      * @throws ValidationException
      */
-    public function notify(Request $request): View|JsonResponse
+    public function notify(Request $request, $payment): View|JsonResponse
     {
-        $this->validate($request, [
-            'out_trade_no' => 'required',
-        ]);
+        $is_paid = false;
+        // $pay_amount = 0;
+
+        if ($payment === 'alipay') {
+            $out_trade_no = $request->input('out_trade_no');
+        } else if ($payment === 'wechat') {
+            $out_trade_no = $request->input('trade_order_id');
+        } else {
+            abort(400, '支付方式错误');
+        }
 
         // 检测订单是否存在
-        $balance = Balance::where('order_id', $request->out_trade_no)->with('user')->first();
+        $balance = Balance::where('order_id', $out_trade_no)->with('user')->first();
         if (!$balance) {
             abort(404, '找不到订单。');
         }
 
         // 检测订单是否已支付
-        // if ($balance->paid_at !== null) {
-        //    // return $this->success('订单已支付');
-        //    return view('balances.process', compact('balance'));
-        // }
+        if ($balance->paid_at !== null) {
+            if ($request->ajax()) {
+                return $this->success($balance);
+            }
 
+            return view('balances.process', compact('balance'));
+        }
+
+
+        // 处理验证
+        if ($payment === 'alipay') {
+            try {
+                $pay = Pay::alipay()->callback();
+
+            } catch (ContainerException|InvalidParamsException $e) {
+                abort(500, $e->getMessage());
+            }
+
+            $is_paid = true;
+        } else if ($payment === 'wechat') {
+            if (!($request->filled('hash') || $request->filled('trade_order_id'))) {
+                return $this->error('参数错误。');
+            }
+
+            if ($request->filled('plugins') && $request->input('plugins') != config('app.name')) {
+                return $this->error('插件不匹配。');
+            }
+
+            $hash = $this->xunhu_hash($request->toArray());
+            if ($request->input('hash') != $hash) {
+                Log::debug('hash error', $request->toArray());
+            }
+
+            if ($request->input('status') === 'OD') {
+                $is_paid = true;
+            }
+
+        } else {
+            abort(400, '支付方式错误。');
+        }
+
+        if ($is_paid) {
+            try {
+                (new Transaction)->addAmount($balance->user_id, 'alipay', $balance->amount);
+
+                $balance->update([
+                    'paid_at' => now()
+                ]);
+
+            } catch (ChargeException $e) {
+                abort(500, $e->getMessage());
+            }
+        }
+
+
+        if ($request->ajax()) {
+            return $this->success($balance);
+        }
 
         return view('balances.process', compact('balance'));
 
-        // try {
-        //     $data = Pay::alipay()->callback();
-        // } catch (InvalidResponseException $e) {
-        //     return $this->error('支付失败');
-        // }
-
-        // // 检测 out_trade_no 是否为商户系统中创建的订单号
-        // if ($data->out_trade_no != $balances->order_id) {
-        //     return $this->error('订单号不一致');
-        // }
-
-        // if ((int) $data->total_amount != (int) $balances->amount) {
-        //     throw new ChargeException('金额不一致');
-        // }
-
-        // // 验证 商户
-        // if ($data['app_id'] != config('balances.alipay.default.app_id')) {
-        //     throw new ChargeException('商户不匹配');
-        // }
-
-        //
-        // if ((new \App\Jobs\CheckAndChargeBalance())->checkAndCharge($balance, true)) {
-        //     return view('pay_process');
-        // } else {
-        //     abort(500, '支付失败');
-        // }
     }
 
     /**

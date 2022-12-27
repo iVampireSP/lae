@@ -20,6 +20,7 @@
         "laravel/tinker": "^2.7",
         "php-mqtt/laravel-client": "^1.1",
         "pusher/pusher-php-server": "^7.2",
+        "simplesoftwareio/simple-qrcode": "^4.2",
         "spiral/roadrunner": "^2.8.2",
         "symfony/psr-http-message-bridge": "^2.1",
         "yansongda/laravel-pay": "~3.2.0"

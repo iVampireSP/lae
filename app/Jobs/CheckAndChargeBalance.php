@@ -7,7 +7,6 @@ use App\Models\Balance;
 use App\Models\Transaction;
 use Illuminate\Support\Facades\Log;
 use Yansongda\LaravelPay\Facades\Pay;
-use Yansongda\Pay\Exception\InvalidResponseException;
 
 class CheckAndChargeBalance extends Job
 {
@@ -62,7 +61,7 @@ class CheckAndChargeBalance extends Job
             $balance->update([
                 'paid_at' => now()
             ]);
-        } catch (InvalidResponseException|ChargeException $e) {
+        } catch (ChargeException $e) {
             Log::error($e->getMessage());
             return false;
         }

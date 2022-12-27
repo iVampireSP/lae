@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 use Yansongda\Pay\Pay;
 
-$secret_file = env('ALIPAY_APP_SECERT_CERT_PATH', config_path('secrets/alipayAppPriv.key'));
-if (!file_exists($secret_file)) {
-    $secret_file = '';
+$alipay_app_private_key = env('ALIPAY_APP_SECERT_CERT_PATH', config_path('secrets/alipayAppPriv.key'));
+if (!file_exists($alipay_app_private_key)) {
+    $alipay_app_private_key = '';
 } else {
-    $secret_file = trim(file_get_contents($secret_file));
+    $alipay_app_private_key = trim(file_get_contents($alipay_app_private_key));
 }
+
+$wechat_pay_cert = env('WECHAT_PAY_CERT_PATH', config_path('secrets/wepay_cert.pem'));
+$wechat_pay_private_key = env('WECHAT_PAY_PRIVATE_KEY_PATH', config_path('secrets/wepay_key.pem'));
 
 return [
     'alipay' => [
@@ -17,7 +20,7 @@ return [
             // 必填-支付宝分配的 app_id
             'app_id' => env('ALIPAY_APP_ID'),
             // 必填-应用私钥 字符串或路径
-            'app_secret_cert' => $secret_file,
+            'app_secret_cert' => $alipay_app_private_key,
             // 必填-应用公钥证书 路径
             'app_public_cert_path' => env('ALIPAY_APP_PUBLIC_CERT_PATH', config_path('secrets/appCertPublicKey.crt')),
             // 必填-支付宝公钥证书 路径
@@ -36,17 +39,17 @@ return [
     'wechat' => [
         'default' => [
             // 必填-商户号，服务商模式下为服务商商户号
-            'mch_id' => env('WECHAT_MENCENT_ID'),
+            'mch_id' => env('WECHAT_MERCHANT_ID'),
             // 必填-商户秘钥
-            'mch_secret_key' => '',
+            'mch_secret_key' => env('WECHAT_V3_API_KEY'),
             // 必填-商户私钥 字符串或路径
-            'mch_secret_cert' => '',
+            'mch_secret_cert' => $wechat_pay_private_key,
             // 必填-商户公钥证书路径
-            'mch_public_cert_path' => '',
+            'mch_public_cert_path' => $wechat_pay_cert,
             // 必填
-            'notify_url' => '',
+            'notify_url' => env('WECHAT_PAY_CALLBACK_NOTIFY_URL'),
             // 选填-公众号 的 app_id
-            'mp_app_id' => '',
+            'mp_app_id' => env('WECHAT_MP_APP_ID'),
             // 选填-小程序 的 app_id
             'mini_app_id' => '',
             // 选填-app 的 app_id
@@ -63,10 +66,6 @@ return [
             'sub_mini_app_id' => '',
             // 选填-服务商模式下，子商户id
             'sub_mch_id' => '',
-            // 选填-微信公钥证书路径, optional，强烈建议 php-fpm 模式下配置此参数
-            'wechat_public_cert_path' => [
-                '45F59D4DABF31918AFCEC556D5D2C6E376675D57' => __DIR__ . '/Cert/wechatPublicKey.crt',
-            ],
             // 选填-默认为正常模式。可选为： MODE_NORMAL, MODE_SERVICE
             'mode' => Pay::MODE_NORMAL,
         ],
@@ -86,6 +85,11 @@ return [
             // 必填
             'notify_url' => '',
         ],
+    ],
+    'xunhu' => [
+        'app_id' => env('XUNHU_PAY_APP_ID'),
+        'app_secret' => env('XUNHU_PAY_APP_SECRET'),
+        'gateway' => env('XUNHU_PAY_GATEWAY', 'https://api.xunhupay.com/payment/do.html'),
     ],
     'http' => [ // optional
         'timeout' => 5.0,

@@ -3,16 +3,31 @@
 @section('title', '余额')
 
 @section('content')
-    <h2>余额</h2>
-    <p>您的余额: {{ $balance }} 元 <small class="text-danger"><i class="bi bi-exclamation-circle"></i> 余额不可用于提现</small></p>
+    <h1><small class="fs-5">余额</small> {{ $balance }} <small class="fs-5">元</small></h1>
+    <p><small class="text-danger"><i class="bi bi-exclamation-circle"></i> 余额不可用于提现</small></p>
 
 
     <h2>充值余额</h2>
-    <form name="charge" method="POST" target="_blank" action="{{ route('balances.store') }}"
+    <form name="charge" method="POST" target="_blank" class="form-horizontal" action="{{ route('balances.store') }}"
           onsubmit="return confirm('请注意: 由于计费方式的特殊性，我们不支持退款，请合理充值。')">
         @csrf
-        <input type="number" id="amount" name="amount" value="10" min="1" max="1000"/>元
-        <button type="submit" class="btn btn-primary">充值</button>
+
+        <input type="radio" name="payment" value="wechat" checked> 微信支付
+        <input type="radio" name="payment" value="alipay"> 支付宝
+
+
+        <div class="input-group mt-2 mb-3 w-25">
+            <button class="btn btn-outline-secondary" type="submit">充值</button>
+
+
+            <input type="number" id="amount" name="amount" value="10" min="1" max="1000" class="form-control text-center"
+                   aria-label="充值金额">
+
+            <span class="input-group-text">元</span>
+
+            <button class="btn btn-secondary" type="submit">充值</button>
+
+        </div>
     </form>
 
     <div class="mt-2">
