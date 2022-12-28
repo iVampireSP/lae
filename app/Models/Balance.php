@@ -13,17 +13,17 @@ use function auth;
 /**
  * App\Models\Balance
  *
- * @property int                             $id
- * @property string|null                     $order_id
- * @property string|null                     $trade_id
- * @property string|null                     $payment
- * @property string                          $amount
- * @property string                          $remaining_amount
- * @property string|null                     $paid_at
- * @property int|null                        $user_id
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property-read User|null                  $user
+ * @property int            $id
+ * @property string|null    $order_id
+ * @property string|null    $trade_id
+ * @property string|null    $payment
+ * @property string         $amount
+ * @property string         $remaining_amount
+ * @property string|null    $paid_at
+ * @property int|null       $user_id
+ * @property Carbon|null    $created_at
+ * @property Carbon|null    $updated_at
+ * @property-read User|null $user
  * @method static CachedBuilder|Balance all($columns = [])
  * @method static CachedBuilder|Balance avg($column)
  * @method static CachedBuilder|Balance cache(array $tags = [])

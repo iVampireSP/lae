@@ -12,10 +12,10 @@ use Illuminate\Support\Carbon;
 /**
  * App\Models\Admin
  *
- * @property int                             $id
- * @property string                          $email
- * @property string                          $password
- * @property string|null                     $remember_token
+ * @property int         $id
+ * @property string      $email
+ * @property string      $password
+ * @property string|null $remember_token
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * @method static Builder|Admin newModelQuery()
@@ -31,7 +31,7 @@ use Illuminate\Support\Carbon;
  */
 class Admin extends Authenticatable
 {
-    use HasFactory, Cachable;
+    use Cachable;
 
     protected $table = 'admins';
 

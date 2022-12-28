@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\HostRequest;
+use App\Jobs\Module\HostJob;
 use App\Models\Host;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
@@ -60,7 +61,7 @@ class HostController extends Controller
             $host->cost();
         }
 
-        dispatch(new \App\Jobs\Module\HostJob($host, 'delete'));
+        dispatch(new HostJob($host, 'delete'));
 
         return $this->deleted($host);
     }

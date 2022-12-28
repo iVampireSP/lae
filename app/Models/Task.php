@@ -18,15 +18,15 @@ use function broadcast;
 /**
  * App\Models\Task
  *
- * @property string                          $id
- * @property string                          $title
- * @property int                             $progress
- * @property string                          $status
- * @property int                             $user_id
- * @property int                             $host_id
+ * @property string      $id
+ * @property string      $title
+ * @property int         $progress
+ * @property string      $status
+ * @property int         $user_id
+ * @property int         $host_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * @property-read Host                       $host
+ * @property-read Host   $host
  * @method static CachedBuilder|Task all($columns = [])
  * @method static CachedBuilder|Task avg($column)
  * @method static CachedBuilder|Task cache(array $tags = [])
@@ -62,8 +62,6 @@ use function broadcast;
  */
 class Task extends Model
 {
-    use HasFactory;
-
     public $incrementing = false;
     protected $fillable = [
         'host_id',

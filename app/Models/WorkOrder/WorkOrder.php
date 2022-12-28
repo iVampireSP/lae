@@ -19,20 +19,20 @@ use Illuminate\Support\Carbon;
 /**
  * App\Models\WorkOrder\WorkOrder
  *
- * @property int                                                                         $id
- * @property string                                                $title
- * @property string                                                $content
- * @property int                                                   $user_id
- * @property string                                                $module_id
- * @property int|null                                              $host_id
- * @property string                                                $status
- * @property Carbon|null                       $created_at
- * @property Carbon|null                       $updated_at
- * @property-read Host|null                                        $host
- * @property-read Module                                           $module
+ * @property int                     $id
+ * @property string                  $title
+ * @property string                  $content
+ * @property int                     $user_id
+ * @property string                  $module_id
+ * @property int|null                $host_id
+ * @property string                  $status
+ * @property Carbon|null             $created_at
+ * @property Carbon|null             $updated_at
+ * @property-read Host|null          $host
+ * @property-read Module             $module
  * @property-read Collection|Reply[] $replies
- * @property-read int|null                                         $replies_count
- * @property-read User                                             $user
+ * @property-read int|null           $replies_count
+ * @property-read User               $user
  * @method static CachedBuilder|WorkOrder all($columns = [])
  * @method static CachedBuilder|WorkOrder avg($column)
  * @method static CachedBuilder|WorkOrder cache(array $tags = [])

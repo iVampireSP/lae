@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Events\UserEvent;
+use App\Jobs\Module\HostJob;
 use App\Models\WorkOrder\WorkOrder;
 use GeneaLabs\LaravelModelCaching\CachedBuilder;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
@@ -15,23 +16,23 @@ use Illuminate\Support\Facades\Cache;
 /**
  * App\Models\Host
  *
- * @property int                             $id
- * @property string                          $name
- * @property string                          $module_id
- * @property int                             $user_id
- * @property float                           $price
- * @property float|null                      $managed_price
- * @property mixed|null                      $configuration
- * @property string                          $status
- * @property int|null                        $hour
- * @property Carbon|null $suspended_at
- * @property string|null                     $deleted_at
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property-read Module                     $module
- * @property-read User                       $user
- * @property-read Collection|WorkOrder[]     $workOrders
- * @property-read int|null                   $work_orders_count
+ * @property int                         $id
+ * @property string                      $name
+ * @property string                      $module_id
+ * @property int                         $user_id
+ * @property float                       $price
+ * @property float|null                  $managed_price
+ * @property mixed|null                  $configuration
+ * @property string                      $status
+ * @property int|null                    $hour
+ * @property Carbon|null                 $suspended_at
+ * @property string|null                 $deleted_at
+ * @property Carbon|null                 $created_at
+ * @property Carbon|null                 $updated_at
+ * @property-read Module                 $module
+ * @property-read User                   $user
+ * @property-read Collection|WorkOrder[] $workOrders
+ * @property-read int|null               $work_orders_count
  * @method static CachedBuilder|Host active()
  * @method static CachedBuilder|Host all($columns = [])
  * @method static CachedBuilder|Host avg($column)
@@ -137,7 +138,7 @@ class Host extends Model
 
         // when Updated
         static::updated(function ($model) {
-            dispatch(new \App\Jobs\Module\HostJob($model, 'patch'));
+            dispatch(new HostJob($model, 'patch'));
 
             Cache::forget('user_hosts_' . $model->user_id);
             Cache::forget('user_tasks_' . $model->user_id);
@@ -213,7 +214,7 @@ class Host extends Model
             }
         }
 
-        dispatch(new \App\Jobs\Module\HostJob($this, 'delete'));
+        dispatch(new HostJob($this, 'delete'));
         return true;
     }
 

@@ -12,16 +12,16 @@ use Laravel\Sanctum\PersonalAccessToken as SanctumPersonalAccessToken;
 /**
  * App\Models\PersonalAccessToken
  *
- * @property int                                               $id
- * @property string                                            $tokenable_type
- * @property int                                               $tokenable_id
- * @property string                                            $name
- * @property string                                            $token
- * @property array|null                                        $abilities
- * @property Carbon|null                   $last_used_at
- * @property Carbon|null                   $expires_at
- * @property Carbon|null                   $created_at
- * @property Carbon|null                   $updated_at
+ * @property int                 $id
+ * @property string              $tokenable_type
+ * @property int                 $tokenable_id
+ * @property string              $name
+ * @property string              $token
+ * @property array|null          $abilities
+ * @property Carbon|null         $last_used_at
+ * @property Carbon|null         $expires_at
+ * @property Carbon|null         $created_at
+ * @property Carbon|null         $updated_at
  * @property-read Model|Eloquent $tokenable
  * @method static CachedBuilder|PersonalAccessToken all($columns = [])
  * @method static CachedBuilder|PersonalAccessToken avg($column)

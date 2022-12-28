@@ -15,15 +15,15 @@ use Illuminate\Support\Carbon;
 /**
  * App\Models\WorkOrder\Reply
  *
- * @property int                             $id
- * @property string                          $content
- * @property int                             $work_order_id
- * @property int|null                        $user_id
- * @property int                             $is_pending
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property-read User|null                  $user
- * @property-read WorkOrder                  $workOrder
+ * @property int            $id
+ * @property string         $content
+ * @property int            $work_order_id
+ * @property int|null       $user_id
+ * @property int            $is_pending
+ * @property Carbon|null    $created_at
+ * @property Carbon|null    $updated_at
+ * @property-read User|null $user
+ * @property-read WorkOrder $workOrder
  * @method static CachedBuilder|Reply all($columns = [])
  * @method static CachedBuilder|Reply avg($column)
  * @method static CachedBuilder|Reply cache(array $tags = [])
