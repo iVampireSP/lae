@@ -13,7 +13,7 @@ return new class extends Migration {
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->date('birthday_at')->nullable()->after('email_verified_at');
+            $table->date('birthday_at')->nullable()->index()->after('email_verified_at');
 
             // 真实姓名
             $table->string('real_name')->nullable()->after('name');
