@@ -112,17 +112,15 @@ class AuthController extends Controller
             $name = $oauth_user->name;
             $email = $oauth_user->email;
             $email_verified_at = $oauth_user->email_verified_at;
-            $user = User::create([
-                'name' => $name,
-                'email' => $email,
-                'password' => null,
-                'email_verified_at' => $email_verified_at,
-                'oauth_id' => $oauth_user->id,
-                'provider' => 'LoliArt',
-                'provider_id' => $oauth_user->id,
-                'real_name' => $oauth_user->real_name,
-                'balance' => 0
-            ]);
+
+            $user = new User();
+            $user->name = $name;
+            $user->email = $email;
+            $user->password = null;
+            $user->email_verified_at = $email_verified_at;
+            $user->real_name = $oauth_user->real_name;
+            $user->birthday_at = $oauth_user->birthday;
+            $user->save();
 
             $request->session()->put('auth.password_confirmed_at', time());
         } else {
