@@ -19,7 +19,7 @@ class SuspendUserAllHosts extends Command
      *
      * @var string
      */
-    protected $description = '暂停用户的所有 Host';
+    protected $description = '暂停用户的所有主机。';
 
     /**
      * Create a new command instance.
@@ -47,6 +47,6 @@ class SuspendUserAllHosts extends Command
             'suspended_at' => now()
         ]);
 
-        $this->info('暂停用户的所有 Host 成功。');
+        $this->info('暂停用户的所有主机成功。');
     }
 }

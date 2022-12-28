@@ -137,7 +137,7 @@ class Host extends Model
 
         // when Updated
         static::updated(function ($model) {
-            dispatch(new \App\Jobs\Module\Host($model, 'patch'));
+            dispatch(new \App\Jobs\Module\HostJob($model, 'patch'));
 
             Cache::forget('user_hosts_' . $model->user_id);
             Cache::forget('user_tasks_' . $model->user_id);
@@ -213,7 +213,7 @@ class Host extends Model
             }
         }
 
-        dispatch(new \App\Jobs\Module\Host($this, 'delete'));
+        dispatch(new \App\Jobs\Module\HostJob($this, 'delete'));
         return true;
     }
 

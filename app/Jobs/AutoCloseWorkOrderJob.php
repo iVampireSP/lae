@@ -4,7 +4,7 @@ namespace App\Jobs;
 
 use App\Models\WorkOrder\WorkOrder;
 
-class AutoCloseWorkOrder extends Job
+class AutoCloseWorkOrderJob extends Job
 {
     /**
      * Create a new job instance.

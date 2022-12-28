@@ -128,7 +128,7 @@ class HostController extends Controller
      */
     public function destroy($host): JsonResponse
     {
-        // if host not instance of Host
+        // if host not instance of HostJob
         if (!$host instanceof Host) {
             $host = Host::findOrFail($host);
         }

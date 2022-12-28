@@ -5,7 +5,7 @@ namespace App\Jobs;
 use App\Models\Module;
 use App\Notifications\ModuleEarnings;
 
-class SendModuleEarnings extends Job
+class SendModuleEarningsJob extends Job
 {
     /**
      * Create a new job instance.

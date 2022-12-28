@@ -10,7 +10,7 @@ use Illuminate\Queue\SerializesModels;
 
 // use Illuminate\Contracts\Queue\ShouldBeUnique;
 
-class DeleteHost implements ShouldQueue
+class DeleteHostJob implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;
 
@@ -34,14 +34,14 @@ class DeleteHost implements ShouldQueue
         // 查找暂停时间超过 3 天的 host
         Host::where('status', 'suspended')->where('suspended_at', '<', now()->subDays(3))->chunk(100, function ($hosts) {
             foreach ($hosts as $host) {
-                dispatch(new Module\Host($host, 'delete'));
+                dispatch(new Module\HostJob($host, 'delete'));
             }
         });
 
         // 查找部署时间超过3天以上的 host
         Host::where('status', 'pending')->where('created_at', '<', now()->subDays(3))->chunk(100, function ($hosts) {
             foreach ($hosts as $host) {
-                dispatch(new Module\Host($host, 'delete'));
+                dispatch(new Module\HostJob($host, 'delete'));
             }
         });
     }

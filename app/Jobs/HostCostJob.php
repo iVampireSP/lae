@@ -9,7 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class HostCost implements ShouldQueue
+class HostCostJob implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels, Lock;
 
@@ -47,7 +47,7 @@ class HostCost implements ShouldQueue
             }
         });
 
-        // Host::whereIn('status', ['running', 'stopped'])->with('user')->chunk(1000, function ($hosts) {
+        // HostJob::whereIn('status', ['running', 'stopped'])->with('user')->chunk(1000, function ($hosts) {
         //     foreach ($hosts as $host) {
         //         $host->cost();
         //     }

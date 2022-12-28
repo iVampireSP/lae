@@ -10,7 +10,7 @@ use Illuminate\Queue\SerializesModels;
 
 // use Illuminate\Contracts\Queue\ShouldBeUnique;
 
-class ClearTasks implements ShouldQueue
+class ClearTasksJob implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;
 

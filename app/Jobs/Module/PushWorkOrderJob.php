@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 
 // use Illuminate\Contracts\Queue\ShouldBeUnique;
 
-class PushWorkOrder implements ShouldQueue
+class PushWorkOrderJob implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;
 

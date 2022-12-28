@@ -12,7 +12,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
-class FetchModule implements ShouldQueue
+class FetchModuleJob implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;
 

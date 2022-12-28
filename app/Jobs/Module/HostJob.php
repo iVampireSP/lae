@@ -10,7 +10,7 @@ use Illuminate\Queue\SerializesModels;
 
 // use Illuminate\Contracts\Queue\ShouldBeUnique;
 
-class Host implements ShouldQueue
+class HostJob implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;
 

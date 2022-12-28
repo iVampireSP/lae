@@ -60,7 +60,7 @@ class HostController extends Controller
             $host->cost();
         }
 
-        dispatch(new \App\Jobs\Module\Host($host, 'delete'));
+        dispatch(new \App\Jobs\Module\HostJob($host, 'delete'));
 
         return $this->deleted($host);
     }

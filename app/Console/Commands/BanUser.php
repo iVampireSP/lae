@@ -48,7 +48,7 @@ class BanUser extends Command
 
         $this->info('封禁: ' . $user->name);
 
-        $this->confirm('确定要继续吗？如果继续，将会暂停所有的 Host，并且吊销所有 Token。');
+        $this->confirm('确定要继续吗？如果继续，将会暂停所有的主机，并且吊销所有 Token。');
 
         $user->banned_at = now();
         $user->banned_reason = $reason;

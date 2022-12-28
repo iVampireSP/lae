@@ -2,15 +2,15 @@
 
 namespace App\Console;
 
-use App\Jobs\AutoCloseWorkOrder;
-use App\Jobs\CheckAndChargeBalance;
-use App\Jobs\CheckHostIfExistsOnModule;
-use App\Jobs\ClearTasks;
-use App\Jobs\DeleteHost;
-use App\Jobs\HostCost;
-use App\Jobs\Module\FetchModule;
-use App\Jobs\Module\PushWorkOrder;
-use App\Jobs\SendModuleEarnings;
+use App\Jobs\AutoCloseWorkOrderJob;
+use App\Jobs\CheckAndChargeBalanceJob;
+use App\Jobs\CheckHostIfExistsOnModuleJob;
+use App\Jobs\ClearTasksJob;
+use App\Jobs\DeleteHostJob;
+use App\Jobs\HostCostJob;
+use App\Jobs\Module\FetchModuleJob;
+use App\Jobs\Module\PushWorkOrderJob;
+use App\Jobs\SendModuleEarningsJob;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -29,30 +29,30 @@ class Kernel extends ConsoleKernel
         $schedule->command('sanctum:prune-expired --hours=24')->daily();
 
         // 扣费
-        $schedule->job(new HostCost(now()->minute))->everyMinute()->withoutOverlapping()->onOneServer();
+        $schedule->job(new HostCostJob(now()->minute))->everyMinute()->withoutOverlapping()->onOneServer();
 
         // 获取模块暴露的信息（服务器等）
-        $schedule->job(new FetchModule())->withoutOverlapping()->everyMinute();
+        $schedule->job(new FetchModuleJob())->withoutOverlapping()->everyMinute();
 
         // 推送工单
-        $schedule->job(new PushWorkOrder())->everyMinute()->onOneServer();
+        $schedule->job(new PushWorkOrderJob())->everyMinute()->onOneServer();
         // 自动关闭工单
-        $schedule->job(new AutoCloseWorkOrder())->everyMinute()->onOneServer();
+        $schedule->job(new AutoCloseWorkOrderJob())->everyMinute()->onOneServer();
 
         // 清理任务
-        $schedule->job(new ClearTasks())->weekly();
+        $schedule->job(new ClearTasksJob())->weekly();
 
         // 删除暂停或部署时间超过 3 天以上的主机
-        $schedule->job(new DeleteHost())->hourly();
+        $schedule->job(new DeleteHostJob())->hourly();
 
         // 检查主机是否存在于模块
-        $schedule->job(new CheckHostIfExistsOnModule())->everyThirtyMinutes()->withoutOverlapping()->onOneServer();
+        $schedule->job(new CheckHostIfExistsOnModuleJob())->everyThirtyMinutes()->withoutOverlapping()->onOneServer();
 
         // 检查未充值的订单，并充值
-        $schedule->job(new CheckAndChargeBalance())->everyFiveMinutes()->onOneServer()->withoutOverlapping();
+        $schedule->job(new CheckAndChargeBalanceJob())->everyFiveMinutes()->onOneServer()->withoutOverlapping();
 
         // 发送模块收益
-        $schedule->job(new SendModuleEarnings())->dailyAt('20:00');
+        $schedule->job(new SendModuleEarningsJob())->dailyAt('20:00');
 
     }
 

@@ -8,7 +8,7 @@ use App\Models\Transaction;
 use Illuminate\Support\Facades\Log;
 use Yansongda\LaravelPay\Facades\Pay;
 
-class CheckAndChargeBalance extends Job
+class CheckAndChargeBalanceJob extends Job
 {
     /**
      * Create a new job instance.
