@@ -19,7 +19,7 @@ class IndexController extends Controller
     public function birthdays(): JsonResponse
     {
         // 获取今天过生日的用户，每页显示 20 个,使用 carbon
-        $users = User::whereMonth('birthday_at', now()->month)
+        $users = User::select(['id', 'name', 'birthday_at', 'email', 'created_at'])->whereMonth('birthday_at', now()->month)
             ->whereDay('birthday_at', now()->day)
             ->simplePaginate(20);
 
