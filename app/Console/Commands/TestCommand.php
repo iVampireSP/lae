@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Balance;
+use App\Models\User;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Command\Command as CommandAlias;
 
@@ -30,15 +31,15 @@ class TestCommand extends Command
     public function handle(): int
     {
 
-        // 使用 SQL 语句，获取 Balance 中的今日收益(sum amount)，然后 dd 为 sql
-        $sql = Balance::query()
-            ->selectRaw('sum(amount) as amount')
-            ->where('created_at', '>=', today())
-            ->toSql();
+        // 使用 SQL 语句，统计 Balance 模型中，根据 payment 类别，计算出数据总和 （group by date and payment）(date 类型要求 datetime)
+        $balances = Balance::selectRaw('date(created_at) as date, payment, sum(amount) as total')
+            ->groupBy('date', 'payment')
+            ->get();
 
 
-        dd($sql);
 
+        // table
+        $this->table(['支付方式', '数量', '日期'], $balances->toArray());
 
         return CommandAlias::SUCCESS;
     }
