@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\PersonalAccessToken;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Sanctum\Sanctum;
@@ -25,7 +26,7 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         //
 
@@ -43,5 +44,11 @@ class AppServiceProvider extends ServiceProvider
                 'version' => 2,
             ])->baseUrl($url);
         });
+
+
+        // Carbon setTestNow
+        // Carbon::setTestNow(now()->addDays(1));
+
+
     }
 }

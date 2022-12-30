@@ -10,7 +10,9 @@ use App\Jobs\DeleteHostJob;
 use App\Jobs\HostCostJob;
 use App\Jobs\Module\FetchModuleJob;
 use App\Jobs\Module\PushWorkOrderJob;
+use App\Jobs\RollbackUserTempGroupJob;
 use App\Jobs\SendModuleEarningsJob;
+use App\Jobs\SetBirthdayGroupJob;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -23,7 +25,7 @@ class Kernel extends ConsoleKernel
      *
      * @return void
      */
-    protected function schedule(Schedule $schedule)
+    protected function schedule(Schedule $schedule): void
     {
         // 清理过期的 Token
         $schedule->command('sanctum:prune-expired --hours=24')->daily();
@@ -54,6 +56,11 @@ class Kernel extends ConsoleKernel
         // 发送模块收益
         $schedule->job(new SendModuleEarningsJob())->dailyAt('20:00');
 
+        // 回滚临时用户组
+        $schedule->job(new RollbackUserTempGroupJob())->everyMinute()->onOneServer();
+
+        // 设置生日用户组
+        $schedule->job(new SetBirthdayGroupJob())->dailyAt('00:00');
     }
 
     /**

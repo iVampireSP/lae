@@ -3,8 +3,6 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Exceptions\CommonException;
-use App\Exceptions\User\BalanceNotEnoughException;
 use Database\Factories\UserFactory;
 use Eloquent;
 use GeneaLabs\LaravelModelCaching\CachedBuilder;
@@ -158,61 +156,9 @@ class User extends Authenticatable
         return $this->belongsTo(UserGroup::class);
     }
 
-    /**
-     * @throws CommonException
-     * @throws BalanceNotEnoughException
-     */
-    // public function toDrops($amount = 1)
-    // {
-    //
-    //     $cache_key = 'user_drops_' . $this->id;
-    //
-    //     if ($amount === 0 || $amount === null) {
-    //         return $this;
-    //     }
-    //
-    //     $rate = config('drops.rate');
-    //
-    //
-    //     $transactions = new Transaction();
-    //
-    //     $drops = $transactions->getDrops($this->id);
-    //
-    //     $total = 0;
-    //
-    //     if ($drops < 0) {
-    //         $amount += abs($drops) / $rate;
-    //     }
-    //
-    //     $total += $amount * $rate;
-    //
-    //
-    //     // amount 保留两位小数
-    //     $amount = round($amount, 2);
-    //
-    //     $lock = Cache::lock("lock_" . $cache_key, 5);
-    //     try {
-    //         $lock->block(5);
-    //
-    //         $this->balance -= $amount;
-    //         $this->save();
-    //
-    //         $transactions->increaseDrops($this->id, $total);
-    //
-    //         // $transactions
-    //
-    //         $transactions->addPayoutBalance($this->id, $amount, '自动转换为 Drops');
-    //
-    //         // if user balance <= 0
-    //         if ($this->balance < $amount) {
-    //             throw new BalanceNotEnoughException('余额不足');
-    //         }
-    //     } catch (LockTimeoutException) {
-    //         throw new CommonException('暂时无法处理此请求，请稍后再试。');
-    //     } finally {
-    //         optional($lock)->release();
-    //     }
-    //
-    //     return $this;
-    // }
+    public function scopeBirthday()
+    {
+        return $this->select(['id', 'name', 'birthday_at', 'email', 'created_at'])->whereMonth('birthday_at', now()->month)
+            ->whereDay('birthday_at', now()->day);
+    }
 }
