@@ -80,7 +80,7 @@ class FetchModuleJob implements ShouldQueue
                             ];
                         }, $json['servers']));
 
-                        broadcast(new ServerEvent($servers));
+                        // broadcast(new ServerEvent($servers));
                     }
 
                 } else {
