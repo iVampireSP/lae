@@ -51,7 +51,8 @@ class TodayIsUserBirthday extends Notification implements ShouldQueue
                 "Happy Birthday",
                 "好想把我的心意传达给你。"
             ],
-            ['今天祝你生日快乐！',
+            [
+                '今天祝你生日快乐！',
                 '这是第几次呢 假装忘记了(实际上)。',
                 '心里很清楚 只是在装傻。'
             ],
@@ -63,7 +64,6 @@ class TodayIsUserBirthday extends Notification implements ShouldQueue
                 'Happy Birthday!',
                 '人与人的相遇真是不可思议。'
             ],
-
             [
                 '你知道吗？',
                 '你对我而言很重要(一定要说出来)',
@@ -78,8 +78,7 @@ class TodayIsUserBirthday extends Notification implements ShouldQueue
         $lyric = $lyrics[array_rand($lyrics)];
 
         $email = (new MailMessage)
-            ->subject('Happy Birthday!')
-            ->greeting('Happy Birthday!');
+            ->subject('生日快乐');
 
         foreach ($lyric as $line) {
             $email->line($line);
