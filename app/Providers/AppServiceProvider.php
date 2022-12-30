@@ -49,6 +49,5 @@ class AppServiceProvider extends ServiceProvider
         // Carbon setTestNow
         // Carbon::setTestNow(now()->addDays(1));
 
-
     }
 }
