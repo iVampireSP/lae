@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\User;
 use App\Models\UserGroup;
+use App\Notifications\TodayIsUserBirthday;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -40,9 +41,8 @@ class SetBirthdayGroupJob implements ShouldQueue
         User::birthday()->chunk(100, function ($users) use ($birthday_group) {
             foreach ($users as $user) {
                 $birthday_group->setTempGroup($user, $birthday_group, now()->addDay());
+                $user->notify(new TodayIsUserBirthday());
             }
         });
-
-
     }
 }

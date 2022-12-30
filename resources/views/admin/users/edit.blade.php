@@ -17,6 +17,24 @@
 
     <p>邮箱: {{ $user->email }}</p>
 
+
+
+    <p>生日: {{ $user->birthday_at }},
+        {{-- 是不是今天 --}}
+        @if ($user->birthday_at->isToday())
+            <span class="text-danger">今天就是。</span>
+        @else
+            {{--  距离下次生日的时间  --}}
+            @if ($user->birthday_at->isFuture())
+                还有 {{ $user->birthday_at->diffInDays() }} 天 {{ $user->birthday_at->diffInHours() }} 小时
+            @else
+                已经过去 {{ $user->birthday_at->diffInDays() }} 天 {{ $user->birthday_at->diffInHours() }} 小时
+            @endif
+            。
+        @endif
+    </p>
+
+
     {{--  hosts  --}}
     <h3>主机列表</h3>
     <table class="table table-hover">
