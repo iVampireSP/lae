@@ -120,7 +120,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'balance' => 'decimal:2',
         'banned_at' => 'datetime',
-        'birthday_at' => 'datetime',
+        'birthday_at' => 'date',
     ];
 
     protected static function boot()
