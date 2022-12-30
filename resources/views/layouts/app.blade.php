@@ -56,7 +56,7 @@
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ms-auto">
                     <a class="nav-link" target="_blank"
-                       href="https://dash.laecloud.com">仪表盘</a>
+                       href="{{ config('settings.dashboard.base_url') }}">仪表盘</a>
 
                     <a class="nav-link"
                        href="{{ route('contact') }}">联系我们</a>

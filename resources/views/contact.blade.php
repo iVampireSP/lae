@@ -4,7 +4,7 @@
 
     <p>请注意，我们官方的控制面板只有一个，那就是
         <a target="_blank"
-           href="https://dash.laecloud.com">dash.laecloud.com</a>。
+           href="{{ config('settings.dashboard.base_url') }}">{{ config('settings.dashboard.base_url') }}</a>。
         <br/>
         莱云 官方没有推出过任何其它形式的客户端（比如桌面客户端等）。我们不会其它形式的客户端做出任何技术支持，也不解答任何问题，也不负责任何损失。
     </p>
