@@ -40,7 +40,10 @@ class SetBirthdayGroupJob implements ShouldQueue
 
         User::birthday()->chunk(100, function ($users) use ($birthday_group) {
             foreach ($users as $user) {
-                $birthday_group->setTempGroup($user, $birthday_group, now()->addDay());
+                // 到第二天 00:00 now
+                $now = now()->addDay()->startOfDay();
+
+                $birthday_group->setTempGroup($user, $birthday_group, $now);
                 $user->notify(new TodayIsUserBirthday());
             }
         });
