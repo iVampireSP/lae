@@ -15,7 +15,7 @@ class Reply implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $reply;
+    protected WorkOrderReply $reply;
 
     /**
      * Create a new job instance.
@@ -33,7 +33,7 @@ class Reply implements ShouldQueue
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         //
         $this->reply->load(['workOrder', 'user']);

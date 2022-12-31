@@ -31,7 +31,7 @@ class PushWorkOrderJob implements ShouldQueue
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         //
         WorkOrder::whereIn('status', ['pending', 'error'])->with(['module', 'user', 'host', 'replies'])->chunk(100, function ($workOrders) {

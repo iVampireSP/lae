@@ -34,7 +34,7 @@ class WorkOrder implements ShouldQueue
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $this->workOrder->load(['module']);
 

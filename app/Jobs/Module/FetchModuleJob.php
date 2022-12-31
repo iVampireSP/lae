@@ -31,7 +31,7 @@ class FetchModuleJob implements ShouldQueue
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         // 获取运行完成的时间
 
