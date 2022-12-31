@@ -38,12 +38,14 @@ class SetBirthdayGroupJob implements ShouldQueue
             return;
         }
 
-        User::birthday()->chunk(100, function ($users) use ($birthday_group) {
-            foreach ($users as $user) {
-                // 到第二天 00:00 now
-                $now = now()->addDay()->startOfDay();
+        // 先撤销原来的
+        User::where('user_group_id', $birthday_group->id)->update(['user_group_id' => null]);
 
-                $birthday_group->setTempGroup($user, $birthday_group, $now);
+        User::birthday()->whereNull('user_group_id')->chunk(100, function ($users) use ($birthday_group) {
+            foreach ($users as $user) {
+                $user->user_group_id = $birthday_group->id;
+                $user->save();
+
                 $user->notify(new TodayIsUserBirthday());
             }
         });
