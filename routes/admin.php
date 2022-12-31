@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\DeviceController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\HostController;
 use App\Http\Controllers\Admin\ModuleController;
+use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\UserGroupController;
 use App\Http\Controllers\Admin\WorkOrderController;
@@ -44,6 +45,8 @@ Route::group([
     Route::resource('user-groups', UserGroupController::class);
 
     Route::resource('devices', DeviceController::class)->only(['index', 'destroy']);
+
+    Route::resource('notifications', NotificationController::class)->only(['create', 'store']);
 
 
     Route::view('commands', 'admin.commands')->name('commands');

@@ -50,6 +50,9 @@
                         <a class="nav-link" href="{{ route('admin.transactions') }}">交易记录</a>
                     </li>
                     <li class="nav-item">
+                        <a class="nav-link" href="{{ route('admin.notifications.create') }}">通知</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="{{ route('admin.admins.index') }}">管理员</a>
                     </li>
                     <li class="nav-item">
