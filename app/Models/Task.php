@@ -6,7 +6,6 @@ use App\Events\UserEvent;
 use App\Exceptions\CommonException;
 use Eloquent;
 use GeneaLabs\LaravelModelCaching\CachedBuilder;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;

@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use App\Models\PersonalAccessToken;
 use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Sanctum\Sanctum;

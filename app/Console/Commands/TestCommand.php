@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Models\Balance;
-use App\Models\User;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Command\Command as CommandAlias;
 
@@ -35,7 +34,6 @@ class TestCommand extends Command
         $balances = Balance::selectRaw('date(created_at) as date, payment, sum(amount) as total')
             ->groupBy('date', 'payment')
             ->get();
-
 
 
         // table

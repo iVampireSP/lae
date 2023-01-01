@@ -2,7 +2,6 @@
 
 namespace App\Jobs\Module;
 
-use App\Events\ServerEvent;
 use App\Models\Module;
 use Exception;
 use Illuminate\Bus\Queueable;

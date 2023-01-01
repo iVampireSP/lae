@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Jobs\SendCommonNotificationsJob;
-use App\Models\Host;
 use App\Models\Module;
 use App\Models\User;
 use GeneaLabs\LaravelModelCaching\CachedBuilder;
@@ -27,28 +26,6 @@ class NotificationController extends Controller
         $users = $this->query($request)->paginate(20)->withQueryString();
 
         return view('admin.notifications.create', compact('modules', 'users'));
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param Request $request
-     *
-     * @return RedirectResponse
-     */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'title' => 'required',
-            'content' => 'required',
-            'user_id' => 'nullable',
-            'module_id' => 'nullable',
-            'user' => 'nullable',
-        ]);
-
-        dispatch(new SendCommonNotificationsJob($request->toArray(), $request->input('title'), $request->input('content')));
-
-        return back()->with('success', '通知发送成功。')->withInput();
     }
 
     public function query(Request|array $request): User|CachedBuilder
@@ -84,5 +61,27 @@ class NotificationController extends Controller
         }
 
         return $users;
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param Request $request
+     *
+     * @return RedirectResponse
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'title' => 'required',
+            'content' => 'required',
+            'user_id' => 'nullable',
+            'module_id' => 'nullable',
+            'user' => 'nullable',
+        ]);
+
+        dispatch(new SendCommonNotificationsJob($request->toArray(), $request->input('title'), $request->input('content')));
+
+        return back()->with('success', '通知发送成功。')->withInput();
     }
 }
