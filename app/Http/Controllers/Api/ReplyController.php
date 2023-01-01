@@ -18,7 +18,7 @@ class ReplyController extends Controller
      */
     public function index(WorkOrder $workOrder)
     {
-        $replies = Reply::workOrderId($workOrder->id)->with(['module', 'user'])->simplePaginate(100);
+        $replies = Reply::workOrderId($workOrder->id)->with(['module', 'user'])->latest()->simplePaginate(100);
 
         return $this->success($replies);
     }
