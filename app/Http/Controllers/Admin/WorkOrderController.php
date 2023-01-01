@@ -91,7 +91,6 @@ class WorkOrderController extends Controller
      */
     public function destroy(WorkOrder $workOrder): RedirectResponse
     {
-        //
         try {
             $workOrder->safeDelete();
         } catch (CommonException $e) {

@@ -4,7 +4,6 @@ namespace App\Observers\WorkOrder;
 
 use App\Models\WorkOrder\WorkOrder;
 use App\Notifications\WorkOrderNotification;
-use Illuminate\Support\Facades\Log;
 
 class WorkOrderObserver
 {
@@ -31,11 +30,9 @@ class WorkOrderObserver
      */
     public function updated(WorkOrder $workOrder)
     {
-
-        Log::debug('workOrder updated', ['workOrder' => $workOrder]);
-        //
-        return (new WorkOrderNotification())
-            ->toGroup($workOrder);
+        return;
+        // return (new WorkOrderNotification())
+        //     ->toGroup($workOrder);
     }
 
     /**
@@ -45,7 +42,7 @@ class WorkOrderObserver
      *
      * @return void
      */
-    public function deleted(WorkOrder $workOrder)
+    public function deleted(WorkOrder $workOrder): void
     {
         //
     }
@@ -57,20 +54,9 @@ class WorkOrderObserver
      *
      * @return void
      */
-    public function restored(WorkOrder $workOrder)
+    public function restored(WorkOrder $workOrder): void
     {
         //
     }
 
-    /**
-     * Handle the WorkOrder "force deleted" event.
-     *
-     * @param WorkOrder $workOrder
-     *
-     * @return void
-     */
-    public function forceDeleted(WorkOrder $workOrder)
-    {
-        //
-    }
 }

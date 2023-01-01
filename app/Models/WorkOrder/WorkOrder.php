@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 
 /**
  * App\Models\WorkOrder\WorkOrder
@@ -87,31 +88,32 @@ class WorkOrder extends Model
     {
         parent::boot();
 
-        static::creating(function ($model) {
+        static::creating(function (self $model) {
+            // 生成 uuid
+            $model->uuid = Str::uuid()->toString();
 
             if ($model->host_id) {
                 $model->load(['host']);
                 $model->module_id = $model->host->module_id;
             }
 
-            // if logged
-            if (auth()->check()) {
+            if (auth('sanctum')->check()) {
                 $model->user_id = auth()->id();
 
                 if ($model->host_id) {
-                    if (!$model->user_id === $model->host->user_id) {
+                    if (!$model->user_id == $model->host->user_id) {
                         throw new CommonException('user_id not match host user_id');
                     }
                 }
             } else {
-                throw new CommonException('user_id is required');
+                if (!$model->user_id) {
+                    throw new CommonException('user_id is required');
+                }
             }
-
 
             if ($model->host_id) {
                 $model->host->load('module');
                 $module = $model->host->module;
-
 
                 if ($module === null) {
                     $model->status = 'open';
@@ -127,6 +129,41 @@ class WorkOrder extends Model
         });
     }
 
+    public function scopeThisModule($query)
+    {
+        return $query->where('module_id', auth('module')->id());
+    }
+
+    public function scopeThisUser($query)
+    {
+        return $query->where('user_id', auth()->id());
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function replies(): HasMany
+    {
+        return $this->hasMany(Reply::class);
+    }
+
+    public function host(): BelongsTo
+    {
+        return $this->belongsTo(Host::class);
+    }
+
+    public function module(): BelongsTo
+    {
+        return $this->belongsTo(Module::class);
+    }
+
+    public function isFailure(): bool
+    {
+        return $this->status === 'pending' || $this->status === 'error';
+    }
+
     /**
      * @throws CommonException
      */
@@ -139,44 +176,5 @@ class WorkOrder extends Model
         dispatch(new WorkOrderJob($this, 'delete'));
 
         return true;
-    }
-
-    // replies
-
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    // host
-
-    public function replies(): HasMany
-    {
-        return $this->hasMany(Reply::class);
-    }
-
-    public function host(): BelongsTo
-    {
-        return $this->belongsTo(Host::class);
-    }
-
-    // scope
-
-    public function module(): BelongsTo
-    {
-        return $this->belongsTo(Module::class);
-    }
-
-    public function scopeThisModule($query)
-    {
-        return $query->where('module_id', auth('module')->id());
-    }
-
-
-    // on create
-
-    public function scopeThisUser($query)
-    {
-        return $query->where('user_id', auth()->id());
     }
 }

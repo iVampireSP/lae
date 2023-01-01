@@ -7,7 +7,6 @@ use App\Models\WorkOrder\WorkOrder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
-use function auth;
 
 class WorkOrderController extends Controller
 {
@@ -31,15 +30,20 @@ class WorkOrderController extends Controller
         ]);
 
         // module_id 和 host_id 必须有个要填写
-        if (isset($request->module_id) && isset($request->host_id)) {
-            return $this->error('module_id 和 host_id 至少要填写一个');
+        if ($request->input('module_id') === null && $request->input('host_id') === null) {
+            $message = 'module_id 和 host_id 必须有个要填写';
+
+            throw ValidationException::withMessages([
+                'module_id' => $message,
+                'host_id' => $message,
+            ]);
         }
 
         $workOrder = WorkOrder::create([
-            'title' => $request->title,
+            'title' => $request->input('title'),
             'content' => $request->input('content'),
-            'module_id' => $request->module_id,
-            'host_id' => $request->host_id,
+            'module_id' => $request->input('module_id'),
+            'host_id' => $request->input('host_id'),
             'status' => 'pending',
         ]);
 
@@ -48,11 +52,8 @@ class WorkOrderController extends Controller
 
     public function show(WorkOrder $workOrder): JsonResponse
     {
-        if (auth()->id() !== $workOrder->user_id) {
-            return $this->notFound('无法找到对应的工单。');
-        }
-
         $workOrder->load(['module', 'host']);
+
         return $this->success($workOrder);
     }
 
@@ -61,15 +62,12 @@ class WorkOrderController extends Controller
      */
     public function update(Request $request, WorkOrder $workOrder)
     {
-        if (auth()->id() !== $workOrder->user_id) {
-            return $this->notFound('无法找到对应的工单。');
-        }
-
         $this->validate($request, [
             'status' => 'nullable|sometimes|string|in:closed',
         ]);
 
         $workOrder->update($request->only('status'));
+
         return $this->success($workOrder);
     }
 }

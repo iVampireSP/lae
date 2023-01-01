@@ -14,11 +14,19 @@
 
         @foreach($replies as $reply)
             <div class="card border-light mb-3 shadow">
-                <div class="card-header">
+                <div class="card-header d-flex w-100 justify-content-between">
                     @if ($reply->user_id)
                         <a href="{{ route('admin.users.edit', $reply->user) }}">{{ $workOrder->user->name }}</a>
+                    @elseif($reply->module_id)
+                        <a href="{{ route('admin.modules.edit', $workOrder->module_id) }}">{{ $workOrder->module->name }}
+                            @if ($reply->name)
+                                的 {{ $reply->name }}
+                            @endif
+                        </a>
+                    @elseif ($reply->name === null && $reply->user_id === null && $reply->module_id === null)
+                        <span class="text-primary">{{ config('app.display_name') }}</span>
                     @else
-                        <a href="{{ route('admin.modules.edit', $workOrder->module_id) }}">{{ $workOrder->module->name }}</a>
+                        {{ $reply->name }}
                     @endif
 
                     <span class="text-end">{{ $reply->created_at }}</span>
@@ -37,7 +45,8 @@
         {{-- label --}}
         <div class="form-group">
             <label for="content">内容</label>
-            <textarea class="form-control" id="content" name="content" rows="10" placeholder="代替模块的回复。"></textarea>
+            <textarea class="form-control" id="content" name="content" rows="10"
+                      placeholder="代替模块的回复。"></textarea>
         </div>
 
         <button type="submit" class="btn btn-primary mt-3 mb-3">提交</button>

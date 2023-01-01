@@ -4,6 +4,7 @@ namespace App\Models\WorkOrder;
 
 use App\Events\UserEvent;
 use App\Exceptions\CommonException;
+use App\Models\Module;
 use App\Models\User;
 use Eloquent;
 use GeneaLabs\LaravelModelCaching\CachedBuilder;
@@ -66,13 +67,15 @@ class Reply extends Model
         'content',
         'work_order_id',
         'user_id',
+        'name',
+        'module_id',
         'is_pending',
     ];
 
     protected static function boot()
     {
         parent::boot();
-        static::creating(function ($model) {
+        static::creating(function (self $model) {
             $model->is_pending = 1;
 
             // load work order
@@ -82,10 +85,11 @@ class Reply extends Model
             if (is_null($model->workOrder)) {
                 throw new CommonException('Work order not found');
             }
-            throw_if($model->workOrder->status == 'pending' || $model->workOrder->status == 'error', CommonException::class, '工单状态不正确');
+
+            throw_if($model->workOrder->isFailure(), CommonException::class, '工单还没有就绪。');
 
             // change work order status
-            if (auth()->check()) {
+            if (auth('sanctum')->check()) {
                 $model->user_id = auth()->id();
                 $model->workOrder->status = 'user_replied';
             }
@@ -116,6 +120,11 @@ class Reply extends Model
         return $this->belongsTo(WorkOrder::class, 'work_order_id', 'id');
     }
 
+    public function module(): BelongsTo
+    {
+        return $this->belongsTo(Module::class);
+    }
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -123,7 +132,6 @@ class Reply extends Model
 
 
     // before create
-
     public function scopeWorkOrderId($query, $work_order_id)
     {
         return $query->where('work_order_id', $work_order_id);

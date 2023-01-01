@@ -19,8 +19,8 @@ class ReplyController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        //
         $replies = Reply::workOrderId($request->route('work_order'))->simplePaginate(10);
+
         return $this->success($replies);
     }
 
@@ -33,19 +33,14 @@ class ReplyController extends Controller
     {
         $this->validate($request, [
             'content' => 'required|string|max:255',
-            'work_order_id' => 'required|integer|exists:work_orders,id',
+            'name' => 'required|string|max:255',
         ]);
 
-        if ($work_order->module_id !== auth('module')->id()) {
-            return $this->error('您没有权限回复此工单。');
-        }
-
-        // 需要转换成数组
-        $request_array = $request->all();
-
         $reply = Reply::create([
-            'content' => $request_array['content'],
-            'work_order_id' => $request_array['work_order_id'],
+            'content' => $request->input('content'),
+            'work_order_id' => $work_order->id,
+            'module_id' => $work_order->module_id,
+            'name' => $request->input('name'),
         ]);
 
         return $this->success($reply);

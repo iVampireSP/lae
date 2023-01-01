@@ -7,7 +7,6 @@ use App\Models\WorkOrder\Reply;
 use App\Models\WorkOrder\WorkOrder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use function auth;
 
 class ReplyController extends Controller
@@ -19,11 +18,7 @@ class ReplyController extends Controller
      */
     public function index(WorkOrder $workOrder)
     {
-        if (auth()->id() !== $workOrder->user_id) {
-            return $this->notFound('无法找到对应的工单。');
-        }
-
-        $replies = Reply::workOrderId($workOrder->id)->simplePaginate(100);
+        $replies = Reply::workOrderId($workOrder->id)->with(['module', 'user'])->simplePaginate(100);
 
         return $this->success($replies);
     }
@@ -34,25 +29,34 @@ class ReplyController extends Controller
      * @param Request   $request
      * @param WorkOrder $workOrder
      *
-     * @return JsonResponse|Response
+     * @return JsonResponse
      */
     public function store(Request $request, WorkOrder $workOrder)
     {
-        if (auth()->id() !== $workOrder->user_id) {
-            return $this->notFound('无法找到对应的工单。');
-        }
-
-        // add reply
         $this->validate($request, [
             'content' => 'string|required|min:1|max:1000',
         ]);
 
+        if ($workOrder->isFailure()) {
+            return $this->error('工单状态异常，无法进行回复。请尝试重新建立工单。');
+        }
 
-        $reply = Reply::create([
+        $create = [
             'content' => $request->input('content'),
             'work_order_id' => $workOrder->id,
-        ]);
+        ];
 
+        if (auth('sanctum')->check()) {
+            $create['user_id'] = auth('sanctum')->id();
+        } else {
+            $this->validate($request, [
+                'name' => 'string|required|min:1|max:255',
+            ]);
+
+            $create['name'] = $request->input('name');
+        }
+
+        $reply = Reply::create($create);
 
         return $this->success($reply);
     }

@@ -28,7 +28,7 @@ class ReplyObserver
      *
      * @return void
      */
-    public function updated(Reply $reply)
+    public function updated(Reply $reply): void
     {
         //
     }
@@ -40,7 +40,7 @@ class ReplyObserver
      *
      * @return void
      */
-    public function deleted(Reply $reply)
+    public function deleted(Reply $reply): void
     {
         //
     }
@@ -52,20 +52,9 @@ class ReplyObserver
      *
      * @return void
      */
-    public function restored(Reply $reply)
+    public function restored(Reply $reply): void
     {
         //
     }
 
-    /**
-     * Handle the Reply "force deleted" event.
-     *
-     * @param Reply $reply
-     *
-     * @return void
-     */
-    public function forceDeleted(Reply $reply)
-    {
-        //
-    }
 }

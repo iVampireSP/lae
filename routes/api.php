@@ -29,9 +29,14 @@ Route::get('forum/pinned', [ForumController::class, 'announcements']);
 Route::get('hosts/usages', [HostController::class, 'usages']);
 Route::apiResource('hosts', HostController::class);
 
-Route::apiResource('work-orders', WorkOrderController::class)->only(['index', 'store', 'show', 'update']);
+Route::apiResource('work-orders', WorkOrderController::class)->only(['index', 'store', 'update']);
 
-Route::apiResource('work-orders.replies', ReplyController::class)->only(['index', 'store']);
+Route::withoutMiddleware('auth:sanctum')->prefix('work-orders')->group(function () {
+    Route::get('{workOrder:uuid}', [WorkOrderController::class, 'show']);
+
+    Route::get('{workOrder:uuid}/replies', [ReplyController::class, 'index']);
+    Route::post('{workOrder:uuid}/replies', [ReplyController::class, 'store']);
+});
 
 Route::any('modules/{module}/{path?}', [ModuleController::class, 'call'])
     ->where('path', '.*');
