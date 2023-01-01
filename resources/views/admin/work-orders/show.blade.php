@@ -50,7 +50,7 @@
         <div class="form-group">
             <label for="content">内容</label>
             <textarea class="form-control" id="content" name="content" rows="10"
-                      placeholder="代替模块的回复。"></textarea>
+                      placeholder="作为 {{ config('app.display_name') }} 回复。"></textarea>
         </div>
 
         <button type="submit" class="btn btn-primary mt-3 mb-3">提交</button>
