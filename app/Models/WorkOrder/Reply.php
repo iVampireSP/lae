@@ -91,7 +91,9 @@ class Reply extends Model
 
 
             // change work order status
-            if (auth('sanctum')->check()) {
+            if (auth('admin')->check()) {
+                $model->role = 'admin';
+            } else if (auth('sanctum')->check()) {
                 $model->user_id = auth('sanctum')->id();
                 $model->role = 'user';
                 $model->workOrder->status = 'user_replied';
@@ -103,8 +105,6 @@ class Reply extends Model
 
                 broadcast(new UserEvent($model->user_id, 'work-order.replied', $model->workOrder));
 
-            } else if (auth('admin')->check()) {
-                $model->role = 'admin';
             } else {
                 $model->role = 'guest';
             }
