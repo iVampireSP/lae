@@ -70,6 +70,7 @@ class Reply extends Model
         'name',
         'module_id',
         'is_pending',
+        'role'
     ];
 
     protected static function boot()
@@ -88,18 +89,26 @@ class Reply extends Model
 
             throw_if($model->workOrder->isFailure(), CommonException::class, '工单还没有就绪。');
 
+
             // change work order status
             if (auth('sanctum')->check()) {
-                $model->user_id = auth()->id();
+                $model->user_id = auth('sanctum')->id();
+                $model->role = 'user';
                 $model->workOrder->status = 'user_replied';
-            }
 
-            if (auth('module')->check() || auth('admin')->check()) {
+            } else if (auth('module')->check()) {
                 $model->user_id = null;
+                $model->role = 'module';
                 $model->workOrder->status = 'replied';
 
                 broadcast(new UserEvent($model->user_id, 'work-order.replied', $model->workOrder));
+
+            } else if (auth('admin')->check()) {
+                $model->role = 'admin';
+            } else {
+                $model->role = 'guest';
             }
+
 
             $model->workOrder->save();
         });

@@ -15,17 +15,21 @@
         @foreach($replies as $reply)
             <div class="card border-light mb-3 shadow">
                 <div class="card-header d-flex w-100 justify-content-between">
-                    @if ($reply->user_id)
-                        <a href="{{ route('admin.users.edit', $reply->user) }}">{{ $workOrder->user->name }}</a>
-                    @elseif($reply->module_id)
+                    @if ($reply->role === 'user')
+                        @if ($reply->user_id)
+                            <a href="{{ route('admin.users.edit', $reply->user) }}">{{ $workOrder->user->name }}</a>
+                        @else
+                            {{ $reply->name }}
+                        @endif
+                    @elseif ($reply->role === 'admin')
+                        <span class="text-primary">{{ config('app.display_name') }}</span>
+                    @elseif ($reply->role === 'module')
                         <a href="{{ route('admin.modules.edit', $workOrder->module_id) }}">{{ $workOrder->module->name }}
                             @if ($reply->name)
                                 的 {{ $reply->name }}
                             @endif
                         </a>
-                    @elseif ($reply->name === null && $reply->user_id === null && $reply->module_id === null)
-                        <span class="text-primary">{{ config('app.display_name') }}</span>
-                    @else
+                    @elseif ($reply->role === 'guest')
                         {{ $reply->name }}
                     @endif
 
