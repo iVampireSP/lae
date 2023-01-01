@@ -14,6 +14,7 @@ class ModuleController extends Controller
     public function index()
     {
         $module = auth('module')->user()->calculate();
+
         return $this->success($module);
     }
 
@@ -32,12 +33,6 @@ class ModuleController extends Controller
         return $this->moduleResponse($response['json'], $response['status']);
     }
 
-    private function fixPath(Request $request, Module $module, $prefix): string
-    {
-        $path = substr($request->path(), strlen("/{$prefix}/modules/{$module->id}"));
-        return preg_replace('/[^a-zA-Z0-9\/]/', '', $path);
-    }
-
     public function exportCall(Request $request, Module $module): Response|JsonResponse
     {
         $path = $this->fixPath($request, $module, 'modules');
@@ -50,5 +45,12 @@ class ModuleController extends Controller
         }
 
         return $this->moduleResponse($response['json'], $response['status']);
+    }
+
+    private function fixPath(Request $request, Module $module, $prefix): string
+    {
+        $path = substr($request->path(), strlen("/{$prefix}/modules/{$module->id}"));
+
+        return preg_replace('/[^a-zA-Z0-9\/]/', '', $path);
     }
 }
