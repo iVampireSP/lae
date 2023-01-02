@@ -65,9 +65,4 @@ class ReplyController extends Controller
 
         return $this->success($reply);
     }
-
-    public function destroy(Request $request, WorkOrder $workOrder)
-    {
-
-    }
 }
