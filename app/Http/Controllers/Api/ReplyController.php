@@ -18,7 +18,9 @@ class ReplyController extends Controller
      */
     public function index(WorkOrder $workOrder)
     {
-        $replies = Reply::workOrderId($workOrder->id)->with(['module', 'user'])->simplePaginate(10);
+        $replies = Reply::workOrderId($workOrder->id)->with(['module'])->with(['user' => function ($query) {
+            $query->select('id', 'name', 'email');
+        }])->simplePaginate(10);
 
         return $this->success($replies);
     }
@@ -64,5 +66,10 @@ class ReplyController extends Controller
         $reply = Reply::create($create);
 
         return $this->success($reply);
+    }
+
+    public function destroy(Request $request, WorkOrder $workOrder)
+    {
+
     }
 }
