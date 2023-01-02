@@ -158,7 +158,7 @@ class User extends Authenticatable
 
     public function scopeBirthday()
     {
-        return $this->select(['id', 'name', 'birthday_at', 'email', 'created_at'])->whereMonth('birthday_at', now()->month)
+        return $this->select(['id', 'name', 'birthday_at', 'email_md5', 'created_at'])->whereMonth('birthday_at', now()->month)
             ->whereDay('birthday_at', now()->day);
     }
 }

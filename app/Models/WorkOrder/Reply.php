@@ -149,7 +149,7 @@ class Reply extends Model
     public function scopeWithUser($query)
     {
         return $query->with(['user' => function ($query) {
-            $query->select('id', 'name', 'email');
+            $query->select('id', 'name', 'email_md5');
         }]);
     }
 }
