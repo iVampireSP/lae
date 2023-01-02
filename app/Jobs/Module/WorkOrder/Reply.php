@@ -2,30 +2,28 @@
 
 namespace App\Jobs\Module\WorkOrder;
 
-use App\Events\UserEvent;
 use App\Models\WorkOrder\Reply as WorkOrderReply;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-// use Illuminate\Contracts\Queue\ShouldBeUnique;
-
 class Reply implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;
 
     protected WorkOrderReply $reply;
+    protected string $type;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(WorkOrderReply $reply)
+    public function __construct(WorkOrderReply $reply, $type = 'post')
     {
-        //
         $this->reply = $reply;
+        $this->type = $type;
     }
 
     /**
@@ -35,25 +33,33 @@ class Reply implements ShouldQueue
      */
     public function handle(): void
     {
-        //
         $this->reply->load(['workOrder', 'user']);
         $this->reply->workOrder->load(['module']);
 
         $reply = $this->reply->toArray();
 
-        $response = $this->reply->workOrder->module->http()->post('work-orders/' . $this->reply->workOrder->id . '/replies', $reply);
+        if ($this->type == 'post') {
+            $response = $this->reply->workOrder->module->http()->post('work-orders/' . $this->reply->workOrder->id . '/replies', $reply);
 
-        if ($response->successful()) {
-            $this->reply->update([
-                'is_pending' => false
-            ]);
+            if ($response->successful()) {
+                $this->reply->update([
+                    'is_pending' => false
+                ]);
+            } else {
+                $this->reply->update([
+                    'is_pending' => true
+                ]);
+            }
 
-            broadcast(new UserEvent($this->reply->workOrder->user_id, 'work-order.replied', $this->reply));
+        } else if ($this->type == 'patch') {
+            $this->reply->workOrder->module->http()->patch('work-orders/' . $this->reply->workOrder->id . '/replies/' . $this->reply->id, $reply);
+        } else if ($this->type == 'delete') {
+            $response = $this->reply->workOrder->module->http()->delete('work-orders/' . $this->reply->workOrder->id . '/replies/' . $this->reply->id);
 
-        } else {
-            $this->reply->update([
-                'is_pending' => true
-            ]);
+            if ($response->successful()) {
+                $this->reply->delete();
+            }
         }
     }
 }
+

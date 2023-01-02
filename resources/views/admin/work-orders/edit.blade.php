@@ -53,7 +53,7 @@
             <button type="submit" class="btn btn-danger mt-3">删除</button>
         </form>
     @else
-        <p>工单状态为 推送中，无法修改</p>
+        <p>工单状态为 推送中，无法修改。</p>
     @endif
 
 @endsection

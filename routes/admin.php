@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\HostController;
 use App\Http\Controllers\Admin\ModuleController;
 use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Admin\ReplyController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\UserGroupController;
 use App\Http\Controllers\Admin\WorkOrderController;
@@ -40,7 +41,7 @@ Route::group([
     Route::resource('hosts', HostController::class)->only(['index', 'edit', 'update', 'destroy']);
 
     Route::resource('work-orders', WorkOrderController::class)->only(['index', 'show', 'edit', 'update', 'destroy']);
-    Route::post('work-orders/{work_order}/replies', [WorkOrderController::class, 'reply'])->name('work-orders.replies.store');
+    Route::resource('work-orders.replies', ReplyController::class)->only(['store', 'edit', 'update', 'destroy']);
 
     Route::resource('user-groups', UserGroupController::class);
 

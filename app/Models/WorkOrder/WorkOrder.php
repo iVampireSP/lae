@@ -153,7 +153,6 @@ class WorkOrder extends Model
         parent::boot();
 
         static::creating(function (self $model) {
-            // 生成 uuid
             $model->uuid = Str::uuid()->toString();
 
             if ($model->host_id) {

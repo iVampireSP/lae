@@ -33,7 +33,10 @@
                         {{ $reply->name }}
                     @endif
 
-                    <span class="text-end">{{ $reply->created_at }}</span>
+                    <span class="text-end">
+                        <a href="{{ route('admin.work-orders.replies.edit', [$workOrder, $reply]) }}">编辑</a>
+                        {{ $reply->created_at }}
+                    </span>
                 </div>
 
                 <div class="card-body">

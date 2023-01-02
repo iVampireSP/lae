@@ -73,6 +73,38 @@ class Reply extends Model
         'role'
     ];
 
+    public function scopeWorkOrderId($query, $work_order_id)
+    {
+        return $query->where('work_order_id', $work_order_id);
+    }
+
+    public function scopeWithUser($query)
+    {
+        return $query->with(['user' => function ($query) {
+            $query->select('id', 'name', 'email_md5');
+        }]);
+    }
+
+    public function workOrder(): BelongsTo
+    {
+        return $this->belongsTo(WorkOrder::class, 'work_order_id', 'id');
+    }
+
+    public function module(): BelongsTo
+    {
+        return $this->belongsTo(Module::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function safeDelete(): void
+    {
+        dispatch(new \App\Jobs\Module\WorkOrder\Reply($this, 'delete'));
+    }
+
     protected static function boot()
     {
         parent::boot();
@@ -119,37 +151,12 @@ class Reply extends Model
                 $model->workOrder->save();
             }
             // dispatch
-            dispatch(new \App\Jobs\Module\WorkOrder\Reply($model));
+            dispatch(new \App\Jobs\Module\WorkOrder\Reply($model, 'post'));
             dispatch(new \App\Jobs\Module\WorkOrder\WorkOrder($model->workOrder, 'put'));
         });
-    }
 
-    public function workOrder(): BelongsTo
-    {
-        return $this->belongsTo(WorkOrder::class, 'work_order_id', 'id');
-    }
-
-    public function module(): BelongsTo
-    {
-        return $this->belongsTo(Module::class);
-    }
-
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
-
-
-    // before create
-    public function scopeWorkOrderId($query, $work_order_id)
-    {
-        return $query->where('work_order_id', $work_order_id);
-    }
-
-    public function scopeWithUser($query)
-    {
-        return $query->with(['user' => function ($query) {
-            $query->select('id', 'name', 'email_md5');
-        }]);
+        static::updating(function (self $model) {
+            dispatch(new \App\Jobs\Module\WorkOrder\Reply($model, 'patch'));
+        });
     }
 }

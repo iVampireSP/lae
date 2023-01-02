@@ -3,7 +3,7 @@
 namespace App\Jobs\Module\WorkOrder;
 
 use App\Events\UserEvent;
-use App\Models\WorkOrder\WorkOrder as WorkOrderWorkOrder;
+use App\Models\WorkOrder\WorkOrder as WorkOrderModel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -15,16 +15,16 @@ class WorkOrder implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $workOrder, $type;
+    protected WorkOrderModel $workOrder;
+    protected string $type;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(WorkOrderWorkOrder $workOrder, $type = 'post')
+    public function __construct(WorkOrderModel $workOrder, $type = 'post')
     {
-        //
         $this->workOrder = $workOrder;
         $this->type = $type;
     }
@@ -38,22 +38,23 @@ class WorkOrder implements ShouldQueue
     {
         $this->workOrder->load(['module']);
 
-        if ($this->type == 'put') {
+        if ($this->type == 'post') {
+            $response = $this->workOrder->module->http()->post('work-orders', $this->workOrder->toArray());
+        } else if ($this->type == 'put') {
             $response = $this->workOrder->module->http()->put('work-orders/' . $this->workOrder->id, $this->workOrder->toArray());
-        } else if ($this->type == 'delete') {
+        } else {
             $response = $this->workOrder->module->http()->delete('work-orders/' . $this->workOrder->id);
 
             if ($response->successful()) {
                 $this->workOrder->delete();
             }
-        } else {
-            $response = $this->workOrder->module->http()->post('work-orders', $this->workOrder->toArray());
         }
 
         if (!$response->successful()) {
             $this->workOrder->update([
                 'status' => 'error'
             ]);
+
         } else {
             if ($this->type == 'delete') {
                 broadcast(new UserEvent($this->workOrder->user_id, 'work-order.deleted', $this->workOrder));
