@@ -66,6 +66,11 @@ class WorkOrderController extends Controller
             'status' => 'nullable|sometimes|string|in:closed',
         ]);
 
+        // 访客不能关闭
+        if ($request->input('status') === 'closed' && !auth('sanctum')->check()) {
+            return $this->error('访客不能修改工单状态。');
+        }
+
         $workOrder->update($request->only('status'));
 
         return $this->success($workOrder);

@@ -41,6 +41,11 @@ class ReplyController extends Controller
             return $this->error('工单状态异常，无法进行回复。请尝试重新建立工单。');
         }
 
+        // 如果工单已经关闭，那么访客不能回复
+        if ($workOrder->isClosed() && !auth('sanctum')->check()) {
+            return $this->error('工单已关闭，无法进行回复。');
+        }
+
         $create = [
             'content' => $request->input('content'),
             'work_order_id' => $workOrder->id,

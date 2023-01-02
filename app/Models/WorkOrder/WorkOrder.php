@@ -164,6 +164,16 @@ class WorkOrder extends Model
         return $this->status === 'pending' || $this->status === 'error';
     }
 
+    public function isOpen(): bool
+    {
+        return $this->status !== 'closed' && $this->status !== 'error' && $this->status !== 'pending';
+    }
+
+    public function isClosed(): bool
+    {
+        return $this->status === 'closed';
+    }
+
     /**
      * @throws CommonException
      */
