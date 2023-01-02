@@ -145,4 +145,11 @@ class Reply extends Model
     {
         return $query->where('work_order_id', $work_order_id);
     }
+
+    public function scopeWithUser($query)
+    {
+        return $query->with(['user' => function ($query) {
+            $query->select('id', 'name', 'email');
+        }]);
+    }
 }
