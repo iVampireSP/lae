@@ -17,7 +17,7 @@
             <div class="card border-light mb-3 shadow">
                 <div class="card-header d-flex w-100 justify-content-between">
                     @if ($reply->role === 'user')
-                        @if ($reply->user_id)
+                        @if ($reply->user)
                             <a href="{{ route('admin.users.edit', $reply->user) }}">{{ $workOrder->user->name }}</a>
                         @else
                             {{ $reply->name }}
