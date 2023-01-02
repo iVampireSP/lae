@@ -44,6 +44,8 @@
                 </div>
             </div>
         @endforeach
+
+        {{ $replies->links() }}
     </div>
 
     <h4 class="mt-3">您的回复</h4>
