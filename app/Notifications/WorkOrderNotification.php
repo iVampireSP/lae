@@ -50,6 +50,11 @@ class WorkOrderNotification extends Notification implements ShouldQueue
             $workOrder->load(['module', 'user']);
 
             $module = $workOrder->module;
+
+            if (!$workOrder->notify) {
+                return;
+            }
+
         } else if ($notifiable instanceof Reply) {
 
             $view = 'notifications.work_order.reply';
@@ -60,6 +65,10 @@ class WorkOrderNotification extends Notification implements ShouldQueue
 
             $reply = $workOrder;
             $workOrder = $workOrder->workOrder;
+
+            if (!$workOrder->notify) {
+                return;
+            }
 
             $module = $workOrder->module;
         } else {

@@ -54,8 +54,6 @@ class WorkOrderController extends Controller
      */
     public function edit(WorkOrder $workOrder): View
     {
-        //
-
         return view('admin.work-orders.edit', compact('workOrder'));
     }
 
@@ -69,17 +67,17 @@ class WorkOrderController extends Controller
      */
     public function update(Request $request, WorkOrder $workOrder): RedirectResponse
     {
-        //
-
         $request->validate([
             'status' => 'required|string|in:open,closed,read,user_read,replied,user_replied,on_hold,in_progress',
+            'notify' => 'nullable|boolean',
         ]);
 
         $workOrder->update([
-            'status' => $request->status
+            'status' => $request->input('status'),
+            'notify' => $request->input('notify'),
         ]);
 
-        return back()->with('success', '工单更新成功');
+        return back()->with('success', '工单更新成功。');
     }
 
     /**

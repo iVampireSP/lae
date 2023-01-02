@@ -66,16 +66,6 @@ class ModuleController extends Controller
 
     }
 
-    private function rules(): array
-    {
-        return [
-            'id' => 'required|string|max:255',
-            'name' => 'required|string|max:255',
-            'url' => 'required|url',
-            'status' => 'required|string|in:up,down,maintenance',
-        ];
-    }
-
     /**
      * Display the specified resource.
      *
@@ -116,25 +106,22 @@ class ModuleController extends Controller
      */
     public function update(Request $request, Module $module): RedirectResponse
     {
-        //
-
         $request->validate($this->rules());
 
-
-        if ($request->reset_api_token) {
+        if ($request->input('reset_api_token')) {
             $module->api_token = Str::random(60);
         }
 
-        $module->id = $request->id;
-        $module->name = $request->name;
-        $module->url = $request->url;
-        $module->status = $request->status;
+        $module->id = $request->input('id');
+        $module->name = $request->input('name');
+        $module->url = $request->input('url');
+        $module->status = $request->input('status');
 
         $module->save();
 
         $text = '模块更新成功';
 
-        if ($request->reset_api_token) {
+        if ($request->input('reset_api_token')) {
             $text .= ', API Token 为 ' . $module->api_token . '。';
         } else {
             $text .= '。';
@@ -152,7 +139,6 @@ class ModuleController extends Controller
      */
     public function destroy(Module $module): RedirectResponse
     {
-        //
         $module->delete();
 
         return redirect()->route('admin.modules.index')->with('success', '模块已删除。');
@@ -200,4 +186,13 @@ class ModuleController extends Controller
         }
     }
 
+    private function rules(): array
+    {
+        return [
+            'id' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
+            'url' => 'required|url',
+            'status' => 'required|string|in:up,down,maintenance',
+        ];
+    }
 }
