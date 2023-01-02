@@ -17,7 +17,7 @@ class ValidateUserIfBanned
      *
      * @return Response|RedirectResponse
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next): Response|RedirectResponse
     {
         $user = $request->user();
         if ($user) if ($user->banned_at !== null) {
