@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Middleware\TrustProxies;
 use App\Models\PersonalAccessToken;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Http;
@@ -27,8 +28,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
-
         Paginator::useBootstrapFive();
 
         Sanctum::usePersonalAccessTokenModel(PersonalAccessToken::class);
