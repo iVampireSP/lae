@@ -5,7 +5,8 @@
 @section('content')
     <h3>{{ $workOrder->title }}</h3>
     <a href="{{ route('admin.work-orders.edit', $workOrder) }}">编辑此工单</a>
-    <h5>{{ \Illuminate\Mail\Markdown::parse($workOrder->content) }}</h5>
+
+    <h5>@parsedown($workOrder->content)</h5>
 
     <x-work-order-status :status="$workOrder->status"></x-work-order-status>
 
