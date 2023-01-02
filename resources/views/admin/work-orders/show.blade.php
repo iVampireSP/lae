@@ -34,6 +34,10 @@
                     @endif
 
                     <span class="text-end">
+                        @if($reply->is_pending)
+                            <span class="badge bg-primary">投递中</span>
+                        @endif
+
                         <a href="{{ route('admin.work-orders.replies.edit', [$workOrder, $reply]) }}">编辑</a>
                         {{ $reply->created_at }}
                     </span>

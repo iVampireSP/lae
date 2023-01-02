@@ -40,7 +40,6 @@ class WorkOrderController extends Controller
         $replies = Reply::where('work_order_id', $workOrder->id)->latest()->paginate(100);
 
         return view('admin.work-orders.show', compact('workOrder', 'replies'));
-
     }
 
     /**

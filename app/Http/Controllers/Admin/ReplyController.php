@@ -69,7 +69,7 @@ class ReplyController extends Controller
             'content' => $request->input('content')
         ]);
 
-        return back()->with('success', '回复修改成功，请等待同步。');
+        return redirect()->route('admin.work-orders.show', $work_order)->with('success', '修改成功。');
     }
 
     /**
@@ -84,6 +84,6 @@ class ReplyController extends Controller
     {
         $reply->safeDelete();
 
-        return back()->with('success', '回复删除成功，请等待同步。');
+        return redirect()->route('admin.work-orders.show', $work_order)->with('success', '正在排队删除回复。');
     }
 }
