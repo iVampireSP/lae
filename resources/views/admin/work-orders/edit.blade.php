@@ -38,7 +38,7 @@
                 <label for="notify" class="col-sm-2 col-form-label">通知</label>
                 <select class="form-control" id="notify" name="notify">
                     <option value="1">是</option>
-                    <option value="0" @if($workOrder->notify === 0) selected @endif>否</option>
+                    <option value="0" @if(!$workOrder->notify) selected @endif>否</option>
                 </select>
             </div>
 
