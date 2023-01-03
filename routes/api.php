@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\BalanceController;
 use App\Http\Controllers\Api\ForumController;
 use App\Http\Controllers\Api\HostController;
 use App\Http\Controllers\Api\IndexController;
@@ -16,6 +17,8 @@ Route::get('/birthdays', [IndexController::class, 'birthdays']);
 
 Route::get('user', [UserController::class, 'index']);
 Route::get('users', [UserController::class, 'index']);
+
+Route::resource('balances', BalanceController::class);
 
 Route::get('servers', ServerController::class);
 

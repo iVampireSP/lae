@@ -18,8 +18,6 @@ use Yansongda\LaravelPay\Facades\Pay;
 
 class BalanceController extends Controller
 {
-    //
-
     public function index(Request $request): View
     {
         $balance = $request->user()->balance;
@@ -31,29 +29,16 @@ class BalanceController extends Controller
 
     public function store(Request $request)
     {
-        // 充值
         $this->validate($request, [
             'amount' => 'required|integer|min:0.1|max:10000',
             'payment' => 'required|in:wechat,alipay',
         ]);
 
-        $user = $request->user();
-
-        $balance = new Balance();
-
-        $data = [
-            'user_id' => $user->id,
+        $balance = Balance::create([
+            'user_id' => auth('web')->id(),
             'amount' => $request->input('amount'),
             'payment' => $request->input('payment'),
-        ];
-
-        $balance = $balance->create($data);
-
-        // 生成 18 位订单号
-        $order_id = date('YmdHis') . $balance->id . rand(1000, 9999);
-        $balance->order_id = $order_id;
-
-        $balance->save();
+        ]);
 
         return redirect()->route('balances.show', compact('balance'));
     }
@@ -64,7 +49,7 @@ class BalanceController extends Controller
     public function show(Request $request, Balance $balance)
     {
 
-        if ($balance->paid_at !== null) {
+        if ($balance->isPaid()) {
             if ($request->ajax()) {
                 return $this->success($balance);
             }
@@ -76,13 +61,14 @@ class BalanceController extends Controller
             }
         }
 
+        if ($balance->isOverdue()) {
+            if (now()->diffInDays($balance->created_at) > 1) {
+                if ($request->ajax()) {
+                    return $this->forbidden($balance);
+                }
 
-        if (now()->diffInDays($balance->created_at) > 1) {
-            if ($request->ajax()) {
-                return $this->forbidden($balance);
+                return redirect()->route('index')->with('error', '订单已逾期。');
             }
-
-            return redirect()->route('index')->with('error', '订单已逾期。');
         }
 
         $balance->load('user');
@@ -109,14 +95,16 @@ class BalanceController extends Controller
         }
 
         if (!isset($qr_code)) {
-            abort(500, '支付方式错误');
+            return redirect()->route('index')->with('error', '支付方式错误。');
         }
 
         return view('balances.pay', compact('balance', 'qr_code'));
     }
 
-    private function xunhu_wechat(Balance $balance, $subject = '支付')
-    {
+    private
+    function xunhu_wechat(
+        Balance $balance, $subject = '支付'
+    ) {
         $data = [
             'version' => '1.1',
             'lang' => 'zh-cn',
@@ -142,7 +130,7 @@ class BalanceController extends Controller
         $response = Http::post(config('pay.xunhu.gateway'), $data);
 
         if (!$response->successful()) {
-            abort(500, '支付网关错误');
+            return redirect()->route('index')->with('error', '支付网关错误。');
         }
 
         $response = $response->json();
@@ -150,14 +138,16 @@ class BalanceController extends Controller
         $hash = $this->xunhu_hash($response);
 
         if (!isset($response['hash']) || $response['hash'] !== $hash) {
-            abort(500, '无法校验支付网关返回数据');
+            return redirect()->route('index')->with('error', '无法校验支付网关返回数据。');
         }
 
         return $response;
     }
 
-    private function xunhu_hash(array $arr)
-    {
+    private
+    function xunhu_hash(
+        array $arr
+    ) {
         ksort($arr);
 
         $pre = [];
@@ -188,10 +178,11 @@ class BalanceController extends Controller
     /**
      * @throws ValidationException
      */
-    public function notify(Request $request, $payment): View|JsonResponse
-    {
+    public
+    function notify(
+        Request $request, $payment
+    ): View|JsonResponse {
         $is_paid = false;
-        // $pay_amount = 0;
 
         if ($payment === 'alipay') {
             $out_trade_no = $request->input('out_trade_no');
@@ -215,7 +206,6 @@ class BalanceController extends Controller
 
             return view('balances.process', compact('balance'));
         }
-
 
         // 处理验证
         if ($payment === 'wechat') {
