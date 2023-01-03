@@ -9,11 +9,14 @@
 
     <h2>充值余额</h2>
     <form name="charge" method="POST" target="_blank" class="form-horizontal" action="{{ route('balances.store') }}"
-          onsubmit="return confirm('请注意: 由于计费方式的特殊性，我们不支持退款，请合理充值。')">
+          onsubmit="return confirm('请注意: 由于计费方式的特殊性和虚拟商品的特性，如果非人为的质量问题，我们不提供退款。请合理充值。')">
         @csrf
 
-        <input type="radio" name="payment" value="wechat" checked> 微信支付
-        <input type="radio" name="payment" value="alipay"> 支付宝
+        <input type="radio" name="payment" id="wechat" value="wechat" checked>
+        <label for="wechat"> <i class="bi bi-wechat"></i> 微信支付</label>
+
+        <input type="radio" name="payment" id="alipay" value="alipay">
+        <label for="alipay"> <i class="bi bi-alipay"></i> 支付宝</label>
 
         <div class="row col-6 col-lg-3">
             <div class="input-group mt-2 mb-3 w-100 col-2">
@@ -26,7 +29,7 @@
 
                 <span class="input-group-text">元</span>
 
-                <button class="btn btn-secondary" type="submit">充值</button>
+                <button class="btn btn-outline-secondary" type="submit">充值</button>
 
             </div>
         </div>
@@ -35,7 +38,7 @@
 
     <div class="mt-2">
         <div>
-            请注意: 由于计费方式的特殊性，我们不支持退款，请合理充值。
+            请注意: 由于计费方式的特殊性和虚拟商品的特性，如果非人为的质量问题，我们不提供退款。请合理充值。
             <br/>
             <a
                 target="_blank"
