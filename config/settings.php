@@ -15,4 +15,5 @@ return [
         'base_url' => env('DASHBOARD_BASE_URL', 'https://dash.laecloud.com'),
         'birthday_path' => env('DASHBOARD_BIRTHDAY_PATH', '/birthdays'),
     ],
+    'node_type' => env('NODE_TYPE', 'master')
 ];
