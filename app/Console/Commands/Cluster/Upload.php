@@ -31,18 +31,22 @@ class Upload extends Command
      */
     public function handle(): int
     {
-        $this->info('正在初始化节点。');
-
         $node_type = config('settings.node_type');
 
-        if ($node_type === 'master') {
-            $this->warn('此节点为主节点，将同时上传两份版本（如果有 .env.slave 的话）。');
+        if ($node_type === 'slave') {
+            $this->info('正在同步从节点配置文件。');
 
-            // 上传 master
-            $this->upload('master');
+            $this->upload('slave');
 
+            $this->info('从节点配置文件同步完成。');
+
+            return CommandAlias::FAILURE;
         }
 
+        $this->warn('此节点为主节点，将同时上传两份版本（如果有 .env.slave 的话）。');
+
+        // 上传 master
+        $this->upload('master');
 
         // 检测 .env.slave 是否存在
         if (file_exists(base_path('.env.slave'))) {
@@ -62,11 +66,10 @@ class Upload extends Command
 
             // 删除 .env.temp
             unlink(base_path('.env.temp'));
-
-            $this->info('节点初始化完成。');
         }
 
-        // if is local
+        $this->info('节点初始化完成。');
+
         if (app()->environment() === 'local') {
             $this->info('清理开发节点。');
 
@@ -90,7 +93,6 @@ class Upload extends Command
             }
         }
         @closedir($handler);
-
     }
 
     public function upload($node_type)
@@ -119,7 +121,6 @@ class Upload extends Command
             Cache::forever($cache_md5_key, md5_file($cacheZip));
 
             unlink($cacheZip);
-
         }
 
         // 上传 .env 文件
