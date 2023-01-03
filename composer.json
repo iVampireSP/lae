@@ -9,6 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
+        "ext-zip": "^1.19",
         "doctrine/dbal": "^3.4",
         "erusev/parsedown": "^1.7",
         "fruitcake/laravel-cors": "^3.0",
