@@ -101,6 +101,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'uuid',
         'name',
         'email',
         'password',
@@ -123,29 +124,6 @@ class User extends Authenticatable
         'birthday_at' => 'date',
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::updating(function ($model) {
-
-            // balance 四舍五入
-
-            // if ($model->isDirty('balance')) {
-            //     $model->balance = round($model->balance, 2, PHP_ROUND_HALF_DOWN);
-            // }
-
-            if ($model->isDirty('banned_at')) {
-                if ($model->banned_at) {
-                    $model->tokens()->delete();
-                    $model->hosts()->update(['status' => 'suspended', 'suspended_at' => now()]);
-                } else {
-                    $model->hosts()->update(['status' => 'stopped']);
-                }
-            }
-        });
-    }
-
     public function hosts(): HasMany
     {
         return $this->hasMany(Host::class);
@@ -160,5 +138,25 @@ class User extends Authenticatable
     {
         return $this->select(['id', 'name', 'birthday_at', 'email_md5', 'created_at'])->whereMonth('birthday_at', now()->month)
             ->whereDay('birthday_at', now()->day);
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function (self $user) {
+            $user->email_md5 = md5($user->email);
+        });
+
+        static::updating(function ($model) {
+            if ($model->isDirty('banned_at')) {
+                if ($model->banned_at) {
+                    $model->tokens()->delete();
+                    $model->hosts()->update(['status' => 'suspended', 'suspended_at' => now()]);
+                } else {
+                    $model->hosts()->update(['status' => 'stopped']);
+                }
+            }
+        });
     }
 }
