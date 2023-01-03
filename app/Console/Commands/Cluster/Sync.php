@@ -34,7 +34,7 @@ class Sync extends Command
     {
         $this->info('正在下载配置。');
 
-        $node_type = config('settings.node_type');
+        $node_type = config('settings.node.type');
 
         if ($node_type === 'master') {
             $confirm = $this->ask('主节点同步将会恢复上一次数据，确定吗？', 'yes');

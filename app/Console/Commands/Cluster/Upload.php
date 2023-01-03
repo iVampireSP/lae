@@ -31,7 +31,7 @@ class Upload extends Command
      */
     public function handle(): int
     {
-        $node_type = config('settings.node_type');
+        $node_type = config('settings.node.type');
 
         if ($node_type === 'slave') {
             $this->info('正在同步从节点配置文件。');

@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Command\Command as CommandAlias;
 
 class Init extends Command
@@ -29,20 +30,37 @@ class Init extends Command
      */
     public function handle(): int
     {
-        $this->info('正在删除 bootstrap/cache 目录。');
-        $cache_path = base_path('bootstrap/cache');
-        $files = glob($cache_path . '/*');
-        foreach ($files as $file) {
-            if (is_file($file)) {
-                unlink($file);
-            }
+        // 重写 .env 文件中的 NODE_ID
+        $this->info('正在重写 .env 文件中的 NODE_ID。');
+
+        $node_id = Str::random(8);
+
+        if (config('settings.node.type') === 'master') {
+            $node_id = 'master';
         }
 
-        Artisan::call('route:clear');
-        Artisan::call('config:clear');
-        Artisan::call('view:clear');
+        $env = file_get_contents(base_path('.env'));
 
-        Artisan::call('optimize');
+        $env = preg_replace('/^NODE_ID=.*$/m', 'NODE_ID=' . $node_id, $env);
+
+        file_put_contents(base_path('.env'), $env);
+
+        if (!config('settings.node.ip')) {
+            $this->error('请先配置节点 IP。');
+            return CommandAlias::FAILURE;
+        }
+
+        // 刷新配置缓存
+        $this->info('正在刷新配置缓存。');
+        Artisan::call('config:cache');
+
+        // redis 创建一个 hash
+        $this->info('正在创建 Redis hash。');
+        $redis = app('redis')->connection();
+        $redis->hset('nodes', $node_id, [
+            'type' => config('settings.node.type'),
+            'id' => $node_id,
+        ]);
 
         return CommandAlias::SUCCESS;
     }

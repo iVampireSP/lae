@@ -15,5 +15,9 @@ return [
         'base_url' => env('DASHBOARD_BASE_URL', 'https://dash.laecloud.com'),
         'birthday_path' => env('DASHBOARD_BIRTHDAY_PATH', '/birthdays'),
     ],
-    'node_type' => env('NODE_TYPE', 'master')
+    'node' => [
+        'type' => env('NODE_TYPE', 'master'),
+        'id' => env('NODE_ID'),
+        'ip' => env('NODE_IP'),
+    ]
 ];
