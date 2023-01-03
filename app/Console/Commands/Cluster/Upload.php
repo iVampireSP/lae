@@ -40,7 +40,7 @@ class Upload extends Command
 
             $this->info('从节点配置文件同步完成。');
 
-            return CommandAlias::FAILURE;
+            return CommandAlias::SUCCESS;
         }
 
         $this->warn('此节点为主节点，将同时上传两份版本（如果有 .env.slave 的话）。');
