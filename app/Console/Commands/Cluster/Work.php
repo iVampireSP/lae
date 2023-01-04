@@ -15,14 +15,14 @@ class Work extends Command
      *
      * @var string
      */
-    protected $signature = 'cluster:work';
+    protected $signature = 'run';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = '开始集群协调任务。';
+    protected $description = '启动此应用程序。';
 
     /**
      * Execute the console command.
@@ -119,7 +119,21 @@ class Work extends Command
                 $this->info('正在启动 Web。');
 
                 $command = 'php artisan octane:start --host=0.0.0.0 --rpc-port=6001 --port=8000';
-                exec($command);
+                // proc_open
+                $descriptor_spec = [
+                    0 => ['pipe', 'r'],
+                    1 => ['pipe', 'w'],
+                    2 => ['pipe', 'w'],
+                ];
+
+                $process = proc_open($command, $descriptor_spec, $pipes);
+
+                if (is_resource($process)) {
+                    while ($s = fgets($pipes[1])) {
+                        echo $s;
+                    }
+                }
+
 
             } else {
                 // 子进程
