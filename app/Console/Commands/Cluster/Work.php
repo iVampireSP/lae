@@ -15,7 +15,7 @@ class Work extends Command
      *
      * @var string
      */
-    protected $signature = 'run';
+    protected $signature = 'works';
 
     /**
      * The console command description.
