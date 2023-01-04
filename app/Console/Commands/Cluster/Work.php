@@ -90,12 +90,10 @@ class Work extends Command
         $this->info('正在报告此系统，请保持此命令一直运行。');
 
         $cpu = $this->getCpuUsage();
-        $memory = $this->getMemoryUsage();
 
         while (1) {
             Cluster::publish('system_usage', [
                 'cpu' => $cpu,
-                'memory' => $memory,
             ]);
 
             sleep(1);
@@ -107,30 +105,5 @@ class Work extends Command
         // 获取 CPU 使用率
         $cpu = sys_getloadavg();
         return $cpu[0];
-    }
-
-    private function getMemoryUsage(): float
-    {
-        // 检查 free 命令是否存在
-        if (exec('which free')) {
-            $free = exec('free');
-        } else {
-
-            // fake free
-            $free = <<<EOF
-               total        used        free      shared  buff/cache   available
-Mem:            1982         334        1121         126         527        1380
-Swap:              0           0           0
-EOF;
-        }
-
-        $free = trim($free);
-
-        $free_arr = explode("\n", $free);
-
-        $mem = explode(" ", $free_arr[1]);
-        $mem = array_filter($mem);
-        $mem = array_merge($mem);
-        return round($mem[2] / $mem[1] * 100, 2);
     }
 }
