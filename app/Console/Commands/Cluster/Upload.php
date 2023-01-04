@@ -68,6 +68,8 @@ class Upload extends Command
             unlink(base_path('.env.temp'));
         }
 
+        Cluster::publish('config.updated');
+
         $this->info('节点初始化完成。');
 
         if (app()->environment() === 'local') {
@@ -112,12 +114,12 @@ class Upload extends Command
 
             $this->info('正在上传 config 目录。');
 
-            $cache_key = "${node_type}_config";
+            $cache_key = "${node_type}_config_zip";
             Cluster::forever($cache_key, file_get_contents($cacheZip));
 
             // md5
             $this->info('正在报告 cache 目录的 MD5 值。');
-            $cache_md5_key = "${node_type}_config_md5";
+            $cache_md5_key = "${node_type}_config_zip_md5";
             Cluster::forever($cache_md5_key, md5_file($cacheZip));
 
             unlink($cacheZip);

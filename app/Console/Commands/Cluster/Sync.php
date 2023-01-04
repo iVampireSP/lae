@@ -16,7 +16,7 @@ class Sync extends Command
      *
      * @var string
      */
-    protected $signature = 'cluster:sync';
+    protected $signature = 'cluster:sync {--force=false}';
 
     /**
      * The console command description.
@@ -37,20 +37,28 @@ class Sync extends Command
         $node_type = config('settings.node.type');
 
         if ($node_type === 'master') {
-            $confirm = $this->ask('主节点同步将会恢复上一次数据，确定吗？', 'yes');
 
-            if ($confirm !== 'yes') {
+            // if force is true, delete the old file
+            if ($this->option('force') === 'true') {
+                $confirm = 'yes';
+            } else {
+                $confirm = $this->ask('主节点同步将会恢复上一次数据，确定吗？', true);
+
+            }
+
+
+            if (!$confirm) {
                 $this->warn('已取消。');
                 return CommandAlias::SUCCESS;
             }
         }
 
-        $cache_key = "master_config";
+        $cache_key = "master_config_zip";
         $config = Cluster::get($cache_key);
 
         if ($config) {
             $this->info('检查下载目录的 MD5 值。');
-            $config_md5_key = "master_config_md5";
+            $config_md5_key = "master_config_zip_md5";
             $config_md5 = Cluster::get($config_md5_key, '');
 
             $md5 = md5($config);
@@ -113,6 +121,9 @@ class Sync extends Command
             // 刷新配置
             $this->info('正在刷新配置。');
             Artisan::call('optimize');
+
+            // 上报消息
+            Cluster::publish('synced');
         } else {
             $this->error('没有找到缓存。请尝试从其他节点重新同步。');
             return CommandAlias::FAILURE;
