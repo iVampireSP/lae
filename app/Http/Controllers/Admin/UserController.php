@@ -27,15 +27,19 @@ class UserController extends Controller
         $users = new User();
 
         if ($request->filled('id')) {
-            $users = $users->where('id', $request->id);
+            $users = $users->where('id', $request->input('id'));
         }
 
         if ($request->filled('name')) {
-            $users = $users->where('name', 'like', '%' . $request->name . '%');
+            $users = $users->where('name', 'like', '%' . $request->input('name') . '%');
         }
 
         if ($request->filled('email')) {
-            $users = $users->where('email', 'like', '%' . $request->email . '%');
+            $users = $users->where('email', 'like', '%' . $request->input('email') . '%');
+        }
+
+        if ($request->has('banned_at')) {
+            $users = $users->whereNotNull('banned_at');
         }
 
         $users = $users->with('user_group')->paginate(50)->withQueryString();
