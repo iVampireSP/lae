@@ -13,6 +13,7 @@ class IndexController extends Controller
     {
         return $this->success([
             'message' => 'Welcome to LaeCloud API Server.',
+            'node_id' => config('settings.node.id'),
             'ip' => $request->ip(),
         ]);
     }
