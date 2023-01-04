@@ -5,6 +5,7 @@ namespace App\Console\Commands\Cluster;
 use App\Support\Cluster;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Command\Command as CommandAlias;
 
@@ -178,12 +179,16 @@ class Work extends Command
 
                 exec('supervisorctl restart lae-web:*');
 
+                Cluster::publish('cluster.restarted.web');
+
                 $this->info('Web 重启完成。');
             },
             'cluster.restart.all' => function () {
                 $this->info('正在重启整个莱云。');
 
                 exec('supervisorctl restart all');
+
+                Cluster::publish('cluster.restarted.all');
 
                 $this->info('整个莱云 重启完成。');
             },

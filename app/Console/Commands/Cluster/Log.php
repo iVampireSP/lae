@@ -61,6 +61,10 @@ class Log extends Command
             'edge.deployed' => '已成功根据集群节点生成配置文件并应用。',
             'edge.launched' => '边缘节点成功启动。',
             'edge.error' => $message['message'] ?? '未知错误',
+            'cluster.restart.web' => '正在重启 web 服务。',
+            'cluster.restart.all' => '正在重启 整个 服务。',
+            'cluster.restarted.web' => 'Web 重启好了。',
+            'cluster.restarted.all' => '整个 重启好了。',
         ];
 
         return $events[$event] ?? null;
