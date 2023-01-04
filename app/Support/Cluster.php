@@ -32,6 +32,7 @@ class Cluster
                 'type' => config('settings.node.type'),
                 'id' => config('settings.node.id'),
                 'ip' => config('settings.node.ip'),
+                'last_heartbeat' => time(),
             ],
             'data' => $data,
         ]));
@@ -107,6 +108,8 @@ class Cluster
             'type' => config('settings.node.type'),
             'id' => $node_id,
             'ip' => config('settings.node.ip'),
+            // utc +8 timestamp
+            'last_heartbeat' => time(),
         ]);
 
         Cluster::publish('node.ok');
