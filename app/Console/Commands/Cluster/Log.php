@@ -38,7 +38,7 @@ class Log extends Command
 
     private function format(string $event, array $message = [])
     {
-        $status = $this->switch($event);
+        $status = $this->switch($event, $message['data']);
 
         if (!$status) {
             return;
@@ -49,7 +49,7 @@ class Log extends Command
         $this->info($message);
     }
 
-    public function switch($event): string|null
+    public function switch($event, $message = []): string|null
     {
         $events = [
             'node.ok' => '此节点初始化成功，并且已经加入集群。',
@@ -58,7 +58,9 @@ class Log extends Command
             'cluster_ready.ok' => 'Cluster Ready 就绪了，已经可以处理请求了。',
             'config.updated' => '集群配置文件已经更新，请所有 slave 节点下载。',
             'config.synced' => '我已下载配置文件。',
-            'edge.deployed' => '边缘节点已经部署，已经成功根据集群节点生成配置文件并应用。',
+            'edge.deployed' => '已成功根据集群节点生成配置文件并应用。',
+            'edge.launched' => '边缘节点成功启动。',
+            'edge.error' => $message['data']['message'],
         ];
 
         return $events[$event] ?? null;
