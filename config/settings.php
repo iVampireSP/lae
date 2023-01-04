@@ -19,5 +19,8 @@ return [
         'type' => env('NODE_TYPE', 'master'),
         'id' => env('NODE_ID'),
         'ip' => env('NODE_IP'),
-    ]
+    ],
+    'roadrunner' => [
+        'version' => env('ROADRUNNER_VERSION', '2.12.1'),
+    ],
 ];
