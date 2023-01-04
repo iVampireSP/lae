@@ -60,7 +60,7 @@ class Log extends Command
             'config.synced' => '我已下载配置文件。',
             'edge.deployed' => '已成功根据集群节点生成配置文件并应用。',
             'edge.launched' => '边缘节点成功启动。',
-            'edge.error' => $message['data']['message'],
+            'edge.error' => $message['message'] ?? '未知错误',
         ];
 
         return $events[$event] ?? null;
