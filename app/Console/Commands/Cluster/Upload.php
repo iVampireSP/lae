@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands\Cluster;
 
+use App\Support\Cluster;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Cache;
 use Symfony\Component\Console\Command\Command as CommandAlias;
 use ZipArchive;
 
@@ -112,26 +112,26 @@ class Upload extends Command
 
             $this->info('正在上传 config 目录。');
 
-            $cache_key = "cluster:${node_type}_config";
-            Cache::forever($cache_key, file_get_contents($cacheZip));
+            $cache_key = "${node_type}_config";
+            Cluster::forever($cache_key, file_get_contents($cacheZip));
 
             // md5
             $this->info('正在报告 cache 目录的 MD5 值。');
-            $cache_md5_key = "cluster:${node_type}_config_md5";
-            Cache::forever($cache_md5_key, md5_file($cacheZip));
+            $cache_md5_key = "${node_type}_config_md5";
+            Cluster::forever($cache_md5_key, md5_file($cacheZip));
 
             unlink($cacheZip);
         }
 
         // 上传 .env 文件
         $this->info('正在上传 .env 文件。');
-        $env_key = "cluster:${node_type}_env";
-        Cache::forever($env_key, file_get_contents(base_path('.env')));
+        $env_key = "${node_type}_env";
+        Cluster::forever($env_key, file_get_contents(base_path('.env')));
 
         // 上传 .env 文件的 MD5
         $this->info('正在报告 .env 文件的 MD5 值。');
-        $env_md5_key = "cluster:${node_type}_env_md5";
-        Cache::forever($env_md5_key, md5_file(base_path('.env')));
+        $env_md5_key = "${node_type}_env_md5";
+        Cluster::forever($env_md5_key, md5_file(base_path('.env')));
 
         $this->info('完成。');
     }

@@ -2,9 +2,9 @@
 
 namespace App\Console\Commands\Cluster;
 
+use App\Support\Cluster;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Console\Command\Command as CommandAlias;
 use ZipArchive;
@@ -45,13 +45,13 @@ class Sync extends Command
             }
         }
 
-        $cache_key = "cluster:master_config";
-        $config = Cache::get($cache_key);
+        $cache_key = "master_config";
+        $config = Cluster::get($cache_key);
 
         if ($config) {
             $this->info('检查下载目录的 MD5 值。');
-            $config_md5_key = "cluster:master_config_md5";
-            $config_md5 = Cache::get($config_md5_key, '');
+            $config_md5_key = "master_config_md5";
+            $config_md5 = Cluster::get($config_md5_key, '');
 
             $md5 = md5($config);
             if ($md5 !== $config_md5) {
@@ -86,11 +86,11 @@ class Sync extends Command
             if ($node_type === 'slave') {
                 // 下载 .env 文件
                 $this->info('正在下载 .env 文件。');
-                $env_cache_key = "cluster:${node_type}_env";
-                $env_md5_key = "cluster:${node_type}_env_md5";
+                $env_cache_key = "${node_type}_env";
+                $env_md5_key = "${node_type}_env_md5";
 
-                $env = Cache::get($env_cache_key);
-                $env_md5 = Cache::get($env_md5_key);
+                $env = Cluster::get($env_cache_key);
+                $env_md5 = Cluster::get($env_md5_key);
 
                 $this->info('检查 .env 文件的 MD5 值。');
                 if (md5($env) !== $env_md5) {

@@ -2,8 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Support\Cluster;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Command\Command as CommandAlias;
 
@@ -30,6 +32,11 @@ class Init extends Command
      */
     public function handle(): int
     {
+        if (!config('settings.node.ip')) {
+            $this->error('请先配置节点 IP。');
+            return CommandAlias::FAILURE;
+        }
+
         // 重写 .env 文件中的 NODE_ID
         $this->info('正在重写 .env 文件中的 NODE_ID。');
 
@@ -45,22 +52,16 @@ class Init extends Command
 
         file_put_contents(base_path('.env'), $env);
 
-        if (!config('settings.node.ip')) {
-            $this->error('请先配置节点 IP。');
-            return CommandAlias::FAILURE;
-        }
 
         // 刷新配置缓存
         $this->info('正在刷新配置缓存。');
         Artisan::call('config:cache');
 
         // redis 创建一个 hash
-        $this->info('正在创建 Redis hash。');
-        $redis = app('redis')->connection();
-        $redis->hset('nodes', $node_id, [
-            'type' => config('settings.node.type'),
-            'id' => $node_id,
-        ]);
+        $this->info('正在注册节点。');
+        Cluster::registerThisNode();
+
+        $this->info('初始化完成。');
 
         return CommandAlias::SUCCESS;
     }
