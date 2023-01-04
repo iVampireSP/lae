@@ -37,7 +37,7 @@ class Cluster
             'data' => $data,
         ]));
 
-        self::registerThisNode();
+        self::registerThisNode(false);
     }
 
     /**
