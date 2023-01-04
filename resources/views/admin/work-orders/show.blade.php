@@ -5,6 +5,7 @@
 @section('content')
     <h3>{{ $workOrder->title }}</h3>
     <a href="{{ route('admin.work-orders.edit', $workOrder) }}">编辑此工单</a>
+    <a href="{{ route('admin.users.edit', $workOrder->user_id) }}">用户: {{ $workOrder->user->name }}</a>
 
     <h5>@parsedown($workOrder->content)</h5>
 
