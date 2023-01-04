@@ -69,6 +69,9 @@ class Work extends Command
             exec("chmod +x rr");
         }
 
+        // 关闭 Octane
+        Artisan::call('octane:stop');
+
         Artisan::call('config:cache');
 
         if (!config('settings.node.ip')) {
