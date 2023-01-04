@@ -172,7 +172,21 @@ class Work extends Command
 
                 $this->info('配置文件更新完成。');
 
-            }
+            },
+            'cluster.restart.web' => function () {
+                $this->info('正在重启 Web。');
+
+                exec('supervisorctl restart lae-web:*');
+
+                $this->info('Web 重启完成。');
+            },
+            'cluster.restart.all' => function () {
+                $this->info('正在重启整个莱云。');
+
+                exec('supervisorctl restart all');
+
+                $this->info('整个莱云 重启完成。');
+            },
         ];
 
         if (isset($events[$event])) {
