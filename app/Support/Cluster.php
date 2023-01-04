@@ -36,6 +36,8 @@ class Cluster
             ],
             'data' => $data,
         ]));
+
+        self::registerThisNode();
     }
 
     /**
@@ -100,7 +102,7 @@ class Cluster
         return Redis::hget($key, $value, $default);
     }
 
-    public static function registerThisNode(): void
+    public static function registerThisNode($report = true): void
     {
         $node_id = config('settings.node.id');
 
@@ -112,6 +114,8 @@ class Cluster
             'last_heartbeat' => time(),
         ]);
 
-        Cluster::publish('node.ok');
+        if ($report) {
+            Cluster::publish('node.ok');
+        }
     }
 }
