@@ -30,6 +30,11 @@ class Work extends Command
      */
     public function handle(): int
     {
+        if (!config('settings.node.ip')) {
+            $this->error('请先配置节点 IP。');
+            return CommandAlias::FAILURE;
+        }
+
         $this->warn('正在初始化集群协调任务。');
         Artisan::call('init');
         Artisan::call('optimize');
