@@ -58,6 +58,7 @@ class Log extends Command
             'cluster_ready.ok' => 'Cluster Ready 就绪了，已经可以处理请求了。',
             'config.updated' => '集群配置文件已经更新，请所有 slave 节点下载。',
             'config.synced' => '我已下载配置文件。',
+            'edge.deployed' => '边缘节点已经部署，已经成功根据集群节点生成配置文件并应用。',
         ];
 
         return $events[$event] ?? null;
