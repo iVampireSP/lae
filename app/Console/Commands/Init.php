@@ -23,7 +23,7 @@ class Init extends Command
      *
      * @var string
      */
-    protected $description = '不清理缓存情况下的 optimize';
+    protected $description = '注册此节点到集群中。';
 
     /**
      * Execute the console command.
@@ -32,6 +32,8 @@ class Init extends Command
      */
     public function handle(): int
     {
+        Artisan::call('optimize');
+
         if (!config('settings.node.ip')) {
             $this->error('请先配置节点 IP。');
             return CommandAlias::FAILURE;
