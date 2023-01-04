@@ -107,8 +107,21 @@ class Sync extends Command
                 } else {
                     $this->info('正在写入 .env 文件。');
 
+                    // $node_ip
+                    $node_ip = config('settings.node.ip');
+
                     // 覆盖 .env 文件
                     file_put_contents(base_path('.env'), $env);
+
+                    // 还原 $node_ip 到 .env
+                    $this->info('正在还原 .env 文件中的 NODE_IP。');
+                    $env = file_get_contents(base_path('.env'));
+
+                    // REPLACE NODE_IP 这一行
+                    $env = preg_replace('/^NODE_IP=.*$/m', "NODE_IP=${node_ip}", $env);
+
+                    file_put_contents(base_path('.env'), $env);
+
                 }
 
             }
