@@ -38,23 +38,21 @@ class Work extends Command
             return CommandAlias::FAILURE;
         }
 
-        // if not node_id
-        if (!config('settings.node.id')) {
-            // 重写 .env 文件中的 NODE_ID
-            $this->info('正在重写 .env 文件中的 NODE_ID。');
 
-            $node_id = Str::random(8);
+        // 重写 .env 文件中的 NODE_ID
+        $this->info('正在重写 .env 文件中的 NODE_ID。');
 
-            if (config('settings.node.type') === 'master') {
-                $node_id = 'master';
-            }
+        $node_id = Str::random(8);
 
-            $env = file_get_contents(base_path('.env'));
-
-            $env = preg_replace('/^NODE_ID=.*$/m', 'NODE_ID=' . $node_id, $env);
-
-            file_put_contents(base_path('.env'), $env);
+        if (config('settings.node.type') === 'master') {
+            $node_id = 'master';
         }
+
+        $env = file_get_contents(base_path('.env'));
+
+        $env = preg_replace('/^NODE_ID=.*$/m', 'NODE_ID=' . $node_id, $env);
+
+        file_put_contents(base_path('.env'), $env);
 
 
         // 刷新配置缓存
