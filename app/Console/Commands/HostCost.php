@@ -26,7 +26,7 @@ class HostCost extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         $host = $this->option('host-id');
 
