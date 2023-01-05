@@ -20,9 +20,9 @@
 
 <body>
 <div id="app">
-    <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+    <nav class="navbar navbar-expand-md shadow-sm bg-body">
         <div class="container">
-            <a class="navbar-brand" href="{{ route('admin.index') }}">
+            <a class="navbar-brand text-auto" href="{{ route('admin.index') }}">
                 管理员
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -35,37 +35,37 @@
                 <!-- Left Side Of Navbar -->
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.users.index') }}">用户</a>
+                        <a class="nav-link text-auto" href="{{ route('admin.users.index') }}">用户</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.hosts.index') }}">主机</a>
+                        <a class="nav-link text-auto" href="{{ route('admin.hosts.index') }}">主机</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.modules.index') }}">模块</a>
+                        <a class="nav-link text-auto" href="{{ route('admin.modules.index') }}">模块</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.work-orders.index') }}">工单</a>
+                        <a class="nav-link text-auto" href="{{ route('admin.work-orders.index') }}">工单</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.transactions') }}">交易记录</a>
+                        <a class="nav-link text-auto" href="{{ route('admin.transactions') }}">交易记录</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.notifications.create') }}">通知</a>
+                        <a class="nav-link text-auto" href="{{ route('admin.notifications.create') }}">通知</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.admins.index') }}">管理员</a>
+                        <a class="nav-link text-auto" href="{{ route('admin.admins.index') }}">管理员</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.user-groups.index') }}">用户组</a>
+                        <a class="nav-link text-auto" href="{{ route('admin.user-groups.index') }}">用户组</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.applications.index') }}">应用程序</a>
+                        <a class="nav-link text-auto" href="{{ route('admin.applications.index') }}">应用程序</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.devices.index') }}">物联设备</a>
+                        <a class="nav-link text-auto" href="{{ route('admin.devices.index') }}">物联设备</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.commands') }}">速查表</a>
+                        <a class="nav-link text-auto" href="{{ route('admin.commands') }}">速查表</a>
                     </li>
                 </ul>
 
@@ -74,19 +74,19 @@
                     <!-- Authentication Links -->
                     @if (!Auth::guard('admin')->check())
                         @if (Route::has('admin.login'))
-                            <li class="nav-item">
+                            <li class="nav-item text-auto">
                                 <a class="nav-link" href="{{ route('admin.login') }}">{{ __('Login') }}</a>
                             </li>
                         @endif
                     @else
                         @if (Auth::guard('web')->check())
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('index') }}">切换到
+                                <a class="nav-link text-auto" href="{{ route('index') }}">切换到
                                     {{ Auth::guard('web')->user()->name }}</a>
                             </li>
                         @endif
                         <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle text-auto" href="#" role="button"
                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 {{ Auth::guard('admin')->user()->email ?? '' }}
                             </a>

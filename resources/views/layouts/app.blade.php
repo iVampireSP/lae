@@ -24,7 +24,7 @@
 
 <body>
 <div id="app">
-    <nav class="navbar navbar-expand-md shadow-sm bg-white">
+    <nav class="navbar navbar-expand-md shadow-sm bg-body">
         <div class="container">
             <a class="navbar-brand text-auto" href="{{ route('index') }}">
                 {{ config('app.display_name') }}
@@ -55,10 +55,10 @@
 
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ms-auto">
-                    <a class="nav-link" target="_blank"
+                    <a class="nav-link text-auto" target="_blank"
                        href="{{ config('settings.dashboard.base_url') }}">仪表盘</a>
 
-                    <a class="nav-link"
+                    <a class="nav-link text-auto"
                        href="{{ route('contact') }}">联系我们</a>
 
                     @if (Auth::guard('admin')->check())
@@ -66,10 +66,10 @@
                         <li class="nav-item">
 
                             @if(Auth::guard('web')->check())
-                                <a class="nav-link"
+                                <a class="nav-link text-auto"
                                    href="{{ route('admin.users.edit', Auth::guard('web')->id()) }}">返回到后台</a>
                             @else
-                                <a class="nav-link"
+                                <a class="nav-link text-auto"
                                    href="{{ route('admin.index') }}">切换到后台</a>
                             @endif
                         </li>
@@ -78,13 +78,13 @@
 
                     <!-- Authentication Links -->
                     @guest
-                        <li class="nav-item">
+                        <li class="nav-item text-auto">
                             <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                         </li>
 
                     @else
                         <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                            <a id="navbarDropdown" class="nav-link text-auto dropdown-toggle" href="#" role="button"
                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 {{ Auth::user()->name }}
                             </a>
