@@ -7,6 +7,10 @@
 // Bootstrap
 @import "bootstrap/scss/bootstrap";
 
+.nav-link {
+    color: #000 !important;
+}
+
 
 .h1,
 .h2,
@@ -109,6 +113,10 @@ td {
       background: url('/assets/images/bg-dark.jpg');
       filter: brightness(0.6);
     } */
+
+    .nav-link {
+        color: unset !important;
+    }
 
     .lae-logo {
         background-image: url('/assets/lae-white.png');
