@@ -125,7 +125,6 @@ class Work extends Command
                 $this->pipeCommand($command);
 
             } else {
-                // 子进程
                 $this->report();
             }
 
@@ -228,5 +227,17 @@ class Work extends Command
                 echo $s;
             }
         }
+
+        // 命令结束后，关闭管道
+        fclose($pipes[0]);
+
+        fclose($pipes[1]);
+
+        fclose($pipes[2]);
+
+        // 关闭进程
+
+        proc_close($process);
+
     }
 }
