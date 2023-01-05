@@ -27,27 +27,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        if (config('settings.node_type') === 'master') {
-            $this->registerMasterSchedules($schedule);
-        } else {
-            $this->registerSlaveSchedules($schedule);
-        }
-    }
-
-    /**
-     * Register the commands for the application.
-     *
-     * @return void
-     */
-    protected function commands(): void
-    {
-        $this->load(__DIR__ . '/Commands');
-
-        require base_path('routes/console.php');
-    }
-
-    private function registerMasterSchedules(Schedule $schedule): void
-    {
         // 清理过期的 Token
         $schedule->command('sanctum:prune-expired --hours=24')->daily();
 
@@ -84,8 +63,15 @@ class Kernel extends ConsoleKernel
         $schedule->job(new SetBirthdayGroupJob())->dailyAt('00:00');
     }
 
-    private function registerSlaveSchedules(Schedule $schedule): void
+    /**
+     * Register the commands for the application.
+     *
+     * @return void
+     */
+    protected function commands(): void
     {
+        $this->load(__DIR__ . '/Commands');
 
+        require base_path('routes/console.php');
     }
 }
