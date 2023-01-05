@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Host;
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Command\Command as CommandAlias;
 
 class HostCost extends Command
 {
@@ -49,6 +50,6 @@ class HostCost extends Command
         }
 
 
-        return Command::SUCCESS;
+        return CommandAlias::SUCCESS;
     }
 }
