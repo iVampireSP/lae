@@ -142,4 +142,9 @@ class Cluster
             Cluster::publish('node.ok');
         }
     }
+
+    public static function currentNode()
+    {
+        return config('settings.node');
+    }
 }

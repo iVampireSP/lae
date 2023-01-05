@@ -26,6 +26,11 @@ class ServerController extends Controller
     public function nodes() {
         $nodes = Cluster::nodes(true);
 
-        return $this->success($nodes);
+        $current_node_id = Cluster::currentNode()['id'];
+
+        return $this->success([
+            'nodes' => $nodes,
+            'current_node_id' => $current_node_id,
+        ]);
     }
 }
