@@ -5,7 +5,6 @@ namespace App\Console\Commands\Cluster;
 use App\Support\Cluster;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Str;
 use Symfony\Component\Console\Command\Command as CommandAlias;
 
@@ -123,21 +122,7 @@ class Work extends Command
                 $this->info('正在启动 Web。');
 
                 $command = 'php artisan octane:start --host=0.0.0.0 --rpc-port=6001 --port=8000';
-                // proc_open
-                $descriptor_spec = [
-                    0 => ['pipe', 'r'],
-                    1 => ['pipe', 'w'],
-                    2 => ['pipe', 'w'],
-                ];
-
-                $process = proc_open($command, $descriptor_spec, $pipes);
-
-                if (is_resource($process)) {
-                    while ($s = fgets($pipes[1])) {
-                        echo $s;
-                    }
-                }
-
+                $this->pipeCommand($command);
 
             } else {
                 // 子进程
@@ -180,7 +165,8 @@ class Work extends Command
             'cluster.restart.web' => function () {
                 $this->info('正在重启 Web。');
 
-                exec('php artisan octane:reload');
+                $this->pipeCommand('php artisan octane:reload');
+
 
                 Cluster::publish('cluster.restarted.web');
 
@@ -189,7 +175,7 @@ class Work extends Command
             'cluster.restart.all' => function () {
                 $this->info('正在重启整个莱云。');
 
-                exec('supervisorctl restart all');
+                $this->pipeCommand('supervisorctl restart all');
 
                 Cluster::publish('cluster.restarted.all');
 
@@ -225,5 +211,22 @@ class Work extends Command
         // 获取 CPU 使用率
         $cpu = sys_getloadavg();
         return $cpu[0];
+    }
+
+    private function pipeCommand($command): void
+    {
+        $descriptor_spec = [
+            0 => ['pipe', 'r'],
+            1 => ['pipe', 'w'],
+            2 => ['pipe', 'w'],
+        ];
+
+        $process = proc_open($command, $descriptor_spec, $pipes);
+
+        if (is_resource($process)) {
+            while ($s = fgets($pipes[1])) {
+                echo $s;
+            }
+        }
     }
 }
