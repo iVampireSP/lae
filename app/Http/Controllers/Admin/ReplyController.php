@@ -31,7 +31,8 @@ class ReplyController extends Controller
 
         Reply::create([
             'content' => $request->input('content'),
-            'work_order_id' => $work_order->id
+            'work_order_id' => $work_order->id,
+            'name' => auth('admin')->user()->name
         ]);
 
         return back()->with('success', '回复成功，请等待同步。');

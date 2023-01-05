@@ -32,17 +32,16 @@ class AdminController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        //
-
         $request->validate([
             'email' => 'required|email|unique:admins,email',
+            'name' => 'required|string|max:30',
         ]);
 
         // 随机密码
         $password = Str::random();
 
         $admin = Admin::create([
-            'email' => $request->email,
+            'email' => $request->input('email'),
             'password' => bcrypt($password),
         ]);
 
@@ -83,6 +82,7 @@ class AdminController extends Controller
     {
         $request->validate([
             'email' => 'required|email|unique:admins,email,' . $admin->id,
+            'name' => 'required|string|max:30',
         ]);
 
         $msg = '管理员信息更新成功';
@@ -98,7 +98,8 @@ class AdminController extends Controller
 
         $msg .= '。';
 
-        $admin->email = $request->email;
+        $admin->name = $request->input('name');
+        $admin->email = $request->input('email');
 
         $admin->save();
 

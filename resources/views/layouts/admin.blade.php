@@ -86,12 +86,19 @@
                             </li>
                         @endif
                         <li class="nav-item dropdown">
+
+                            @php($admin = \Illuminate\Support\Facades\Auth::guard('admin')->user())
+
                             <a id="navbarDropdown" class="nav-link dropdown-toggle text-auto" href="#" role="button"
                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                {{ Auth::guard('admin')->user()->email ?? '' }}
+                                {{ $admin->name ?? '管理员' }}
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="{{ route('admin.admins.edit', $admin) }}">
+                                    编辑资料
+                                </a>
+
                                 <a class="dropdown-item" href="{{ route('admin.logout') }}"
                                    onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

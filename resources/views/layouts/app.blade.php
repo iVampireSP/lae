@@ -67,7 +67,7 @@
 
                             @if(Auth::guard('web')->check())
                                 <a class="nav-link text-auto"
-                                   href="{{ route('admin.users.edit', Auth::guard('web')->id()) }}">返回到后台</a>
+                                   href="{{ route('admin.users.edit', Auth::guard('web')->id()) }}">回到 {{ Auth::guard('admin')->user()->name }}</a>
                             @else
                                 <a class="nav-link text-auto"
                                    href="{{ route('admin.index') }}">切换到后台</a>

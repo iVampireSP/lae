@@ -41,7 +41,7 @@
                             <a
                                 href="{{ route('admin.hosts.edit', $workOrder->host_id) }}"
                                 class="host_name"
-                                host="{{ $workOrder->host_id }}">
+                            >
                                 {{ $workOrder->host->name }}
                             </a>
                         @else
@@ -66,9 +66,5 @@
 
     {{-- 分页 --}}
     {{ $workOrders->links() }}
-
-
-
-
 
 @endsection

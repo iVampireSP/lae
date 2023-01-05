@@ -24,7 +24,7 @@
                             {{ $reply->name }}
                         @endif
                     @elseif ($reply->role === 'admin')
-                        <span class="text-primary">{{ config('app.display_name') }}</span>
+                        <span class="text-primary">{{ config('app.display_name') }} 的 {{ $reply->name }}</span>
                     @elseif ($reply->role === 'module')
                         <a href="{{ route('admin.modules.edit', $workOrder->module_id) }}">{{ $workOrder->module->name }}
                             @if ($reply->name)
@@ -61,7 +61,7 @@
         <div class="form-group">
             <label for="content">内容</label>
             <textarea class="form-control" id="content" name="content" rows="10"
-                      placeholder="作为 {{ config('app.display_name') }} 回复。"></textarea>
+                      placeholder="作为 {{ config('app.display_name') }} 的 {{ Auth::guard('admin')->user()->name }} 回复。"></textarea>
         </div>
 
         <button type="submit" class="btn btn-primary mt-3 mb-3">提交</button>
