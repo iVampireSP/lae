@@ -137,6 +137,59 @@ class Work extends Command
         return CommandAlias::SUCCESS;
     }
 
+    private function pipeCommand($command): void
+    {
+        $descriptor_spec = [
+            0 => ['pipe', 'r'],
+            1 => ['pipe', 'w'],
+            2 => ['pipe', 'w'],
+        ];
+
+        $pipes = [];
+        $process = proc_open($command, $descriptor_spec, $pipes);
+
+        if (is_resource($process)) {
+            while ($s = fgets($pipes[1])) {
+                echo $s;
+            }
+        }
+
+        // 命令结束后，关闭管道
+        fclose($pipes[0]);
+
+        fclose($pipes[1]);
+
+        fclose($pipes[2]);
+
+        // 关闭进程
+
+        proc_close($process);
+
+    }
+
+    private function report(): void
+    {
+        $this->info('正在报告此系统，请保持此命令一直运行。');
+
+        Artisan::call('config:cache');
+
+        $cpu = $this->getCpuUsage();
+
+        while (1) {
+            Cluster::publish('system_usage', [
+                'cpu' => $cpu,
+            ]);
+
+            sleep(1);
+        }
+    }
+
+    private function getCpuUsage(): float
+    {
+        // 获取 CPU 使用率
+        $cpu = sys_getloadavg();
+        return $cpu[0];
+    }
 
     private function work(): void
     {
@@ -186,58 +239,5 @@ class Work extends Command
             $this->warn("正在处理 {$event} 事件。");
             $events[$event]($message);
         }
-    }
-
-    private function report(): void
-    {
-        $this->info('正在报告此系统，请保持此命令一直运行。');
-
-        Artisan::call('config:cache');
-
-        $cpu = $this->getCpuUsage();
-
-        while (1) {
-            Cluster::publish('system_usage', [
-                'cpu' => $cpu,
-            ]);
-
-            sleep(1);
-        }
-    }
-
-    private function getCpuUsage(): float
-    {
-        // 获取 CPU 使用率
-        $cpu = sys_getloadavg();
-        return $cpu[0];
-    }
-
-    private function pipeCommand($command): void
-    {
-        $descriptor_spec = [
-            0 => ['pipe', 'r'],
-            1 => ['pipe', 'w'],
-            2 => ['pipe', 'w'],
-        ];
-
-        $process = proc_open($command, $descriptor_spec, $pipes);
-
-        if (is_resource($process)) {
-            while ($s = fgets($pipes[1])) {
-                echo $s;
-            }
-        }
-
-        // 命令结束后，关闭管道
-        fclose($pipes[0]);
-
-        fclose($pipes[1]);
-
-        fclose($pipes[2]);
-
-        // 关闭进程
-
-        proc_close($process);
-
     }
 }

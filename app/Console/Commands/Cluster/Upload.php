@@ -82,24 +82,9 @@ class Upload extends Command
         return CommandAlias::SUCCESS;
     }
 
-    public function addFileToZip(string $path, ZipArchive $zip): void
-    {
-        $handler = opendir($path);
-        while (($filename = readdir($handler)) !== false) {
-            if ($filename != '.' && $filename != '..') {
-                if (is_dir($path . '/' . $filename)) {
-                    $this->addFileToZip($path . '/' . $filename, $zip);
-                } else {
-                    $zip->addFile($path . '/' . $filename);
-                }
-            }
-        }
-        @closedir($handler);
-    }
-
     public function upload($node_type)
     {
-        $this->warn("正在上传 ${node_type}  文件。");
+        $this->warn("正在上传 {$node_type}  文件。");
         $this->info('正在打包 config 目录。');
 
         if ($node_type === 'master') {
@@ -114,12 +99,12 @@ class Upload extends Command
 
             $this->info('正在上传 config 目录。');
 
-            $cache_key = "${node_type}_config_zip";
+            $cache_key = "{$node_type}_config_zip";
             Cluster::forever($cache_key, file_get_contents($cacheZip));
 
             // md5
             $this->info('正在报告 cache 目录的 MD5 值。');
-            $cache_md5_key = "${node_type}_config_zip_md5";
+            $cache_md5_key = "{$node_type}_config_zip_md5";
             Cluster::forever($cache_md5_key, md5_file($cacheZip));
 
             unlink($cacheZip);
@@ -127,14 +112,29 @@ class Upload extends Command
 
         // 上传 .env 文件
         $this->info('正在上传 .env 文件。');
-        $env_key = "${node_type}_env";
+        $env_key = "{$node_type}_env";
         Cluster::forever($env_key, file_get_contents(base_path('.env')));
 
         // 上传 .env 文件的 MD5
         $this->info('正在报告 .env 文件的 MD5 值。');
-        $env_md5_key = "${node_type}_env_md5";
+        $env_md5_key = "{$node_type}_env_md5";
         Cluster::forever($env_md5_key, md5_file(base_path('.env')));
 
         $this->info('完成。');
+    }
+
+    public function addFileToZip(string $path, ZipArchive $zip): void
+    {
+        $handler = opendir($path);
+        while (($filename = readdir($handler)) !== false) {
+            if ($filename != '.' && $filename != '..') {
+                if (is_dir($path . '/' . $filename)) {
+                    $this->addFileToZip($path . '/' . $filename, $zip);
+                } else {
+                    $zip->addFile($path . '/' . $filename);
+                }
+            }
+        }
+        @closedir($handler);
     }
 }

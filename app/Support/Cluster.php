@@ -9,6 +9,11 @@ class Cluster
 
     public static string $prefix = 'cluster:';
 
+    public static function isCluster(): bool
+    {
+        return self::isMaster() || self::isSlave();
+    }
+
     public static function isMaster(): bool
     {
         return config('settings.node.type') === 'master';
@@ -17,11 +22,6 @@ class Cluster
     public static function isSlave(): bool
     {
         return config('settings.node.type') === 'slave';
-    }
-
-    public static function isCluster(): bool
-    {
-        return self::isMaster() || self::isSlave();
     }
 
     public static function publish($event, $data = []): void
@@ -38,6 +38,28 @@ class Cluster
         ]));
 
         self::registerThisNode(false);
+    }
+
+    public static function registerThisNode($report = true): void
+    {
+        $node_id = config('settings.node.id');
+
+        Cluster::hset('nodes', $node_id, [
+            'type' => config('settings.node.type'),
+            'id' => $node_id,
+            'ip' => config('settings.node.ip'),
+            // utc +8 timestamp
+            'last_heartbeat' => time(),
+        ]);
+
+        if ($report) {
+            Cluster::publish('node.ok');
+        }
+    }
+
+    public static function hset($key, $value, $data = []): void
+    {
+        Redis::hset(self::$prefix . $key, $value, json_encode($data));
     }
 
     /**
@@ -71,19 +93,9 @@ class Cluster
         });
     }
 
-    public static function hset($key, $value, $data = []): void
-    {
-        Redis::hset(self::$prefix . $key, $value, json_encode($data));
-    }
-
     public static function get($key, $default = null): string|array|null
     {
         return Redis::get(self::$prefix . $key, $default);
-    }
-
-    public static function set($key, $value, $ttl = null): void
-    {
-        Redis::set(self::$prefix . $key, $value, $ttl);
     }
 
     public static function forget($key): void
@@ -97,16 +109,14 @@ class Cluster
         self::set($key, $value, -1);
     }
 
+    public static function set($key, $value, $ttl = null): void
+    {
+        Redis::set(self::$prefix . $key, $value, $ttl);
+    }
+
     public static function hget($key, $hashKey, $default = []): string|array|null
     {
         $value = Redis::hget(self::$prefix . $key, $hashKey);
-
-        return $value ?: $default;
-    }
-
-    public static function hgetAll($hashKey, $default = []): array
-    {
-        $value = Redis::hgetall(self::$prefix . $hashKey);
 
         return $value ?: $default;
     }
@@ -126,21 +136,11 @@ class Cluster
         return $nodes;
     }
 
-    public static function registerThisNode($report = true): void
+    public static function hgetAll($hashKey, $default = []): array
     {
-        $node_id = config('settings.node.id');
+        $value = Redis::hgetall(self::$prefix . $hashKey);
 
-        Cluster::hset('nodes', $node_id, [
-            'type' => config('settings.node.type'),
-            'id' => $node_id,
-            'ip' => config('settings.node.ip'),
-            // utc +8 timestamp
-            'last_heartbeat' => time(),
-        ]);
-
-        if ($report) {
-            Cluster::publish('node.ok');
-        }
+        return $value ?: $default;
     }
 
     public static function currentNode()

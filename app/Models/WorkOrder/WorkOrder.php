@@ -89,6 +89,52 @@ class WorkOrder extends Model
         'notify' => 'boolean'
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function (self $model) {
+            $model->uuid = Str::uuid()->toString();
+
+            if ($model->host_id) {
+                $model->load(['host']);
+                $model->module_id = $model->host->module_id;
+            }
+
+            if (auth('sanctum')->check()) {
+                $model->user_id = auth()->id();
+
+                if ($model->host_id) {
+                    if (!$model->user_id == $model->host->user_id) {
+                        throw new CommonException('user_id not match host user_id');
+                    }
+                }
+            } else {
+                if (!$model->user_id) {
+                    throw new CommonException('user_id is required');
+                }
+            }
+
+            if ($model->host_id) {
+                $model->host->load('module');
+                $module = $model->host->module;
+
+                if ($module === null) {
+                    $model->status = 'open';
+                } else {
+                    $model->status = 'pending';
+                }
+            }
+
+            $model->notify = true;
+        });
+
+        // updated
+        static::updated(function ($model) {
+            dispatch(new WorkOrderJob($model, 'put'));
+        });
+    }
+
     public function scopeThisModule($query)
     {
         return $query->where('module_id', auth('module')->id());
@@ -146,51 +192,5 @@ class WorkOrder extends Model
         dispatch(new WorkOrderJob($this, 'delete'));
 
         return true;
-    }
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function (self $model) {
-            $model->uuid = Str::uuid()->toString();
-
-            if ($model->host_id) {
-                $model->load(['host']);
-                $model->module_id = $model->host->module_id;
-            }
-
-            if (auth('sanctum')->check()) {
-                $model->user_id = auth()->id();
-
-                if ($model->host_id) {
-                    if (!$model->user_id == $model->host->user_id) {
-                        throw new CommonException('user_id not match host user_id');
-                    }
-                }
-            } else {
-                if (!$model->user_id) {
-                    throw new CommonException('user_id is required');
-                }
-            }
-
-            if ($model->host_id) {
-                $model->host->load('module');
-                $module = $model->host->module;
-
-                if ($module === null) {
-                    $model->status = 'open';
-                } else {
-                    $model->status = 'pending';
-                }
-            }
-
-            $model->notify = true;
-        });
-
-        // updated
-        static::updated(function ($model) {
-            dispatch(new WorkOrderJob($model, 'put'));
-        });
     }
 }

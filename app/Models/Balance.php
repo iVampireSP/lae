@@ -77,31 +77,6 @@ class Balance extends Model
         'amount' => 'decimal:2',
     ];
 
-    public function user(): BelongsToAlias
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    public function scopeThisUser($query)
-    {
-        return $query->where('user_id', auth()->id());
-    }
-
-    public function isPaid(): bool
-    {
-        return $this->paid_at !== null;
-    }
-
-    public function isOverdue(): bool
-    {
-        return $this->created_at->diffInDays(now()) > 1 && !$this->isPaid();
-    }
-
-    public function canPay(): bool
-    {
-        return !$this->isPaid() && !$this->isOverdue();
-    }
-
     protected static function boot()
     {
         parent::boot();
@@ -112,5 +87,30 @@ class Balance extends Model
 
             $balance->order_id = date('YmdHis') . $balance->id . rand(1000, 9999);
         });
+    }
+
+    public function user(): BelongsToAlias
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function scopeThisUser($query)
+    {
+        return $query->where('user_id', auth()->id());
+    }
+
+    public function canPay(): bool
+    {
+        return !$this->isPaid() && !$this->isOverdue();
+    }
+
+    public function isPaid(): bool
+    {
+        return $this->paid_at !== null;
+    }
+
+    public function isOverdue(): bool
+    {
+        return $this->created_at->diffInDays(now()) > 1 && !$this->isPaid();
     }
 }

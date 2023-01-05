@@ -66,6 +66,16 @@ class ModuleController extends Controller
 
     }
 
+    private function rules(): array
+    {
+        return [
+            'id' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
+            'url' => 'required|url',
+            'status' => 'required|string|in:up,down,maintenance',
+        ];
+    }
+
     /**
      * Display the specified resource.
      *
@@ -165,6 +175,9 @@ class ModuleController extends Controller
         return back()->with('success', '已信任该模块。');
     }
 
+
+    // fast login
+
     public function allows_destroy(Module $module, ModuleAllow $allow)
     {
         $allow->delete();
@@ -172,8 +185,6 @@ class ModuleController extends Controller
         return redirect()->route('admin.modules.allows', $module)->with('success', '取消信任完成。');
     }
 
-
-    // fast login
     public function fast_login(Module $module): View|RedirectResponse
     {
         $resp = $module->baseRequest('post', 'fast-login', []);
@@ -184,15 +195,5 @@ class ModuleController extends Controller
         } else {
             return redirect()->route('admin.modules.show', $module)->with('error', '快速登录失败，可能是模块不支持。');
         }
-    }
-
-    private function rules(): array
-    {
-        return [
-            'id' => 'required|string|max:255',
-            'name' => 'required|string|max:255',
-            'url' => 'required|url',
-            'status' => 'required|string|in:up,down,maintenance',
-        ];
     }
 }

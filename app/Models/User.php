@@ -124,22 +124,6 @@ class User extends Authenticatable
         'birthday_at' => 'date',
     ];
 
-    public function hosts(): HasMany
-    {
-        return $this->hasMany(Host::class);
-    }
-
-    public function user_group(): BelongsTo
-    {
-        return $this->belongsTo(UserGroup::class);
-    }
-
-    public function scopeBirthday()
-    {
-        return $this->select(['id', 'name', 'birthday_at', 'email_md5', 'created_at'])->whereMonth('birthday_at', now()->month)
-            ->whereDay('birthday_at', now()->day);
-    }
-
     protected static function boot()
     {
         parent::boot();
@@ -158,5 +142,21 @@ class User extends Authenticatable
                 }
             }
         });
+    }
+
+    public function hosts(): HasMany
+    {
+        return $this->hasMany(Host::class);
+    }
+
+    public function user_group(): BelongsTo
+    {
+        return $this->belongsTo(UserGroup::class);
+    }
+
+    public function scopeBirthday()
+    {
+        return $this->select(['id', 'name', 'birthday_at', 'email_md5', 'created_at'])->whereMonth('birthday_at', now()->month)
+            ->whereDay('birthday_at', now()->day);
     }
 }
