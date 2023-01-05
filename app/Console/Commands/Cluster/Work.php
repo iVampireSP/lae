@@ -164,7 +164,7 @@ class Work extends Command
             'cluster.restart.web' => function () {
                 $this->info('正在重启 Web。');
 
-                $this->pipeCommand('php artisan octane:reload');
+                exec('php artisan octane:reload');
 
 
                 Cluster::publish('cluster.restarted.web');
