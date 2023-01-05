@@ -2,7 +2,6 @@
 
 namespace App\Notifications;
 
-use App\Broadcasting\WeComRobotChannel;
 use App\Models\WorkOrder\Reply;
 use App\Models\WorkOrder\WorkOrder;
 use Illuminate\Bus\Queueable;
@@ -51,9 +50,9 @@ class WorkOrderNotification extends Notification implements ShouldQueue
 
             $module = $workOrder->module;
 
-            if (!$workOrder->notify) {
-                return;
-            }
+            // if (!$workOrder->notify) {
+            //     return;
+            // }
 
         } else if ($notifiable instanceof Reply) {
 

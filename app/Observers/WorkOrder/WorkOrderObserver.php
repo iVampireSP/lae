@@ -16,8 +16,7 @@ class WorkOrderObserver
      */
     public function created(WorkOrder $workOrder)
     {
-        //
-        return (new WorkOrderNotification())
+        (new WorkOrderNotification())
             ->toGroup($workOrder);
     }
 
@@ -30,9 +29,8 @@ class WorkOrderObserver
      */
     public function updated(WorkOrder $workOrder)
     {
-        return;
-        // return (new WorkOrderNotification())
-        //     ->toGroup($workOrder);
+        (new WorkOrderNotification())
+            ->toGroup($workOrder);
     }
 
     /**

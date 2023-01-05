@@ -184,6 +184,8 @@ class WorkOrder extends Model
                     $model->status = 'pending';
                 }
             }
+
+            $model->notify = true;
         });
 
         // updated
