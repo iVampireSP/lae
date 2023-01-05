@@ -5,5 +5,5 @@
 
 ### Web 节点运行
 ```bash
-docker run -itd --name=lae --restart=always -p 8000:8000 -v /opt/lae:/opt/lae ccr.ccs.tencentyun.com/laecloud/cafe:latte art works\
+docker run -itd --name=lae --restart=always -p 8000:8000 -v /opt/lae:/opt/lae ccr.ccs.tencentyun.com/laecloud/cafe:latte art works
 ```
