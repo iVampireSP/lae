@@ -1,7 +1,11 @@
 # LaeCloud 莱云
 
 ### 主节点运行
-复制 supervisor/ 下的所有文件到 /etc/supervisor/conf.d 中，然后全部启动
+```bash
+docker run -itd --name=lae_schedule --restart=always -v /opt/lae:/opt/lae ccr.ccs.tencentyun.com/laecloud/cafe:latte art schedule:work
+
+docker run -itd --name=lae_workers --restart=always -v /opt/lae:/opt/lae ccr.ccs.tencentyun.com/laecloud/cafe:latte art queue:work
+```
 
 ### Web 节点运行
 ```bash
