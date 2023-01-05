@@ -20,9 +20,11 @@ Route::get('users', [UserController::class, 'index']);
 
 Route::resource('balances', BalanceController::class);
 
-Route::get('servers', ServerController::class);
 
+Route::get('servers', [ServerController::class, 'module_reports']);
+Route::get('nodes', [ServerController::class, 'nodes']);
 Route::get('modules', [ModuleController::class, 'index']);
+
 
 Route::resource('tasks', TaskController::class)->only(['index', 'show']);
 

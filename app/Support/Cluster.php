@@ -97,9 +97,33 @@ class Cluster
         self::set($key, $value, -1);
     }
 
-    public static function hget($key, $value, $default = null): string|array|null
+    public static function hget($key, $hashKey, $default = []): string|array|null
     {
-        return Redis::hget($key, $value, $default);
+        $value = Redis::hget(self::$prefix . $key, $hashKey);
+
+        return $value ?: $default;
+    }
+
+    public static function hgetAll($hashKey, $default = []): array
+    {
+        $value = Redis::hgetall(self::$prefix . $hashKey);
+
+        return $value ?: $default;
+    }
+
+    public static function nodes($hide_ip = false): array
+    {
+        $nodes = self::hgetAll('nodes');
+
+        foreach ($nodes as $key => $node) {
+            $nodes[$key] = json_decode($node, true);
+
+            if ($hide_ip) {
+                unset($nodes[$key]['ip']);
+            }
+        }
+
+        return $nodes;
     }
 
     public static function registerThisNode($report = true): void
