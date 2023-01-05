@@ -180,7 +180,7 @@ class Work extends Command
             'cluster.restart.web' => function () {
                 $this->info('正在重启 Web。');
 
-                exec('supervisorctl restart lae-web:*');
+                exec('php artisan octane:reload');
 
                 Cluster::publish('cluster.restarted.web');
 
