@@ -81,7 +81,7 @@ class Sync extends Command
             $cache_path = base_path('config');
 
             // exec
-            $cmd = "rm -rf ${cache_path}";
+            $cmd = "rm -rf {$cache_path}";
             exec($cmd);
 
 
@@ -94,8 +94,8 @@ class Sync extends Command
             if ($node_type === 'slave') {
                 // 下载 .env 文件
                 $this->info('正在下载 .env 文件。');
-                $env_cache_key = "${node_type}_env";
-                $env_md5_key = "${node_type}_env_md5";
+                $env_cache_key = "{$node_type}_env";
+                $env_md5_key = "{$node_type}_env_md5";
 
                 $env = Cluster::get($env_cache_key);
                 $env_md5 = Cluster::get($env_md5_key);
@@ -118,7 +118,7 @@ class Sync extends Command
                     $env = file_get_contents(base_path('.env'));
 
                     // REPLACE NODE_IP 这一行
-                    $env = preg_replace('/^NODE_IP=.*$/m', "NODE_IP=${node_ip}", $env);
+                    $env = preg_replace('/^NODE_IP=.*$/m', "NODE_IP={$node_ip}", $env);
 
                     file_put_contents(base_path('.env'), $env);
 
