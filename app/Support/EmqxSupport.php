@@ -6,6 +6,7 @@ use App\Exceptions\EmqxSupportException;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class EmqxSupport
 {
@@ -61,7 +62,8 @@ class EmqxSupport
 
         try {
             $response = $this->api()->get('clients', $params);
-        } catch (ConnectionException $e) {
+        } /** @noinspection PhpRedundantCatchClauseInspection */ catch (ConnectionException $e) {
+            Log::error('emqx connect failed.', [$e]);
             throw new EmqxSupportException('EMQX API 无法连接。');
         }
 
