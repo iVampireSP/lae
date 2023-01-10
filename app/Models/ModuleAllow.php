@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ModuleAllow extends Model
 {
-    use HasFactory;
+    // use HasFactory;
 
     protected $fillable = [
         'module_id',

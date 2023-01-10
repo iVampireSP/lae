@@ -14,51 +14,6 @@ use Ramsey\Uuid\Uuid;
 use function auth;
 use function broadcast;
 
-/**
- * App\Models\Task
- *
- * @property string      $id
- * @property string      $title
- * @property int         $progress
- * @property string      $status
- * @property int         $user_id
- * @property int         $host_id
- * @property Carbon|null $created_at
- * @property Carbon|null $updated_at
- * @property-read Host   $host
- * @method static CachedBuilder|Task all($columns = [])
- * @method static CachedBuilder|Task avg($column)
- * @method static CachedBuilder|Task cache(array $tags = [])
- * @method static CachedBuilder|Task cachedValue(array $arguments, string $cacheKey)
- * @method static CachedBuilder|Task count($columns = '*')
- * @method static CachedBuilder|Task disableCache()
- * @method static CachedBuilder|Task disableModelCaching()
- * @method static CachedBuilder|Task exists()
- * @method static CachedBuilder|Task flushCache(array $tags = [])
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Task
- *         getModelCacheCooldown(\Illuminate\Database\Eloquent\Model $instance)
- * @method static CachedBuilder|Task inRandomOrder($seed = '')
- * @method static CachedBuilder|Task insert(array $values)
- * @method static CachedBuilder|Task isCachable()
- * @method static CachedBuilder|Task max($column)
- * @method static CachedBuilder|Task min($column)
- * @method static CachedBuilder|Task newModelQuery()
- * @method static CachedBuilder|Task newQuery()
- * @method static CachedBuilder|Task query()
- * @method static CachedBuilder|Task sum($column)
- * @method static CachedBuilder|Task truncate()
- * @method static CachedBuilder|Task user()
- * @method static CachedBuilder|Task whereCreatedAt($value)
- * @method static CachedBuilder|Task whereHostId($value)
- * @method static CachedBuilder|Task whereId($value)
- * @method static CachedBuilder|Task whereProgress($value)
- * @method static CachedBuilder|Task whereStatus($value)
- * @method static CachedBuilder|Task whereTitle($value)
- * @method static CachedBuilder|Task whereUpdatedAt($value)
- * @method static CachedBuilder|Task whereUserId($value)
- * @method static CachedBuilder|Task withCacheCooldownSeconds(?int $seconds = null)
- * @mixin Eloquent
- */
 class Task extends Model
 {
     public $incrementing = false;

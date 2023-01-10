@@ -19,58 +19,6 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
-/**
- * App\Models\WorkOrder\WorkOrder
- *
- * @property int                     $id
- * @property string                  $title
- * @property string                  $content
- * @property int                     $user_id
- * @property string                  $module_id
- * @property int|null                $host_id
- * @property string                  $status
- * @property Carbon|null             $created_at
- * @property Carbon|null             $updated_at
- * @property-read Host|null          $host
- * @property-read Module             $module
- * @property-read Collection|Reply[] $replies
- * @property-read int|null           $replies_count
- * @property-read User               $user
- * @method static CachedBuilder|WorkOrder all($columns = [])
- * @method static CachedBuilder|WorkOrder avg($column)
- * @method static CachedBuilder|WorkOrder cache(array $tags = [])
- * @method static CachedBuilder|WorkOrder cachedValue(array $arguments, string $cacheKey)
- * @method static CachedBuilder|WorkOrder count($columns = '*')
- * @method static CachedBuilder|WorkOrder disableCache()
- * @method static CachedBuilder|WorkOrder disableModelCaching()
- * @method static CachedBuilder|WorkOrder exists()
- * @method static CachedBuilder|WorkOrder flushCache(array $tags = [])
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|WorkOrder
- *         getModelCacheCooldown(\Illuminate\Database\Eloquent\Model $instance)
- * @method static CachedBuilder|WorkOrder inRandomOrder($seed = '')
- * @method static CachedBuilder|WorkOrder insert(array $values)
- * @method static CachedBuilder|WorkOrder isCachable()
- * @method static CachedBuilder|WorkOrder max($column)
- * @method static CachedBuilder|WorkOrder min($column)
- * @method static CachedBuilder|WorkOrder newModelQuery()
- * @method static CachedBuilder|WorkOrder newQuery()
- * @method static CachedBuilder|WorkOrder query()
- * @method static CachedBuilder|WorkOrder sum($column)
- * @method static CachedBuilder|WorkOrder thisModule()
- * @method static CachedBuilder|WorkOrder thisUser()
- * @method static CachedBuilder|WorkOrder truncate()
- * @method static CachedBuilder|WorkOrder whereContent($value)
- * @method static CachedBuilder|WorkOrder whereCreatedAt($value)
- * @method static CachedBuilder|WorkOrder whereHostId($value)
- * @method static CachedBuilder|WorkOrder whereId($value)
- * @method static CachedBuilder|WorkOrder whereModuleId($value)
- * @method static CachedBuilder|WorkOrder whereStatus($value)
- * @method static CachedBuilder|WorkOrder whereTitle($value)
- * @method static CachedBuilder|WorkOrder whereUpdatedAt($value)
- * @method static CachedBuilder|WorkOrder whereUserId($value)
- * @method static CachedBuilder|WorkOrder withCacheCooldownSeconds(?int $seconds = null)
- * @mixin Eloquent
- */
 class WorkOrder extends Model
 {
     use Cachable, Notifiable;

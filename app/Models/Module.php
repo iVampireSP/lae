@@ -15,43 +15,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use JetBrains\PhpStorm\ArrayShape;
 
-/**
- * App\Models\Module
- *
- * @property string      $id
- * @property string      $name
- * @property string|null $api_token
- * @property string|null $url
- * @property string|null $wecom_key 企业微信机器人 key
- * @method static CachedBuilder|Module all($columns = [])
- * @method static CachedBuilder|Module avg($column)
- * @method static CachedBuilder|Module cache(array $tags = [])
- * @method static CachedBuilder|Module cachedValue(array $arguments, string $cacheKey)
- * @method static CachedBuilder|Module count($columns = '*')
- * @method static CachedBuilder|Module disableCache()
- * @method static CachedBuilder|Module disableModelCaching()
- * @method static CachedBuilder|Module exists()
- * @method static CachedBuilder|Module flushCache(array $tags = [])
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Module
- *         getModelCacheCooldown(\Illuminate\Database\Eloquent\Model $instance)
- * @method static CachedBuilder|Module inRandomOrder($seed = '')
- * @method static CachedBuilder|Module insert(array $values)
- * @method static CachedBuilder|Module isCachable()
- * @method static CachedBuilder|Module max($column)
- * @method static CachedBuilder|Module min($column)
- * @method static CachedBuilder|Module newModelQuery()
- * @method static CachedBuilder|Module newQuery()
- * @method static CachedBuilder|Module query()
- * @method static CachedBuilder|Module sum($column)
- * @method static CachedBuilder|Module truncate()
- * @method static CachedBuilder|Module whereApiToken($value)
- * @method static CachedBuilder|Module whereId($value)
- * @method static CachedBuilder|Module whereName($value)
- * @method static CachedBuilder|Module whereUrl($value)
- * @method static CachedBuilder|Module whereWecomKey($value)
- * @method static CachedBuilder|Module withCacheCooldownSeconds(?int $seconds = null)
- * @mixin Eloquent
- */
 class Module extends Authenticatable
 {
     use Cachable;

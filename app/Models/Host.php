@@ -13,64 +13,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo as BelongsToAlias;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 
-/**
- * App\Models\Host
- *
- * @property int                         $id
- * @property string                      $name
- * @property string                      $module_id
- * @property int                         $user_id
- * @property float                       $price
- * @property float|null                  $managed_price
- * @property mixed|null                  $configuration
- * @property string                      $status
- * @property int|null                    $hour
- * @property Carbon|null                 $suspended_at
- * @property string|null                 $deleted_at
- * @property Carbon|null                 $created_at
- * @property Carbon|null                 $updated_at
- * @property-read Module                 $module
- * @property-read User                   $user
- * @property-read Collection|WorkOrder[] $workOrders
- * @property-read int|null               $work_orders_count
- * @method static CachedBuilder|Host active()
- * @method static CachedBuilder|Host all($columns = [])
- * @method static CachedBuilder|Host avg($column)
- * @method static CachedBuilder|Host cache(array $tags = [])
- * @method static CachedBuilder|Host cachedValue(array $arguments, string $cacheKey)
- * @method static CachedBuilder|Host count($columns = '*')
- * @method static CachedBuilder|Host disableCache()
- * @method static CachedBuilder|Host disableModelCaching()
- * @method static CachedBuilder|Host exists()
- * @method static CachedBuilder|Host flushCache(array $tags = [])
- * @method static \GeneaLabs\LaravelModelCaching\CachedBuilder|Host
- *         getModelCacheCooldown(\Illuminate\Database\Eloquent\Model $instance)
- * @method static CachedBuilder|Host inRandomOrder($seed = '')
- * @method static CachedBuilder|Host insert(array $values)
- * @method static CachedBuilder|Host isCachable()
- * @method static CachedBuilder|Host max($column)
- * @method static CachedBuilder|Host min($column)
- * @method static CachedBuilder|Host newModelQuery()
- * @method static CachedBuilder|Host newQuery()
- * @method static CachedBuilder|Host query()
- * @method static CachedBuilder|Host sum($column)
- * @method static CachedBuilder|Host thisUser($module = null)
- * @method static CachedBuilder|Host truncate()
- * @method static CachedBuilder|Host whereConfiguration($value)
- * @method static CachedBuilder|Host whereCreatedAt($value)
- * @method static CachedBuilder|Host whereDeletedAt($value)
- * @method static CachedBuilder|Host whereHour($value)
- * @method static CachedBuilder|Host whereId($value)
- * @method static CachedBuilder|Host whereManagedPrice($value)
- * @method static CachedBuilder|Host whereModuleId($value)
- * @method static CachedBuilder|Host whereName($value)
- * @method static CachedBuilder|Host wherePrice($value)
- * @method static CachedBuilder|Host whereStatus($value)
- * @method static CachedBuilder|Host whereSuspendedAt($value)
- * @method static CachedBuilder|Host whereUpdatedAt($value)
- * @method static CachedBuilder|Host whereUserId($value)
- * @method static CachedBuilder|Host withCacheCooldownSeconds(?int $seconds = null)
- */
 class Host extends Model
 {
     use Cachable;
