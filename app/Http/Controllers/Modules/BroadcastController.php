@@ -15,7 +15,6 @@ class BroadcastController extends Controller
     {
         $this->validate($request, $this->rules());
 
-
         broadcast(new Users($user, $request->filled('type'), $request->all()));
 
         return $this->created($request);
@@ -24,8 +23,9 @@ class BroadcastController extends Controller
     private function rules(): array
     {
         return [
-            'message' => 'required',
-            'type' => 'required|in:info,error,warning,success'
+            'message' => 'required|string|max:255',
+            'type' => 'required|in:info,error,warning,success',
+            'data' => 'nullable|json',
         ];
     }
 
