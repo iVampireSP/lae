@@ -3,12 +3,15 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Cache;
 
 class UserGroup extends Model
 {
+    use Cachable;
+
     public $fillable = [
         'name',
         'color',

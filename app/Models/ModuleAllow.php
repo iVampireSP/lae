@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ModuleAllow extends Model
 {
-    // use HasFactory;
+    use Cachable;
 
     protected $fillable = [
         'module_id',
