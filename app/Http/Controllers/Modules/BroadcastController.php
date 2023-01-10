@@ -23,10 +23,7 @@ class BroadcastController extends Controller
             $type .= '.message';
         }
 
-        broadcast(new Users($user, $type, [
-            'user' => $user,
-            'message' => $request->input('message')
-        ]));
+        broadcast(new Users($user, $type, $request->all()));
 
         return $this->created($request);
     }

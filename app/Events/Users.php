@@ -23,11 +23,11 @@ class Users extends Event implements ShouldBroadcastNow
      *
      * @return void
      */
-    public function __construct(User $user, $type, $message)
+    public function __construct(User $user, $type, string|array $data)
     {
         $this->user = $user;
         $this->type = $type;
-        $this->data = $message;
+        $this->data = $data;
 
         if (Auth::guard('module')->check()) {
             $this->module = Auth::guard('module')->user();
