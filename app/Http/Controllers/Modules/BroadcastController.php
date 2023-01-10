@@ -17,7 +17,7 @@ class BroadcastController extends Controller
 
         broadcast(new Users($user, $request->filled('type'), $request->all()));
 
-        return $this->created($request);
+        return $this->created("message sent.");
     }
 
     private function rules(): array
@@ -25,7 +25,7 @@ class BroadcastController extends Controller
         return [
             'message' => 'required|string|max:255',
             'type' => 'required|in:info,error,warning,success',
-            'data' => 'nullable|array',
+            'data' => 'nullable|json',
         ];
     }
 
