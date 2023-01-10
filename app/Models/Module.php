@@ -2,8 +2,6 @@
 
 namespace App\Models;
 
-use Eloquent;
-use GeneaLabs\LaravelModelCaching\CachedBuilder;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use GuzzleHttp\Exception\ConnectException;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -92,7 +90,7 @@ class Module extends Authenticatable
 
     public function request($method, $path, $requests): array
     {
-        return $this->baseRequest($method, "functions/{$path}", $requests);
+        return $this->baseRequest($method, "functions/$path", $requests);
     }
 
     public function baseRequest($method, $path, $requests): array
@@ -125,18 +123,19 @@ class Module extends Authenticatable
 
         $requests['module_id'] = $module_id;
 
-        $response = $http->{$method}("exports/{$path}", $requests);
+        $response = $http->{$method}("exports/$path", $requests);
 
         return $this->getResponse($response);
     }
 
-    public function check($module_id = null): bool
+    public function check(): bool
     {
-        if ($module_id) {
-            $module = Module::find($module_id);
-        } else {
-            $module = $this;
-        }
+        // $module_id = null
+        // if ($module_id) {
+        //     $module = Module::find($module_id);
+        // } else {
+        //     $module = $this;
+        // }
 
         $success = 0;
 

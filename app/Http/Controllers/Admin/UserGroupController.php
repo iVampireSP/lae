@@ -16,9 +16,9 @@ class UserGroupController extends Controller
      *
      * @return View
      */
-    public function index()
+    public function index(): View
     {
-        $user_groups = UserGroup::paginate(10);
+        $user_groups = (new UserGroup)->paginate(10);
 
         return view('admin.user-groups.index', compact('user_groups'));
     }
@@ -30,11 +30,11 @@ class UserGroupController extends Controller
      *
      * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $request->validate($this->rules());
 
-        $user_group = UserGroup::create($request->all());
+        $user_group = (new UserGroup)->create($request->all());
 
         return redirect()->route('admin.user-groups.edit', $user_group)->with('success', '用户组新建成功。');
     }
@@ -70,7 +70,7 @@ class UserGroupController extends Controller
      */
     public function show(UserGroup $user_group): View
     {
-        $users = User::where('user_group_id', $user_group->id)->paginate(100);
+        $users = (new User)->where('user_group_id', $user_group->id)->paginate(100);
 
         return view('admin.user-groups.show', compact('user_group', 'users'));
     }
@@ -114,7 +114,7 @@ class UserGroupController extends Controller
      *
      * @return RedirectResponse
      */
-    public function destroy(UserGroup $user_group)
+    public function destroy(UserGroup $user_group): RedirectResponse
     {
         $user_group->delete();
 

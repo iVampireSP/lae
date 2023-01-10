@@ -11,14 +11,14 @@ use Illuminate\Support\Str;
 
 class ModuleController extends Controller
 {
-    public function index()
+    public function index(): JsonResponse
     {
         $module = auth('module')->user()->calculate();
 
         return $this->success($module);
     }
 
-    public function call(Request $request, Module $module)
+    public function call(Request $request, Module $module): Response|JsonResponse
     {
         $path = $this->fixPath($request, $module, 'api');
 
@@ -35,7 +35,7 @@ class ModuleController extends Controller
 
     private function fixPath(Request $request, Module $module, $prefix): string
     {
-        $path = substr($request->path(), strlen("/{$prefix}/modules/{$module->id}"));
+        $path = substr($request->path(), strlen("/$prefix/modules/$module->id"));
 
         return preg_replace('/[^a-zA-Z0-9\/]/', '', $path);
     }

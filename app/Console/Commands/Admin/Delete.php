@@ -4,6 +4,7 @@ namespace App\Console\Commands\Admin;
 
 use App\Models\Admin;
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Command\Command as CommandAlias;
 
 class Delete extends Command
 {
@@ -26,7 +27,7 @@ class Delete extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         // 获取管理员ID
         $id = $this->ask('请输入管理员ID');
@@ -36,6 +37,6 @@ class Delete extends Command
 
         // 输出信息
         $this->info('管理员删除成功。');
-        return Command::SUCCESS;
+        return CommandAlias::SUCCESS;
     }
 }

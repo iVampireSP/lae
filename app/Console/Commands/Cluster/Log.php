@@ -44,7 +44,7 @@ class Log extends Command
             return;
         }
 
-        $message = "[{$message['node']['type']}] {$message['node']['id']}:{$event}: " . $status;
+        $message = "[{$message['node']['type']}] {$message['node']['id']}:$event: " . $status;
 
         $this->info($message);
     }

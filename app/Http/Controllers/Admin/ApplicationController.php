@@ -15,11 +15,9 @@ class ApplicationController extends Controller
      *
      * @return View
      */
-    public function index()
+    public function index(): View
     {
-        //
-
-        $applications = Application::paginate(100);
+        $applications = (new Application)->paginate(100);
 
         return view('admin.applications.index', compact('applications'));
     }
@@ -31,7 +29,7 @@ class ApplicationController extends Controller
      *
      * @return View
      */
-    public function store(Request $request)
+    public function store(Request $request): View
     {
         //
 
@@ -41,7 +39,7 @@ class ApplicationController extends Controller
             'api_token' => 'required|unique:applications,api_token',
         ]);
 
-        $application = Application::create($request->all());
+        $application = (new Application)->create($request->all());
 
         return view('admin.applications.edit', compact('application'));
     }
@@ -51,7 +49,7 @@ class ApplicationController extends Controller
      *
      * @return View
      */
-    public function create()
+    public function create(): View
     {
         //
 
@@ -65,7 +63,7 @@ class ApplicationController extends Controller
      *
      * @return RedirectResponse
      */
-    public function show(Application $application)
+    public function show(Application $application): RedirectResponse
     {
         //
 
@@ -79,7 +77,7 @@ class ApplicationController extends Controller
      *
      * @return View
      */
-    public function edit(Application $application)
+    public function edit(Application $application): View
     {
         //
 
@@ -94,7 +92,7 @@ class ApplicationController extends Controller
      *
      * @return RedirectResponse
      */
-    public function update(Request $request, Application $application)
+    public function update(Request $request, Application $application): RedirectResponse
     {
         //
 
@@ -116,7 +114,7 @@ class ApplicationController extends Controller
      *
      * @return RedirectResponse
      */
-    public function destroy(Application $application)
+    public function destroy(Application $application): RedirectResponse
     {
         //
 

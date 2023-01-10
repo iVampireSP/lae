@@ -32,14 +32,14 @@ class DeleteHostJob implements ShouldQueue
     public function handle(): void
     {
         // 查找暂停时间超过 3 天的 host
-        Host::where('status', 'suspended')->where('suspended_at', '<', now()->subDays(3))->chunk(100, function ($hosts) {
+        (new Host)->where('status', 'suspended')->where('suspended_at', '<', now()->subDays(3))->chunk(100, function ($hosts) {
             foreach ($hosts as $host) {
                 dispatch(new Module\HostJob($host, 'delete'));
             }
         });
 
         // 查找部署时间超过3天以上的 host
-        Host::where('status', 'pending')->where('created_at', '<', now()->subDays(3))->chunk(100, function ($hosts) {
+        (new Host)->where('status', 'pending')->where('created_at', '<', now()->subDays(3))->chunk(100, function ($hosts) {
             foreach ($hosts as $host) {
                 dispatch(new Module\HostJob($host, 'delete'));
             }

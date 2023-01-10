@@ -18,7 +18,7 @@ class AdminController extends Controller
      */
     public function index(): View
     {
-        $admins = Admin::paginate(50);
+        $admins = (new Admin)->paginate(50);
 
         return view('admin.admins.index', compact('admins'));
     }
@@ -40,7 +40,7 @@ class AdminController extends Controller
         // 随机密码
         $password = Str::random();
 
-        $admin = Admin::create([
+        $admin = (new Admin)->create([
             'email' => $request->input('email'),
             'password' => bcrypt($password),
         ]);
@@ -121,7 +121,7 @@ class AdminController extends Controller
         }
 
         // 不能删除最后一个管理员
-        if (Admin::count() == 1) {
+        if ((new Admin)->count() == 1) {
             return redirect()->back()->with('error', '不能删除最后一个管理员。');
         }
 

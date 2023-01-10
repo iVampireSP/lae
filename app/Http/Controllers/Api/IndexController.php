@@ -20,7 +20,7 @@ class IndexController extends Controller
 
     public function birthdays(): JsonResponse
     {
-        $users = User::birthday()->simplePaginate(20);
+        $users = (new User)->birthday()->simplePaginate(20);
 
         return $this->success($users);
     }

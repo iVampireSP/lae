@@ -2,14 +2,12 @@
 
 namespace App\View\Components;
 
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
 class HostStatus extends Component
 {
-    public $status = null;
+    public string|null $status = null;
 
     /**
      * Create a new component instance.
@@ -26,9 +24,9 @@ class HostStatus extends Component
     /**
      * Get the view / contents that represent the component.
      *
-     * @return Application|Factory|View
+     * @return View
      */
-    public function render()
+    public function render(): View
     {
         return view('components.host-status', ['status' => $this->status]);
     }

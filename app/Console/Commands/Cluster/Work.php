@@ -47,22 +47,22 @@ class Work extends Command
 
             $version = config('settings.roadrunner.version');
 
-            $download_link = "https://github.sakurapuare.com/roadrunner-server/roadrunner/releases/download/v{$version}/roadrunner-{$version}-{$os}-{$arch}.tar.gz";
+            $download_link = "https://github.sakurapuare.com/roadrunner-server/roadrunner/releases/download/v$version/roadrunner-$version-$os-$arch.tar.gz";
 
             $save_name = 'rr_download.tar.gz';
 
             // 下载（wget）
-            exec("wget {$download_link} -O {$save_name}");
-            exec("tar -zxvf {$save_name}");
+            exec("wget $download_link -O $save_name");
+            exec("tar -zxvf $save_name");
 
             // 删除下载的压缩包
-            exec("rm {$save_name}");
+            exec("rm $save_name");
 
             // 提取解压目录下的 rr 文件
-            exec("mv roadrunner-{$version}-{$os}-$arch/rr rr");
+            exec("mv roadrunner-$version-$os-$arch/rr rr");
 
             // 删除解压目录
-            exec("rm -rf roadrunner-{$version}-{$os}-$arch");
+            exec("rm -rf roadrunner-$version-$os-$arch");
 
             // 设置 rr 可执行权限
             exec("chmod +x rr");
@@ -236,7 +236,7 @@ class Work extends Command
         ];
 
         if (isset($events[$event])) {
-            $this->warn("正在处理 {$event} 事件。");
+            $this->warn("正在处理 $event 事件。");
             $events[$event]($message);
         }
     }

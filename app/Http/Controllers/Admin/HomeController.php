@@ -6,17 +6,18 @@ use App\Http\Controllers\Controller;
 use App\Models\Module;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class HomeController extends Controller
 {
-    public function index()
+    public function index(): View
     {
-        $modules = Module::paginate(10);
+        $modules = (new Module)->paginate(10);
 
         return view('admin.index', compact('modules'));
     }
 
-    public function transactions(Request $request)
+    public function transactions(Request $request): View
     {
         $transactions = new Transaction();
 

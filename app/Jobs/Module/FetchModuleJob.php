@@ -43,7 +43,7 @@ class FetchModuleJob implements ShouldQueue
         // }
 
         //
-        Module::whereNotNull('url')->chunk(100, function ($modules) {
+        (new Module)->whereNotNull('url')->chunk(100, function ($modules) {
             $servers = [];
 
             foreach ($modules as $module) {

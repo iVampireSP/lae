@@ -84,7 +84,7 @@ class Upload extends Command
 
     public function upload($node_type)
     {
-        $this->warn("正在上传 {$node_type}  文件。");
+        $this->warn("正在上传 $node_type  文件。");
         $this->info('正在打包 config 目录。');
 
         if ($node_type === 'master') {

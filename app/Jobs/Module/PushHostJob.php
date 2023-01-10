@@ -32,7 +32,7 @@ class PushHostJob implements ShouldQueue
     public function handle(): void
     {
         //
-        Host::whereIn('status', ['pending', 'error'])->with(['module', 'user'])->chunk(100, function ($hosts) {
+        (new Host)->whereIn('status', ['pending', 'error'])->with(['module', 'user'])->chunk(100, function ($hosts) {
             foreach ($hosts as $host) {
                 $host->status = 'running';
 

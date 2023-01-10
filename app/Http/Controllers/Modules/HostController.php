@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers\Controller;
 use App\Models\Host;
+// use App\Models\User;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Http\JsonResponse;
@@ -22,7 +23,7 @@ class HostController extends Controller
      */
     public function index(Request $request): Paginator
     {
-        return Host::where('module_id', $request->user('module')->id)->simplePaginate(100);
+        return (new Host)->where('module_id', $request->user('module')->id)->simplePaginate(100);
     }
 
     /**
@@ -42,9 +43,9 @@ class HostController extends Controller
             'user_id' => 'required|integer|exists:users,id',
         ]);
 
-        $user = User::findOrFail($request->user_id);
+        $user = (new User)->findOrFail($request->input('user_id'));
 
-        if ($request->price > 0) {
+        if ($request->input('price') > 0) {
             if ($user->balance < 1) {
                 return $this->error('此用户余额不足，无法开设计费项目。');
             }
@@ -55,14 +56,14 @@ class HostController extends Controller
 
         $data = [
             'name' => $name,
-            'status' => $request->status,
-            'price' => $request->price,
-            'managed_price' => $request->managed_price,
+            'status' => $request->input('status'),
+            'price' => $request->input('price'),
+            'managed_price' => $request->input('managed_price'),
             'user_id' => $user->id,
             'module_id' => auth('module')->id()
         ];
 
-        $host = Host::create($data);
+        $host = (new Host)->create($data);
 
         $host['host_id'] = $host->id;
 
@@ -105,7 +106,7 @@ class HostController extends Controller
             'cost_once' => 'sometimes|numeric|nullable',
         ]);
 
-        // if has cost_once
+        // if it has cost_once
         if ($request->has('cost_once')) {
             $host->cost($request->cost_once ?? 0, false);
 
@@ -130,7 +131,7 @@ class HostController extends Controller
     {
         // if host not instance of HostJob
         if (!$host instanceof Host) {
-            $host = Host::findOrFail($host);
+            $host = (new Host)->findOrFail($host);
         }
 
         $host?->delete();

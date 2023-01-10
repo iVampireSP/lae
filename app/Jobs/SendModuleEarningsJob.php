@@ -24,7 +24,7 @@ class SendModuleEarningsJob extends Job
      */
     public function handle(): void
     {
-        Module::chunk(100, function ($modules) {
+        (new Module)->chunk(100, function ($modules) {
             foreach ($modules as $module) {
                 (new ModuleEarnings($module))
                     ->toGroup($module->calculate());

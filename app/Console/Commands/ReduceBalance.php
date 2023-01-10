@@ -37,7 +37,7 @@ class ReduceBalance extends Command
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         //
 
@@ -46,7 +46,7 @@ class ReduceBalance extends Command
         $amount = $this->argument('amount');
 
 
-        $user = User::find($user_id);
+        $user = (new User)->find($user_id);
 
         $this->warn('扣除金额: ' . $amount . ' 元');
 

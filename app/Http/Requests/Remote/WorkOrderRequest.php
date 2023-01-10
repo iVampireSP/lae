@@ -23,7 +23,7 @@ class WorkOrderRequest extends FormRequest
             $work_order_id = $work_order;
         }
 
-        return WorkOrder::where('id', $work_order_id)->where('module_id', auth('module')->id())->exists();
+        return (new WorkOrder)->where('id', $work_order_id)->where('module_id', auth('module')->id())->exists();
     }
 
     /**

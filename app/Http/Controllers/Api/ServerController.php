@@ -4,12 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Support\Cluster;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
 class ServerController extends Controller
 {
-    public function module_reports(Request $request)
+    public function module_reports(Request $request): JsonResponse
     {
         $servers = Cache::get('servers', []);
 
@@ -23,7 +24,7 @@ class ServerController extends Controller
         return $this->success($servers);
     }
 
-    public function nodes()
+    public function nodes(): JsonResponse
     {
         $nodes = Cluster::nodes(true);
 

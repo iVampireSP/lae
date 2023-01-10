@@ -24,6 +24,6 @@ class AutoCloseWorkOrderJob extends Job
     public function handle(): void
     {
         // close work order after 1 day
-        WorkOrder::where('updated_at', '<=', now()->subDay())->update(['status' => 'closed']);
+        (new WorkOrder)->where('updated_at', '<=', now()->subDay())->update(['status' => 'closed']);
     }
 }

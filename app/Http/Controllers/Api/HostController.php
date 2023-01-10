@@ -16,7 +16,7 @@ class HostController extends Controller
 {
     public function index(): JsonResponse
     {
-        $hosts = Host::where('user_id', auth()->id())->with('module', function ($query) {
+        $hosts = (new Host)->where('user_id', auth()->id())->with('module', function ($query) {
             $query->select(['id', 'name']);
         })->get();
 
@@ -37,7 +37,7 @@ class HostController extends Controller
         }
 
         $host->update([
-            'status' => $request->status,
+            'status' => $request->input('status'),
         ]);
 
         return $this->updated($host);

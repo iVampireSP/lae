@@ -8,15 +8,11 @@ use App\Models\Host;
 use App\Models\Module;
 use App\Models\User;
 use App\Notifications\WorkOrder as WorkOrderNotification;
-use Eloquent;
-use GeneaLabs\LaravelModelCaching\CachedBuilder;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 class WorkOrder extends Model
@@ -38,6 +34,13 @@ class WorkOrder extends Model
     protected $casts = [
         'notify' => 'boolean'
     ];
+
+    public function routeNotificationForMail(WorkOrderNotification $work_order): array
+    {
+        $user = $work_order->user;
+
+        return [$user->email => $user->name];
+    }
 
     protected static function boot()
     {

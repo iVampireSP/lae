@@ -2,12 +2,11 @@
 
 namespace App\Models;
 
-use App\Exceptions\ChargeException;
 use App\Exceptions\User\BalanceNotEnoughException;
 use Carbon\Carbon;
-use Illuminate\Contracts\Cache\LockTimeoutException;
+use Illuminate\Database\Eloquent\HigherOrderBuilderProxy;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\HigherOrderCollectionProxy;
 use Jenssegers\Mongodb\Eloquent\Model;
 
 class Transaction extends Model
@@ -68,7 +67,7 @@ class Transaction extends Model
 
             $lock->block(5);
 
-            $user = User::findOrFail($user_id);
+            $user = (new User)->findOrFail($user_id);
 
             $user->balance -= $amount;
             $user->save();
@@ -100,7 +99,7 @@ class Transaction extends Model
 
     private function addLog($user_id, $data)
     {
-        $user = User::find($user_id);
+        $user = (new User)->find($user_id);
 
         $current = [
             'balance' => (float)$user->balance,
@@ -113,9 +112,13 @@ class Transaction extends Model
         // add expired at
         $data['expired_at'] = now()->addSeconds(7);
 
+        /** @noinspection PhpUndefinedMethodInspection */
         return $this->create($data);
     }
 
+    /**
+     * @throws BalanceNotEnoughException
+     */
     public function reduceAmountModuleFail($user_id, $module_id, $amount = 0, $description = '扣除费用请求。')
     {
 
@@ -124,7 +127,7 @@ class Transaction extends Model
 
             $lock->block(5);
 
-            $user = User::findOrFail($user_id);
+            $user = (new User)->findOrFail($user_id);
 
             $user->balance -= $amount;
 
@@ -151,7 +154,7 @@ class Transaction extends Model
 
             $lock->block(5);
 
-            $user = User::findOrFail($user_id);
+            $user = (new User)->findOrFail($user_id);
 
             $user->balance -= $amount;
             $user->save();
@@ -180,16 +183,22 @@ class Transaction extends Model
     }
 
     /**
-     * @throws ChargeException
+     * @param        $user_id
+     * @param string $payment
+     * @param int    $amount
+     * @param null   $description
+     * @param bool   $add_charge_log
+     *
+     * @return float|HigherOrderBuilderProxy|HigherOrderCollectionProxy|int|mixed|string
      */
-    public function addAmount($user_id, $payment = 'console', $amount = 0, $description = null, $add_charge_log = false)
+    public function addAmount($user_id, string $payment = 'console', int $amount = 0, $description = null, bool $add_charge_log = false): mixed
     {
         $lock = Cache::lock("user_balance_lock_" . $user_id, 10);
         try {
 
             $lock->block(5);
 
-            $user = User::findOrFail($user_id);
+            $user = (new User)->findOrFail($user_id);
 
             $left_balance = $user->balance + $amount;
 
@@ -207,13 +216,10 @@ class Transaction extends Model
                     'paid_at' => Carbon::now(),
                 ];
 
-                Balance::create($data);
+                (new Balance)->create($data);
             }
 
             $this->addIncomeBalance($user_id, $payment, $amount, $description);
-        } catch (LockTimeoutException $e) {
-            Log::error($e);
-            throw new ChargeException('充值失败，请稍后再试。');
         } finally {
             optional($lock)->release();
         }
@@ -253,11 +259,11 @@ class Transaction extends Model
                 $description = '完成。';
             }
 
-            $description_new = "转账给 {$to->name}({$to->email}) {$amount} 元，{$description}";
+            $description_new = "转账给 $to->name($to->email) $amount 元，$description";
 
             $this->addPayoutBalance($user->id, $amount, $description_new);
 
-            $description_new = "收到来自 {$user->name}($user->email) 转来的 {$amount} 元， $description";
+            $description_new = "收到来自 $user->name($user->email) 转来的 $amount 元， $description";
 
             $this->addIncomeBalance($to->id, 'transfer', $amount, $description_new);
         } finally {

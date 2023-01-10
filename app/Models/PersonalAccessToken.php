@@ -2,11 +2,7 @@
 
 namespace App\Models;
 
-use Eloquent;
-use GeneaLabs\LaravelModelCaching\CachedBuilder;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Carbon;
 use Laravel\Sanctum\PersonalAccessToken as SanctumPersonalAccessToken;
 
 class PersonalAccessToken extends SanctumPersonalAccessToken
@@ -24,7 +20,7 @@ class PersonalAccessToken extends SanctumPersonalAccessToken
      *
      * @return bool
      */
-    public function save(array $options = [])
+    public function save(array $options = []): bool
     {
         $changes = $this->getDirty();
         // Check for 2 changed values because one is always the updated_at column

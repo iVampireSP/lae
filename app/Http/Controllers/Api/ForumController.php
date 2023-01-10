@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Closure;
 use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use function config;
@@ -21,7 +22,7 @@ class ForumController extends Controller
         $this->http = Http::baseUrl($this->baseUrl . '/api')->throw();
     }
 
-    public function announcements()
+    public function announcements(): JsonResponse
     {
         $resp = $this->cache(function () {
             return $this->get('discussions?filter[tag]=announcements&page[offset]=0&sort=-createdAt');
@@ -45,14 +46,14 @@ class ForumController extends Controller
         return $this->http->get($url)->json()['data'];
     }
 
-    public function resp($data)
+    public function resp($data): JsonResponse
     {
         $data['base_url'] = $this->baseUrl;
 
         return $this->success($data);
     }
 
-    public function pinned()
+    public function pinned(): JsonResponse
     {
         $resp = $this->cache(function () {
             return $this->get('discussions?filter[tag]=pinned&page[offset]=0&sort=-createdAt');

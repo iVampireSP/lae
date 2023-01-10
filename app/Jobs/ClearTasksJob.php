@@ -32,6 +32,6 @@ class ClearTasksJob implements ShouldQueue
     public function handle(): void
     {
         // 删除所有大于 1 天的任务
-        Task::where('created_at', '<', now()->subDay())->delete();
+        (new Task)->where('created_at', '<', now()->subDay())->delete();
     }
 }

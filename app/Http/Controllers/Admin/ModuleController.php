@@ -54,11 +54,11 @@ class ModuleController extends Controller
 
         $module = new Module();
 
-        $module->id = $request->id;
-        $module->name = $request->name;
+        $module->id = $request->input('id');
+        $module->name = $request->input('name');
         $module->api_token = $api_token;
-        $module->url = $request->url;
-        $module->status = $request->status;
+        $module->url = $request->input('url');
+        $module->status = $request->input('status');
 
         $module->save();
 
@@ -87,7 +87,7 @@ class ModuleController extends Controller
     {
         $years = $module->calculate();
 
-        $hosts = Host::where('module_id', $module->id)->with('user')->latest()->paginate(50);
+        $hosts = (new Host)->where('module_id', $module->id)->with('user')->latest()->paginate(50);
 
         return view('admin.modules.show', compact('module', 'years', 'hosts'));
     }
@@ -154,20 +154,20 @@ class ModuleController extends Controller
         return redirect()->route('admin.modules.index')->with('success', '模块已删除。');
     }
 
-    public function allows(Module $module)
+    public function allows(Module $module): View
     {
-        $allows = ModuleAllow::where('module_id', $module->id)->with('allowed_module')->paginate(50);
+        $allows = (new ModuleAllow)->where('module_id', $module->id)->with('allowed_module')->paginate(50);
 
         return view('admin.modules.allows', compact('module', 'allows'));
     }
 
-    public function allows_store(Request $request, Module $module)
+    public function allows_store(Request $request, Module $module): RedirectResponse
     {
         $request->validate([
             'allowed_module_id' => 'required|string|max:255|exists:modules,id',
         ]);
 
-        ModuleAllow::where('module_id', $module->id)->where('allowed_module_id', $request->allow_module_id)->firstOrCreate([
+        (new ModuleAllow)->where('module_id', $module->id)->where('allowed_module_id', $request->input('allow_module_id'))->firstOrCreate([
             'module_id' => $module->id,
             'allowed_module_id' => $request->get('allowed_module_id'),
         ]);
@@ -178,7 +178,7 @@ class ModuleController extends Controller
 
     // fast login
 
-    public function allows_destroy(Module $module, ModuleAllow $allow)
+    public function allows_destroy(Module $module, ModuleAllow $allow): RedirectResponse
     {
         $allow->delete();
 

@@ -2,11 +2,12 @@
 
 namespace App\Jobs;
 
-use App\Exceptions\ChargeException;
 use App\Models\Balance;
 use App\Models\Transaction;
-use Illuminate\Support\Facades\Log;
 use Yansongda\LaravelPay\Facades\Pay;
+use Yansongda\Pay\Exception\ContainerException;
+use Yansongda\Pay\Exception\InvalidParamsException;
+use Yansongda\Pay\Exception\ServiceNotFoundException;
 
 class CheckAndChargeBalanceJob extends Job
 {
@@ -27,7 +28,7 @@ class CheckAndChargeBalanceJob extends Job
      */
     public function handle(): void
     {
-        Balance::where('paid_at', null)->chunk(100, function ($balances) {
+        (new Balance)->where('paid_at', null)->chunk(100, function ($balances) {
             foreach ($balances as $balance) {
                 if (!$this->checkAndCharge($balance, true)) {
                     if (now()->diffInDays($balance->created_at) > 1) {
@@ -37,14 +38,18 @@ class CheckAndChargeBalanceJob extends Job
             }
         });
 
-        Balance::where('paid_at', null)->where('created_at', '<', now()->subDays(2))->delete();
+        (new Balance)->where('paid_at', null)->where('created_at', '<', now()->subDays(2))->delete();
     }
 
     public function checkAndCharge(Balance $balance, $check = false): bool
     {
 
         if ($check) {
-            $alipay = Pay::alipay()->find(['out_trade_no' => $balance->order_id]);
+            try {
+                $alipay = Pay::alipay()->find(['out_trade_no' => $balance->order_id]);
+            } catch (ContainerException|InvalidParamsException|ServiceNotFoundException) {
+                return false;
+            }
 
             if ($alipay->trade_status !== 'TRADE_SUCCESS') {
                 return false;
@@ -55,16 +60,11 @@ class CheckAndChargeBalanceJob extends Job
             return true;
         }
 
-        try {
-            (new Transaction)->addAmount($balance->user_id, 'alipay', $balance->amount);
+        (new Transaction)->addAmount($balance->user_id, 'alipay', $balance->amount);
 
-            $balance->update([
-                'paid_at' => now()
-            ]);
-        } catch (ChargeException $e) {
-            Log::error($e->getMessage());
-            return false;
-        }
+        $balance->update([
+            'paid_at' => now()
+        ]);
 
         return true;
     }

@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use App\Models\Balance;
 use App\Models\Host;
-use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Console\Command;
 
@@ -39,15 +38,15 @@ class GetUser extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         //
         $email_or_id = $this->argument('email_or_id');
 
-        $user = User::where('email', $email_or_id)->orWhere('id', $email_or_id)->orWhere('name', $email_or_id)->first();
+        $user = (new User)->where('email', $email_or_id)->orWhere('id', $email_or_id)->orWhere('name', $email_or_id)->first();
 
 
-        $transaction = new Transaction();
+        // $transaction = new Transaction();
 
         $this->warn('用户基本信息');
 
@@ -58,7 +57,7 @@ class GetUser extends Command
 
         $this->warn('前 10 条充值记录');
 
-        $balances = Balance::where('user_id', $user->id)->whereNotNull('paid_at')->latest()->limit(10)->get();
+        $balances = (new Balance)->where('user_id', $user->id)->whereNotNull('paid_at')->latest()->limit(10)->get();
 
         // 倒序输出
         foreach (array_reverse($balances->toArray()) as $balance) {
@@ -67,7 +66,7 @@ class GetUser extends Command
 
         $this->warn('前 10 个主机');
 
-        $hosts = Host::where('user_id', $user->id)->with('module')->latest()->limit(10)->get();
+        $hosts = (new Host)->where('user_id', $user->id)->with('module')->latest()->limit(10)->get();
 
         // 倒序
         foreach (array_reverse($hosts->toArray()) as $host) {

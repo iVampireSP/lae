@@ -14,9 +14,9 @@ class BalanceController extends Controller
      *
      * @return JsonResponse
      */
-    public function index()
+    public function index(): JsonResponse
     {
-        $balances = Balance::thisUser()->paginate(100);
+        $balances = (new Balance)->thisUser()->paginate(100);
 
         return $this->success($balances);
     }
@@ -28,14 +28,14 @@ class BalanceController extends Controller
      *
      * @return JsonResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $this->validate($request, [
             'amount' => 'required|integer|min:0.1|max:10000',
             'payment' => 'required|in:wechat,alipay',
         ]);
 
-        $balance = Balance::create([
+        $balance = (new Balance)->create([
             'user_id' => auth('sanctum')->id(),
             'amount' => $request->input('amount'),
             'payment' => $request->input('payment'),
@@ -54,7 +54,7 @@ class BalanceController extends Controller
      *
      * @return JsonResponse
      */
-    public function show(Balance $balance)
+    public function show(Balance $balance): JsonResponse
     {
         if ($balance->canPay()) {
 

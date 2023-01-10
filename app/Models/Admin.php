@@ -2,11 +2,8 @@
 
 namespace App\Models;
 
-use Eloquent;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Support\Carbon;
 
 class Admin extends Authenticatable
 {

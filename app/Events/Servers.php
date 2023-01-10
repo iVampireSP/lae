@@ -21,9 +21,4 @@ class Servers extends Event implements ShouldBroadcast
     {
         return new Channel('servers');
     }
-
-    public function broadcastAs()
-    {
-        return 'servers';
-    }
 }

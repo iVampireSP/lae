@@ -6,12 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Module;
 use App\Models\ModuleAllow;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class MqttAuthController extends Controller
 {
     //
 
-    public function authentication(Request $request)
+    public function authentication(Request $request): Response
     {
         //
         $client_id = $request->input('client_id');
@@ -26,7 +27,7 @@ class MqttAuthController extends Controller
         $device_id = $usernames[1] ?? null;
 
 
-        $module = Module::where('id', $module_id)->first();
+        $module = (new Module)->where('id', $module_id)->first();
 
         if (!$module) {
             return $this->ignore();
@@ -63,14 +64,14 @@ class MqttAuthController extends Controller
         }
     }
 
-    private function ignore()
+    private function ignore(): Response
     {
         return response([
             'result' => 'ignore',
         ], 200);
     }
 
-    private function allow()
+    private function allow(): Response
     {
         return response([
             'result' => 'allow',
@@ -78,14 +79,14 @@ class MqttAuthController extends Controller
         ], 200);
     }
 
-    private function deny()
+    private function deny(): Response
     {
         return response([
             'result' => 'deny',
         ], 200);
     }
 
-    public function authorization(Request $request)
+    public function authorization(Request $request): Response
     {
         // 禁止订阅保留的
         if ($request->input('topic') == '$SYS/#') {
@@ -109,7 +110,7 @@ class MqttAuthController extends Controller
         $module_id = $usernames[0] ?? null;
         $device_id = $usernames[1] ?? null;
 
-        $module = Module::where('id', $module_id)->first();
+        $module = (new Module)->where('id', $module_id)->first();
 
         if (!$module) {
             // 不属于我们管理，跳过。
@@ -122,7 +123,7 @@ class MqttAuthController extends Controller
         if ($action == 'publish') {
             if ($topics[0] !== $module_id) {
                 // 但是，在拒绝之前，应该检查一下，是否有允许的模块
-                $allow = ModuleAllow::where('module_id', $topics[0])->where('allowed_module_id', $module_id)->exists();
+                $allow = (new ModuleAllow)->where('module_id', $topics[0])->where('allowed_module_id', $module_id)->exists();
 
                 if (!$allow) {
                     return $this->deny();

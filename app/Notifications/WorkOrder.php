@@ -11,51 +11,52 @@ class WorkOrder extends Notification
 {
     use Queueable;
 
+    public WorkOrderModel $work_order;
+
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(WorkOrderModel $work_order)
     {
-        //
+        $this->work_order = $work_order;
     }
 
     /**
      * Get the notification's delivery channels.
      *
-     * @param mixed $notifiable
      *
      * @return array
      */
-    public function via(mixed $notifiable): array
+    public function via(): array
     {
-        return [WeComChannel::class];
+        return [WeComChannel::class, 'mail'];
     }
 
     /**
      * Get the mail representation of the notification.
      *
-     * @param mixed $notifiable
      *
      * @return MailMessage
      */
-    public function toMail(mixed $notifiable): MailMessage
+    public function toMail(): MailMessage
     {
         return (new MailMessage)
             ->line('The introduction to the notification.')
             ->action('Notification Action', url('/'))
             ->line('Thank you for using our application!');
+
+
     }
 
     /**
      * Get the array representation of the notification.
      *
-     * @param mixed $notifiable
      *
      * @return array
      */
-    public function toArray(mixed $notifiable): array
+    public function toArray(): array
     {
         return [
             //

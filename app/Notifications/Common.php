@@ -28,11 +28,10 @@ class Common extends Notification implements ShouldQueue
     /**
      * Get the notification's delivery channels.
      *
-     * @param mixed $notifiable
      *
      * @return array
      */
-    public function via($notifiable): array
+    public function via(): array
     {
         return ['mail'];
     }
@@ -40,11 +39,10 @@ class Common extends Notification implements ShouldQueue
     /**
      * Get the mail representation of the notification.
      *
-     * @param mixed $notifiable
      *
      * @return MailMessage
      */
-    public function toMail($notifiable): MailMessage
+    public function toMail(): MailMessage
     {
         return (new MailMessage)->subject($this->title)->markdown('mail.common', [
             'title' => $this->title,
@@ -55,11 +53,10 @@ class Common extends Notification implements ShouldQueue
     /**
      * Get the array representation of the notification.
      *
-     * @param mixed $notifiable
      *
      * @return array
      */
-    public function toArray($notifiable): array
+    public function toArray(): array
     {
         return [
             //

@@ -36,13 +36,13 @@ class CalcModule extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         $this->warn('开始计算集成模块收益。');
         $this->warn('当前时间: ' . now());
 
 
-        Module::chunk(100, function ($modules) {
+        (new Module)->chunk(100, function ($modules) {
             foreach ($modules as $module) {
                 $this->warn('模块: ' . $module->name);
                 $years = $module->calculate();
@@ -57,7 +57,7 @@ class CalcModule extends Command
                     foreach ($months as $month => $m) {
                         $total += round($m['balance'], 2);
                         $total_should += round($m['should_balance'], 2);
-                        $this->info("{$module->name} {$year}年 {$month}月 实收: {$total}元 应得: {$total_should} 元");
+                        $this->info("$module->name {$year}年 {$month}月 实收: {$total}元 应得: $total_should 元");
                     }
                 }
             }

@@ -4,6 +4,7 @@ namespace App\Console\Commands\Admin;
 
 use App\Models\Admin;
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Command\Command as CommandAlias;
 
 class All extends Command
 {
@@ -26,7 +27,7 @@ class All extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
 
         $admins = Admin::all();
@@ -38,6 +39,6 @@ class All extends Command
             ];
         })->toArray());
 
-        return Command::SUCCESS;
+        return CommandAlias::SUCCESS;
     }
 }

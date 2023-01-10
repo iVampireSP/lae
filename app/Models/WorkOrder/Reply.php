@@ -6,12 +6,9 @@ use App\Events\Users;
 use App\Exceptions\CommonException;
 use App\Models\Module;
 use App\Models\User;
-use Eloquent;
-use GeneaLabs\LaravelModelCaching\CachedBuilder;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Carbon;
 
 class Reply extends Model
 {

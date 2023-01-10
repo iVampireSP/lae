@@ -17,7 +17,7 @@ class HostRequest extends FormRequest
         $host = $this->route('host');
 
         if (!($host instanceof Host)) {
-            $host = Host::where('id', $host)->first();
+            $host = (new Host)->where('id', $host)->first();
         }
 
         if ($host->user_id ?? 0 == $this->user()->id) {
@@ -33,7 +33,7 @@ class HostRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             //

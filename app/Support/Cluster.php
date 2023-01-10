@@ -26,6 +26,7 @@ class Cluster
 
     public static function publish($event, $data = []): void
     {
+        /** @noinspection PhpUndefinedMethodInspection */
         Redis::publish('cluster_ready', json_encode([
             'event' => $event,
             'node' => [
@@ -59,6 +60,7 @@ class Cluster
 
     public static function hset($key, $value, $data = []): void
     {
+        /** @noinspection PhpUndefinedMethodInspection */
         Redis::hset(self::$prefix . $key, $value, json_encode($data));
     }
 
@@ -95,11 +97,13 @@ class Cluster
 
     public static function get($key, $default = null): string|array|null
     {
+        /** @noinspection PhpUndefinedMethodInspection */
         return Redis::get(self::$prefix . $key, $default);
     }
 
     public static function forget($key): void
     {
+        /** @noinspection PhpUndefinedMethodInspection */
         Redis::forget(self::$prefix . $key);
     }
 
@@ -111,11 +115,13 @@ class Cluster
 
     public static function set($key, $value, $ttl = null): void
     {
+        /** @noinspection PhpUndefinedMethodInspection */
         Redis::set(self::$prefix . $key, $value, $ttl);
     }
 
     public static function hget($key, $hashKey, $default = []): string|array|null
     {
+        /** @noinspection PhpUndefinedMethodInspection */
         $value = Redis::hget(self::$prefix . $key, $hashKey);
 
         return $value ?: $default;
@@ -138,6 +144,7 @@ class Cluster
 
     public static function hgetAll($hashKey, $default = []): array
     {
+        /** @noinspection PhpUndefinedMethodInspection */
         $value = Redis::hgetall(self::$prefix . $hashKey);
 
         return $value ?: $default;

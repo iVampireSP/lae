@@ -17,9 +17,11 @@ class NotificationController extends Controller
     /**
      * Show the form for creating a new resource.
      *
+     * @param Request $request
+     *
      * @return View
      */
-    public function create(Request $request)
+    public function create(Request $request): View
     {
         $modules = Module::all();
 
@@ -35,7 +37,7 @@ class NotificationController extends Controller
         }
 
         if (!empty($request['user_id'])) {
-            $users = User::where('id', $request['user_id']);
+            $users = (new User)->where('id', $request['user_id']);
         } else {
             $users = User::query();
 
@@ -70,7 +72,7 @@ class NotificationController extends Controller
      *
      * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'title' => 'required',

@@ -4,13 +4,10 @@ namespace App\Models;
 
 use App\Events\Users;
 use App\Jobs\Module\HostJob;
-use App\Models\WorkOrder\WorkOrder;
-use GeneaLabs\LaravelModelCaching\CachedBuilder;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo as BelongsToAlias;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 
 class Host extends Model
@@ -104,6 +101,7 @@ class Host extends Model
         });
     }
 
+    /** @noinspection PhpUndefinedMethodInspection */
     public function getUserHosts($user_id = null): array|Collection
     {
         return $this->where('user_id', $user_id)->with('module', function ($query) {

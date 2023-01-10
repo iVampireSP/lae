@@ -37,7 +37,7 @@ class Status extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
 
         $this->warn('===== 运行环境 =====');

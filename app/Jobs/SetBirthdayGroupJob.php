@@ -32,16 +32,16 @@ class SetBirthdayGroupJob implements ShouldQueue
      */
     public function handle(): void
     {
-        $birthday_group = UserGroup::find(config('settings.user_groups.birthday_group_id'));
+        $birthday_group = (new UserGroup)->find(config('settings.user_groups.birthday_group_id'));
 
         if (!$birthday_group) {
             return;
         }
 
         // 先撤销原来的
-        User::where('user_group_id', $birthday_group->id)->update(['user_group_id' => null]);
+        (new User)->where('user_group_id', $birthday_group->id)->update(['user_group_id' => null]);
 
-        User::birthday()->whereNull('user_group_id')->chunk(100, function ($users) use ($birthday_group) {
+        (new User)->birthday()->whereNull('user_group_id')->chunk(100, function ($users) use ($birthday_group) {
             foreach ($users as $user) {
                 $user->user_group_id = $birthday_group->id;
                 $user->save();

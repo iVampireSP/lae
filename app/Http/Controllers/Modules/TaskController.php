@@ -21,7 +21,7 @@ class TaskController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $modules = Task::where('module_id', $request->user('module')->id)->simplePaginate(100);
+        $modules = (new Task)->where('module_id', $request->user('module')->id)->simplePaginate(100);
 
         return $this->success($modules);
     }
@@ -43,7 +43,7 @@ class TaskController extends Controller
             'status' => 'required|in:pending,processing,need_operation,done,success,failed,error,canceled',
         ]);
 
-        $task = Task::create($request->all());
+        $task = (new Task)->create($request->all());
 
         return $this->success($task);
     }

@@ -19,7 +19,7 @@ class ReplyController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $replies = Reply::workOrderId($request->route('work_order'))->simplePaginate(10);
+        $replies = (new Reply)->workOrderId($request->route('work_order'))->simplePaginate(10);
 
         return $this->success($replies);
     }
@@ -36,7 +36,7 @@ class ReplyController extends Controller
             'name' => 'required|string|max:255',
         ]);
 
-        $reply = Reply::create([
+        $reply = (new Reply)->create([
             'content' => $request->input('content'),
             'work_order_id' => $work_order->id,
             'module_id' => $work_order->module_id,

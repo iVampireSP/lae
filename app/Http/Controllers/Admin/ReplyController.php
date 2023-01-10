@@ -19,7 +19,7 @@ class ReplyController extends Controller
      *
      * @return RedirectResponse
      */
-    public function store(Request $request, WorkOrder $work_order)
+    public function store(Request $request, WorkOrder $work_order): RedirectResponse
     {
         $request->validate([
             'content' => 'required|string',
@@ -29,7 +29,7 @@ class ReplyController extends Controller
             return back()->with('error', '工单还未就绪。');
         }
 
-        Reply::create([
+        (new Reply)->create([
             'content' => $request->input('content'),
             'work_order_id' => $work_order->id,
             'name' => auth('admin')->user()->name
@@ -46,7 +46,7 @@ class ReplyController extends Controller
      *
      * @return View
      */
-    public function edit(WorkOrder $work_order, Reply $reply)
+    public function edit(WorkOrder $work_order, Reply $reply): View
     {
         return view('admin.work-orders.reply_edit', compact('reply', 'work_order'));
     }
@@ -60,7 +60,7 @@ class ReplyController extends Controller
      *
      * @return RedirectResponse
      */
-    public function update(Request $request, WorkOrder $work_order, Reply $reply)
+    public function update(Request $request, WorkOrder $work_order, Reply $reply): RedirectResponse
     {
         $request->validate([
             'content' => 'required|string',
@@ -81,7 +81,7 @@ class ReplyController extends Controller
      *
      * @return RedirectResponse
      */
-    public function destroy(WorkOrder $work_order, Reply $reply)
+    public function destroy(WorkOrder $work_order, Reply $reply): RedirectResponse
     {
         $reply->safeDelete();
 

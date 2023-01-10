@@ -36,7 +36,7 @@ class BanUser extends Command
      *
      * @return int
      */
-    public function handle()
+    public function handle(): int
     {
         //
 
@@ -44,7 +44,7 @@ class BanUser extends Command
 
         $reason = $this->argument('reason');
 
-        $user = User::find($user_id);
+        $user = (new User)->find($user_id);
 
         $this->info('封禁: ' . $user->name);
 

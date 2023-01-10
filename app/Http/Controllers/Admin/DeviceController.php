@@ -6,23 +6,25 @@ use App\Exceptions\EmqxSupportException;
 use App\Http\Controllers\Controller;
 use App\Support\EmqxSupport;
 use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class DeviceController extends Controller
 {
     //
 
-    public function index(Request $request)
+    public function index(Request $request): RedirectResponse|View
     {
         $emqx = new EmqxSupport();
 
         try {
             $clients = $emqx->clients([
-                'clientid' => $request->client_id,
-                'username' => $request->username,
-                'page' => $request->page,
+                'clientid' => $request->input('client_id'),
+                'username' => $request->input('username'),
+                'page' => $request->input('page'),
             ]);
-        } catch (EmqxSupportException|ConnectionException $e) {
+        } catch (EmqxSupportException $e) {
             return back()->with('error', $e->getMessage());
         }
 
@@ -41,7 +43,10 @@ class DeviceController extends Controller
     // }
 
 
-    public function destroy($client_id)
+    /**
+     * @throws EmqxSupportException
+     */
+    public function destroy($client_id): RedirectResponse
     {
         $emqx = new EmqxSupport();
 

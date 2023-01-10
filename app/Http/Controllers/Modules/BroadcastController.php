@@ -6,11 +6,12 @@ use App\Events\Users;
 use App\Http\Controllers\Controller;
 use App\Models\Host;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class BroadcastController extends Controller
 {
-    public function broadcast_to_user(Request $request, User $user)
+    public function broadcast_to_user(Request $request, User $user): JsonResponse
     {
         $this->validate($request, $this->rules());
 
@@ -22,14 +23,14 @@ class BroadcastController extends Controller
         return $this->created($request->input('message'));
     }
 
-    private function rules()
+    private function rules(): array
     {
         return [
             'message' => 'required',
         ];
     }
 
-    public function broadcast_to_host(Request $request, Host $host)
+    public function broadcast_to_host(Request $request, Host $host): JsonResponse
     {
         $this->validate($request, $this->rules());
 

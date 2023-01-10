@@ -4,11 +4,8 @@ namespace App\Models;
 
 use App\Events\Users;
 use App\Exceptions\CommonException;
-use Eloquent;
-use GeneaLabs\LaravelModelCaching\CachedBuilder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Ramsey\Uuid\Uuid;
 use function auth;
@@ -68,7 +65,7 @@ class Task extends Model
             broadcast(new Users($model->user_id, 'tasks.created', $model));
         });
 
-        // updateing
+        // updating
         static::updating(function ($model) {
             if ($model->progress == 100) {
                 $model->status = 'done';

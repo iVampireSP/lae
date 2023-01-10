@@ -13,7 +13,7 @@ class HostCostJob implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels, Lock;
 
-    public $minute, $cache, $user;
+    public int $minute;
 
     /**
      * Create a new job instance.

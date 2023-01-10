@@ -31,7 +31,7 @@ class ModuleEarnings extends Notification
      *
      * @return void
      */
-    public function toGroup($notifiable)
+    public function toGroup(mixed $notifiable): void
     {
         $module = $this->module;
 
@@ -39,7 +39,7 @@ class ModuleEarnings extends Notification
         $wecom_key = $module->wecom_key ?? config('settings.wecom.robot_hook.billing');
 
 
-        $text = "# {$module->name} 收益";
+        $text = "# $module->name 收益";
         foreach ($notifiable as $year => $months) {
             // 排序 months 从小到大
             ksort($months);
@@ -55,7 +55,7 @@ class ModuleEarnings extends Notification
 ==========
 {$year}年 {$month}月
 实收: {$total}元
-应得: {$total_should} 元
+应得: $total_should 元
 
 EOF;
             }

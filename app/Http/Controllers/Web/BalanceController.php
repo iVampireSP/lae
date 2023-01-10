@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Exceptions\ChargeException;
 use App\Http\Controllers\Controller;
 use App\Models\Balance;
 use App\Models\Module;
 use App\Models\Transaction;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -22,19 +22,19 @@ class BalanceController extends Controller
     {
         $balance = $request->user()->balance;
 
-        $balances = Balance::thisUser()->latest()->paginate(100);
+        $balances = (new Balance)->thisUser()->latest()->paginate(100);
 
         return view('balances.index', compact('balance', 'balances'));
     }
 
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $this->validate($request, [
             'amount' => 'required|integer|min:0.1|max:10000',
             'payment' => 'required|in:wechat,alipay',
         ]);
 
-        $balance = Balance::create([
+        $balance = (new Balance)->create([
             'user_id' => auth('web')->id(),
             'amount' => $request->input('amount'),
             'payment' => $request->input('payment'),
@@ -46,7 +46,7 @@ class BalanceController extends Controller
     /**
      * 显示充值页面和状态(ajax)
      */
-    public function show(Request $request, Balance $balance)
+    public function show(Request $request, Balance $balance): RedirectResponse|JsonResponse|View
     {
 
         if ($balance->isPaid()) {
@@ -147,7 +147,7 @@ class BalanceController extends Controller
     private
     function xunhu_hash(
         array $arr
-    ) {
+    ): string {
         ksort($arr);
 
         $pre = [];
@@ -193,7 +193,7 @@ class BalanceController extends Controller
         }
 
         // 检测订单是否存在
-        $balance = Balance::where('order_id', $out_trade_no)->with('user')->first();
+        $balance = (new Balance)->where('order_id', $out_trade_no)->with('user')->first();
         if (!$balance) {
             abort(404, '找不到订单。');
         }
@@ -228,16 +228,11 @@ class BalanceController extends Controller
         }
 
         if ($is_paid) {
-            try {
-                (new Transaction)->addAmount($balance->user_id, 'alipay', $balance->amount);
+            (new Transaction)->addAmount($balance->user_id, 'alipay', $balance->amount);
 
-                $balance->update([
-                    'paid_at' => now()
-                ]);
-
-            } catch (ChargeException $e) {
-                abort(500, $e->getMessage());
-            }
+            $balance->update([
+                'paid_at' => now()
+            ]);
         }
 
 
@@ -263,7 +258,7 @@ class BalanceController extends Controller
 
         $modules = Module::all();
 
-        $transactions = Transaction::where('user_id', auth()->id());
+        $transactions = (new Transaction)->where('user_id', auth()->id());
 
         if ($request->has('type')) {
             $transactions = $transactions->where('type', $request->type);

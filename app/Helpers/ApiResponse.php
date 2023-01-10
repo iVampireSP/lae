@@ -122,14 +122,14 @@ trait ApiResponse
 
     public function updated($message = 'Updated'): JsonResponse
     {
-        return $this->success($message, 200);
+        return $this->success($message);
     }
 
     // server error
 
     public function deleted($message = 'Deleted'): JsonResponse
     {
-        return $this->success($message, 200);
+        return $this->success($message);
     }
 
     // service unavailable

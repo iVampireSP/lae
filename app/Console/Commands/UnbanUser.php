@@ -36,13 +36,13 @@ class UnbanUser extends Command
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         //
 
         $user_id = $this->argument('user_id');
 
-        $user = User::find($user_id);
+        $user = (new User)->find($user_id);
 
         $this->info('解除封禁: ' . $user->name);
 

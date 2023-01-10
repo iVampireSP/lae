@@ -25,11 +25,10 @@ class TodayIsUserBirthday extends Notification implements ShouldQueue
     /**
      * Get the notification's delivery channels.
      *
-     * @param mixed $notifiable
      *
      * @return array
      */
-    public function via($notifiable): array
+    public function via(): array
     {
         return ['mail'];
     }
@@ -37,11 +36,10 @@ class TodayIsUserBirthday extends Notification implements ShouldQueue
     /**
      * Get the mail representation of the notification.
      *
-     * @param mixed $notifiable
      *
      * @return MailMessage
      */
-    public function toMail(mixed $notifiable): MailMessage
+    public function toMail(): MailMessage
     {
         $url = URL::format(config('settings.dashboard.base_url'), config('settings.dashboard.birthday_path'));
 
@@ -95,11 +93,10 @@ class TodayIsUserBirthday extends Notification implements ShouldQueue
     /**
      * Get the array representation of the notification.
      *
-     * @param mixed $notifiable
      *
      * @return array
      */
-    public function toArray($notifiable)
+    public function toArray(): array
     {
         return [
             //

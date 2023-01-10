@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Exceptions\ChargeException;
 use App\Http\Controllers\Controller;
 use App\Models\Balance;
 use App\Models\Host;
@@ -68,13 +67,13 @@ class UserController extends Controller
      *
      * @return View
      */
-    public function edit(User $user)
+    public function edit(User $user): View
     {
         //
 
-        $hosts = Host::where('user_id', $user->id)->latest()->paginate(50, ['*'], 'hosts_page');
-        $workOrders = WorkOrder::where('user_id', $user->id)->latest()->paginate(50, ['*'], 'workOrders_page');
-        $balances = Balance::where('user_id', $user->id)->latest()->paginate(50, ['*'], 'balances_page');
+        $hosts = (new Host)->where('user_id', $user->id)->latest()->paginate(50, ['*'], 'hosts_page');
+        $workOrders = (new WorkOrder)->where('user_id', $user->id)->latest()->paginate(50, ['*'], 'workOrders_page');
+        $balances = (new Balance)->where('user_id', $user->id)->latest()->paginate(50, ['*'], 'balances_page');
         $groups = UserGroup::all();
 
         return view('admin.users.edit', compact('user', 'hosts', 'workOrders', 'balances', 'groups'));
@@ -88,7 +87,7 @@ class UserController extends Controller
      *
      * @return RedirectResponse
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, User $user): RedirectResponse
     {
         //
         $request->validate([
@@ -97,11 +96,11 @@ class UserController extends Controller
 
         $transaction = new Transaction();
 
-        if ($request->is_banned) {
+        if ($request->input('is_banned')) {
             $user->banned_at = Carbon::now();
 
             if ($request->filled('banned_reason')) {
-                $user->banned_reason = $request->banned_reason;
+                $user->banned_reason = $request->input('banned_reason');
             }
         } else {
             if ($user->banned_at) {
@@ -119,11 +118,7 @@ class UserController extends Controller
             } else if ($one_time_action == 'stop_all_hosts') {
                 $user->hosts()->update(['status' => 'stopped', 'suspended_at' => null]);
             } else if ($one_time_action == 'add_balance') {
-                try {
-                    $transaction->addAmount($user->id, 'console', $request->balance ?? 0, '管理员添加。', true);
-                } catch (ChargeException $e) {
-                    return back()->with('error', $e->getMessage());
-                }
+                $transaction->addAmount($user->id, 'console', $request->balance ?? 0, '管理员添加。', true);
             } else if ($one_time_action == 'reduce_balance') {
                 $transaction->reduceAmount($user->id, $request->balance ?? 0, '管理员扣除。');
             }

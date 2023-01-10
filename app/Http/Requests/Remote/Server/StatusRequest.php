@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Remote\Server;
 
-use App\Models\Server\Status;
 use Illuminate\Foundation\Http\FormRequest;
 
 class StatusRequest extends FormRequest

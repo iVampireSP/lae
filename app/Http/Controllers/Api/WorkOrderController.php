@@ -20,7 +20,7 @@ class WorkOrderController extends Controller
     /**
      * @throws ValidationException
      */
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $this->validate($request, [
             'title' => 'required|max:255',
@@ -39,7 +39,7 @@ class WorkOrderController extends Controller
             ]);
         }
 
-        $workOrder = WorkOrder::create([
+        $workOrder = (new WorkOrder)->create([
             'title' => $request->input('title'),
             'content' => $request->input('content'),
             'module_id' => $request->input('module_id'),
@@ -60,7 +60,7 @@ class WorkOrderController extends Controller
     /**
      * @throws ValidationException
      */
-    public function update(Request $request, WorkOrder $workOrder)
+    public function update(Request $request, WorkOrder $workOrder): JsonResponse
     {
         $this->validate($request, [
             'status' => 'nullable|sometimes|string|in:closed',

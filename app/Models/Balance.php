@@ -2,12 +2,9 @@
 
 namespace App\Models;
 
-use Eloquent;
-use GeneaLabs\LaravelModelCaching\CachedBuilder;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo as BelongsToAlias;
-use Illuminate\Support\Carbon;
 use function auth;
 
 class Balance extends Model

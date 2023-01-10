@@ -7,11 +7,12 @@ use App\Http\Controllers\Controller;
 use App\Models\Host;
 use App\Models\Transaction;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         $this->validate($request, [
             'user_id' => 'sometimes|integer',
@@ -40,19 +41,19 @@ class UserController extends Controller
         return $this->success($users);
     }
 
-    public function show(User $user)
+    public function show(User $user): JsonResponse
     {
         return $this->success($user);
     }
 
-    public function hosts(User $user)
+    public function hosts(User $user): JsonResponse
     {
         $hosts = (new Host())->getUserHosts($user->id);
 
         return $this->success($hosts);
     }
 
-    public function reduce(Request $request, User $user)
+    public function reduce(Request $request, User $user): JsonResponse
     {
         $this->validate($request, [
             'amount' => 'required|numeric|min:0.01|max:10000',
@@ -63,7 +64,7 @@ class UserController extends Controller
         $transaction = new Transaction();
 
         try {
-            $transaction->reduceAmountModuleFail($user->id, $module->id, $request->amount, $request->description);
+            $transaction->reduceAmountModuleFail($user->id, $module->id, $request->input('amount'), $request->input('description'));
         } catch (BalanceNotEnoughException) {
             return $this->error('余额不足');
         }

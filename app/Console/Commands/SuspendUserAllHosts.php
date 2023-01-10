@@ -36,13 +36,13 @@ class SuspendUserAllHosts extends Command
      *
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         //
 
         $user_id = $this->argument('user_id');
 
-        Host::where('user_id', $user_id)->update([
+        (new Host)->where('user_id', $user_id)->update([
             'status' => 'suspended',
             'suspended_at' => now()
         ]);

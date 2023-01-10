@@ -2,7 +2,7 @@
 
 namespace App\Jobs\Module;
 
-use App\Models\WorkOrder\Reply;
+use App\Jobs\Module\WorkOrder\Reply;
 use App\Models\WorkOrder\WorkOrder;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -34,7 +34,7 @@ class PushWorkOrderJob implements ShouldQueue
     public function handle(): void
     {
         //
-        WorkOrder::whereIn('status', ['pending', 'error'])->with(['module', 'user', 'host', 'replies'])->chunk(100, function ($workOrders) {
+        (new WorkOrder)->whereIn('status', ['pending', 'error'])->with(['module', 'user', 'host', 'replies'])->chunk(100, function ($workOrders) {
             foreach ($workOrders as $workOrder) {
 
                 if ($workOrder->host) {
@@ -69,9 +69,9 @@ class PushWorkOrderJob implements ShouldQueue
             }
         });
 
-        Reply::where('is_pending', 1)->chunk(100, function ($replies) {
+        (new \App\Models\WorkOrder\Reply)->where('is_pending', 1)->chunk(100, function ($replies) {
             foreach ($replies as $reply) {
-                dispatch(new \App\Jobs\Module\WorkOrder\Reply($reply));
+                dispatch(new Reply($reply));
             }
         });
 

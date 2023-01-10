@@ -2,21 +2,19 @@
 
 namespace App\View\Components;
 
-use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
 class Payment extends Component
 {
-    public $payment = null;
+    public string $payment = '';
 
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($payment)
+    public function __construct(string $payment)
     {
         //
         $this->payment = $payment;
@@ -25,9 +23,9 @@ class Payment extends Component
     /**
      * Get the view / contents that represent the component.
      *
-     * @return Application|Factory|View
+     * @return View
      */
-    public function render()
+    public function render(): View
     {
 
         $this->payment = match ($this->payment) {

@@ -46,7 +46,7 @@ class Create extends Command
         }
 
         // 创建管理员
-        $admin = Admin::create([
+        $admin = (new Admin)->create([
             'email' => $email,
             'password' => bcrypt($password)
         ]);

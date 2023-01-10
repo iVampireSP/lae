@@ -14,11 +14,13 @@ class ReplyController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param WorkOrder $workOrder
+     *
      * @return JsonResponse
      */
-    public function index(WorkOrder $workOrder)
+    public function index(WorkOrder $workOrder): JsonResponse
     {
-        $replies = Reply::workOrderId($workOrder->id)->with('module')->withUser()->simplePaginate(20);
+        $replies = (new Reply)->workOrderId($workOrder->id)->with('module')->withUser()->simplePaginate(20);
 
         return $this->success($replies);
     }
@@ -31,7 +33,7 @@ class ReplyController extends Controller
      *
      * @return JsonResponse
      */
-    public function store(Request $request, WorkOrder $workOrder)
+    public function store(Request $request, WorkOrder $workOrder): JsonResponse
     {
         $this->validate($request, [
             'content' => 'string|required|min:1|max:1000',
@@ -61,7 +63,7 @@ class ReplyController extends Controller
             $create['name'] = $request->input('name');
         }
 
-        $reply = Reply::create($create);
+        $reply = (new Reply)->create($create);
 
         return $this->success($reply);
     }

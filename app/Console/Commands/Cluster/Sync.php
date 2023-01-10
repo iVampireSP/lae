@@ -81,7 +81,7 @@ class Sync extends Command
             $cache_path = base_path('config');
 
             // exec
-            $cmd = "rm -rf {$cache_path}";
+            $cmd = "rm -rf $cache_path";
             exec($cmd);
 
 
@@ -118,7 +118,7 @@ class Sync extends Command
                     $env = file_get_contents(base_path('.env'));
 
                     // REPLACE NODE_IP 这一行
-                    $env = preg_replace('/^NODE_IP=.*$/m', "NODE_IP={$node_ip}", $env);
+                    $env = preg_replace('/^NODE_IP=.*$/m', "NODE_IP=$node_ip", $env);
 
                     file_put_contents(base_path('.env'), $env);
 

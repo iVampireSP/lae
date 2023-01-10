@@ -37,7 +37,7 @@ class RollbackUserTempGroupJob implements ShouldQueue
 
         foreach ($temp_groups as $user_id => $temp_group) {
             if (now()->gt($temp_group['expired_at'])) {
-                $user = User::find($user_id);
+                $user = (new User)->find($user_id);
                 $user->user_group_id = $temp_group['user_group_id'];
                 $user->save();
                 unset($temp_groups[$user_id]);

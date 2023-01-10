@@ -3,11 +3,15 @@
 namespace App\Support;
 
 use App\Exceptions\EmqxSupportException;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
 
 class EmqxSupport
 {
+    /**
+     * @throws EmqxSupportException
+     */
     public function kickClient($client_id = null, $username = null): void
     {
         // 如果都为空，直接返回
@@ -20,7 +24,11 @@ class EmqxSupport
         }
 
         if ($username) {
-            $clients = $this->clients(['username' => $username]);
+            try {
+                $clients = $this->clients(['username' => $username]);
+            } catch (EmqxSupportException $e) {
+                throw new EmqxSupportException($e->getMessage());
+            }
 
             if ($clients) {
                 // 循环翻页
@@ -51,7 +59,11 @@ class EmqxSupport
             'isTrusted' => true,
         ], $params);
 
-        $response = $this->api()->get('clients', $params);
+        try {
+            $response = $this->api()->get('clients', $params);
+        } catch (ConnectionException $e) {
+            throw new EmqxSupportException('EMQX API 无法连接。');
+        }
 
         if ($response->successful()) {
             return $response->json();
