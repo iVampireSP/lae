@@ -78,6 +78,6 @@ class User extends Authenticatable
     {
         /** @noinspection PhpUndefinedMethodInspection */
         return $this->select(['id', 'name', 'birthday_at', 'email_md5', 'created_at'])->whereMonth('birthday_at', now()->month)
-            ->whereDay('birthday_at', now()->day);
+            ->whereDay('birthday_at', now()->day)->whereNull('banned_at');
     }
 }
