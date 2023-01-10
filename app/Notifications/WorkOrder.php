@@ -31,7 +31,7 @@ class WorkOrder extends Notification
      */
     public function via(): array
     {
-        return [WeComChannel::class, 'mail'];
+        return [WeComChannel::class];
     }
 
     /**
