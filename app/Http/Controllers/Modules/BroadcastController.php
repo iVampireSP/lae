@@ -25,7 +25,7 @@ class BroadcastController extends Controller
         return [
             'message' => 'required|string|max:255',
             'type' => 'required|in:info,error,warning,success',
-            'data' => 'nullable|json',
+            'data' => 'nullable|array',
         ];
     }
 
