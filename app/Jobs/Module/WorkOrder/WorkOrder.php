@@ -2,7 +2,7 @@
 
 namespace App\Jobs\Module\WorkOrder;
 
-use App\Events\UserEvent;
+use App\Events\Users;
 use App\Models\WorkOrder\WorkOrder as WorkOrderModel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -57,9 +57,9 @@ class WorkOrder implements ShouldQueue
 
         } else {
             if ($this->type == 'delete') {
-                broadcast(new UserEvent($this->workOrder->user_id, 'work-order.deleted', $this->workOrder));
+                broadcast(new Users($this->workOrder->user, 'work-order.deleted', $this->workOrder));
             } else {
-                broadcast(new UserEvent($this->workOrder->user_id, 'work-order.updated', $this->workOrder));
+                broadcast(new Users($this->workOrder->user, 'work-order.updated', $this->workOrder));
             }
         }
 
