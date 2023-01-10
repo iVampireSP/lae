@@ -11,5 +11,3 @@
 ##### 余额 {{ $user->balance }} 元
 
 # {{ $workOrder->id }}#{{ $workOrder->title }}
-
-{{ $reply->content }}

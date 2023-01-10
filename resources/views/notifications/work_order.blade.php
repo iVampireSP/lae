@@ -2,7 +2,7 @@
     $title = '';
 @endphp
 
-@switch ($workOrder->status)
+@switch ($data->status)
     @case('pending')
     @php
         $title = '工单挂起';
@@ -17,7 +17,7 @@
 
     @case('user_replied')
     @php
-        $title = '工单挂起';
+        $title = '用户已回复';
     @endphp
     @break
 
@@ -58,14 +58,14 @@
     @break
 @endswitch
 
-## {{ $title }}
+# 标题: {{ $title }}
 
-# {{ $module->name }}
+# 模块: {{ $data->module->name }}
 
-## 客户 {{ $user->name }}
-##### 邮箱 {{ $user->email }}
-##### 余额 {{ $user->balance }} 元
+## 客户 {{ $data->user->name }}
+##### 邮箱 {{ $data->user->email }}
+##### 余额 {{ $data->user->balance }} 元
 
-# {{ $workOrder->id }}#{{ $workOrder->title }}
+# {{ $data->id }}#{{ $data->title }}
 
-{{ $workOrder->content }}
+{{ $data->content }}
