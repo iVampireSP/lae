@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Modules;
 
-use App\Events\UserEvent;
+use App\Events\Users;
 use App\Http\Controllers\Controller;
 use App\Models\Host;
 use App\Models\User;
@@ -14,12 +14,12 @@ class BroadcastController extends Controller
     {
         $this->validate($request, $this->rules());
 
-        broadcast(new UserEvent($user->id, 'modules.users.event', [
+        broadcast(new Users($user->id, 'modules.users.event', [
             'user' => $user,
-            'message' => $request->message
+            'message' => $request->input('message')
         ]));
 
-        return $this->created($request->message);
+        return $this->created($request->input('message'));
     }
 
     private function rules()
@@ -33,11 +33,11 @@ class BroadcastController extends Controller
     {
         $this->validate($request, $this->rules());
 
-        broadcast(new UserEvent($host->user_id, 'modules.hosts.event', [
+        broadcast(new Users($host->user, 'modules.hosts.event', [
             'host' => $host,
-            'message' => $request->message
+            'message' => $request->input('message')
         ]));
 
-        return $this->created($request->message);
+        return $this->created($request->input('message'));
     }
 }
