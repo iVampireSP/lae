@@ -15,15 +15,8 @@ class BroadcastController extends Controller
     {
         $this->validate($request, $this->rules());
 
-        $type = 'modules.users.event';
 
-        if ($request->filled('type')) {
-            $type .= '.' . $request->input('type');
-        } else {
-            $type .= '.message';
-        }
-
-        broadcast(new Users($user, $type, $request->all()));
+        broadcast(new Users($user, $request->filled('type'), $request->all()));
 
         return $this->created($request);
     }
@@ -32,18 +25,19 @@ class BroadcastController extends Controller
     {
         return [
             'message' => 'required',
+            'type' => 'required|in:info,error,warning,success'
         ];
     }
 
-    public function broadcast_to_host(Request $request, Host $host): JsonResponse
-    {
-        $this->validate($request, $this->rules());
-
-        broadcast(new Users($host->user, 'modules.hosts.event', [
-            'host' => $host,
-            'message' => $request->input('message')
-        ]));
-
-        return $this->created($request->input('message'));
-    }
+    // public function broadcast_to_host(Request $request, Host $host): JsonResponse
+    // {
+    //     $this->validate($request, $this->rules());
+    //
+    //     broadcast(new Users($host->user, 'modules.hosts.event', [
+    //         'host' => $host,
+    //         'message' => $request->input('message')
+    //     ]));
+    //
+    //     return $this->created($request->input('message'));
+    // }
 }
