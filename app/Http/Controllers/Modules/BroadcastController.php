@@ -15,12 +15,20 @@ class BroadcastController extends Controller
     {
         $this->validate($request, $this->rules());
 
-        broadcast(new Users($user->id, 'modules.users.event', [
+        $type = 'modules.users.event';
+
+        if ($request->filled('type')) {
+            $type .= '.' . $request->input('type');
+        } else {
+            $type .= '.message';
+        }
+
+        broadcast(new Users($user, $type, [
             'user' => $user,
             'message' => $request->input('message')
         ]));
 
-        return $this->created($request->input('message'));
+        return $this->created($request);
     }
 
     private function rules(): array
