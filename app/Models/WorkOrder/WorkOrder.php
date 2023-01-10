@@ -152,6 +152,6 @@ class WorkOrder extends Model
 
     public function receivesBroadcastNotificationsOn(): string
     {
-        return new PrivateChannel('users.' . $this->id);
+        return new PrivateChannel('users.' . $this->user_id);
     }
 }

@@ -40,4 +40,9 @@ class Users extends Event implements ShouldBroadcastNow
     {
         return new PrivateChannel('users.' . $this->user->id);
     }
+
+    public function broadcastAs(): string
+    {
+        return 'common';
+    }
 }
