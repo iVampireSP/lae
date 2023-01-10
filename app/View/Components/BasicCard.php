@@ -26,7 +26,7 @@ class BasicCard extends Component
      *
      * @return View
      */
-    public function render() :View
+    public function render(): View
     {
         return view('components.basic-card', [
             'title' => $this->title,

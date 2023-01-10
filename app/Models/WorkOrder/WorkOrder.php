@@ -35,13 +35,6 @@ class WorkOrder extends Model
         'notify' => 'boolean'
     ];
 
-    public function routeNotificationForMail(WorkOrderNotification $work_order): array
-    {
-        $user = $work_order->user;
-
-        return [$user->email => $user->name];
-    }
-
     protected static function boot()
     {
         parent::boot();
@@ -88,6 +81,13 @@ class WorkOrder extends Model
 
             $model->notify(new WorkOrderNotification($model));
         });
+    }
+
+    public function routeNotificationForMail(WorkOrderNotification $work_order): array
+    {
+        $user = $work_order->user;
+
+        return [$user->email => $user->name];
     }
 
     public function scopeThisModule($query)
