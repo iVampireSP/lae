@@ -2,40 +2,32 @@
 
 namespace App\Events;
 
+use App\Models\Module;
+use App\Models\User;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Auth;
 
-class UserEvent extends Event implements ShouldBroadcastNow
+class Users extends Event implements ShouldBroadcastNow
 {
     use SerializesModels;
 
-    public $user_id;
+    public User $user;
     public string $type = 'ping';
-    public $message;
-    public $module;
+    public string|array $message;
+    public null|Module $module;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct($user_id, $type, $message)
+    public function __construct(User $user, $type, $message)
     {
-        //
-        $this->user_id = $user_id;
-
+        $this->user = $user;
         $this->type = $type;
-
-        // if message is model
-        if (is_object($message)) {
-            $this->message = $message->toArray();
-        } else {
-            $this->message = $message;
-        }
-
-        // if (Auth::check()) {
+        $this->message = $message;
 
         if (Auth::guard('module')->check()) {
             $this->module = Auth::guard('module')->user();
@@ -46,11 +38,6 @@ class UserEvent extends Event implements ShouldBroadcastNow
 
     public function broadcastOn(): PrivateChannel
     {
-        return new PrivateChannel('users.' . $this->user_id);
-    }
-
-    public function broadcastAs(): string
-    {
-        return 'user';
+        return new PrivateChannel('users.' . $this->user->id);
     }
 }
