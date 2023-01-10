@@ -54,14 +54,6 @@ class WorkOrder implements ShouldQueue
             $this->workOrder->update([
                 'status' => 'error'
             ]);
-
-        } else {
-            if ($this->type == 'delete') {
-                broadcast(new Users($this->workOrder->user, 'work-order.deleted', $this->workOrder));
-            } else {
-                broadcast(new Users($this->workOrder->user, 'work-order.updated', $this->workOrder));
-            }
         }
-
     }
 }

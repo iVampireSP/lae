@@ -4,7 +4,6 @@ namespace App\Notifications;
 
 use App\Models\WorkOrder\WorkOrder as WorkOrderModel;
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
@@ -28,11 +27,13 @@ class WorkOrder extends Notification
      * Get the notification's delivery channels.
      *
      *
+     * @param WorkOrderModel $workOrder
+     *
      * @return array
      */
     public function via(WorkOrderModel $workOrder): array
     {
-        $methods = [WeComChannel::class, 'broadcast'];
+        $methods = [WeComChannel::class, CommonChannel::class];
 
         if (in_array($workOrder->status, ['processing', 'replied'])) {
             $methods[] = 'mail';
@@ -61,18 +62,21 @@ class WorkOrder extends Notification
      * Get the array representation of the notification.
      *
      *
+     * @param WorkOrderModel $workOrder
+     *
      * @return array
      */
-    public function toArray(): array
+    public function toArray(WorkOrderModel $workOrder): array
     {
-        return [
-            //
-        ];
+        $array = $workOrder->toArray();
+        $array['type'] = 'info';
+        $array['title'] = '工单: ' . $workOrder->title . ' 状态更新。';
+
+        return $array;
     }
 
     public function toWeCom(WorkOrderModel $workOrder): false|array
     {
-
         $workOrder->load(['module', 'user']);
 
         $module = $workOrder->module;
@@ -97,9 +101,9 @@ class WorkOrder extends Notification
         ];
     }
 
-    public function toBroadcast(WorkOrderModel $workOrder): BroadcastMessage
-    {
-        return new BroadcastMessage($workOrder->toArray());
-    }
+    // public function toBroadcast(WorkOrderModel $workOrder): BroadcastMessage
+    // {
+    //     return new BroadcastMessage($workOrder->toArray());
+    // }
 
 }
