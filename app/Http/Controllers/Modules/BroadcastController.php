@@ -15,7 +15,7 @@ class BroadcastController extends Controller
     {
         $this->validate($request, $this->rules());
 
-        broadcast(new Users($user, $request->filled('type'), $request->all()));
+        broadcast(new Users($user, $request->input('type'), $request->all()));
 
         return $this->created("message sent.");
     }
