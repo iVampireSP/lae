@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Events\UserEvent;
+use App\Events\Users;
 use App\Jobs\Module\HostJob;
 use App\Models\WorkOrder\WorkOrder;
 use GeneaLabs\LaravelModelCaching\CachedBuilder;
@@ -113,7 +113,7 @@ class Host extends Model
         });
 
         static::created(function ($model) {
-            broadcast(new UserEvent($model->user_id, 'hosts.created', $model));
+            broadcast(new Users($model->user_id, 'hosts.created', $model));
         });
 
         static::updating(function ($model) {
@@ -133,7 +133,7 @@ class Host extends Model
             //     $model->managed_price = round($model->managed_price, 2);
             // }
 
-            broadcast(new UserEvent($model->user_id, 'hosts.updating', $model));
+            broadcast(new Users($model->user_id, 'hosts.updating', $model));
         });
 
         // when Updated
@@ -143,12 +143,12 @@ class Host extends Model
             Cache::forget('user_hosts_' . $model->user_id);
             Cache::forget('user_tasks_' . $model->user_id);
 
-            broadcast(new UserEvent($model->user_id, 'hosts.updated', $model));
+            broadcast(new Users($model->user_id, 'hosts.updated', $model));
         });
 
         //
         // static::deleting(function ($model) {
-        //     broadcast(new UserEvent($model->user_id, 'hosts.deleting', $model));
+        //     broadcast(new Users($model->user_id, 'hosts.deleting', $model));
         // });
 
         static::deleting(function ($model) {
@@ -156,7 +156,7 @@ class Host extends Model
         });
 
         static::deleted(function ($model) {
-            broadcast(new UserEvent($model->user_id, 'hosts.deleted', $model));
+            broadcast(new Users($model->user_id, 'hosts.deleted', $model));
             Cache::forget('user_tasks_' . $model->user_id);
             Cache::forget('user_hosts_' . $model->user_id);
         });
@@ -298,7 +298,7 @@ class Host extends Model
 
         $this->addLog($real_price);
 
-        broadcast(new UserEvent($this->user_id, 'balances.amount.reduced', $this->user));
+        broadcast(new Users($this->user, 'balances.amount.reduced', $this->user));
 
         if ($left < 0) {
             $this->update([
