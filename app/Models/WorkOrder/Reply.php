@@ -46,6 +46,8 @@ class Reply extends Model
             // change work order status
             if (auth('admin')->check()) {
                 $model->role = 'admin';
+                $model->workOrder->status = 'replied';
+
             } else if (auth('sanctum')->check()) {
                 $model->user_id = auth('sanctum')->id();
                 $model->role = 'user';
