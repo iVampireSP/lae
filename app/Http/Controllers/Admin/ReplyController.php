@@ -25,7 +25,7 @@ class ReplyController extends Controller
             'content' => 'required|string',
         ]);
 
-        if (!$work_order->isOpen()) {
+        if ($work_order->isFailure()) {
             return back()->with('error', '工单还未就绪。');
         }
 

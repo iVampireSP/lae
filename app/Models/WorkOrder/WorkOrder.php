@@ -9,6 +9,7 @@ use App\Models\Module;
 use App\Models\User;
 use App\Notifications\WorkOrder as WorkOrderNotification;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -83,13 +84,6 @@ class WorkOrder extends Model
         });
     }
 
-    public function routeNotificationForMail(WorkOrderNotification $work_order): array
-    {
-        $user = $work_order->user;
-
-        return [$user->email => $user->name];
-    }
-
     public function scopeThisModule($query)
     {
         return $query->where('module_id', auth('module')->id());
@@ -147,5 +141,17 @@ class WorkOrder extends Model
         dispatch(new WorkOrderJob($this, 'delete'));
 
         return true;
+    }
+
+    public function routeNotificationForMail(WorkOrderNotification $work_order): array
+    {
+        $user = $this->user;
+
+        return [$user->email => $user->name];
+    }
+
+    public function receivesBroadcastNotificationsOn(): string
+    {
+        return new PrivateChannel('users.' . $this->id);
     }
 }
