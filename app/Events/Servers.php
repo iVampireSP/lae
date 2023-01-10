@@ -5,7 +5,7 @@ namespace App\Events;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-class ServerEvent extends Event implements ShouldBroadcast
+class Servers extends Event implements ShouldBroadcast
 {
 
     public array $data;
