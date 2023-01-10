@@ -15,7 +15,7 @@ class Users extends Event implements ShouldBroadcastNow
 
     public User $user;
     public string $type = 'ping';
-    public string|array $message;
+    public string|array $data;
     public null|Module $module;
 
     /**
@@ -27,7 +27,7 @@ class Users extends Event implements ShouldBroadcastNow
     {
         $this->user = $user;
         $this->type = $type;
-        $this->message = $message;
+        $this->data = $message;
 
         if (Auth::guard('module')->check()) {
             $this->module = Auth::guard('module')->user();
