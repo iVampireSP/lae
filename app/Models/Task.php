@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Events\UserEvent;
+use App\Events\Users;
 use App\Exceptions\CommonException;
 use Eloquent;
 use GeneaLabs\LaravelModelCaching\CachedBuilder;
@@ -110,7 +110,7 @@ class Task extends Model
         // created
         static::created(function ($model) {
             $model->load('host');
-            broadcast(new UserEvent($model->user_id, 'tasks.created', $model));
+            broadcast(new Users($model->user_id, 'tasks.created', $model));
         });
 
         // updateing
@@ -125,12 +125,12 @@ class Task extends Model
             // Cache::forget('user_tasks_' . $model->user_id);
 
             $model->load('host');
-            broadcast(new UserEvent($model->user_id, 'tasks.updated', $model));
+            broadcast(new Users($model->user_id, 'tasks.updated', $model));
         });
 
 
         static::deleted(function ($model) {
-            broadcast(new UserEvent($model->user_id, 'tasks.deleted', $model));
+            broadcast(new Users($model->user_id, 'tasks.deleted', $model));
         });
     }
 
