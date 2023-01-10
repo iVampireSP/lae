@@ -2,7 +2,7 @@
 
 namespace App\Models\WorkOrder;
 
-use App\Events\UserEvent;
+use App\Events\Users;
 use App\Exceptions\CommonException;
 use App\Models\Module;
 use App\Models\User;
@@ -103,7 +103,7 @@ class Reply extends Model
                 $model->role = 'module';
                 $model->workOrder->status = 'replied';
 
-                broadcast(new UserEvent($model->user_id, 'work-order.replied', $model->workOrder));
+                broadcast(new Users($model->user, 'work-order.replied', $model->workOrder));
 
             } else {
                 $model->role = 'guest';
@@ -113,11 +113,12 @@ class Reply extends Model
             $model->workOrder->save();
         });
 
-        static::created(function ($model) {
+        static::created(function (self $model) {
             if (auth('module')->check()) {
                 $model->workOrder->status = 'replied';
                 $model->workOrder->save();
             }
+
             // dispatch
             dispatch(new \App\Jobs\Module\WorkOrder\Reply($model, 'post'));
             dispatch(new \App\Jobs\Module\WorkOrder\WorkOrder($model->workOrder, 'put'));
