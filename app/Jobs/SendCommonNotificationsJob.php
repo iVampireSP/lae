@@ -4,7 +4,7 @@ namespace App\Jobs;
 
 use App\Http\Controllers\Admin\NotificationController;
 use App\Models\User;
-use App\Notifications\CommonNotification;
+use App\Notifications\Common;
 use GeneaLabs\LaravelModelCaching\CachedBuilder;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -48,7 +48,7 @@ class SendCommonNotificationsJob implements ShouldQueue
         // chunk
         $users->chunk(100, function ($users) {
             foreach ($users as $user) {
-                $user->notify(new CommonNotification($this->title, $this->content));
+                $user->notify(new Common($this->title, $this->content));
             }
         });
     }

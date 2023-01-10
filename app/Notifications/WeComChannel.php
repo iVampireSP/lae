@@ -3,61 +3,48 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class WeComChannel extends Notification
 {
     use Queueable;
 
     /**
-     * Create a new notification instance.
+     * Send the given notification.
+     *
+     * @param mixed        $notifiable
+     * @param Notification $notification
      *
      * @return void
      */
-    public function __construct()
+    public function send(mixed $notifiable, Notification $notification): void
     {
-        //
-    }
+        $data = $notification->toWeCom($notifiable);
 
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @param mixed $notifiable
-     *
-     * @return array
-     */
-    public function via($notifiable)
-    {
-        return ['mail'];
-    }
+        if (!$data) {
+            return;
+        }
 
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param mixed $notifiable
-     *
-     * @return MailMessage
-     */
-    public function toMail($notifiable)
-    {
-        return (new MailMessage)
-            ->line('The introduction to the notification.')
-            ->action('Notification Action', url('/'))
-            ->line('Thank you for using our application!');
-    }
+        $view = $data['view'];
+        $key = $data['wecom_key'] ?? null;
 
-    /**
-     * Get the array representation of the notification.
-     *
-     * @param mixed $notifiable
-     *
-     * @return array
-     */
-    public function toArray($notifiable)
-    {
-        return [
-            //
-        ];
+        if (!$key) {
+            $key = config('settings.wecom.robot_hook.default');
+        }
+
+        $resp = Http::post('https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=' . $key, [
+            'msgtype' => 'markdown',
+            'markdown' => [
+                'content' => view($view, [
+                    'data' => $data['data'],
+                ])->render(),
+            ],
+        ]);
+
+        if (!$resp->successful()) {
+            Log::error('企业微信机器人发送失败', $data['data']);
+        }
     }
 }
