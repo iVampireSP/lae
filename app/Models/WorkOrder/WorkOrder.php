@@ -7,6 +7,7 @@ use App\Jobs\Module\WorkOrder\WorkOrder as WorkOrderJob;
 use App\Models\Host;
 use App\Models\Module;
 use App\Models\User;
+use App\Notifications\WorkOrder as WorkOrderNotification;
 use Eloquent;
 use GeneaLabs\LaravelModelCaching\CachedBuilder;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
@@ -14,6 +15,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
@@ -71,7 +73,7 @@ use Illuminate\Support\Str;
  */
 class WorkOrder extends Model
 {
-    use Cachable;
+    use Cachable, Notifiable;
 
     protected $table = 'work_orders';
 
@@ -130,8 +132,10 @@ class WorkOrder extends Model
         });
 
         // updated
-        static::updated(function ($model) {
+        static::updated(function (self $model) {
             dispatch(new WorkOrderJob($model, 'put'));
+
+            $model->notify(new WorkOrderNotification($model));
         });
     }
 
