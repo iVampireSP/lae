@@ -30,16 +30,6 @@ class WebNotification extends Notification
     }
 
     /**
-     * Get the notification's delivery channels.
-     *
-     * @return array
-     */
-    public function via(): array
-    {
-        return [WebChannel::class];
-    }
-
-    /**
      * Get the array representation of the notification.
      *
      * @return array
@@ -47,5 +37,15 @@ class WebNotification extends Notification
     public function toArray(): array
     {
         return $this->message;
+    }
+
+    /**
+     * Get the notification's delivery channels.
+     *
+     * @return array
+     */
+    public function via(): array
+    {
+        return [WebChannel::class];
     }
 }

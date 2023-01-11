@@ -6,7 +6,6 @@ use App\Events\Users;
 use App\Exceptions\CommonException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Facades\Cache;
 use Ramsey\Uuid\Uuid;
 use function auth;
 use function broadcast;
@@ -31,7 +30,7 @@ class Task extends Model
     protected static function boot()
     {
         parent::boot();
-        static::creating(function ($model) {
+        static::creating(function (self $model) {
             // id 为 uuid
             $model->id = Uuid::uuid4()->toString();
 
@@ -54,34 +53,30 @@ class Task extends Model
                 }
 
                 $model->user_id = $model->host->user_id;
-
-                Cache::forget('user_tasks_' . $model->user_id);
             }
         });
 
         // created
-        static::created(function ($model) {
+        static::created(function (self $model) {
             $model->load('host');
             broadcast(new Users($model->user_id, 'tasks.created', $model));
         });
 
         // updating
-        static::updating(function ($model) {
+        static::updating(function (self $model) {
             if ($model->progress == 100) {
                 $model->status = 'done';
             }
         });
 
         // updated and delete
-        static::updated(function ($model) {
-            // Cache::forget('user_tasks_' . $model->user_id);
-
+        static::updated(function (self $model) {
             $model->load('host');
             broadcast(new Users($model->user_id, 'tasks.updated', $model));
         });
 
 
-        static::deleted(function ($model) {
+        static::deleted(function (self $model) {
             broadcast(new Users($model->user_id, 'tasks.deleted', $model));
         });
     }

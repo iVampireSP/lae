@@ -2,7 +2,6 @@
 
 namespace App\Jobs\Module\WorkOrder;
 
-use App\Events\Users;
 use App\Models\WorkOrder\WorkOrder as WorkOrderModel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
