@@ -80,4 +80,10 @@ class User extends Authenticatable
         return $this->select(['id', 'name', 'birthday_at', 'email_md5', 'created_at'])->whereMonth('birthday_at', now()->month)
             ->whereDay('birthday_at', now()->day)->whereNull('banned_at');
     }
+
+    public function selectPublic(): User
+    {
+        // 过滤掉私有字段
+        return $this->select(['id', 'name', 'email_md5', 'created_at']);
+    }
 }

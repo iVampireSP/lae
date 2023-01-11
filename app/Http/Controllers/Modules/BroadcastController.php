@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Modules;
 
-use App\Events\Users;
 use App\Http\Controllers\Controller;
-use App\Models\Host;
 use App\Models\User;
+use App\Notifications\WebNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -15,7 +14,7 @@ class BroadcastController extends Controller
     {
         $this->validate($request, $this->rules());
 
-        broadcast(new Users($user, $request->input('type'), $request->all()));
+        $user->notify(new WebNotification($request->all(), $request->input('type')));
 
         return $this->created("message sent.");
     }
@@ -25,7 +24,7 @@ class BroadcastController extends Controller
         return [
             'message' => 'required|string|max:255',
             'type' => 'required|in:info,error,warning,success',
-            'data' => 'nullable|json',
+            'event' => 'nullable|alpha',
         ];
     }
 

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Events\Users;
 use App\Jobs\Module\HostJob;
+use App\Notifications\WebNotification;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -51,9 +52,12 @@ class Host extends Model
             }
         });
 
-        static::created(function ($model) {
-            broadcast(new Users($model->user_id, 'hosts.created', $model));
+        static::created(function (self $model) {
+            // broadcast(new Users($model->user, 'success', $model));
+            $model->user->notify(new WebNotification($model, 'hosts.created'));
+
         });
+
 
         static::updating(function ($model) {
             if ($model->isDirty('status')) {

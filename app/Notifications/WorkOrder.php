@@ -33,7 +33,7 @@ class WorkOrder extends Notification
      */
     public function via(WorkOrderModel $workOrder): array
     {
-        $methods = [WeComChannel::class, CommonChannel::class];
+        $methods = [WeComChannel::class, WebChannel::class];
 
         if (in_array($workOrder->status, ['processing', 'replied'])) {
             $methods[] = 'mail';
@@ -69,8 +69,12 @@ class WorkOrder extends Notification
     public function toArray(WorkOrderModel $workOrder): array
     {
         $array = $workOrder->toArray();
-        $array['type'] = 'info';
-        $array['title'] = '工单: ' . $workOrder->title . ' 状态更新。';
+
+        $array['event'] = 'WorkOrder.updated';
+
+        if ($workOrder->status === 'replied') {
+            $array['event'] = 'WorkOrder.replied';
+        }
 
         return $array;
     }

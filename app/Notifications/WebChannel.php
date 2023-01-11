@@ -7,7 +7,7 @@ use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
 
-class CommonChannel extends Notification
+class WebChannel extends Notification
 {
     use Queueable;
 
@@ -32,10 +32,9 @@ class CommonChannel extends Notification
         $user = User::find($user_id);
 
         if (!in_array($data['type'] ?? '', ['info', 'success', 'warning', 'error'])) {
-            return;
+            $data['type'] = 'info';
         }
 
         broadcast(new Users($user, $data['type'], $data));
-
     }
 }

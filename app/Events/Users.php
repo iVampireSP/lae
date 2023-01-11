@@ -7,8 +7,10 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcastNow;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class Users extends Event implements ShouldBroadcastNow
 {
@@ -16,8 +18,9 @@ class Users extends Event implements ShouldBroadcastNow
 
     public User $user;
     public string $type = 'ping';
-    public array $data;
-    public null|Module $module;
+    public array|Model $data;
+    public null|Module $module = null;
+    public string $event = 'messages';
 
     public Carbon $sent_at;
 
@@ -27,18 +30,45 @@ class Users extends Event implements ShouldBroadcastNow
      *
      * @return void
      */
-    public function __construct(User $user, $type, array $data)
+    public function __construct(User|int $user, $type, array|Model $data)
     {
-        $this->user = $user;
-        $this->type = $type;
-        $this->data = $data;
-
+        // init vars
         $this->sent_at = Carbon::now();
 
+        // if user is int
+        if (is_int($user)) {
+            $user = User::find($user);
+        }
+
+        $this->user = $user;
+
+        $this->type = $type;
+
+        if ($data instanceof Model) {
+            $this->data = $data->toArray();
+        } else {
+            $this->data = $data;
+        }
+
+
+        // check if module
         if (Auth::guard('module')->check()) {
             $this->module = Auth::guard('module')->user();
-        } else {
-            $this->module = null;
+
+            if (isset($this->data['event'])) {
+                $this->event = $this->module->id . '.' . $this->data['event'];
+            }
+        }
+
+        // log
+        if (config('app.env') != 'production') {
+            Log::debug('Users Event', [
+                'user' => $this->user->id,
+                'type' => $this->type,
+                'data' => $this->data,
+                'module' => $this->module,
+                'event' => $this->event,
+            ]);
         }
     }
 
@@ -49,6 +79,6 @@ class Users extends Event implements ShouldBroadcastNow
 
     public function broadcastAs(): string
     {
-        return 'common';
+        return 'messages';
     }
 }
