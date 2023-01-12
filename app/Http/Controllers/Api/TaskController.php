@@ -11,7 +11,14 @@ class TaskController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $tasks = (new Task)->where('user_id', $request->user()->id)->with('host')->latest()->get();
+        $task = (new Task)->with('host')->latest()->where('user_id', $request->user()->id);
+
+        if ($request->filled('status')) {
+            $task->where('status', $request->input('status'));
+        }
+
+        $tasks = $task->limit(20)->get();
+
         return $this->success($tasks);
     }
 
