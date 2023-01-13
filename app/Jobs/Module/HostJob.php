@@ -22,7 +22,7 @@ class HostJob implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($host, $type = 'post')
+    public function __construct(HostModel $host, $type = 'post')
     {
         //
         $this->host = $host;

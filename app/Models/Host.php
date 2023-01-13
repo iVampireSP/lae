@@ -53,7 +53,7 @@ class Host extends Model
         });
 
         static::created(function (self $model) {
-            // broadcast(new Users($model->user, 'success', $model));
+
             $model->user->notify(new WebNotification($model, 'hosts.created'));
 
         });
@@ -68,24 +68,14 @@ class Host extends Model
                 }
             }
 
-            // if ($model->isDirty('price')) {
-            //     $model->price = round($model->price, 2);
-            // }
-
-            // if ($model->isDirty('managed_price') && $model->managed_price !== null) {
-            //     $model->managed_price = round($model->managed_price, 2);
-            // }
+            // 调度任务
+            dispatch(new HostJob($model, 'patch'));
 
             broadcast(new Users($model->user_id, 'hosts.updating', $model));
         });
 
         // when Updated
         static::updated(function ($model) {
-            dispatch(new HostJob($model, 'patch'));
-
-            Cache::forget('user_hosts_' . $model->user_id);
-            Cache::forget('user_tasks_' . $model->user_id);
-
             broadcast(new Users($model->user_id, 'hosts.updated', $model));
         });
 
