@@ -29,7 +29,7 @@ class WebChannel extends Notification
 
         $user_id = $notifiable->user_id ?? $notifiable->id;
 
-        $user = User::find($user_id);
+        $user = (new User)->find($user_id);
 
         broadcast(new Users($user, $data['event'], $data));
     }

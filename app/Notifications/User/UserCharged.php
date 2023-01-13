@@ -25,11 +25,10 @@ class UserCharged extends Notification implements ShouldQueue
     /**
      * Get the notification's delivery channels.
      *
-     * @param Balance $notifiable
      *
      * @return array
      */
-    public function via(Balance $notifiable): array
+    public function via(): array
     {
         return [WeComChannel::class];
     }

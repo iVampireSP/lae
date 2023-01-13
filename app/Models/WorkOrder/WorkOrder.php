@@ -142,7 +142,7 @@ class WorkOrder extends Model
         return true;
     }
 
-    public function routeNotificationForMail(WorkOrderNotification $work_order): array
+    public function routeNotificationForMail(): array
     {
         $user = $this->user;
 

@@ -36,7 +36,7 @@ class Users extends Event implements ShouldBroadcastNow
 
         // if user is int
         if (is_int($user)) {
-            $user = User::find($user);
+            $user = (new User)->find($user);
         }
 
         $this->user = $user;

@@ -26,6 +26,7 @@ class WebNotification extends Notification
         }
 
         $this->message = $message;
+        $this->event = $event;
     }
 
     /**
