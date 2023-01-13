@@ -4,9 +4,9 @@ namespace App\Console;
 
 use App\Jobs\AutoCloseWorkOrderJob;
 use App\Jobs\CheckAndChargeBalanceJob;
-use App\Jobs\CheckHostIfExistsOnModuleJob;
 use App\Jobs\ClearTasksJob;
 use App\Jobs\DeleteHostJob;
+use App\Jobs\Host\ScanAllHostsJob;
 use App\Jobs\HostCostJob;
 use App\Jobs\Module\FetchModuleJob;
 use App\Jobs\Module\PushWorkOrderJob;
@@ -48,7 +48,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new DeleteHostJob())->hourly();
 
         // 检查主机是否存在于模块
-        $schedule->job(new CheckHostIfExistsOnModuleJob())->everyThirtyMinutes()->withoutOverlapping()->onOneServer();
+        $schedule->job(new ScanAllHostsJob())->everyThirtyMinutes()->withoutOverlapping()->onOneServer();
 
         // 检查未充值的订单，并充值
         $schedule->job(new CheckAndChargeBalanceJob())->everyFiveMinutes()->onOneServer()->withoutOverlapping();

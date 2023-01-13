@@ -38,6 +38,8 @@ Route::group([
     Route::get('modules/{module}/fast-login', [ModuleController::class, 'fast_login'])->name('modules.fast-login');
 
     Route::resource('applications', ApplicationController::class);
+
+    Route::post('hosts/{host}/refresh', [HostController::class, 'updateOrDelete'])->name('hosts.refresh');
     Route::resource('hosts', HostController::class)->only(['index', 'edit', 'update', 'destroy']);
 
     Route::resource('work-orders', WorkOrderController::class)->only(['index', 'show', 'edit', 'update', 'destroy']);

@@ -43,8 +43,6 @@ class HostController extends Controller
      */
     public function edit(Host $host): View
     {
-        //
-
         return view('admin.hosts.edit', compact('host'));
     }
 
@@ -60,7 +58,7 @@ class HostController extends Controller
     {
         $request->validate([
             'name' => 'sometimes|string|max:255',
-            'status' => 'sometimes|in:running,stopped,error,suspended,pending',
+            'status' => 'sometimes|in:running,stopped,suspended,pending',
             'price' => 'sometimes|numeric',
             'managed_price' => 'nullable|numeric',
         ]);
@@ -82,5 +80,12 @@ class HostController extends Controller
         $host->safeDelete();
 
         return redirect()->route('admin.hosts.index')->with('success', '正在排队删除此主机。');
+    }
+
+    public function updateOrDelete(Host $host): RedirectResponse
+    {
+        $host->updateOrDelete();
+
+        return back()->with('success', '正在排队刷新此主机的状态。');
     }
 }

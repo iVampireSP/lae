@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Events\Users;
+use App\Jobs\Host\UpdateOrDeleteHostJob;
 use App\Jobs\Module\HostJob;
 use App\Notifications\WebNotification;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
@@ -149,6 +150,13 @@ class Host extends Model
         }
 
         dispatch(new HostJob($this, 'delete'));
+        return true;
+    }
+
+    public function updateOrDelete(): bool
+    {
+        dispatch(new UpdateOrDeleteHostJob($this));
+
         return true;
     }
 

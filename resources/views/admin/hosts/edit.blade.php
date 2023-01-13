@@ -29,6 +29,7 @@
                 <option value="running" {{ $host->status == 'running' ? 'selected' : '' }}>运行中</option>
                 <option value="stopped" {{ $host->status == 'stopped' ? 'selected' : '' }}>已停止</option>
                 <option value="suspended" {{ $host->status == 'suspended' ? 'selected' : '' }}>已暂停</option>
+                <option value="error" {{ $host->status == 'error' ? 'selected' : '' }}>错误 (提交此项目将会被忽略)</option>
             </select>
         </div>
 
@@ -36,6 +37,14 @@
 
     </form>
 
+    <hr/>
+
+    <form method="post" action="{{ route('admin.hosts.refresh', $host) }}">
+        @csrf
+        <button type="submit" class="btn btn-primary mt-3">刷新此主机</button>
+    </form>
+
+    <hr/>
 
     <form method="post" action="{{ route('admin.hosts.destroy', $host) }}">
         @csrf
