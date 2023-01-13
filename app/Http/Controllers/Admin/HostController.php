@@ -58,16 +58,14 @@ class HostController extends Controller
      */
     public function update(Request $request, Host $host): RedirectResponse
     {
-        //
-
         $request->validate([
-            // 'name' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
+            'status' => 'required|in:running,stopped,error,suspended,pending',
+            'price' => 'required|numeric',
             'managed_price' => 'nullable|numeric',
         ]);
 
-        $req = $request->only('managed_price');
-
-        $host->update($req);
+        $host->update($request->all());
 
         return back()->with('success', '此主机已更新。');
     }
