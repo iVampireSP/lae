@@ -2,7 +2,8 @@
 
 namespace App\Models;
 
-use App\Notifications\UserCharged;
+use App\Events\Users;
+use App\Notifications\User\UserCharged;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo as BelongsToAlias;
@@ -31,17 +32,22 @@ class Balance extends Model
     {
         parent::boot();
 
-        static::creating(function ($balance) {
+        static::creating(function (self $balance) {
             // $balance->remaining_amount = $balance->amount;
             $balance->remaining_amount = 0;
 
             $balance->order_id = date('YmdHis') . $balance->id . rand(1000, 9999);
         });
 
-        static::updated(function ($balance) {
+        static::created(function (self $balance) {
+            broadcast(new Users($balance->user, 'balance.created', $balance));
+        });
+
+        static::updated(function (self $balance) {
             if ($balance->isDirty('paid_at')) {
                 if ($balance->paid_at) {
                     $balance->notify(new UserCharged());
+                    broadcast(new Users($balance->user, 'balance.updated', $balance));
                 }
             }
         });
