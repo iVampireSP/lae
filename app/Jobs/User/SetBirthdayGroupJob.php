@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\User;
 
 use App\Models\User;
 use App\Models\UserGroup;
-use App\Notifications\TodayIsUserBirthday;
+use App\Notifications\User\TodayIsUserBirthday;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;

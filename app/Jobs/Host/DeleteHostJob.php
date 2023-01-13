@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Host;
 
 use App\Models\Host;
 use Illuminate\Bus\Queueable;
@@ -34,14 +34,14 @@ class DeleteHostJob implements ShouldQueue
         // 查找暂停时间超过 3 天的 host
         (new Host)->where('status', 'suspended')->where('suspended_at', '<', now()->subDays(3))->chunk(100, function ($hosts) {
             foreach ($hosts as $host) {
-                dispatch(new Module\HostJob($host, 'delete'));
+                dispatch(new HostJob($host, 'delete'));
             }
         });
 
         // 查找部署时间超过3天以上的 host
         (new Host)->where('status', 'pending')->where('created_at', '<', now()->subDays(3))->chunk(100, function ($hosts) {
             foreach ($hosts as $host) {
-                dispatch(new Module\HostJob($host, 'delete'));
+                dispatch(new HostJob($host, 'delete'));
             }
         });
     }

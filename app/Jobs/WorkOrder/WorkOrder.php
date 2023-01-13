@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs\Module\WorkOrder;
+namespace App\Jobs\WorkOrder;
 
 use App\Models\WorkOrder\WorkOrder as WorkOrderModel;
 use Illuminate\Bus\Queueable;

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Notifications;
+namespace App\Notifications\Channels;
 
+use App\Console\Commands\Cluster\Log;
 use App\Events\Users;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
@@ -31,10 +32,6 @@ class WebChannel extends Notification
 
         $user = User::find($user_id);
 
-        if (!in_array($data['type'] ?? '', ['info', 'success', 'warning', 'error'])) {
-            $data['type'] = 'info';
-        }
-
-        broadcast(new Users($user, $data['type'], $data));
+        broadcast(new Users($user, $data['event'], $data));
     }
 }

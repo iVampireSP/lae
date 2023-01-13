@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Module;
 
+use App\Jobs\Job;
 use App\Models\Module;
-use App\Notifications\ModuleEarnings;
+use App\Notifications\Modules\ModuleEarnings;
 
 class SendModuleEarningsJob extends Job
 {

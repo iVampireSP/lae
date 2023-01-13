@@ -1,8 +1,10 @@
 <?php
 
-namespace App\Notifications;
+namespace App\Notifications\WorkOrder;
 
 use App\Models\WorkOrder\WorkOrder as WorkOrderModel;
+use App\Notifications\Channels\WebChannel;
+use App\Notifications\Channels\WeComChannel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;

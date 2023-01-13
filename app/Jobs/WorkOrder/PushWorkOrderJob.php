@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Jobs\Module;
+namespace App\Jobs\WorkOrder;
 
-use App\Jobs\Module\WorkOrder\Reply;
 use App\Models\WorkOrder\WorkOrder;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

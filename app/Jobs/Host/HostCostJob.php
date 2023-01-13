@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\Host;
 
 use App\Helpers\Lock;
 use App\Models\Host;

@@ -2,17 +2,17 @@
 
 namespace App\Console;
 
-use App\Jobs\AutoCloseWorkOrderJob;
-use App\Jobs\CheckAndChargeBalanceJob;
-use App\Jobs\ClearTasksJob;
-use App\Jobs\DeleteHostJob;
+use App\Jobs\Host\DeleteHostJob;
+use App\Jobs\Host\HostCostJob;
 use App\Jobs\Host\ScanAllHostsJob;
-use App\Jobs\HostCostJob;
 use App\Jobs\Module\FetchModuleJob;
-use App\Jobs\Module\PushWorkOrderJob;
-use App\Jobs\RollbackUserTempGroupJob;
-use App\Jobs\SendModuleEarningsJob;
-use App\Jobs\SetBirthdayGroupJob;
+use App\Jobs\Module\SendModuleEarningsJob;
+use App\Jobs\User\CheckAndChargeBalanceJob;
+use App\Jobs\User\ClearTasksJob;
+use App\Jobs\User\RollbackUserTempGroupJob;
+use App\Jobs\User\SetBirthdayGroupJob;
+use App\Jobs\WorkOrder\AutoCloseWorkOrderJob;
+use App\Jobs\WorkOrder\PushWorkOrderJob;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 

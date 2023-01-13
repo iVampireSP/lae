@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\WorkOrder;
 
+use App\Jobs\Job;
 use App\Models\WorkOrder\WorkOrder;
 
 class AutoCloseWorkOrderJob extends Job

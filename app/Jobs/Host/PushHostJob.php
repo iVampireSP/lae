@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs\Module;
+namespace App\Jobs\Host;
 
 use App\Models\Host;
 use Illuminate\Bus\Queueable;

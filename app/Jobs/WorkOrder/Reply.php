@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Jobs\Module\WorkOrder;
+namespace App\Jobs\WorkOrder;
 
 use App\Models\WorkOrder\Reply as WorkOrderReply;
 use Illuminate\Bus\Queueable;

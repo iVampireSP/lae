@@ -1,15 +1,17 @@
 <?php
 
-namespace App\Jobs;
+namespace App\Jobs\User;
 
+use App\Jobs\Job;
 use App\Models\Balance;
 use App\Models\Transaction;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Yansongda\LaravelPay\Facades\Pay;
 use Yansongda\Pay\Exception\ContainerException;
 use Yansongda\Pay\Exception\InvalidParamsException;
 use Yansongda\Pay\Exception\ServiceNotFoundException;
 
-class CheckAndChargeBalanceJob extends Job
+class CheckAndChargeBalanceJob extends Job implements ShouldQueue
 {
     /**
      * Create a new job instance.
