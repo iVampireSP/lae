@@ -28,7 +28,7 @@
 
     <div class="form-group mt-1">
         <label for="name">企业微信 群机器人 WebHook Key</label>
-        <input type="text" class="form-control" id="wecom_key" name="wecom_key">
+        <input type="text" class="form-control" id="wecom_key" name="wecom_key" value="{{ $module->wecom_key }}" autocomplete="off">
     </div>
 
     <div class="form-group mt-1">

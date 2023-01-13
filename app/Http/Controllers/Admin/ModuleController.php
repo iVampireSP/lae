@@ -34,8 +34,6 @@ class ModuleController extends Controller
      */
     public function create(): View
     {
-        //
-
         return view('admin.modules.create');
     }
 
@@ -74,7 +72,7 @@ class ModuleController extends Controller
             'name' => 'required|string|max:255',
             'url' => 'required|url',
             'status' => 'required|string|in:up,down,maintenance',
-            'wecom_key' => 'required|string|max:255',
+            'wecom_key' => 'nullable|string|max:255',
         ];
     }
 
@@ -103,6 +101,8 @@ class ModuleController extends Controller
      */
     public function edit(Module $module): View
     {
+        $module = $module->makeVisible('wecom_key');
+
         return view('admin.modules.edit', compact('module'));
     }
 
