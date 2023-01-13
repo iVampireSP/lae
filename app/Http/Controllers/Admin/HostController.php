@@ -59,9 +59,9 @@ class HostController extends Controller
     public function update(Request $request, Host $host): RedirectResponse
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'status' => 'required|in:running,stopped,error,suspended,pending',
-            'price' => 'required|numeric',
+            'name' => 'sometimes|string|max:255',
+            'status' => 'sometimes|in:running,stopped,error,suspended,pending',
+            'price' => 'sometimes|numeric',
             'managed_price' => 'nullable|numeric',
         ]);
 
