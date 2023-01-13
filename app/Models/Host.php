@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use App\Events\Users;
+use App\Jobs\Host\HostJob;
 use App\Jobs\Host\UpdateOrDeleteHostJob;
-use App\Jobs\Module\HostJob;
 use App\Notifications\WebNotification;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Collection;

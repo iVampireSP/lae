@@ -2,7 +2,6 @@
 
 namespace App\Jobs\Host;
 
-use App\Jobs\Module\HostJob;
 use App\Models\Host;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

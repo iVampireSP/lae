@@ -75,12 +75,12 @@ class Reply extends Model
             }
 
             // dispatch
-            dispatch(new \App\Jobs\Module\WorkOrder\Reply($model, 'post'));
-            dispatch(new \App\Jobs\Module\WorkOrder\WorkOrder($model->workOrder, 'put'));
+            dispatch(new \App\Jobs\WorkOrder\Reply($model, 'post'));
+            dispatch(new \App\Jobs\WorkOrder\WorkOrder($model->workOrder, 'put'));
         });
 
         static::updating(function (self $model) {
-            dispatch(new \App\Jobs\Module\WorkOrder\Reply($model, 'patch'));
+            dispatch(new \App\Jobs\WorkOrder\Reply($model, 'patch'));
         });
     }
 
@@ -113,6 +113,6 @@ class Reply extends Model
 
     public function safeDelete(): void
     {
-        dispatch(new \App\Jobs\Module\WorkOrder\Reply($this, 'delete'));
+        dispatch(new \App\Jobs\WorkOrder\Reply($this, 'delete'));
     }
 }

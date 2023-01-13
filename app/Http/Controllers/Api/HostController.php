@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\HostRequest;
-use App\Jobs\Module\HostJob;
+use App\Jobs\Host\HostJob;
 use App\Models\Host;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;

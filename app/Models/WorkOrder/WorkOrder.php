@@ -3,11 +3,11 @@
 namespace App\Models\WorkOrder;
 
 use App\Exceptions\CommonException;
-use App\Jobs\Module\WorkOrder\WorkOrder as WorkOrderJob;
+use App\Jobs\WorkOrder\WorkOrder as WorkOrderJob;
 use App\Models\Host;
 use App\Models\Module;
 use App\Models\User;
-use App\Notifications\WorkOrder as WorkOrderNotification;
+use App\Notifications\WorkOrder\WorkOrder as WorkOrderNotification;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
