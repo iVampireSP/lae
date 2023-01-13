@@ -29,7 +29,7 @@ class Users extends Event implements ShouldBroadcastNow
      *
      * @return void
      */
-    public function __construct(User|int $user, $event, array|Model $data)
+    public function __construct(User|int $user, string $event, array|Model $data)
     {
         // init vars
         $this->sent_at = Carbon::now();

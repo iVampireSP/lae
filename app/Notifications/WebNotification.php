@@ -12,21 +12,18 @@ class WebNotification extends Notification
     use Queueable;
 
     public array|Model $message = [];
-    public string $event = 'notification';
-
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(array|Model $message, string $event)
+    public function __construct(array|Model $message)
     {
         if ($message instanceof Model) {
             $message = $message->toArray();
         }
 
         $this->message = $message;
-        $this->event = $event;
     }
 
     /**
