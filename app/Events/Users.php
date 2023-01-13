@@ -52,9 +52,9 @@ class Users extends Event implements ShouldBroadcastNow
         if (Auth::guard('module')->check()) {
             $this->module = Auth::guard('module')->user();
 
-            if (isset($this->data['event'])) {
-                $this->event = $this->module->id . '.' . $this->data['event'];
-            }
+            // if (isset($this->data['event'])) {
+            //     $this->event = $this->module->id . '.' . $this->data['event'];
+            // }
         }
 
 

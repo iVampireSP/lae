@@ -17,13 +17,15 @@ class WebNotification extends Notification
      *
      * @return void
      */
-    public function __construct(array|Model $message)
+    public function __construct(array|Model $message, string $event = 'notification')
     {
         if ($message instanceof Model) {
-            $message = $message->toArray();
+            $this->message = $message->toArray();
+        } else {
+            $this->message = $message;
         }
 
-        $this->message = $message;
+        $this->message['event'] = $event;
     }
 
     /**
