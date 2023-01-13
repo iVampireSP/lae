@@ -228,7 +228,7 @@ class BalanceController extends Controller
         }
 
         if ($is_paid) {
-            (new Transaction)->addAmount($balance->user_id, 'alipay', $balance->amount);
+            (new Transaction)->addAmount($balance->user_id, $balance->payment, $balance->amount);
 
             $balance->update([
                 'paid_at' => now()
