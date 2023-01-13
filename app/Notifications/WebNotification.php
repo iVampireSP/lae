@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Notifications\Channels\WebChannel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notification;
@@ -11,22 +12,20 @@ class WebNotification extends Notification
     use Queueable;
 
     public array|Model $message = [];
-    public string $type = 'info';
+    public string $event = 'notification';
 
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct(array|Model $message, string $type)
+    public function __construct(array|Model $message, string $event)
     {
         if ($message instanceof Model) {
             $message = $message->toArray();
         }
 
         $this->message = $message;
-
-        $this->type = $type;
     }
 
     /**

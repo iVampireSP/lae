@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Jobs\SendCommonNotificationsJob;
+use App\Jobs\User\SendUserNotificationsJob;
 use App\Models\Module;
 use App\Models\User;
 use GeneaLabs\LaravelModelCaching\CachedBuilder;
@@ -80,9 +80,13 @@ class NotificationController extends Controller
             'user_id' => 'nullable',
             'module_id' => 'nullable',
             'user' => 'nullable',
+            'send_mail' => 'boolean',
         ]);
 
-        dispatch(new SendCommonNotificationsJob($request->toArray(), $request->input('title'), $request->input('content')));
+        // send mail 是 checkbox，值为 1
+        $send_mail = $request->has('send_mail');
+
+        dispatch(new SendUserNotificationsJob($request->toArray(), $request->input('title'), $request->input('content'), $send_mail));
 
         return back()->with('success', '通知发送成功。')->withInput();
     }

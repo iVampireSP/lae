@@ -17,10 +17,9 @@ class Users extends Event implements ShouldBroadcastNow
     use SerializesModels;
 
     public User $user;
-    public string $type = 'ping';
     public array|Model $data;
     public null|Module $module = null;
-    public string $event = 'messages';
+    public string $event = 'notification';
 
     public Carbon $sent_at;
 
@@ -30,7 +29,7 @@ class Users extends Event implements ShouldBroadcastNow
      *
      * @return void
      */
-    public function __construct(User|int $user, $type, array|Model $data)
+    public function __construct(User|int $user, $event, array|Model $data)
     {
         // init vars
         $this->sent_at = Carbon::now();
@@ -42,7 +41,7 @@ class Users extends Event implements ShouldBroadcastNow
 
         $this->user = $user;
 
-        $this->type = $type;
+        $this->event = $event;
 
         if ($data instanceof Model) {
             $this->data = $data->toArray();
@@ -50,8 +49,6 @@ class Users extends Event implements ShouldBroadcastNow
             $this->data = $data;
         }
 
-
-        // check if module
         if (Auth::guard('module')->check()) {
             $this->module = Auth::guard('module')->user();
 
@@ -60,11 +57,11 @@ class Users extends Event implements ShouldBroadcastNow
             }
         }
 
+
         // log
         if (config('app.env') != 'production') {
             Log::debug('Users Event', [
                 'user' => $this->user->id,
-                'type' => $this->type,
                 'data' => $this->data,
                 'module' => $this->module,
                 'event' => $this->event,
@@ -72,12 +69,14 @@ class Users extends Event implements ShouldBroadcastNow
         }
     }
 
-    public function broadcastOn(): PrivateChannel
+    public
+    function broadcastOn(): PrivateChannel
     {
         return new PrivateChannel('users.' . $this->user->id);
     }
 
-    public function broadcastAs(): string
+    public
+    function broadcastAs(): string
     {
         return 'messages';
     }

@@ -14,7 +14,7 @@ class BroadcastController extends Controller
     {
         $this->validate($request, $this->rules());
 
-        $user->notify(new WebNotification($request->all(), $request->input('type')));
+        $user->notify(new WebNotification($request->all(), $request->input('event')));
 
         return $this->created("message sent.");
     }
@@ -23,8 +23,7 @@ class BroadcastController extends Controller
     {
         return [
             'message' => 'required|string|max:255',
-            'type' => 'required|in:info,error,warning,success',
-            'event' => 'nullable|alpha',
+            'event' => 'required|alpha',
         ];
     }
 
