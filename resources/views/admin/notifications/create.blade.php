@@ -109,6 +109,14 @@
         <input type="hidden" name="module_id" value="{{ Request::get('module_id') }}">
         <input type="hidden" name="user_id" value="{{ Request::get('user_id') }}">
 
+        {{--  checkbox send_mail   --}}
+        <div class="form-group">
+            <label for="send_mail">邮件通知</label>
+            <input type="checkbox" name="send_mail" id="send_mail" value="1"
+                   @if(Request::get('send_mail') == 1) checked @endif>
+        </div>
+
+
         <div class="form-group">
             <label for="title">标题</label>
             <input type="text" name="title" id="title" class="form-control" value="{{ old('title') }}">
