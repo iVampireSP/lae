@@ -2,7 +2,6 @@
 
 namespace App\Notifications\Channels;
 
-use App\Console\Commands\Cluster\Log;
 use App\Events\Users;
 use App\Models\User;
 use Illuminate\Bus\Queueable;

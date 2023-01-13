@@ -153,13 +153,6 @@ class Host extends Model
         return true;
     }
 
-    public function updateOrDelete(): bool
-    {
-        dispatch(new UpdateOrDeleteHostJob($this));
-
-        return true;
-    }
-
     public function cost($amount = null, $auto = true): bool
     {
         $this->load('user');
@@ -296,6 +289,13 @@ class Host extends Model
         Cache::forever($cache_key, $earnings);
 
         /** 统计收益结束 */
+
+        return true;
+    }
+
+    public function updateOrDelete(): bool
+    {
+        dispatch(new UpdateOrDeleteHostJob($this));
 
         return true;
     }
