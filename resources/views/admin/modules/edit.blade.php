@@ -27,6 +27,11 @@
     </div>
 
     <div class="form-group mt-1">
+        <label for="name">企业微信 群机器人 WebHook Key</label>
+        <input type="text" class="form-control" id="wecom_key" name="wecom_key">
+    </div>
+
+    <div class="form-group mt-1">
         <label for="status">状态</label>
         <select class="form-control" id="status" name="status">
             <option value="up" @if ($module->status === 'up') selected @endif>正常</option>

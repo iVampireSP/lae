@@ -59,6 +59,7 @@ class ModuleController extends Controller
         $module->api_token = $api_token;
         $module->url = $request->input('url');
         $module->status = $request->input('status');
+        $module->wecom_key = $request->input('wecom_key');
 
         $module->save();
 
@@ -73,6 +74,7 @@ class ModuleController extends Controller
             'name' => 'required|string|max:255',
             'url' => 'required|url',
             'status' => 'required|string|in:up,down,maintenance',
+            'wecom_key' => 'required|string|max:255',
         ];
     }
 
@@ -101,8 +103,6 @@ class ModuleController extends Controller
      */
     public function edit(Module $module): View
     {
-        //
-
         return view('admin.modules.edit', compact('module'));
     }
 
@@ -126,6 +126,7 @@ class ModuleController extends Controller
         $module->name = $request->input('name');
         $module->url = $request->input('url');
         $module->status = $request->input('status');
+        $module->wecom_key = $request->input('wecom_key');
 
         $module->save();
 
