@@ -67,7 +67,7 @@ class UserNotification extends Notification implements ShouldQueue
         return [
             'title' => $this->title,
             'content' => $this->content,
-            'event' => 'notification',
+            'event' => 'notifications',
         ];
     }
 }
