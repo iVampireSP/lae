@@ -44,7 +44,13 @@
 
         <div class="form-group">
             <label for="allowed_module_id">另一个 模块</label>
-            <input type="text" class="form-control" id="allowed_module_id" name="allowed_module_id"/>
+
+            <select name="allowed_module_id" id="allowed_module_id" class="form-control">
+                <option value="">无</option>
+                @foreach ($modules as $module)
+                    <option value="{{ $module->id }}">{{ $module->name }}</option>
+                @endforeach
+            </select>
         </div>
 
 

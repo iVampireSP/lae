@@ -61,7 +61,7 @@ class ModuleController extends Controller
 
         $module->save();
 
-        return redirect()->route('admin.modules.edit', $module)->with('success', '模块创建成功, 请重置以获得 API Token。');
+        return redirect()->route('admin.modules.edit', $module)->with('success', '模块创建成功。');
 
     }
 
@@ -101,7 +101,7 @@ class ModuleController extends Controller
      */
     public function edit(Module $module): View
     {
-        $module = $module->makeVisible('wecom_key');
+        $module = $module->makeVisible(['wecom_key', 'api_token']);
 
         return view('admin.modules.edit', compact('module'));
     }
@@ -118,15 +118,17 @@ class ModuleController extends Controller
     {
         $request->validate($this->rules());
 
-        if ($request->input('reset_api_token')) {
-            $module->api_token = Str::random(60);
-        }
-
         $module->id = $request->input('id');
         $module->name = $request->input('name');
         $module->url = $request->input('url');
         $module->status = $request->input('status');
         $module->wecom_key = $request->input('wecom_key');
+
+        if (!$request->filled('api_token')) {
+            $module->api_token = Str::random(60);
+        } else {
+            $module->api_token = $request->input('api_token');
+        }
 
         $module->save();
 
@@ -158,8 +160,9 @@ class ModuleController extends Controller
     public function allows(Module $module): View
     {
         $allows = (new ModuleAllow)->where('module_id', $module->id)->with('allowed_module')->paginate(50);
+        $modules = (new Module)->where('id', '!=', $module->id)->get();
 
-        return view('admin.modules.allows', compact('module', 'allows'));
+        return view('admin.modules.allows', compact('module', 'allows', 'modules'));
     }
 
     public function allows_store(Request $request, Module $module): RedirectResponse
