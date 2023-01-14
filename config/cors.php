@@ -1,10 +1,6 @@
 <?php
 
-$allowed_origins = [
-    'http://127.0.0.1:5173',
-    'http://localhost:5173',
-    env('DASHBOARD_BASE_URL'),
-];
+$cors_origin = explode(',', env('CORS_ORIGINS'));
 
 return [
 
@@ -25,7 +21,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => $allowed_origins,
+    'allowed_origins' => $cors_origin,
 
     'allowed_origins_patterns' => [],
 
