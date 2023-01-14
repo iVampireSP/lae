@@ -59,6 +59,10 @@ class Handler extends ExceptionHandler
         //     }
         //     return response();
         // });
+
+        $this->reportable(function (Throwable $e) {
+            //
+        });
     }
 
     /**

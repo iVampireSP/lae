@@ -7,6 +7,7 @@ use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\EncryptCookies;
 use App\Http\Middleware\JsonResponse;
 use App\Http\Middleware\PreventRequestsDuringMaintenance;
+use App\Http\Middleware\RealNamed;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Middleware\TrimStrings;
 use App\Http\Middleware\TrustProxies;
@@ -97,5 +98,6 @@ class Kernel extends HttpKernel
         'verified' => EnsureEmailIsVerified::class,
         'banned' => ValidateUserIfBanned::class,
         'admin.validateReferer' => ValidateReferer::class,
+        'real_named' => RealNamed::class,
     ];
 }

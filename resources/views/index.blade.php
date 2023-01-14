@@ -6,12 +6,31 @@
         <p>嗨，游客</p>
         <p>您需要先登录，才能继续使用 莱云。</p>
 
-        <p>如果您继续登录，则代表您已经阅读并同意 <a href="https://www.laecloud.com/tos/" target="_blank" class="text-decoration-underline">服务条款</a></p>
+        <p>如果您继续登录，则代表您已经阅读并同意 <a href="https://www.laecloud.com/tos/" target="_blank"
+                                                    class="text-decoration-underline">服务条款</a></p>
         <a href="{{ route('login') }}" class="btn btn-primary">登录</a>
     @endguest
 
-
     @auth
+        @if(!auth('web')->user()->real_name_verified_at)
+            <div>
+                <div class="alert alert-danger d-flex align-items-center alert-dismissible fade show" role="alert">
+                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
+                        <use xlink:href="#exclamation-triangle-fill"/>
+                    </svg>
+                    <div>
+                        <div>
+                            全站实名认证状态已刷新，您需要进行实人认证。
+                            <hr />
+                            您还没有完成实人认证，请尽快完成实人认证。
+                            <br />
+                            <a href="{{ route('real_name.create') }}">点击这里实人认证</a>
+                        </div>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                </div>
+            </div>
+        @endif
 
         @if (session('token'))
             <p style="color:green">这是新的 Token，请妥善保管：{{ session('token') }}</p>
@@ -44,6 +63,5 @@
             <button class="btn btn-danger" type="submit">退出登录</button>
         </form>
     @endauth
-
 
 @endsection

@@ -37,8 +37,16 @@ class UserController extends Controller
             $users = $users->where('email', 'like', '%' . $request->input('email') . '%');
         }
 
+        if ($request->filled('real_name')) {
+            $users = $users->where('real_name', 'like', '%' . $request->input('real_name') . '%');
+        }
+
         if ($request->has('banned_at')) {
             $users = $users->whereNotNull('banned_at');
+        }
+
+        if ($request->has('real_name_verified_at')) {
+            $users = $users->whereNotNull('real_name_verified_at');
         }
 
         $users = $users->with('user_group')->paginate(50)->withQueryString();
@@ -69,8 +77,6 @@ class UserController extends Controller
      */
     public function edit(User $user): View
     {
-        //
-
         $hosts = (new Host)->where('user_id', $user->id)->latest()->paginate(50, ['*'], 'hosts_page');
         $workOrders = (new WorkOrder)->where('user_id', $user->id)->latest()->paginate(50, ['*'], 'workOrders_page');
         $balances = (new Balance)->where('user_id', $user->id)->latest()->paginate(50, ['*'], 'balances_page');
@@ -92,6 +98,7 @@ class UserController extends Controller
         //
         $request->validate([
             'balance' => 'nullable|numeric|min:0.01|max:1000',
+            'id_card' => 'nullable|string|size:18',
         ]);
 
         $transaction = new Transaction();
@@ -127,6 +134,14 @@ class UserController extends Controller
 
         if ($request->has('user_group_id')) {
             $user->user_group_id = $request->input('user_group_id');
+        }
+
+        if ($request->has('real_name')) {
+            $user->real_name = $request->input('real_name');
+        }
+
+        if ($request->has('id_card')) {
+            $user->id_card = $request->input('id_card');
         }
 
         if ($user->isDirty()) {

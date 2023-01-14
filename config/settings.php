@@ -23,4 +23,9 @@ return [
     'roadrunner' => [
         'version' => env('ROADRUNNER_VERSION', '2.12.1'),
     ],
+    'supports' => [
+        'real_name' => [
+            'code' => env('SUPPORT_REAL_NAME_APP_CODE')
+        ]
+    ],
 ];

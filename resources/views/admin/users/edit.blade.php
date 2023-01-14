@@ -4,6 +4,12 @@
 
 @section('content')
     <h3>{{ $user->name }}</h3>
+
+    @if ($user->real_name_verified_at)
+        <span class="badge bg-success">已完成实人验证</span>
+    @endif
+
+
     <a href="{{ route('admin.users.show', $user) }}">作为 {{ $user->name }} 登录</a>
 
     @if ($user->banned_at)
@@ -20,8 +26,9 @@
     <p>邮箱: {{ $user->email }}</p>
 
 
-
-    <p>生日: {{ $user->birthday_at }}</p>
+    @if ($user->birthday_at)
+        <p>生日: {{ $user->birthday_at }}</p>
+    @endif
 
 
     {{--  hosts  --}}
@@ -191,6 +198,28 @@
                             @if ($user->user_group_id == $group->id) selected @endif>{{ $group->name }}</option>
                 @endforeach
             </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary mt-3">提交</button>
+    </form>
+
+    {{--  实人认证  --}}
+    <h3 class="mt-3">实人认证</h3>
+    <p>您应该保持此信息保密。</p>
+    <form action="{{ route('admin.users.update', $user) }}" method="post">
+        @csrf
+        @method('PATCH')
+
+        <div class="form-group">
+            <label for="real_name">姓名</label>
+            <input type="text" class="form-control" id="real_name" name="real_name" placeholder="姓名"
+                   value="{{ $user->real_name }}" autocomplete="off">
+        </div>
+
+        <div class="form-group">
+            <label for="id_card">身份证号</label>
+            <input type="text" class="form-control" id="id_card" name="id_card" placeholder="身份证号"
+                   value="{{ $user->id_card }}" maxlength="18" autocomplete="off">
         </div>
 
         <button type="submit" class="btn btn-primary mt-3">提交</button>

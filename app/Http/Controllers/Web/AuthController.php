@@ -27,12 +27,23 @@ class AuthController extends Controller
     public function index(Request $request): View|RedirectResponse
     {
         // if logged in
-        if ($request->input('callback')) {
+        if ($request->filled('callback')) {
 
-            session(['callback' => $request->input('callback')]);
+            $callback = $request->input('callback');
 
+            session(['callback' => $callback]);
 
-            if (Auth::check()) {
+            if (Auth::guard('web')->check()) {
+
+                $callbackHost = parse_url($callback, PHP_URL_HOST);
+                $dashboardHost = parse_url(config('settings.dashboard.base_url'), PHP_URL_HOST);
+
+                if ($callbackHost === $dashboardHost) {
+                    $token = $request->user()->createToken('Dashboard')->plainTextToken;
+
+                    return redirect($callback . '?token=' . $token);
+                }
+
                 return redirect()->route('confirm_redirect');
             } else {
                 return redirect()->route('login');
@@ -108,9 +119,6 @@ class AuthController extends Controller
         }
         $oauth_user = json_decode($oauth_user);
 
-        if (is_null($oauth_user->verified_at)) {
-            return redirect()->route('not_verified');
-        }
 
         $user_sql = (new User)->where('email', $oauth_user->email);
         $user = $user_sql->first();
@@ -125,8 +133,8 @@ class AuthController extends Controller
             $user->email = $email;
             $user->password = null;
             $user->email_verified_at = $email_verified_at;
-            $user->real_name = $oauth_user->real_name;
-            $user->birthday_at = $oauth_user->birthday;
+            // $user->real_name = $oauth_user->real_name;
+            // $user->birthday_at = $oauth_user->birthday;
             $user->save();
 
             $request->session()->put('auth.password_confirmed_at', time());

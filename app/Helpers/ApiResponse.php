@@ -62,98 +62,76 @@ trait ApiResponse
         return $this->apiResponse($message, $code);
     }
 
-    // bad request
+    public function failed($message = 'Failed', $code = 400): JsonResponse
+    {
+        return $this->apiResponse($message, $code);
+    }
 
     public function serviceUnavailable($message = 'Service unavailable'): JsonResponse
     {
         return $this->error($message, 503);
     }
 
-    // created
-
     public function forbidden($message = 'Forbidden'): JsonResponse
     {
         return $this->error($message, 403);
     }
-
-    // accepted
 
     public function notFound($message = 'Not found'): JsonResponse
     {
         return $this->error($message, 404);
     }
 
-    // no content
-
     public function methodNotAllowed($message = 'Method not allowed'): JsonResponse
     {
         return $this->error($message, 405);
     }
-
-    // updated
 
     public function tooManyRequests($message = 'Too many requests'): JsonResponse
     {
         return $this->error($message, 429);
     }
 
-    // deleted
-
     public function serverError($message = 'Server error'): JsonResponse
     {
         return $this->error($message, 500);
     }
-
-    // not allowed
 
     public function unauthorized($message = 'Unauthorized'): JsonResponse
     {
         return $this->error($message, 401);
     }
 
-    // conflict
-
     public function accepted($message = 'Accepted'): JsonResponse
     {
         return $this->success($message, 202);
     }
-
-    // too many requests
 
     public function updated($message = 'Updated'): JsonResponse
     {
         return $this->success($message);
     }
 
-    // server error
-
     public function deleted($message = 'Deleted'): JsonResponse
     {
         return $this->success($message);
     }
-
-    // service unavailable
 
     public function notAllowed($message = 'Not allowed'): JsonResponse
     {
         return $this->error($message, 405);
     }
 
-    // method not allowed
-
     public function conflict($message = 'Conflict'): JsonResponse
     {
         return $this->error($message, 409);
     }
-
-    // not acceptable
 
     public function notAcceptable($message = 'Not acceptable'): JsonResponse
     {
         return $this->error($message, 406);
     }
 
-    // precondition failed
     public function preconditionFailed($message = 'Precondition failed'): JsonResponse
     {
         return $this->error($message, 412);
