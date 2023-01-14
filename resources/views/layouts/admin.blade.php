@@ -149,8 +149,6 @@
         </div>
     </main>
 
-    <x-module-script/>
-
 </div>
 </body>
 

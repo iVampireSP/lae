@@ -1,4 +1,4 @@
-@auth
+{{--@auth--}}
     {{--<span class="module_name" module="{{ $t->module_id }}">{{ $t->module_id }}</span>--}}
     <script>
         let modules = {!! $modules !!},
@@ -23,4 +23,4 @@
         })
     </script>
 
-@endauth
+{{--@endauth--}}

@@ -115,9 +115,6 @@
             @yield('content')
         </div>
     </main>
-
-    <x-module-script/>
-
 </div>
 </body>
 

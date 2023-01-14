@@ -83,4 +83,6 @@
     </div>
 
     {{ $transactions->links() }}
+
+    <x-module-script/>
 @endsection
