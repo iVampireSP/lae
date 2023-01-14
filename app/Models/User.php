@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Crypt;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -72,15 +71,22 @@ class User extends Authenticatable
 
             if ($user->isDirty('id_card')) {
 
-                $user->real_name_verified_at = now();
+                if ($user->id_card === null) {
+                    $user->real_name_verified_at = null;
+                } else {
+                    $user->real_name_verified_at = now();
 
-                // 更新生日
-                try {
-                    $user->birthday_at = $user->getBirthdayFromIdCard();
-                } catch (InvalidFormatException) {
-                    $user->birthday_at = null;
+                    // 更新生日
+                    try {
+                        $user->birthday_at = $user->getBirthdayFromIdCard();
+                    } catch (InvalidFormatException) {
+                        $user->birthday_at = null;
+                    }
                 }
+
+
             }
+
         });
     }
 

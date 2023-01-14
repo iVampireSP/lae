@@ -6,7 +6,8 @@
     <h3>{{ $user->name }}</h3>
 
     @if ($user->real_name_verified_at)
-        <span class="badge bg-success">已完成实人验证</span>
+        <span class="text-success">实人验证于 {{ $user->real_name_verified_at }} </span>
+        <br />
     @endif
 
 
