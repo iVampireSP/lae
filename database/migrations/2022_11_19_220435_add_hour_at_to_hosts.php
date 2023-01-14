@@ -11,7 +11,7 @@ return new class extends Migration {
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('hosts', function (Blueprint $table) {
             //
@@ -20,7 +20,7 @@ return new class extends Migration {
         });
 
         echo PHP_EOL . '将开始刷新主机的小时数...';
-        Host::chunk(100, function ($hosts) {
+        (new App\Models\Host)->chunk(100, function ($hosts) {
             foreach ($hosts as $host) {
                 $host->hour_at = $host->created_at->hour;
                 $host->save();
@@ -34,7 +34,7 @@ return new class extends Migration {
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('hosts', function (Blueprint $table) {
             //

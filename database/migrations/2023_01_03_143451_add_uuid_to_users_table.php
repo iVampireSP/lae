@@ -17,10 +17,10 @@ return new class extends Migration {
             $table->uuid()->unique()->after('id')->nullable();
         });
 
-        $count = User::count();
+        $count = (new App\Models\User)->count();
         $i = 0;
 
-        User::chunk(100, function ($users) use (&$i, $count) {
+        (new App\Models\User)->chunk(100, function ($users) use (&$i, $count) {
             foreach ($users as $user) {
                 echo sprintf('Updating %d/%d', ++$i, $count) . PHP_EOL;
 

@@ -5,14 +5,13 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('hosts', function (Blueprint $table) {
             //
@@ -21,7 +20,7 @@ return new class extends Migration
         });
 
         echo PHP_EOL . '将开始刷新主机的分钟数...';
-        Host::chunk(100, function ($hosts) {
+        (new App\Models\Host)->chunk(100, function ($hosts) {
             foreach ($hosts as $host) {
                 echo '刷新: ' . $host->id . PHP_EOL;
                 $host->minute_at = $host->created_at->minute;
@@ -36,7 +35,7 @@ return new class extends Migration
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('hosts', function (Blueprint $table) {
             //

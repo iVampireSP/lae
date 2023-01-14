@@ -23,7 +23,7 @@ return new class extends Migration {
         });
 
         // 为每个工单回复生成一个 module_id 安静更改
-        Reply::whereNull('module_id')->with('workOrder')->chunk(100, function ($replies) {
+        (new App\Models\WorkOrder\Reply)->whereNull('module_id')->with('workOrder')->chunk(100, function ($replies) {
             foreach ($replies as $reply) {
                 $reply->module_id = $reply->workOrder->module_id;
                 $reply->saveQuietly();

@@ -10,7 +10,7 @@ return new class extends Migration {
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('work_order_replies', function (Blueprint $table) {
             $table->id();
@@ -18,7 +18,7 @@ return new class extends Migration {
             // content
             $table->text('content');
 
-            // workorder id (on delete cascade)
+            // work_order id (on delete cascade)
             $table->unsignedBigInteger('work_order_id')->index();
             $table->foreign('work_order_id')->references('id')->on('work_orders')->onDelete('cascade');
 
@@ -39,8 +39,8 @@ return new class extends Migration {
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
-        Schema::dropIfExists('workorder_replies');
+        Schema::dropIfExists('work_order_replies');
     }
 };

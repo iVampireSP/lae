@@ -10,12 +10,12 @@ return new class extends Migration {
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
 
         // if transaction collection exists
         if (Schema::connection('mongodb')->hasTable('transactions')) {
-            return true;
+            return;
         }
 
         Schema::connection('mongodb')->create('transactions', function (Blueprint $collection) {
@@ -40,7 +40,7 @@ return new class extends Migration {
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::connection('mongodb')->dropIfExists('transactions');
     }

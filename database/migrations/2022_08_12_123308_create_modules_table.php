@@ -11,7 +11,7 @@ return new class extends Migration {
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('modules', function (Blueprint $table) {
             $table->string('id')->index()->primary()->unique();
@@ -23,14 +23,14 @@ return new class extends Migration {
         });
 
         // if env is local
-        if (env('APP_ENV') == 'local') {
+        if (config('app.env') == 'local') {
             $module = [
                 'id' => 'test',
                 'name' => 'Example Module',
                 'api_token' => '123456'
             ];
 
-            Module::create($module);
+            (new App\Models\Module)->create($module);
         }
     }
 
@@ -39,7 +39,7 @@ return new class extends Migration {
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::dropIfExists('modules');
     }

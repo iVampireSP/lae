@@ -15,7 +15,7 @@ return new class extends Migration {
     {
         Schema::table('work_orders', function (Blueprint $table) {
             // uuid
-            $table->uuid('uuid')->nullable()->after('id')->index()->unique();
+            $table->uuid()->nullable()->after('id')->index()->unique();
         });
 
         // 为每个工单生成一个 uuid 安静更改
@@ -34,6 +34,5 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        return;
     }
 };

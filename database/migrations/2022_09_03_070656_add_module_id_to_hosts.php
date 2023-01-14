@@ -10,7 +10,7 @@ return new class extends Migration {
      *
      * @return void
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('hosts', function (Blueprint $table) {
             $table->foreign('module_id')->references('id')->on('modules')->cascadeOnUpdate();
@@ -22,10 +22,11 @@ return new class extends Migration {
      *
      * @return void
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('hosts', function (Blueprint $table) {
-            //
+            // rollback
+            $table->dropForeign(['module_id']);
         });
     }
 };

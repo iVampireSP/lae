@@ -17,10 +17,10 @@ return new class extends Migration {
             $table->string('email_md5')->after('email')->nullable()->comment('邮箱 MD5');
         });
 
-        $count = User::count();
+        $count = (new App\Models\User)->count();
         $i = 0;
 
-        User::chunk(100, function ($users) use (&$i, $count) {
+        (new App\Models\User)->chunk(100, function ($users) use (&$i, $count) {
             foreach ($users as $user) {
 
                 echo sprintf('Updating %d/%d', ++$i, $count) . PHP_EOL;
