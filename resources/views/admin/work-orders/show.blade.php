@@ -7,7 +7,21 @@
     <a href="{{ route('admin.work-orders.edit', $workOrder) }}">编辑此工单</a>
     <a href="{{ route('admin.users.edit', $workOrder->user_id) }}">用户: {{ $workOrder->user->name }}</a>
 
-    <h5>@parsedown($workOrder->content)</h5>
+    @if($workOrder->ip)
+        <p>IP 地址: {{ $workOrder->ip }}</p>
+    @endif
+
+    @if($workOrder->host_id)
+        <a href="{{ route('admin.hosts.edit', $workOrder->host_id) }}">主机: {{ $workOrder->host->name }}</a>
+    @endif
+
+    @if($workOrder->module_id)
+        <a href="{{ route('admin.modules.show', $workOrder->module_id) }}">模块: {{ $workOrder->module->name }}</a>
+    @endif
+
+    <hr/>
+    <p>@parsedown($workOrder->content)</p>
+    <hr/>
 
     <x-work-order-status :status="$workOrder->status"></x-work-order-status>
 
@@ -35,6 +49,7 @@
                         {{ $reply->name }}
                     @endif
 
+
                     <span class="text-end">
                         @if($reply->is_pending)
                             <span class="badge bg-primary">投递中</span>
@@ -48,6 +63,14 @@
                 <div class="card-body">
                     @parsedown($reply->content)
                 </div>
+
+                @if($reply->ip)
+
+                    <div class="card-footer">
+                        <span>IP 地址: {{ $reply->ip }}</span>
+                    </div>
+                @endif
+
             </div>
         @endforeach
 

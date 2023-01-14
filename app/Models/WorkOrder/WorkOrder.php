@@ -31,6 +31,10 @@ class WorkOrder extends Model
         'notify'
     ];
 
+    protected $hidden = [
+        'ip',
+    ];
+
     protected $casts = [
         'notify' => 'boolean'
     ];
@@ -73,6 +77,8 @@ class WorkOrder extends Model
             }
 
             $model->notify = true;
+
+            $model->ip = request()->ip();
         });
 
         // updated

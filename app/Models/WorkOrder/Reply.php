@@ -26,6 +26,10 @@ class Reply extends Model
         'role'
     ];
 
+    protected $hidden = [
+        'ip',
+    ];
+
     protected static function boot()
     {
         parent::boot();
@@ -64,8 +68,9 @@ class Reply extends Model
                 $model->role = 'guest';
             }
 
-
             $model->workOrder->save();
+
+            $model->ip = request()->ip();
         });
 
         static::created(function (self $model) {

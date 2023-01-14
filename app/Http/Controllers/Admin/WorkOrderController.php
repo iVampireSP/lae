@@ -21,7 +21,7 @@ class WorkOrderController extends Controller
      */
     public function index(WorkOrder $workOrder): View
     {
-        $workOrders = $workOrder->with(['user', 'host'])->latest()->paginate(20)->withQueryString();
+        $workOrders = $workOrder->with(['user', 'host', 'module'])->latest()->paginate(20)->withQueryString();
 
         return view('admin.work-orders.index', compact('workOrders'));
     }
@@ -35,7 +35,7 @@ class WorkOrderController extends Controller
      */
     public function show(WorkOrder $workOrder): View
     {
-        $workOrder->load(['user', 'module']);
+        $workOrder->load(['user', 'module', 'host']);
 
         $replies = (new Reply)->where('work_order_id', $workOrder->id)->latest()->paginate(100);
 
