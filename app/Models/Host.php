@@ -32,8 +32,8 @@ class Host extends Model
     protected $casts = [
         // 'configuration' => 'array',
         'suspended_at' => 'datetime',
-        'price' => 'decimal:2',
-        'managed_price' => 'decimal:2',
+        'price' => 'decimal',
+        'managed_price' => 'decimal',
     ];
 
     protected static function boot()
