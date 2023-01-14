@@ -14,7 +14,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->decimal('balance')->change();
+            $table->decimal('balance')->default(0)->change();
         });
     }
 
@@ -26,7 +26,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->decimal('balance', 10)->change();
+            $table->decimal('balance', 10)->default(0)->change();
         });
     }
 };
