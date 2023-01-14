@@ -71,10 +71,8 @@ class User extends Authenticatable
 
             if ($user->isDirty('id_card') || $user->isDirty('real_name')) {
 
-                if (empty($user->id_card) && empty($user->real_name)) {
+                if (empty($user->id_card) || empty($user->real_name)) {
                     $user->real_name_verified_at = null;
-                    $user->real_name = null;
-                    $user->id_card = null;
                 } else {
                     $user->real_name_verified_at = now();
 
