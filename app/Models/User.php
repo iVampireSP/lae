@@ -39,7 +39,7 @@ class User extends Authenticatable
 
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'balance' => 'decimal',
+        'balance' => 'decimal:2',
         'banned_at' => 'datetime',
         'birthday_at' => 'date',
     ];
