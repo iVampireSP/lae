@@ -28,7 +28,11 @@
 
 
     @if ($user->birthday_at)
-        <p>生日: {{ $user->birthday_at->format('Y-m-d') }}</p>
+        <p>
+            生日: {{ $user->birthday_at->format('Y-m-d') }}
+            <br />
+            {{ $user->birthday_at->age }} 岁，{{ $user->isAdult() ? '已成年' : '未成年' }}。
+        </p>
     @endif
 
 
