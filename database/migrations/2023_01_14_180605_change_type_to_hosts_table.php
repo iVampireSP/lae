@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::table('hosts', function (Blueprint $table) {
             // 将 price 和 managed_price 改成 decimal
-            $table->decimal('price')->change();
-            $table->decimal('managed_price')->change();
+            $table->decimal('price', 10)->change();
+            $table->decimal('managed_price', 10)->change();
         });
     }
 
