@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\Cluster;
 
-use App\Support\Cluster;
+use App\Support\ClusterSupport;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Str;
@@ -101,7 +101,7 @@ class Work extends Command
 
         // redis 创建一个 hash
         $this->info('正在注册节点。');
-        Cluster::registerThisNode();
+        ClusterSupport::registerThisNode();
 
         $this->info('初始化完成。');
 
@@ -176,7 +176,7 @@ class Work extends Command
         $cpu = $this->getCpuUsage();
 
         while (1) {
-            Cluster::publish('system_usage', [
+            ClusterSupport::publish('system_usage', [
                 'cpu' => $cpu,
             ]);
 
@@ -195,8 +195,8 @@ class Work extends Command
     {
         $this->info('正在监听任务。');
 
-        Cluster::publish('node.online');
-        Cluster::listen('*', function ($event, $message) {
+        ClusterSupport::publish('node.online');
+        ClusterSupport::listen('*', function ($event, $message) {
             $this->dispatchEvent($event, $message);
         }, false);
     }
@@ -220,7 +220,7 @@ class Work extends Command
                 exec('php artisan octane:reload');
 
 
-                Cluster::publish('cluster.restarted.web');
+                ClusterSupport::publish('cluster.restarted.web');
 
                 $this->info('Web 重启完成。');
             },
@@ -229,7 +229,7 @@ class Work extends Command
 
                 $this->pipeCommand('supervisorctl restart all');
 
-                Cluster::publish('cluster.restarted.all');
+                ClusterSupport::publish('cluster.restarted.all');
 
                 $this->info('整个莱云 重启完成。');
             },

@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\Cluster;
 
-use App\Support\Cluster;
+use App\Support\ClusterSupport;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
@@ -54,12 +54,12 @@ class Sync extends Command
         }
 
         $cache_key = "master_config_zip";
-        $config = Cluster::get($cache_key);
+        $config = ClusterSupport::get($cache_key);
 
         if ($config) {
             $this->info('检查下载目录的 MD5 值。');
             $config_md5_key = "master_config_zip_md5";
-            $config_md5 = Cluster::get($config_md5_key, '');
+            $config_md5 = ClusterSupport::get($config_md5_key, '');
 
             $md5 = md5($config);
             if ($md5 !== $config_md5) {
@@ -97,8 +97,8 @@ class Sync extends Command
                 $env_cache_key = "{$node_type}_env";
                 $env_md5_key = "{$node_type}_env_md5";
 
-                $env = Cluster::get($env_cache_key);
-                $env_md5 = Cluster::get($env_md5_key);
+                $env = ClusterSupport::get($env_cache_key);
+                $env_md5 = ClusterSupport::get($env_md5_key);
 
                 $this->info('检查 .env 文件的 MD5 值。');
                 if (md5($env) !== $env_md5) {
@@ -136,7 +136,7 @@ class Sync extends Command
             Artisan::call('optimize');
 
             // 上报消息
-            Cluster::publish('synced');
+            ClusterSupport::publish('synced');
         } else {
             $this->error('没有找到缓存。请尝试从其他节点重新同步。');
             return CommandAlias::FAILURE;

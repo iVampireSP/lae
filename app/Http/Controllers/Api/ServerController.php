@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Support\Cluster;
+use App\Support\ClusterSupport;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -26,9 +26,9 @@ class ServerController extends Controller
 
     public function nodes(): JsonResponse
     {
-        $nodes = Cluster::nodes(true);
+        $nodes = ClusterSupport::nodes(true);
 
-        $current_node_id = Cluster::currentNode()['id'];
+        $current_node_id = ClusterSupport::currentNode()['id'];
 
         return $this->success([
             'nodes' => $nodes,

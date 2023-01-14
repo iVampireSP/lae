@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\Cluster;
 
-use App\Support\Cluster;
+use App\Support\ClusterSupport;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Command\Command as CommandAlias;
 
@@ -29,7 +29,7 @@ class Log extends Command
      */
     public function handle(): int
     {
-        Cluster::listen('*', function ($event, $message) {
+        ClusterSupport::listen('*', function ($event, $message) {
             $this->format($event, $message);
         }, false);
 
@@ -55,7 +55,7 @@ class Log extends Command
             'node.ok' => '此节点初始化成功，并且已经加入集群。',
             'node.online' => '此节点已经上线。',
             'node.offline' => '将不再处理任何任务。',
-            'cluster_ready.ok' => 'Cluster Ready 就绪了，已经可以处理请求了。',
+            'cluster_ready.ok' => 'ClusterSupport Ready 就绪了，已经可以处理请求了。',
             'config.updated' => '集群配置文件已经更新，请所有 slave 节点下载。',
             'config.synced' => '我已下载配置文件。',
             'edge.deployed' => '已成功根据集群节点生成配置文件并应用。',

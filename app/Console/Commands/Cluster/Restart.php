@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\Cluster;
 
-use App\Support\Cluster;
+use App\Support\ClusterSupport;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Command\Command as CommandAlias;
 
@@ -37,7 +37,7 @@ class Restart extends Command
             return CommandAlias::FAILURE;
         }
 
-        Cluster::publish('cluster.restart.' . $service);
+        ClusterSupport::publish('cluster.restart.' . $service);
 
         $this->info('已经向集群广播重启命令，等待集群响应。');
 

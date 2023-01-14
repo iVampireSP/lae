@@ -4,7 +4,7 @@ namespace App\Support;
 
 use Illuminate\Support\Facades\Redis;
 
-class Cluster
+class ClusterSupport
 {
 
     public static string $prefix = 'cluster:';
@@ -45,7 +45,7 @@ class Cluster
     {
         $node_id = config('settings.node.id');
 
-        Cluster::hset('nodes', $node_id, [
+        ClusterSupport::hset('nodes', $node_id, [
             'type' => config('settings.node.type'),
             'id' => $node_id,
             'ip' => config('settings.node.ip'),
@@ -54,7 +54,7 @@ class Cluster
         ]);
 
         if ($report) {
-            Cluster::publish('node.ok');
+            ClusterSupport::publish('node.ok');
         }
     }
 

@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands\Cluster;
 
-use App\Support\Cluster;
+use App\Support\ClusterSupport;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Artisan;
 use Symfony\Component\Console\Command\Command as CommandAlias;
@@ -68,7 +68,7 @@ class Upload extends Command
             unlink(base_path('.env.temp'));
         }
 
-        Cluster::publish('config.updated');
+        ClusterSupport::publish('config.updated');
 
         $this->info('节点初始化完成。');
 
@@ -100,12 +100,12 @@ class Upload extends Command
             $this->info('正在上传 config 目录。');
 
             $cache_key = "{$node_type}_config_zip";
-            Cluster::forever($cache_key, file_get_contents($cacheZip));
+            ClusterSupport::forever($cache_key, file_get_contents($cacheZip));
 
             // md5
             $this->info('正在报告 cache 目录的 MD5 值。');
             $cache_md5_key = "{$node_type}_config_zip_md5";
-            Cluster::forever($cache_md5_key, md5_file($cacheZip));
+            ClusterSupport::forever($cache_md5_key, md5_file($cacheZip));
 
             unlink($cacheZip);
         }
@@ -113,12 +113,12 @@ class Upload extends Command
         // 上传 .env 文件
         $this->info('正在上传 .env 文件。');
         $env_key = "{$node_type}_env";
-        Cluster::forever($env_key, file_get_contents(base_path('.env')));
+        ClusterSupport::forever($env_key, file_get_contents(base_path('.env')));
 
         // 上传 .env 文件的 MD5
         $this->info('正在报告 .env 文件的 MD5 值。');
         $env_md5_key = "{$node_type}_env_md5";
-        Cluster::forever($env_md5_key, md5_file(base_path('.env')));
+        ClusterSupport::forever($env_md5_key, md5_file(base_path('.env')));
 
         $this->info('完成。');
     }
