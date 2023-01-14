@@ -69,14 +69,14 @@ class User extends Authenticatable
                 $user->email_md5 = md5($user->email);
             }
 
-            if ($user->isDirty('id_card')) {
+            if ($user->isDirty('id_card') || $user->isDirty('real_name')) {
 
-                if ($user->id_card === null) {
+                if (empty($user->id_card) && empty($user->real_name)) {
                     $user->real_name_verified_at = null;
+                    $user->real_name = null;
+                    $user->id_card = null;
                 } else {
-                    if ($user->real_name !== null) {
-                        $user->real_name_verified_at = now();
-                    }
+                    $user->real_name_verified_at = now();
 
                     // 更新生日
                     try {
