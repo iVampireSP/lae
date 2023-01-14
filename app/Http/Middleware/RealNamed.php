@@ -28,7 +28,7 @@ class RealNamed
         if (auth($guard)->check()) {
             if ($request->user($guard)->real_name_verified_at === null) {
                 if ($request->expectsJson()) {
-                    return $this->error('您还没有实名认证。');
+                    return $this->unauthorized('您还没有实名认证。');
                 }
 
                 return redirect()->route('real_name.create');
