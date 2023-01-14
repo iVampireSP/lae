@@ -1,13 +1,10 @@
 <?php
 
 $allowed_origins = [
-    '127.0.0.1'
+    'http://127.0.0.1:5173',
+    'http://localhost:5173',
+    env('DASHBOARD_BASE_URL'),
 ];
-
-// 从 config(app.url) 中获取域名
-$allowed_origins[] = parse_url(config('app.url'), PHP_URL_HOST);
-
-
 
 return [
 
@@ -28,7 +25,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => ['*'],
+    'allowed_origins' => $allowed_origins,
 
     'allowed_origins_patterns' => [],
 
