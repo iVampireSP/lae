@@ -74,7 +74,9 @@ class User extends Authenticatable
                 if ($user->id_card === null) {
                     $user->real_name_verified_at = null;
                 } else {
-                    $user->real_name_verified_at = now();
+                    if ($user->real_name !== null) {
+                        $user->real_name_verified_at = now();
+                    }
 
                     // 更新生日
                     try {
