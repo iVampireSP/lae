@@ -112,6 +112,14 @@
         <x-alert/>
 
         <div class="container">
+            @auth('web')
+                @if (!auth('web')->user()->isAdult())
+                    <x-alert-warning>
+                        未成年账号，需要家长或监护人的同意以及指导下才能使用莱云。
+                    </x-alert-warning>
+                @endif
+            @endauth
+
             @yield('content')
         </div>
     </main>

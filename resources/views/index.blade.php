@@ -24,12 +24,6 @@
             </x-alert-danger>
         @endif
 
-        @if (!auth('web')->user()->isAdult())
-            <x-alert-warning>
-                未成年账号，需要家长或监护人的同意以及指导下才能使用莱云。
-            </x-alert-warning>
-        @endif
-
         @if (session('token'))
             <p style="color:green">这是新的 Token，请妥善保管：{{ session('token') }}</p>
             {{-- <a href="http://localhost:3000/login?token={{ session('token') }}">前往</a> --}}
