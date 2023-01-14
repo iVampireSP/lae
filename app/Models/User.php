@@ -47,6 +47,14 @@ class User extends Authenticatable
         'birthday_at' => 'date',
     ];
 
+    protected $dates = [
+        'email_verified_at',
+        'real_name_verified_at',
+        'banned_at',
+        'birthday_at',
+    ];
+
+
     protected static function boot()
     {
         parent::boot();

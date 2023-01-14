@@ -7,7 +7,7 @@
 
     @if ($user->real_name_verified_at)
         <span class="text-success">实人验证于 {{ $user->real_name_verified_at }} </span>
-        <br />
+        <br/>
     @endif
 
 
@@ -28,7 +28,7 @@
 
 
     @if ($user->birthday_at)
-        <p>生日: {{ $user->birthday_at }}</p>
+        <p>生日: {{ $user->birthday_at->format('Y-m-d') }}</p>
     @endif
 
 
