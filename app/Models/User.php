@@ -113,6 +113,11 @@ class User extends Authenticatable
         return $year . '-' . $month . '-' . $day;
     }
 
+    public function isAdult(): bool
+    {
+        return $this->birthday_at->diffInYears(now()) >= 18;
+    }
+
     public function user_group(): BelongsTo
     {
         return $this->belongsTo(UserGroup::class);
