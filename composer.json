@@ -9,6 +9,8 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "ext-pcntl": "*",
+        "ext-posix": "*",
         "ext-zip": "^1.19",
         "doctrine/dbal": "^3.4",
         "erusev/parsedown": "^1.7",
@@ -26,9 +28,7 @@
         "simplesoftwareio/simple-qrcode": "^4.2",
         "spiral/roadrunner": "^2.8.2",
         "symfony/psr-http-message-bridge": "^2.1",
-        "yansongda/laravel-pay": "~3.2.0",
-        "ext-pcntl": "*",
-        "ext-posix": "*"
+        "yansongda/laravel-pay": "~3.2.0"
     },
     "require-dev": {
         "beyondcode/laravel-query-detector": "^1.6",
