@@ -34,35 +34,59 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <!-- Left Side Of Navbar -->
                 <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link text-auto" href="{{ route('admin.users.index') }}">用户</a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUser" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            用户和业务
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownUser">
+                            <li>
+                                <a class="dropdown-item" href="{{ route('admin.users.index') }}">用户</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ route('admin.hosts.index') }}">主机</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ route('admin.notifications.create') }}">通知</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ route('admin.user-groups.index') }}">用户组</a>
+                            </li>
+                        </ul>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-auto" href="{{ route('admin.hosts.index') }}">主机</a>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownSupport" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            对接和支持
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownSupport">
+                            <li>
+                                <a class="dropdown-item" href="{{ route('admin.modules.index') }}">模块</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ route('admin.work-orders.index') }}">工单</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ route('admin.notifications.create') }}">通知</a>
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item" href="{{ route('admin.devices.index') }}">物联设备</a>
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item" href="{{ route('admin.applications.index') }}">应用程序</a>
+                            </li>
+                        </ul>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-auto" href="{{ route('admin.modules.index') }}">模块</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-auto" href="{{ route('admin.work-orders.index') }}">工单</a>
-                    </li>
+
+
                     <li class="nav-item">
                         <a class="nav-link text-auto" href="{{ route('admin.transactions') }}">交易记录</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-auto" href="{{ route('admin.notifications.create') }}">通知</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link text-auto" href="{{ route('admin.admins.index') }}">管理员</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-auto" href="{{ route('admin.user-groups.index') }}">用户组</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-auto" href="{{ route('admin.applications.index') }}">应用程序</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-auto" href="{{ route('admin.devices.index') }}">物联设备</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link text-auto" href="{{ route('admin.commands') }}">速查表</a>
