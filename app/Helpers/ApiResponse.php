@@ -62,11 +62,6 @@ trait ApiResponse
         return $this->apiResponse($message, $code);
     }
 
-    public function failed($message = 'Failed', $code = 400): JsonResponse
-    {
-        return $this->apiResponse($message, $code);
-    }
-
     public function serviceUnavailable($message = 'Service unavailable'): JsonResponse
     {
         return $this->error($message, 503);
@@ -95,6 +90,11 @@ trait ApiResponse
     public function serverError($message = 'Server error'): JsonResponse
     {
         return $this->error($message, 500);
+    }
+
+    public function failed($message = 'Failed', $code = 400): JsonResponse
+    {
+        return $this->apiResponse($message, $code);
     }
 
     public function unauthorized($message = 'Unauthorized'): JsonResponse

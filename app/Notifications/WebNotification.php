@@ -12,6 +12,7 @@ class WebNotification extends Notification
     use Queueable;
 
     public array|Model $message = [];
+
     /**
      * Create a new notification instance.
      *

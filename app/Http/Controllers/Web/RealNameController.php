@@ -9,11 +9,6 @@ use Illuminate\Support\Facades\Cache;
 
 class RealNameController extends Controller
 {
-    public function create()
-    {
-        return view('real_name.create');
-    }
-
     public function store(Request $request)
     {
         $request->validate([
@@ -45,5 +40,10 @@ class RealNameController extends Controller
         Cache::set('real_name:user:' . $user->id, $output, 600);
 
         return redirect($output);
+    }
+
+    public function create()
+    {
+        return view('real_name.create');
     }
 }

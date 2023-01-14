@@ -95,6 +95,16 @@ class User extends Authenticatable
         return $this->hasMany(Host::class);
     }
 
+    private function getBirthdayFromIdCard(): string
+    {
+        $idCard = $this->id_card;
+
+        $year = substr($idCard, 6, 4);
+        $month = substr($idCard, 10, 2);
+        $day = substr($idCard, 12, 2);
+        return $year . '-' . $month . '-' . $day;
+    }
+
     public function user_group(): BelongsTo
     {
         return $this->belongsTo(UserGroup::class);
@@ -111,15 +121,5 @@ class User extends Authenticatable
     {
         // 过滤掉私有字段
         return $this->select(['id', 'name', 'email_md5', 'created_at']);
-    }
-
-    private function getBirthdayFromIdCard(): string
-    {
-        $idCard = $this->id_card;
-
-        $year = substr($idCard, 6, 4);
-        $month = substr($idCard, 10, 2);
-        $day = substr($idCard, 12, 2);
-        return $year . '-' . $month . '-' . $day;
     }
 }

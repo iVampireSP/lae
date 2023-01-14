@@ -53,30 +53,6 @@ class RealNameSupport
         return $this->submit($id);
     }
 
-    /**
-     * 验证实名认证请求
-     *
-     * @param array $request
-     *
-     * @return array|bool
-     */
-    public function verify(array $request): array|bool
-    {
-        $data = json_decode($request['data'], true);
-
-        $verify = $this->verifyIfSuccess($request['data'], $request['sign']);
-
-        if (!$verify) {
-            return false;
-        }
-
-        if ($data['code'] !== 'PASS') {
-            return false;
-        }
-
-        return Cache::get('real_name:' . $data['bizNo'], false);
-    }
-
     /** 向 实名认证服务 发送请求
      *
      * @param string $id
@@ -115,6 +91,30 @@ class RealNameSupport
         }
 
         return $resp['verifyUrl'];
+    }
+
+    /**
+     * 验证实名认证请求
+     *
+     * @param array $request
+     *
+     * @return array|bool
+     */
+    public function verify(array $request): array|bool
+    {
+        $data = json_decode($request['data'], true);
+
+        $verify = $this->verifyIfSuccess($request['data'], $request['sign']);
+
+        if (!$verify) {
+            return false;
+        }
+
+        if ($data['code'] !== 'PASS') {
+            return false;
+        }
+
+        return Cache::get('real_name:' . $data['bizNo'], false);
     }
 
     private function verifyIfSuccess(string $request, string $sign): bool
