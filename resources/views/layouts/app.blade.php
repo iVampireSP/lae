@@ -109,8 +109,6 @@
     </nav>
 
     <main class="py-4">
-        <x-alert/>
-
         <div class="container">
             @auth('web')
                 @if (!auth('web')->user()->isAdult())
@@ -119,6 +117,11 @@
                     </x-alert-warning>
                 @endif
             @endauth
+        </div>
+
+        <x-alert/>
+
+        <div class="container">
 
             @yield('content')
         </div>
