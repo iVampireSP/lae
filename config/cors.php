@@ -8,6 +8,7 @@ $allowed_origins = [
 $allowed_origins[] = parse_url(config('app.url'), PHP_URL_HOST);
 
 
+
 return [
 
     /*
@@ -27,7 +28,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => $allowed_origins,
+    'allowed_origins' => ['*'],
 
     'allowed_origins_patterns' => [],
 
