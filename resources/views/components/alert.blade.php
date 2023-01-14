@@ -14,63 +14,29 @@
         </symbol>
     </svg>
     @if (session('error'))
-        <div>
-            <div class="alert alert-danger d-flex align-items-center alert-dismissible fade show" role="alert">
-                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
-                    <use xlink:href="#exclamation-triangle-fill"/>
-                </svg>
-                <div>
-                    {{ session('error') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            </div>
-        </div>
+        <x-alert-danger>
+            {{ session('error') }}
+        </x-alert-danger>
     @endif
     @if (session('status'))
-        <div>
-            <div class="alert alert-primary d-flex align-items-center alert-dismissible fade show" role="alert">
-                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:">
-                    <use xlink:href="#info-fill"/>
-                </svg>
-                <div>
-                    {{ session('status') }}
-                </div>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        </div>
+        <x-alert-info>
+            {{ session('status') }}
+        </x-alert-info>
     @endif
 
     @if (session('success'))
-        <div>
-            <div class="alert alert-success d-flex align-items-center alert-dismissible fade show" role="alert">
-                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">
-                    <use xlink:href="#check-circle-fill"/>
-                </svg>
-                <div>
-                    {{ session('success') }}
-
-                </div>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        </div>
+        <x-alert-success>
+            {{ session('success') }}
+        </x-alert-success>
     @endif
     @if (isset($errors) && $errors->any())
-        <div>
-            <div class="alert alert-danger d-flex align-items-center alert-dismissible fade show" role="alert">
-                <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
-                    <use xlink:href="#exclamation-triangle-fill"/>
-                </svg>
-                <div>
-                    <ul class="mb-0">
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            </div>
-        </div>
-
+        <x-alert-danger>
+            <ul class="mb-0">
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </x-alert-danger>
     @endif
 
 </div>

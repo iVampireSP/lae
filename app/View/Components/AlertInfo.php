@@ -2,18 +2,19 @@
 
 namespace App\View\Components;
 
+use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class Alert extends Component
+class AlertInfo extends Component
 {
     /**
      * Get the view / contents that represent the component.
      *
-     * @return View
+     * @return View|Closure|string
      */
-    public function render(): View
+    public function render(): View|Closure|string
     {
-        return view('components.alert');
+        return view('components.alert-info');
     }
 }
