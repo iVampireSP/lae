@@ -13,23 +13,27 @@
 
     @auth
         @if(!auth('web')->user()->real_name_verified_at)
-            <div>
-                <div class="alert alert-danger d-flex align-items-center alert-dismissible fade show" role="alert">
-                    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
-                        <use xlink:href="#exclamation-triangle-fill"/>
-                    </svg>
-                    <div>
-                        <div>
-                            全站实名认证状态已刷新，您需要进行实人认证。
-                            <hr />
-                            您还没有完成实人认证，请尽快完成实人认证。
-                            <br />
-                            <a href="{{ route('real_name.create') }}">点击这里实人认证</a>
-                        </div>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
+            <x-alert-danger>
+                <div>
+                    全站实名认证状态已刷新，您需要进行实人认证。
+                    <hr/>
+                    您还没有完成实人认证，请尽快完成实人认证。
+                    <br/>
+                    <a href="{{ route('real_name.create') }}">点击这里实人认证</a>
                 </div>
-            </div>
+            </x-alert-danger>
+        @endif
+
+        @if (!auth('web')->user()->isAdult())
+            <x-alert-danger>
+                <div>
+                    全站实名认证状态已刷新，您需要进行实人认证。
+                    <hr/>
+                    您还没有完成实人认证，请尽快完成实人认证。
+                    <br/>
+                    <a href="{{ route('real_name.create') }}">点击这里实人认证</a>
+                </div>
+            </x-alert-danger>
         @endif
 
         @if (session('token'))
