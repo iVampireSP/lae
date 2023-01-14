@@ -25,15 +25,9 @@
         @endif
 
         @if (!auth('web')->user()->isAdult())
-            <x-alert-danger>
-                <div>
-                    全站实名认证状态已刷新，您需要进行实人认证。
-                    <hr/>
-                    您还没有完成实人认证，请尽快完成实人认证。
-                    <br/>
-                    <a href="{{ route('real_name.create') }}">点击这里实人认证</a>
-                </div>
-            </x-alert-danger>
+            <x-alert-warning>
+                未成年账号，需要家长或监护人的同意以及指导下才能使用莱云。
+            </x-alert-warning>
         @endif
 
         @if (session('token'))
