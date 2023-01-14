@@ -14,7 +14,7 @@ return new class extends Migration {
     {
         Schema::table('users', function (Blueprint $table) {
             //
-            $table->decimal('balances', 10)->default(0)->after('password');
+            $table->decimal('balance', 10)->default(0)->after('password');
 
             // drop column if exists
             if (Schema::hasColumn('users', 'drops')) {
@@ -32,7 +32,7 @@ return new class extends Migration {
     {
         Schema::table('users', function (Blueprint $table) {
             //
-            $table->dropColumn('balances');
+            $table->dropColumn('balance');
         });
     }
 };

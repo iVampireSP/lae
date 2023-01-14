@@ -14,7 +14,7 @@ return new class extends Migration {
     {
         Schema::table('users', function (Blueprint $table) {
             //
-            $table->dateTime('banned_at')->nullable()->comment('封禁时间')->after('balances');
+            $table->dateTime('banned_at')->nullable()->comment('封禁时间')->after('balance');
             // reason
             $table->string('banned_reason')->nullable()->after('banned_at');
         });
