@@ -110,9 +110,11 @@ class User extends Authenticatable
     {
         $idCard = $this->id_card;
 
-        $year = substr($idCard, 6, 4);
-        $month = substr($idCard, 10, 2);
-        $day = substr($idCard, 12, 2);
+        $bir = substr($idCard, 6, 8);
+        $year = (int) substr($bir, 0, 4);
+        $month = (int) substr($bir, 4, 2);
+        $day = (int) substr($bir, 6, 2);
+
         return $year . '-' . $month . '-' . $day;
     }
 
