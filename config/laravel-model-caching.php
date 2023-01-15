@@ -1,9 +1,11 @@
 <?php
 
+$enabled = config('app.env') === 'production';
+
 return [
     'cache-prefix' => '',
 
-    'enabled' => env('MODEL_CACHE_ENABLED', true),
+    'enabled' => $enabled,
 
     'use-database-keying' => env('MODEL_CACHE_USE_DATABASE_KEYING', true),
 
