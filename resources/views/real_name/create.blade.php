@@ -35,7 +35,7 @@
             公安 CTID 实人认证服务由 北京一砂信息技术有限公司 提供。它将会引导您完成实人认证。
         </x-alert-warning>
         <x-alert-success>
-            我们会妥善保管您的数据，不会泄露给任何第三方，更详细的隐私政策请查看上方的链接。
+            为监管需要，我们会加密保存您的身份数据，不会泄露给任何第三方。更详细的隐私政策请查看上方的链接中的 "隐私及个人信息的保护"。
         </x-alert-success>
         <x-alert-warning>
             如果您是怀抱志向的未成年人，请确保您的父母或监护人已经同意您进行实人认证。
@@ -47,15 +47,18 @@
             <br />
             如果您未办理过身份证，则公安数据库中没有您的人脸信息，请勿进行实人认证。
         </x-alert-warning>
+        <x-alert-warning>
+            您的年龄必须大于 {{ config('settings.supports.real_name.min_age') }} 岁，小于 {{ config('settings.supports.real_name.max_age') }} 岁，否则无法进行实人认证。
+        </x-alert-warning>
 
         <h3>实人认证</h3>
 
 
         {{--  if https --}}
         @if (request()->isSecure())
-            <p>您的数据已加密传输。</p>
+            <p>实名认证数据将全部加密传输，请放心实名。</p>
         @else
-            <p class="text-danger">您的数据未加密传输，请使用 https 访问。</p>
+            <p class="text-danger">您的数据未加密传输，请使用 HTTPS 访问。</p>
         @endif
 
         <form action="{{ route('real_name.store') }}" method="post">
