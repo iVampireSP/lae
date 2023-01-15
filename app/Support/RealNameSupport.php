@@ -3,9 +3,9 @@
 namespace App\Support;
 
 use Illuminate\Http\Client\PendingRequest;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 /**
@@ -108,6 +108,7 @@ class RealNameSupport
         $verify = $this->verifyIfSuccess($request['data'], $request['sign']);
 
         if (!$verify) {
+            Log::debug('实名认证签名验证失败', $request);
             return false;
         }
 
@@ -115,7 +116,7 @@ class RealNameSupport
             return false;
         }
 
-        $return =  Cache::get('real_name:' . $data['bizNo'], false);
+        $return = Cache::get('real_name:' . $data['bizNo'], false);
 
         Cache::forget('real_name:' . $data['bizNo']);
 
