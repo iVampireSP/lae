@@ -118,6 +118,11 @@ class User extends Authenticatable
         return $this->birthday_at->diffInYears(now()) >= 18;
     }
 
+    public function isRealNamed(): bool
+    {
+        return $this->real_name_verified_at !== null;
+    }
+
     public function user_group(): BelongsTo
     {
         return $this->belongsTo(UserGroup::class);
