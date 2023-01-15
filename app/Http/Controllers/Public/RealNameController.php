@@ -7,6 +7,7 @@ use App\Models\Transaction;
 use App\Models\User;
 use App\Support\RealNameSupport;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class RealNameController extends Controller
 {
@@ -15,6 +16,7 @@ class RealNameController extends Controller
         $result = (new RealNameSupport())->verify($request->all());
 
         if (!$result) {
+            Log::warning('实名认证失败', $request->all());
             return $this->error('实名认证失败。');
         }
 
