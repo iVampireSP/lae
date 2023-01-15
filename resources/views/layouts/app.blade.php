@@ -58,6 +58,9 @@
                     <a class="nav-link text-auto" target="_blank"
                        href="{{ config('settings.dashboard.base_url') }}">仪表盘</a>
 
+                    <a class="nav-link text-auto" target="_blank"
+                       href="{{ config('settings.forum.base_url') }}">社区</a>
+
                     <a class="nav-link text-auto"
                        href="{{ route('contact') }}">联系我们</a>
 

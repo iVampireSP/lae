@@ -28,4 +28,7 @@ return [
             'code' => env('SUPPORT_REAL_NAME_APP_CODE')
         ]
     ],
+    'forum' => [
+        'base_url' => env('FORUM_BASEURL')
+    ],
 ];

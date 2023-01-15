@@ -18,7 +18,7 @@ class ForumController extends Controller
 
     public function __construct()
     {
-        $this->baseUrl = config('forum.base_url');
+        $this->baseUrl = config('settings.forum.base_url');
         $this->http = Http::baseUrl($this->baseUrl . '/api')->throw();
     }
 
