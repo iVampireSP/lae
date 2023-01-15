@@ -30,7 +30,7 @@
     @if ($user->birthday_at)
         <p>
             生日: {{ $user->birthday_at->format('Y-m-d') }}
-            <br />
+            <br/>
             {{ $user->birthday_at->age }} 岁，{{ $user->isAdult() ? '已成年' : '未成年' }}。
         </p>
     @endif
@@ -208,26 +208,42 @@
         <button type="submit" class="btn btn-primary mt-3">提交</button>
     </form>
 
-    {{--  实人认证  --}}
-    <h3 class="mt-3">实人认证</h3>
-    <p>您应该保持此信息保密。</p>
-    <form action="{{ route('admin.users.update', $user) }}" method="post">
-        @csrf
-        @method('PATCH')
 
-        <div class="form-group">
-            <label for="real_name">姓名</label>
-            <input type="text" class="form-control" id="real_name" name="real_name" placeholder="姓名"
-                   value="{{ $user->real_name }}" autocomplete="off">
-        </div>
+    <h3 class="mt-3">实人认证信息</h3>
+    <p>
+        请注意自己的底线，不要随意改写及泄漏以下信息。
+    </p>
+    <div id="real_name_form">
+        <form action="{{ route('admin.users.update', $user) }}" method="post">
+            @csrf
+            @method('PATCH')
 
-        <div class="form-group">
-            <label for="id_card">身份证号</label>
-            <input type="text" class="form-control" id="id_card" name="id_card" placeholder="身份证号"
-                   value="{{ $user->id_card }}" maxlength="18" autocomplete="off">
-        </div>
+            <div class="form-group">
+                <label for="real_name">姓名</label>
+                <input type="text" class="form-control" id="real_name" name="real_name" placeholder="姓名"
+                       value="{{ $user->real_name }}" autocomplete="off">
+            </div>
 
-        <button type="submit" class="btn btn-primary mt-3">提交</button>
-    </form>
+            <div class="form-group">
+                <label for="id_card">身份证号</label>
+                <input type="text" class="form-control" id="id_card" name="id_card" placeholder="身份证号"
+                       value="{{ $user->id_card }}" maxlength="18" autocomplete="off">
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-3">提交</button>
+        </form>
+    </div>
+
+
+    <style>
+        #real_name_form {
+            filter: blur(10px);
+            transition: all 0.5s;
+        }
+
+        #real_name_form:hover {
+            filter: blur(0);
+        }
+    </style>
 
 @endsection

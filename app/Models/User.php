@@ -5,11 +5,14 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Carbon\Exceptions\InvalidFormatException;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
+use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Crypt;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -44,7 +47,7 @@ class User extends Authenticatable
         'real_name_verified_at' => 'datetime',
         'balance' => 'decimal:2',
         'banned_at' => 'datetime',
-        'birthday_at' => 'date',
+        'birthday_at' => 'date:Y-m-d'
     ];
 
     protected $dates = [
@@ -54,6 +57,7 @@ class User extends Authenticatable
         'birthday_at',
     ];
 
+    // id card 必须加密
 
     protected static function boot()
     {
@@ -77,19 +81,20 @@ class User extends Authenticatable
                 $user->email_md5 = md5($user->email);
             }
 
-            if ($user->isDirty('id_card') || $user->isDirty('real_name')) {
+            if ($user->isDirty('id_card')) {
+                $user->id_card = Crypt::encryptString($user->id_card);
+            }
 
-                if (empty($user->id_card) || empty($user->real_name)) {
-                    $user->real_name_verified_at = null;
-                } else {
-                    $user->real_name_verified_at = now();
+            if ($user->isDirty('id_card') || $user->isDirty('real_name')) if (empty($user->id_card) || empty($user->real_name)) {
+                $user->real_name_verified_at = null;
+            } else {
+                $user->real_name_verified_at = now();
 
-                    // 更新生日
-                    try {
-                        $user->birthday_at = $user->getBirthdayFromIdCard();
-                    } catch (InvalidFormatException) {
-                        $user->birthday_at = null;
-                    }
+                // 更新生日
+                try {
+                    $user->birthday_at = $user->getBirthdayFromIdCard();
+                } catch (InvalidFormatException) {
+                    $user->birthday_at = null;
                 }
             }
 
@@ -109,6 +114,24 @@ class User extends Authenticatable
         $month = substr($idCard, 10, 2);
         $day = substr($idCard, 12, 2);
         return $year . '-' . $month . '-' . $day;
+    }
+
+    /**
+     * 获取用户的身份证号
+     *
+     * @return Attribute
+     */
+    protected function idCard(): Attribute
+    {
+        return Attribute::make(
+            function ($value) {
+                try {
+                    return Crypt::decryptString($value);
+                } catch (DecryptException) {
+                    return $value;
+                }
+            }
+        );
     }
 
     public function isAdult(): bool
