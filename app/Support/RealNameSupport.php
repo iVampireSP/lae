@@ -115,7 +115,11 @@ class RealNameSupport
             return false;
         }
 
-        return Cache::get('real_name:' . $data['bizNo'], false);
+        $return =  Cache::get('real_name:' . $data['bizNo'], false);
+
+        Cache::forget('real_name:' . $data['bizNo']);
+
+        return $return;
     }
 
     private function verifyIfSuccess(string $request, string $sign): bool
