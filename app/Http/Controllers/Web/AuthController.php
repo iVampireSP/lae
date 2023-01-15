@@ -35,10 +35,16 @@ class AuthController extends Controller
 
             if (Auth::guard('web')->check()) {
 
+
                 $callbackHost = parse_url($callback, PHP_URL_HOST);
                 $dashboardHost = parse_url(config('settings.dashboard.base_url'), PHP_URL_HOST);
 
                 if ($callbackHost === $dashboardHost) {
+
+                    if (!Auth::guard('web')->user()->isRealNamed()) {
+                        return redirect()->route('real_name.create')->with('status', '重定向已被打断，需要先实人认证。');
+                    }
+
                     $token = $request->user()->createToken('Dashboard')->plainTextToken;
 
                     return redirect($callback . '?token=' . $token);
