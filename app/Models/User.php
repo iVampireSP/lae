@@ -115,7 +115,8 @@ class User extends Authenticatable
 
     public function isAdult(): bool
     {
-        return $this->birthday_at->diffInYears(now()) >= 18;
+        // 如果 birthday_at 为空，那么就返回 false
+        return $this->birthday_at?->diffInYears(now()) >= 18;
     }
 
     public function isRealNamed(): bool
