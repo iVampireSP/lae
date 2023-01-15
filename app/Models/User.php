@@ -91,8 +91,6 @@ class User extends Authenticatable
                         $user->birthday_at = null;
                     }
                 }
-
-
             }
 
         });

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Support\RealNameSupport;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 
 class RealNameController extends Controller
@@ -16,6 +17,18 @@ class RealNameController extends Controller
             'id_card' => 'required|string|size:18|unique:users,id_card',
         ]);
 
+        $realNameSupport = new RealNameSupport();
+
+
+        $birthday = $realNameSupport->getBirthday($request->input('id_card'));
+        // 检查年龄是否在区间内 settings.supports.real_name.min_age ~ settings.supports.real_name.max_age
+        if (Carbon::now()->diffInYears($birthday) < config('settings.supports.real_name.min_age') || Carbon::now()->diffInYears($birthday) > config('settings.supports.real_name.max_age')) {
+            $message = '至少需要 ' . config('settings.supports.real_name.min_age') . ' 岁，最大 ' . config('settings.supports.real_name.max_age') . ' 岁。';
+
+            return back()->with('error', $message);
+        }
+
+
         $user = $request->user();
 
         if ($user->real_name_verified_at !== null) {
@@ -26,7 +39,6 @@ class RealNameController extends Controller
             return back()->with('error', '您的余额不足。请保证余额大于 1 元。');
         }
 
-        $realNameSupport = new RealNameSupport();
         $output = $realNameSupport->create($user->id, $request->input('real_name'), $request->input('id_card'));
 
         // 标记用户正在实名，缓存 600s

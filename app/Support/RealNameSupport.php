@@ -3,6 +3,7 @@
 namespace App\Support;
 
 use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
@@ -137,6 +138,15 @@ EOF;
         $flag = openssl_verify($request, $sign, $public_key, OPENSSL_ALGO_SHA256);
 
         return $flag === 1;
+    }
+
+    public function getBirthday(string $id_card): string
+    {
+        $year = substr($id_card, 6, 4);
+        $month = substr($id_card, 10, 2);
+        $day = substr($id_card, 12, 2);
+
+        return $year . '-' . $month . '-' . $day;
     }
 
 }
