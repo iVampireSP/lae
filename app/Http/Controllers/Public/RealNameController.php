@@ -27,8 +27,7 @@ class RealNameController extends Controller
         $user->id_card = $result['id_card'];
         $user->save();
 
-        $transaction = new Transaction();
-        $transaction->reduceAmount($user->id, 0.7, '实名认证费用。');
+        $user->reduce("0.7", '实名认证费用。', false);
 
         return $this->success('实名认证成功。');
     }
