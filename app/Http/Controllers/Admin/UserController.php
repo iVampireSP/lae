@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Balance;
 use App\Models\Host;
-use App\Models\Transaction;
 use App\Models\User;
 use App\Models\UserGroup;
 use App\Models\WorkOrder\WorkOrder;
@@ -101,8 +100,6 @@ class UserController extends Controller
             'id_card' => 'nullable|string|size:18',
         ]);
 
-        $transaction = new Transaction();
-
         if ($request->input('is_banned')) {
             $user->banned_at = Carbon::now();
 
@@ -125,9 +122,13 @@ class UserController extends Controller
             } else if ($one_time_action == 'stop_all_hosts') {
                 $user->hosts()->update(['status' => 'stopped', 'suspended_at' => null]);
             } else if ($one_time_action == 'add_balance') {
-                $transaction->addAmount($user->id, 'console', $request->balance ?? 0, '管理员添加。', true);
+                $description = '管理员 ' . $request->user('admin')->name . " 增加。";
+
+                $user->charge($request->input('balance'), 'console', $description);
             } else if ($one_time_action == 'reduce_balance') {
-                $transaction->reduceAmount($user->id, $request->balance ?? 0, '管理员扣除。');
+                $description = '管理员 ' . $request->user('admin')->name . " 扣除。";
+
+                $user->reduce($request->input('balance'), $description);
             }
 
         }

@@ -4,13 +4,15 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Support\RealNameSupport;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\View\View;
 
 class RealNameController extends Controller
 {
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'real_name' => 'required|string',
@@ -54,7 +56,7 @@ class RealNameController extends Controller
         return redirect($output);
     }
 
-    public function create()
+    public function create(): View
     {
         return view('real_name.create');
     }

@@ -13,13 +13,12 @@
         <table class="table table-hover">
             <thead>
             <tr>
-                <th scope="col">类型与模块</th>
+                <th scope="col">模块</th>
                 <th scope="col">支付方式</th>
                 <th scope="col">说明</th>
                 <th scope="col">用户 ID</th>
                 <th scope="col">主机 ID</th>
-                <th scope="col">入账</th>
-                <th scope="col">支出</th>
+                <th scope="col">金额</th>
                 <th scope="col">余额</th>
                 <th scope="col">交易时间</th>
             </tr>
@@ -27,19 +26,8 @@
             <tbody>
             @foreach ($transactions as $t)
                 <tr>
-                    <td>
-                        @if ($t->type === 'payout')
-                            <span class="text-danger">
-                                支出
-                            </span>
-                        @elseif($t->type === 'income')
-                            <span class="text-success">
-                                收入
-                            </span>
-                        @endif
-                        &nbsp;
+                    <td> &nbsp;
                         <span class="module_name" module="{{ $t->module_id }}">{{ $t->module_id }}</span>
-
                     </td>
                     <td>
                         <x-payment :payment="$t->payment"></x-payment>
@@ -61,16 +49,21 @@
                             <a href="?host_id={{ $t->host_id }}">筛选</a>
                         @endif
                     </td>
-                    <td class="text-success">
-                        {{ $t->income }} 元
-                    </td>
 
-                    <td class="text-danger">
-                        {{ $t->outcome }} 元
+                    <td>
+                        @if ($t->type === 'payout')
+                            <span class="text-danger">
+                            支出 {{ $t->amount }} 元
+                        </span>
+                        @elseif($t->type === 'income')
+                            <span class="text-success">
+                            收入 {{ $t->amount }} 元
+                        </span>
+                        @endif
                     </td>
 
                     <td>
-                        {{ $t->balance ?? $t->balances }} 元
+                        {{ $t->user_remain ?? $t->balance }} 元
                     </td>
                     <td>
                         {{ $t->created_at }}

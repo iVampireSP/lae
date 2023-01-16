@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -11,8 +10,6 @@ use Illuminate\View\View;
 
 class TransferController extends Controller
 {
-    //
-
     public function index(Request $request): View
     {
         $user = $request->user();
@@ -24,7 +21,7 @@ class TransferController extends Controller
     public function transfer(Request $request): RedirectResponse
     {
         $request->validate([
-            'amount' => 'numeric|min:1|max:100',
+            'amount' => 'string|min:1|max:100',
             'description' => 'nullable|string|max:100',
         ]);
 
@@ -38,13 +35,14 @@ class TransferController extends Controller
             return back()->withErrors(['to' => '不能转给自己。']);
         }
 
-        $transaction = new Transaction();
+        $amount = $request->input('amount');
 
-        if ($user->balance < $request->input('amount')) {
-            return back()->withErrors(['amount' => '您的余额不足。']);
-        } else {
-            $transaction->transfer($user, $to, $request->input('amount'), $request->input('description'));
+        // 使用 bc 判断金额是否足够
+        if (bccomp($amount, $user->balance, 2) > 0) {
+            return back()->withErrors(['amount' => '余额不足。']);
         }
+
+        $user->startTransfer($to, $amount, $request->input('description'));
 
         return back()->with('success', '转账成功，已达对方账户。');
     }

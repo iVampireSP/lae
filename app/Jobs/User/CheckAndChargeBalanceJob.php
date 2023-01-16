@@ -4,7 +4,6 @@ namespace App\Jobs\User;
 
 use App\Jobs\Job;
 use App\Models\Balance;
-use App\Models\Transaction;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Yansongda\LaravelPay\Facades\Pay;
 use Yansongda\Pay\Exception\ContainerException;
@@ -61,8 +60,6 @@ class CheckAndChargeBalanceJob extends Job implements ShouldQueue
         if ($balance->paid_at !== null) {
             return true;
         }
-
-        (new Transaction)->addAmount($balance->user_id, 'alipay', $balance->amount);
 
         $balance->update([
             'paid_at' => now()

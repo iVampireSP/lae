@@ -2,11 +2,7 @@
 
 namespace App\Models;
 
-use App\Exceptions\User\BalanceNotEnoughException;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\HigherOrderBuilderProxy;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\HigherOrderCollectionProxy;
 use Jenssegers\Mongodb\Eloquent\Model;
 
 class Transaction extends Model
@@ -27,7 +23,7 @@ class Transaction extends Model
     ];
 
     protected $fillable = [
-        // 交易类型
+        // 类型
         'type',
 
         // 交易渠道
@@ -36,15 +32,12 @@ class Transaction extends Model
         // 描述
         'description',
 
-        // 入账
-        'income',
+        // 交易金额，负数则是扣除
+        'amount',
 
-        // 出账
-        'outcome',
-
-        // 可用余额
-        'balances',
-        'balance',
+        // 剩余余额
+        'user_remain',
+        'module_remain',
 
         // 赠送金额
         'gift',
@@ -59,219 +52,32 @@ class Transaction extends Model
         return $query->where('user_id', auth()->id());
     }
 
-    public function reduceAmount($user_id, $amount = 0, $description = '扣除费用请求。')
+    // on create
+    protected static function boot()
     {
+        parent::boot();
 
-        $lock = Cache::lock("user_balance_lock_" . $user_id, 10);
-        try {
+        static::creating(function (self $transaction) {
+            $user = null;
+            $module = null;
 
-            $lock->block(5);
-
-            $user = (new User)->findOrFail($user_id);
-
-            $user->balance -= $amount;
-            $user->save();
-
-            $this->addPayoutBalance($user_id, $amount, $description);
-        } finally {
-            optional($lock)->release();
-        }
-
-        return $user->balance;
-    }
-
-    public function addPayoutBalance($user_id, $amount, $description, $module_id = null)
-    {
-        $data = [
-            'type' => 'payout',
-            'payment' => 'balance',
-            'description' => $description,
-            'income' => 0,
-            'outcome' => (float)$amount,
-        ];
-
-        if ($module_id) {
-            $data['module_id'] = $module_id;
-        }
-
-        return $this->addLog($user_id, $data);
-    }
-
-    private function addLog($user_id, $data)
-    {
-        $user = (new User)->find($user_id);
-
-        $current = [
-            'balance' => (float)$user->balance,
-            'user_id' => intval($user_id),
-        ];
-
-        // merge
-        $data = array_merge($data, $current);
-
-        // add expired at
-        $data['expired_at'] = now()->addSeconds(7);
-
-        /** @noinspection PhpUndefinedMethodInspection */
-        return $this->create($data);
-    }
-
-    /**
-     * @throws BalanceNotEnoughException
-     */
-    public function reduceAmountModuleFail($user_id, $module_id, $amount = 0, $description = '扣除费用请求。')
-    {
-
-        $lock = Cache::lock("user_balance_lock_" . $user_id, 10);
-        try {
-
-            $lock->block(5);
-
-            $user = (new User)->findOrFail($user_id);
-
-            $user->balance -= $amount;
-
-            // if balance < 0
-            if ($user->balance < 0) {
-                throw new BalanceNotEnoughException('余额不足。');
+            if ($transaction->user_id) {
+                $user = (new User)->find($transaction->user_id);
             }
 
-            $user->save();
-
-            $this->addPayoutBalance($user_id, $amount, $description, $module_id);
-        } finally {
-            optional($lock)->release();
-        }
-
-        return $user->balance;
-    }
-
-    public function reduceHostAmount($user_id, $host_id, $module_id, $amount = 0, $description = '扣除费用请求。')
-    {
-
-        $lock = Cache::lock("user_balance_lock_" . $user_id, 10);
-        try {
-
-            $lock->block(5);
-
-            $user = (new User)->findOrFail($user_id);
-
-            $user->balance -= $amount;
-            $user->save();
-
-            $this->addHostPayoutBalance($user_id, $host_id, $module_id, $amount, $description);
-        } finally {
-            optional($lock)->release();
-        }
-
-        return $user->balance;
-    }
-
-    public function addHostPayoutBalance($user_id, $host_id, $module_id, $amount, $description)
-    {
-        $data = [
-            'type' => 'payout',
-            'payment' => 'balance',
-            'description' => $description,
-            'income' => 0,
-            'outcome' => (float)$amount,
-            'host_id' => $host_id,
-            'module_id' => $module_id,
-        ];
-
-        return $this->addLog($user_id, $data);
-    }
-
-    /**
-     * @param        $user_id
-     * @param string $payment
-     * @param int    $amount
-     * @param null   $description
-     * @param bool   $add_charge_log
-     *
-     * @return float|HigherOrderBuilderProxy|HigherOrderCollectionProxy|int|mixed|string
-     */
-    public function addAmount($user_id, string $payment = 'console', int $amount = 0, $description = null, bool $add_charge_log = false): mixed
-    {
-        $lock = Cache::lock("user_balance_lock_" . $user_id, 10);
-        try {
-
-            $lock->block(5);
-
-            $user = (new User)->findOrFail($user_id);
-
-            $left_balance = $user->balance + $amount;
-
-            $user->increment('balance', $amount);
-
-            if (!$description) {
-                $description = '充值 ' . $amount . ' 元';
+            if ($transaction->module_id) {
+                $module = (new Module)->find($transaction->module_id);
             }
 
-            if ($add_charge_log) {
-                $data = [
-                    'user_id' => $user_id,
-                    'amount' => $amount,
-                    'payment' => $payment,
-                    'paid_at' => Carbon::now(),
-                ];
-
-                (new Balance)->create($data);
+            if ($user) {
+                $transaction->user_remain = $user->balance;
             }
 
-            $this->addIncomeBalance($user_id, $payment, $amount, $description);
-        } finally {
-            optional($lock)->release();
-        }
-
-        return $left_balance;
-    }
-
-    public function addIncomeBalance($user_id, $payment, $amount, $description)
-    {
-        $data = [
-            'type' => 'income',
-            'payment' => $payment,
-            'description' => $description,
-            'income' => (float)$amount,
-            'outcome' => 0,
-        ];
-
-        return $this->addLog($user_id, $data);
-    }
-
-    public function transfer(User $user, User $to, float $amount, string|null $description): float
-    {
-        $lock = Cache::lock("user_balance_lock_" . $user->id, 10);
-        $lock_to = Cache::lock("user_balance_lock_" . $to->id, 10);
-        try {
-
-            $lock->block(5);
-            $lock_to->block(5);
-
-            $user->balance -= $amount;
-            $user->save();
-
-            $to->balance += $amount;
-            $to->save();
-
-            if (!$description) {
-                $description = '完成。';
+            if ($module) {
+                $transaction->module_remain = $module->balance;
             }
 
-            $description_new = "转账给 $to->name($to->email) $amount 元，$description";
-
-            $this->addPayoutBalance($user->id, $amount, $description_new);
-
-            $description_new = "收到来自 $user->name($user->email) 转来的 $amount 元， $description";
-
-            $this->addIncomeBalance($to->id, 'transfer', $amount, $description_new);
-        } finally {
-            optional($lock)->release();
-            optional($lock_to)->release();
-        }
-
-        return $user->balance;
+            $transaction->expired_at = Carbon::now()->addSeconds(7)->toString();
+        });
     }
-
 }

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Exceptions\User\BalanceNotEnoughException;
 use Carbon\Exceptions\InvalidFormatException;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Contracts\Encryption\DecryptException;
@@ -12,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Crypt;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -111,9 +113,9 @@ class User extends Authenticatable
         $idCard = $this->id_card;
 
         $bir = substr($idCard, 6, 8);
-        $year = (int) substr($bir, 0, 4);
-        $month = (int) substr($bir, 4, 2);
-        $day = (int) substr($bir, 6, 2);
+        $year = (int)substr($bir, 0, 4);
+        $month = (int)substr($bir, 4, 2);
+        $day = (int)substr($bir, 6, 2);
 
         return $year . '-' . $month . '-' . $day;
     }
@@ -163,5 +165,108 @@ class User extends Authenticatable
     {
         // 过滤掉私有字段
         return $this->select(['id', 'name', 'email_md5', 'created_at']);
+    }
+
+
+    /**
+     * 扣除费用
+     *
+     * @param string $amount
+     * @param string $description
+     * @param bool   $fail
+     * @param array  $options
+     *
+     * @return string
+     */
+    public function reduce(string $amount = "0", string $description = "消费", bool $fail = false, array $options = []): string
+    {
+        Cache::lock('user_balance_' . $this->id, 10)->block(10, function () use ($amount, $fail, $description, $options) {
+            $this->refresh();
+
+            if ($this->balance < $amount) {
+                if ($fail) {
+                    throw new BalanceNotEnoughException();
+                }
+            }
+
+            $this->balance = bcsub($this->balance, $amount, 2);
+            $this->save();
+
+            $data = [
+                'user_id' => $this->id,
+                'amount' => $amount,
+                'description' => $description,
+                'payment' => 'balance',
+                'type' => 'payout',
+            ];
+
+            if ($options) {
+                $data = array_merge($data, $options);
+            }
+
+            (new Transaction)->create($data);
+        });
+
+        return $this->balance;
+    }
+
+    /**
+     * 增加余额
+     *
+     * @param string $amount
+     * @param string $payment
+     * @param string $description
+     * @param array  $options
+     *
+     * @return string
+     */
+    public function charge(string $amount = "0", string $payment = 'console', string $description = '充值', array $options = []): string
+    {
+        Cache::lock('user_balance_' . $this->id, 10)->block(10, function () use ($amount, $description, $payment, $options) {
+            $this->refresh();
+            $this->balance = bcadd($this->balance, $amount, 2);
+            $this->save();
+
+            $data = [
+                'user_id' => $this->id,
+                'amount' => $amount,
+                'payment' => $payment,
+                'description' => $description,
+                'type' => 'income',
+            ];
+
+            if ($options) {
+                $data = array_merge($data, $options);
+            }
+
+            (new Transaction)->create($data);
+
+            (new Balance)->create([
+                'user_id' => $this->id,
+                'amount' => $amount,
+                'payment' => $payment,
+                'description' => $description,
+                'paid_at' => now(),
+            ]);
+        });
+
+        return $this->balance;
+    }
+
+    public function startTransfer(User $to, string $amount, string|null $description)
+    {
+        $description_from = "转账给 $to->name($to->email)";
+        $description_to = "收到 $this->name($this->email) 的转账";
+
+        if ($description) {
+            $description_from .= "，备注：$description";
+            $description_to .= "，备注：$description";
+        }
+
+        $this->reduce($amount, $description_from, true);
+
+        $to->charge($amount, 'transfer', $description_to);
+
+        return $this->balance;
     }
 }

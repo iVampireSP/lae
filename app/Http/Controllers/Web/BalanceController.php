@@ -48,7 +48,6 @@ class BalanceController extends Controller
      */
     public function show(Request $request, Balance $balance): RedirectResponse|JsonResponse|View
     {
-
         if ($balance->isPaid()) {
             if ($request->ajax()) {
                 return $this->success($balance);
@@ -228,8 +227,7 @@ class BalanceController extends Controller
         }
 
         if ($is_paid) {
-            (new Transaction)->addAmount($balance->user_id, $balance->payment, $balance->amount);
-
+            // $balance->user->charge($balance->amount, $balance->payment, $balance->order_id);
             $balance->update([
                 'paid_at' => now()
             ]);

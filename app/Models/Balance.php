@@ -48,6 +48,8 @@ class Balance extends Model
                 if ($balance->paid_at) {
                     $balance->notify(new UserCharged());
                     broadcast(new Users($balance->user, 'balance.updated', $balance));
+
+                    $balance->user->charge($balance->amount, $balance->payment, $balance->order_id);
                 }
             }
         });

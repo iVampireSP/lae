@@ -45,11 +45,11 @@ class Host extends Model
             $model->minute_at = now()->minute;
 
             if ($model->price !== null) {
-                $model->price = round($model->price, 2);
+                $model->price = bcdiv($model->price, 1, 2);
             }
 
             if ($model->managed_price !== null) {
-                $model->managed_price = round($model->managed_price, 2);
+                $model->managed_price = bcdiv($model->managed_price, 1, 2);
             }
         });
 
@@ -153,7 +153,7 @@ class Host extends Model
         return true;
     }
 
-    public function cost($amount = null, $auto = true): bool
+    public function cost(string $amount = null, $auto = true): bool
     {
         $this->load('user');
         $user = $this->user;
@@ -177,20 +177,23 @@ class Host extends Model
         $append_description = '';
         if ($user_group) {
             if ($user_group->discount !== 100 && $user_group->discount !== null) {
-                $real_price = $real_price * ($user_group->discount / 100);
+                $real_price = bcmul($real_price, bcdiv($user_group->discount, "100", 2), 2);
+
                 $append_description = ' (折扣 ' . $user_group->discount . '%)';
             }
         }
-
 
         if ($auto) {
             // 获取本月天数
             $days = now()->daysInMonth;
             // 本月每天的每小时的价格
-            $real_price = $real_price / $days / 24;
+            // 使用 bcmath 函数，解决浮点数计算精度问题
+            $real_price = bcdiv($real_price, $days, 4);
+            $real_price = bcdiv($real_price, 24, 4);
         }
 
         if ($real_price == 0) {
+            echo '价格为 0，不扣费';
             return true;
         }
 
@@ -199,9 +202,7 @@ class Host extends Model
             $real_price = 0.0001;
         }
 
-        $real_price = round($real_price ?? 0, 4);
-
-        $transaction = new Transaction();
+        $real_price = bcdiv($real_price, 1, 4);
 
         $month = now()->month;
 
@@ -215,7 +216,7 @@ class Host extends Model
             $hosts_balances[$this->id] = $real_price;
         }
 
-        $hosts_balances[$this->id] = round($hosts_balances[$this->id], 4);
+        $hosts_balances[$this->id] = bcdiv($hosts_balances[$this->id], 1, 4);
 
         Cache::put($month_cache_key, $hosts_balances, 604800);
 
@@ -229,7 +230,12 @@ class Host extends Model
             $description .= $append_description;
         }
 
-        $left = $transaction->reduceHostAmount($this->user_id, $this->id, $this->module_id, $real_price, $description);
+        $data = [
+            'host_id' => $this->id,
+            'module_id' => $this->module_id,
+        ];
+
+        $left = $user->reduce($real_price, $description, false, $data);
 
         $this->addLog($real_price);
 
@@ -244,9 +250,9 @@ class Host extends Model
         return true;
     }
 
-    public function addLog(float|null $amount = 0): bool
+    public function addLog(string $amount = "0"): bool
     {
-        if ($amount === 0 || $amount === null) {
+        if ($amount === "0") {
             return false;
         }
 
@@ -256,12 +262,12 @@ class Host extends Model
 
         $cache_key = 'module_earning_' . $this->module_id;
 
-        $commission = (float)config('billing.commission');
+        $commission = config('billing.commission');
 
-        $should_amount = round($amount * $commission, 2);
+        $should_amount = bcmul($amount, $commission, 2);
 
         // 应得的余额
-        $should_balance = $amount - $should_amount;
+        $should_balance = bcsub($amount, $should_amount, 2);
 
         $earnings = Cache::get($cache_key, []);
 
@@ -270,8 +276,10 @@ class Host extends Model
         }
 
         if (isset($earnings[$current_year][$current_month])) {
-            $earnings[$current_year][$current_month]['balance'] += $amount;
-            $earnings[$current_year][$current_month]['should_balance'] += $should_balance;
+            $earnings[$current_year][$current_month]['balance'] = bcadd($earnings[$current_year][$current_month]['balance'], $amount, 2);
+            $earnings[$current_year][$current_month]['should_balance'] = bcadd($earnings[$current_year][$current_month]['should_balance'], $should_balance, 2);
+
+
         } else {
             $earnings[$current_year][$current_month] = [
                 'balance' => $amount,
