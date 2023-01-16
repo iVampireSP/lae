@@ -47,12 +47,6 @@ class Transaction extends Model
         'module_id',
     ];
 
-    public function scopeThisUser($query)
-    {
-        return $query->where('user_id', auth()->id());
-    }
-
-    // on create
     protected static function boot()
     {
         parent::boot();
@@ -79,5 +73,12 @@ class Transaction extends Model
 
             $transaction->expired_at = Carbon::now()->addSeconds(7)->toString();
         });
+    }
+
+    // on create
+
+    public function scopeThisUser($query)
+    {
+        return $query->where('user_id', auth()->id());
     }
 }

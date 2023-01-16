@@ -120,24 +120,6 @@ class User extends Authenticatable
         return $year . '-' . $month . '-' . $day;
     }
 
-    /**
-     * 获取用户的身份证号
-     *
-     * @return Attribute
-     */
-    protected function idCard(): Attribute
-    {
-        return Attribute::make(
-            function ($value) {
-                try {
-                    return Crypt::decryptString($value);
-                } catch (DecryptException) {
-                    return $value;
-                }
-            }
-        );
-    }
-
     public function isAdult(): bool
     {
         // 如果 birthday_at 为空，那么就返回 false
@@ -167,6 +149,22 @@ class User extends Authenticatable
         return $this->select(['id', 'name', 'email_md5', 'created_at']);
     }
 
+    public function startTransfer(User $to, string $amount, string|null $description)
+    {
+        $description_from = "转账给 $to->name($to->email)";
+        $description_to = "收到 $this->name($this->email) 的转账";
+
+        if ($description) {
+            $description_from .= "，备注：$description";
+            $description_to .= "，备注：$description";
+        }
+
+        $this->reduce($amount, $description_from, true);
+
+        $to->charge($amount, 'transfer', $description_to);
+
+        return $this->balance;
+    }
 
     /**
      * 扣除费用
@@ -253,20 +251,21 @@ class User extends Authenticatable
         return $this->balance;
     }
 
-    public function startTransfer(User $to, string $amount, string|null $description)
+    /**
+     * 获取用户的身份证号
+     *
+     * @return Attribute
+     */
+    protected function idCard(): Attribute
     {
-        $description_from = "转账给 $to->name($to->email)";
-        $description_to = "收到 $this->name($this->email) 的转账";
-
-        if ($description) {
-            $description_from .= "，备注：$description";
-            $description_to .= "，备注：$description";
-        }
-
-        $this->reduce($amount, $description_from, true);
-
-        $to->charge($amount, 'transfer', $description_to);
-
-        return $this->balance;
+        return Attribute::make(
+            function ($value) {
+                try {
+                    return Crypt::decryptString($value);
+                } catch (DecryptException) {
+                    return $value;
+                }
+            }
+        );
     }
 }

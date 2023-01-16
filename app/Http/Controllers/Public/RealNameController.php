@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
-use App\Models\Transaction;
 use App\Models\User;
 use App\Support\RealNameSupport;
 use Illuminate\Http\JsonResponse;
