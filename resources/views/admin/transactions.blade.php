@@ -26,7 +26,7 @@
             <tbody>
             @foreach ($transactions as $t)
                 <tr>
-                    <td> &nbsp;
+                    <td>
                         <span class="module_name" module="{{ $t->module_id }}">{{ $t->module_id }}</span>
                     </td>
                     <td>
@@ -38,9 +38,11 @@
                         {{ $t->description }}
                     </td>
                     <td>
-                        <a href="{{ route('admin.users.edit', $t->user_id) }}">{{ $t->user_id }}</a>
-                        <br/>
-                        <a href="?user_id={{ $t->user_id }}">筛选</a>
+                        @if ($t->user_id)
+                            <a href="{{ route('admin.users.edit', $t->user_id) }}">{{ $t->user_id }}</a>
+                            <br/>
+                            <a href="?user_id={{ $t->user_id }}">筛选</a>
+                        @endif
                     </td>
                     <td>
                         @if ($t->host_id)
@@ -63,7 +65,13 @@
                     </td>
 
                     <td>
-                        {{ $t->user_remain ?? $t->balance }} 元
+                        @if ($t->user_id)
+                            用户 {{ $t->user_remain }} 元
+                        @endif
+                        <br/>
+                        @if ($t->module_id)
+                            模块 {{ $t->module_remain }} 元
+                        @endif
                     </td>
                     <td>
                         {{ $t->created_at }}
