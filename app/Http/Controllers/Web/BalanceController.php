@@ -22,7 +22,7 @@ class BalanceController extends Controller
     {
         $balance = $request->user()->balance;
 
-        $balances = (new Balance)->thisUser()->latest()->paginate(100);
+        $balances = (new Balance)->thisUser()->latest()->paginate(20);
 
         return view('balances.index', compact('balance', 'balances'));
     }
@@ -30,7 +30,7 @@ class BalanceController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $this->validate($request, [
-            'amount' => 'required|integer|min:0.1|max:10000',
+            'amount' => 'required|numeric|min:0.1|max:10000',
             'payment' => 'required|in:wechat,alipay',
         ]);
 
