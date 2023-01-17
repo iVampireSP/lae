@@ -26,7 +26,7 @@ class HomeController extends Controller
         }
 
         if ($request->filled('module_id')) {
-            $transactions = $transactions->where('module_id', intval($request->input('module_id')));
+            $transactions = $transactions->where('module_id', $request->input('module_id'));
         }
 
         if ($request->filled('host_id')) {
@@ -37,7 +37,7 @@ class HomeController extends Controller
             $transactions = $transactions->where('payment', $request->input('payment'));
         }
 
-        $transactions = $transactions->latest()->paginate(100)->withQueryString();
+        $transactions = $transactions->latest()->paginate(50)->withQueryString();
 
         return view('admin.transactions', compact('transactions'));
     }
