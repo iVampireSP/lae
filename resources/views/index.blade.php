@@ -16,7 +16,7 @@
             <x-alert-danger>
                 <div>
                     由于监管不佳，我们的 镜缘映射 机器收到了来自服务商的违规违法通知且已被封禁。
-                    <br />
+                    <br/>
                     2023.01.15 起，我们将开始加强监管，将实名认证升级为 实人认证，以及开始对 镜缘映射 隧道内容进行半自动化核查。
                     <br/>
                     <a href="{{ route('real_name.create') }}">点击这里实人认证</a>
@@ -25,8 +25,13 @@
         @endif
 
         @if (session('token'))
-            <p style="color:green">这是新的 Token，请妥善保管：{{ session('token') }}</p>
-            {{-- <a href="http://localhost:3000/login?token={{ session('token') }}">前往</a> --}}
+            <x-alert-warning>
+                <div>
+                    像密码一样保管好您的 API Token。
+                    <br />
+                    {{ session('token') }}
+                </div>
+            </x-alert-warning>
         @endif
 
 
@@ -35,9 +40,15 @@
 
         <form action="{{ route('newToken') }}" name="newToken" method="POST">
             @csrf
-            <label for="token_name">Token 名称</label>
-            <input type="text" name="token_name" id="token_name" placeholder="Token 名字"/>
-            <button class="btn btn-primary" type="submit">获取新的 Token</button>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" id="token_name" name="token_name" placeholder="这个 Token 要用来做什么"
+                       aria-label="Example text with button addon"
+                       aria-describedby="button-addon1">
+                <button class="btn btn-outline-primary" type="submit" id="button-addon1">生成</button>
+
+            </div>
+
+
         </form>
 
         <hr/>
