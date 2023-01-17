@@ -211,15 +211,19 @@ class User extends Authenticatable
     /**
      * 增加余额
      *
-     * @param string $amount
-     * @param string $payment
-     * @param string $description
-     * @param array  $options
+     * @param string|null $amount
+     * @param string      $payment
+     * @param string      $description
+     * @param array       $options
      *
      * @return string
      */
-    public function charge(string $amount = "0", string $payment = 'console', string $description = '充值', array $options = []): string
+    public function charge(string|null $amount = "0", string $payment = 'console', string $description = '充值', array $options = []): string
     {
+        if ($amount === null || $amount === '') {
+            return $this->balance;
+        }
+
         Cache::lock('user_balance_' . $this->id, 10)->block(10, function () use ($amount, $description, $payment, $options) {
             $this->refresh();
             $this->balance = bcadd($this->balance, $amount, 2);
