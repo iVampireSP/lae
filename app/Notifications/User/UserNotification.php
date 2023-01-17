@@ -21,7 +21,7 @@ class UserNotification extends Notification implements ShouldQueue
      *
      * @return void
      */
-    public function __construct(string $title, string $content, bool $send_mail)
+    public function __construct(string $title, string $content, bool $send_mail = false)
     {
         $this->title = $title;
         $this->content = $content;
