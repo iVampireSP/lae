@@ -4,11 +4,12 @@
 
 @section('content')
     <h3>{{ $module->name }}</h3>
-    <p>状态: {{ $module->status }}</p>
+    <p>状态: {{ $module->status }}, 余额: {{ $module->balance }} 元。</p>
 
     <div class="mt-3">
         <a href="{{ route('admin.modules.edit', $module) }}">编辑</a>
         <a href="{{ route('admin.modules.allows', $module) }}">MQTT 授权</a>
+        <a href="{{ route('admin.transactions') }}?module_id={{ $module->id }}">交易记录</a>
         <a href="{{ route('admin.modules.fast-login', $module) }}" target="_blank">快速登录</a>
         <a href="{{ route('admin.notifications.create') }}?user=all&module_id={{ $module->id }}">给此模块的所有用户发送通知</a>
     </div>
