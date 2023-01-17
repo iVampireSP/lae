@@ -47,7 +47,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'real_name_verified_at' => 'datetime',
-        'balance' => 'decimal:2',
+        'balance' => 'decimal:4',
         'banned_at' => 'datetime',
         'birthday_at' => 'date:Y-m-d'
     ];
@@ -191,7 +191,7 @@ class User extends Authenticatable
                 }
             }
 
-            $this->balance = bcsub($this->balance, $amount, 2);
+            $this->balance = bcsub($this->balance, $amount, 4);
             $this->save();
 
             $data = [
@@ -230,7 +230,7 @@ class User extends Authenticatable
 
         Cache::lock('user_balance_' . $this->id, 10)->block(10, function () use ($amount, $description, $payment, $options) {
             $this->refresh();
-            $this->balance = bcadd($this->balance, $amount, 2);
+            $this->balance = bcadd($this->balance, $amount, 4);
             $this->save();
 
             $data = [
