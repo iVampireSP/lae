@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Notifications\User\UserNotification;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
@@ -161,7 +162,10 @@ class AuthController extends Controller
 
     public function deleteAll(Request $request): RedirectResponse
     {
-        $request->user()->tokens()->delete();
+        $user = $request->user('web');
+
+        $user->tokens()->delete();
+        $user->notify(new UserNotification('莱云', '您的所有 Token 已被删除。'));
 
         return back()->with('success', '所有 Token 删除成功。');
     }
