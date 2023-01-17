@@ -6,10 +6,11 @@ use App\Models\WorkOrder\WorkOrder as WorkOrderModel;
 use App\Notifications\Channels\WebChannel;
 use App\Notifications\Channels\WeComChannel;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class WorkOrder extends Notification
+class WorkOrder extends Notification implements ShouldQueue
 {
     use Queueable;
 
