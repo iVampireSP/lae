@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh_CN" data-bs-theme="auto">
+<html lang="zh_CN" data-bs-theme="dark">
 
 <head>
     <meta charset="utf-8">
@@ -24,7 +24,7 @@
 
 <body>
 <div id="app">
-    <nav class="navbar navbar-expand-md shadow-sm bg-body">
+    <nav class="navbar navbar-expand-lg bd-navbar sticky-top bg-body">
         <div class="container">
             <a class="navbar-brand" href="{{ route('index') }}">
                 {{ config('app.display_name') }}
