@@ -87,10 +87,6 @@ class WorkOrder extends Notification
 
         $module = $workOrder->module;
 
-        if ($workOrder->notify === 0) {
-            return false;
-        }
-
         // 取消隐藏字段
         $module->makeVisible(['wecom_key']);
 

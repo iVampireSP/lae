@@ -7,6 +7,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 // use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -44,10 +45,13 @@ class PushWorkOrderJob implements ShouldQueue
 
 
                 if ($workOrder->status === 'error') {
-                    // 如果 created_at 超过 3 天 use Carbon
-                    if (now()->diffInDays($workOrder->created_at) > 3) {
+                    // 如果超过 3 次错误，使用 Redis
+                    $count = Cache::get('work_order_error_count_' . $workOrder->id, 0);
+                    if ($count > 3) {
                         $workOrder->delete();
                         continue;
+                    } else {
+                        Cache::increment('work_order_error_count_' . $workOrder->id);
                     }
                 }
 

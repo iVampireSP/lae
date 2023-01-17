@@ -85,7 +85,9 @@ class WorkOrder extends Model
         static::updated(function (self $model) {
             dispatch(new WorkOrderJob($model, 'put'));
 
-            $model->notify(new WorkOrderNotification($model));
+            if ($model->notify) {
+                $model->notify(new WorkOrderNotification($model));
+            }
         });
     }
 
