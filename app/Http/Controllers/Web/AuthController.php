@@ -22,8 +22,6 @@ use function view;
 
 class AuthController extends Controller
 {
-    // use ApiResponse;
-
     public function index(Request $request): View|RedirectResponse
     {
         // if logged in
@@ -61,10 +59,7 @@ class AuthController extends Controller
 
     public function confirm_redirect(Request $request): View
     {
-        // create token
-
         $callback = $request->callback ?? session('callback');
-
 
         return view('confirm_redirect', compact('callback'));
     }
@@ -81,8 +76,6 @@ class AuthController extends Controller
             'state' => $state,
             'meta' => 'test_meta',
         ]);
-
-        // dd($query);
 
         return redirect()->to(config('oauth.oauth_auth_url') . '?' . $query);
     }
@@ -139,8 +132,6 @@ class AuthController extends Controller
             $user->email = $email;
             $user->password = null;
             $user->email_verified_at = $email_verified_at;
-            // $user->real_name = $oauth_user->real_name;
-            // $user->birthday_at = $oauth_user->birthday;
             $user->save();
 
             $request->session()->put('auth.password_confirmed_at', time());
@@ -150,7 +141,6 @@ class AuthController extends Controller
                     'name' => $oauth_user->name
                 ]);
             }
-            // $api_token = $user->api_token;
         }
 
         Auth::loginUsingId($user->id, true);
