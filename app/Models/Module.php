@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Exceptions\User\BalanceNotEnoughException;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use GuzzleHttp\Exception\ConnectException;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -33,6 +34,11 @@ class Module extends Authenticatable
         'api_token',
         'url',
         'wecom_key'
+    ];
+
+    protected $casts = [
+        'id' => 'string',
+        'balance' => 'decimal:4',
     ];
 
     protected static function boot()
@@ -157,5 +163,101 @@ class Module extends Authenticatable
     {
         $cache_key = 'module_earning_' . $this->id;
         return Cache::get($cache_key, []);
+    }
+
+
+    /**
+     * 扣除费用
+     *
+     * @param string|null $amount
+     * @param string|null $description
+     * @param bool        $fail
+     * @param array       $options
+     *
+     * @return string
+     */
+    public function reduce(string|null $amount = "0", string|null $description = "消费", bool $fail = false, array $options = []): string
+    {
+        if ($amount === null || $amount === '') {
+            return $this->balance;
+        }
+
+        Cache::lock('module_balance_' . $this->id, 10)->block(10, function () use ($amount, $fail, $description, $options) {
+            $this->refresh();
+
+            if ($this->balance < $amount) {
+                if ($fail) {
+                    throw new BalanceNotEnoughException();
+                }
+            }
+
+            $this->balance = bcsub($this->balance, $amount, 4);
+            $this->save();
+
+            if ($description) {
+                $data = [
+                    'module_id' => $this->id,
+                    'amount' => $amount,
+                    'description' => $description,
+                    'payment' => 'balance',
+                    'type' => 'payout',
+                ];
+
+                if ($options) {
+                    $data = array_merge($data, $options);
+                }
+
+                (new Transaction)->create($data);
+
+            }
+
+        });
+
+        return $this->balance;
+    }
+
+    /**
+     * 增加余额
+     *
+     * @param string|null $amount
+     * @param string      $payment
+     * @param string|null $description
+     * @param array       $options
+     *
+     * @return string
+     */
+    public function charge(string|null $amount = "0", string $payment = 'console', string|null $description = '充值', array $options = []): string
+    {
+        if ($amount === null || $amount === '') {
+            return $this->balance;
+        }
+
+        Cache::lock('module_balance_' . $this->id, 10)->block(10, function () use ($amount, $description, $payment, $options) {
+            $this->refresh();
+
+            $this->balance = bcadd($this->balance, $amount, 4);
+
+            $this->save();
+
+            if ($description) {
+                $data = [
+                    'module_id' => $this->id,
+                    'amount' => $amount,
+                    'payment' => $payment,
+                    'description' => $description,
+                    'type' => 'income',
+                ];
+
+                if ($options) {
+                    $data = array_merge($data, $options);
+                }
+
+                (new Transaction)->create($data);
+            }
+
+
+        });
+
+        return $this->balance;
     }
 }
