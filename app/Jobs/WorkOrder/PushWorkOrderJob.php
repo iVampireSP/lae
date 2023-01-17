@@ -52,7 +52,6 @@ class PushWorkOrderJob implements ShouldQueue
 
 
                 $success = false;
-
                 try {
                     $response = $workOrder->module->http()->retry(3, 100)->post('work-orders', $workOrder->toArray());
 
@@ -61,10 +60,14 @@ class PushWorkOrderJob implements ShouldQueue
                             'work_order_id' => $workOrder->id,
                             'response' => $response->body(),
                         ]);
-                        $workOrder->status = 'error';
+                    } else {
+                        $success = true;
                     }
                 } catch (RequestException $e) {
                     Log::warning($e->getMessage());
+                }
+
+                if (!$success) {
                     $workOrder->status = 'error';
                 }
 
