@@ -39,6 +39,11 @@
         </div>
 
         <div class="form-group mt-1">
+            <label for="balance">修改余额（元）</label>
+            <input type="text" class="form-control" id="balance" name="balance" value="{{ $module->balance }}"/>
+        </div>
+
+        <div class="form-group mt-1">
             <label for="status">状态</label>
             <select class="form-control" id="status" name="status">
                 <option value="up" @if ($module->status === 'up') selected @endif>正常</option>
