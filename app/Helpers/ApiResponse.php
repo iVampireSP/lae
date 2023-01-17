@@ -114,7 +114,7 @@ trait ApiResponse
 
     public function deleted($message = 'Deleted'): JsonResponse
     {
-        return $this->success($message);
+        return $this->success($message, 204);
     }
 
     public function notAllowed($message = 'Not allowed'): JsonResponse
