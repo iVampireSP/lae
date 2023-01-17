@@ -148,7 +148,7 @@ class ModuleController extends Controller
                     $module->charge($diff, 'console', $description);
                 } else {
                     $description = '管理员 ' . auth('admin')->user()->name . ' 扣除 ' . abs($diff) . ' 元';
-                    $module->reduce(abs($diff), $description, false);
+                    $module->reduce(abs($diff), $description);
                 }
             }
         }
