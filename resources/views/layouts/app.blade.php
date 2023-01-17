@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh_CN">
+<html lang="zh_CN" data-bs-theme="auto">
 
 <head>
     <meta charset="utf-8">
@@ -26,42 +26,42 @@
 <div id="app">
     <nav class="navbar navbar-expand-md shadow-sm bg-body">
         <div class="container">
-            <a class="navbar-brand text-auto" href="{{ route('index') }}">
+            <a class="navbar-brand" href="{{ route('index') }}">
                 {{ config('app.display_name') }}
             </a>
-            <button class="navbar-toggler text-auto" type="button" data-bs-toggle="collapse"
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                <span class="bi bi-list text-auto fs-1"></span>
+                <span class="bi bi-list fs-1"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <!-- Left Side Of Navbar -->
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link text-auto" href="{{ route('index') }}">密钥管理</a>
+                        <a class="nav-link" href="{{ route('index') }}">密钥管理</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-auto" href="{{ route('balances.index') }}">余额与充值</a>
+                        <a class="nav-link" href="{{ route('balances.index') }}">余额与充值</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-auto" href="{{ route('transfer') }}">转账</a>
+                        <a class="nav-link" href="{{ route('transfer') }}">转账</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-auto" href="{{ route('transactions') }}">交易记录</a>
+                        <a class="nav-link" href="{{ route('transactions') }}">交易记录</a>
                     </li>
 
                 </ul>
 
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ms-auto">
-                    <a class="nav-link text-auto" target="_blank"
+                    <a class="nav-link" target="_blank"
                        href="{{ config('settings.dashboard.base_url') }}">仪表盘</a>
 
-                    <a class="nav-link text-auto" target="_blank"
+                    <a class="nav-link" target="_blank"
                        href="{{ config('settings.forum.base_url') }}">社区</a>
 
-                    <a class="nav-link text-auto"
+                    <a class="nav-link"
                        href="{{ route('contact') }}">联系我们</a>
 
                     @if (Auth::guard('admin')->check())
@@ -69,10 +69,10 @@
                         <li class="nav-item">
 
                             @if(Auth::guard('web')->check())
-                                <a class="nav-link text-auto"
+                                <a class="nav-link"
                                    href="{{ route('admin.users.edit', Auth::guard('web')->id()) }}">回到 {{ Auth::guard('admin')->user()->name }}</a>
                             @else
-                                <a class="nav-link text-auto"
+                                <a class="nav-link"
                                    href="{{ route('admin.index') }}">切换到后台</a>
                             @endif
                         </li>
@@ -81,21 +81,20 @@
 
                     <!-- Authentication Links -->
                     @guest
-                        <li class="nav-item text-auto">
+                        <li class="nav-item">
                             <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                         </li>
 
                     @else
                         <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link text-auto dropdown-toggle" href="#" role="button"
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 {{ Auth::user()->name }}
                             </a>
 
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ route('logout') }}"
-                                   onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                                   onclick="document.getElementById('logout-form').submit();return false;">
                                     {{ __('Logout') }}
                                 </a>
 

@@ -17,8 +17,6 @@ class ModuleEarning extends Component
      */
     public function __construct(Module $module)
     {
-        //
-
         $this->module = $module;
     }
 

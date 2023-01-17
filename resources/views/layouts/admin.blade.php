@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-bs-theme="auto">
 
 <head>
     <meta charset="utf-8">
@@ -22,13 +22,13 @@
 <div id="app">
     <nav class="navbar navbar-expand-md shadow-sm bg-body">
         <div class="container">
-            <a class="navbar-brand text-auto" href="{{ route('admin.index') }}">
+            <a class="navbar-brand" href="{{ route('admin.index') }}">
                 管理员
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                     data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                <span class="bi bi-list text-auto fs-1"></span>
+                <span class="bi bi-list fs-1"></span>
             </button>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -83,13 +83,13 @@
 
 
                     <li class="nav-item">
-                        <a class="nav-link text-auto" href="{{ route('admin.transactions') }}">交易记录</a>
+                        <a class="nav-link" href="{{ route('admin.transactions') }}">交易记录</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-auto" href="{{ route('admin.admins.index') }}">管理员</a>
+                        <a class="nav-link" href="{{ route('admin.admins.index') }}">管理员</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-auto" href="{{ route('admin.commands') }}">速查表</a>
+                        <a class="nav-link" href="{{ route('admin.commands') }}">速查表</a>
                     </li>
                 </ul>
 
@@ -98,14 +98,14 @@
                     <!-- Authentication Links -->
                     @if (!Auth::guard('admin')->check())
                         @if (Route::has('admin.login'))
-                            <li class="nav-item text-auto">
+                            <li class="nav-item">
                                 <a class="nav-link" href="{{ route('admin.login') }}">{{ __('Login') }}</a>
                             </li>
                         @endif
                     @else
                         @if (Auth::guard('web')->check())
                             <li class="nav-item">
-                                <a class="nav-link text-auto" href="{{ route('index') }}">切换到
+                                <a class="nav-link" href="{{ route('index') }}">切换到
                                     {{ Auth::guard('web')->user()->name }}</a>
                             </li>
                         @endif
@@ -113,7 +113,7 @@
 
                             @php($admin = \Illuminate\Support\Facades\Auth::guard('admin')->user())
 
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle text-auto" href="#" role="button"
+                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 {{ $admin->name ?? '管理员' }}
                             </a>
@@ -124,8 +124,7 @@
                                 </a>
 
                                 <a class="dropdown-item" href="{{ route('admin.logout') }}"
-                                   onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
+                                   onclick="document.getElementById('logout-form').submit();return false;">
                                     {{ __('Logout') }}
                                 </a>
 

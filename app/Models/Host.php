@@ -237,7 +237,7 @@ class Host extends Model
 
         $left = $user->reduce($real_price, $description, false, $data);
 
-        $this->addLog($this, $real_price);
+        $this->addLog($real_price);
 
         broadcast(new Users($this->user, 'balances.amount.reduced', $this->user));
 
@@ -250,7 +250,7 @@ class Host extends Model
         return true;
     }
 
-    public function addLog(Host $host, string $amount = "0"): bool
+    public function addLog(string $amount = "0"): bool
     {
         if ($amount === "0") {
             return false;
@@ -295,7 +295,7 @@ class Host extends Model
             $earnings = array_slice($earnings, -3, 3, true);
         }
 
-        $this->module->charge($should_balance, 'balance', null);
+        $this->module->charge($amount, 'balance', null);
 
         // 保存 1 年
         Cache::forever($cache_key, $earnings);
