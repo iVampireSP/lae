@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers\Modules;
 
-use App\Exceptions\User\BalanceNotEnoughException;
 use App\Http\Controllers\Controller;
 use App\Models\Host;
-use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -53,22 +51,46 @@ class UserController extends Controller
         return $this->success($hosts);
     }
 
-    public function reduce(Request $request, User $user): JsonResponse
+    public function update(Request $request, User $user): JsonResponse
     {
         $this->validate($request, [
-            'amount' => 'required|numeric|min:0.01|max:10000',
+            'balance' => 'required|numeric|min:-10000|max:10000',
             'description' => 'required|string',
         ]);
 
-        $module = auth('module')->user();
-        $transaction = new Transaction();
+        $module = $request->user('module');
 
-        try {
-            $transaction->reduceAmountModuleFail($user->id, $module->id, $request->input('amount'), $request->input('description'));
-        } catch (BalanceNotEnoughException) {
-            return $this->error('余额不足');
+        $balance = $request->input('balance');
+
+        if ($balance < 0) {
+            // 使用 bc，取 balance 绝对值
+            $balance = bcsub(0, $balance, 4);
+
+            // 如果用户余额不足，抛出异常，使用 bc 函数判断
+            if (bccomp($user->balance, $balance, 2) === -1) {
+                return $this->error('用户余额不足。');
+            }
+
+            $user->reduce($balance, $request->description, true);
+            $module->charge($balance, 'balance', $request->description, [
+                'user_id' => $user->id,
+            ]);
+
+        } else {
+            // 如果模块余额不足，抛出异常，使用 bc 函数判断
+            if (bccomp($module->balance, $balance, 2) === -1) {
+                return $this->error('模块余额不足。');
+            }
+
+            $module->reduce($balance, $request->description, true, [
+                'user_id' => $user->id,
+                'payment' => 'module_balance'
+            ]);
+
+            $user->charge($balance, 'module_balance', $request->description);
         }
 
-        return $this->success();
+        return $this->updated();
     }
+
 }
