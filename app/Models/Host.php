@@ -188,12 +188,11 @@ class Host extends Model
             $days = now()->daysInMonth;
             // 本月每天的每小时的价格
             // 使用 bcmath 函数，解决浮点数计算精度问题
-            $real_price = bcdiv($real_price, $days, 4);
-            $real_price = bcdiv($real_price, 24, 4);
+            $real_price = bcdiv($real_price, $days, 8);
+            $real_price = bcdiv($real_price, 24, 8);
         }
 
         if ($real_price == 0) {
-            echo '价格为 0，不扣费';
             return true;
         }
 
