@@ -11,6 +11,7 @@
             <thead>
             <th>ID</th>
             <th>名称</th>
+            <th>余额</th>
             <th>操作</th>
             </thead>
 
@@ -26,10 +27,15 @@
                         {{ $module->name }}
                     </td>
                     <td>
+                        {{ $module->balance }} 元
+                    </td>
+                    <td>
                         <a href="{{ route('admin.modules.show', $module) }}" class="btn btn-primary btn-sm">查看</a>
                         <a href="{{ route('admin.modules.edit', $module) }}" class="btn btn-primary btn-sm">编辑</a>
-                        <a href="{{ route('admin.modules.allows', $module) }}" class="btn btn-primary btn-sm">MQTT 授权</a>
-                        <a href="{{ route('admin.modules.fast-login', $module) }}" target="_blank" class="btn btn-primary btn-sm">快速登录</a>
+                        <a href="{{ route('admin.modules.allows', $module) }}" class="btn btn-primary btn-sm">MQTT
+                            授权</a>
+                        <a href="{{ route('admin.modules.fast-login', $module) }}" target="_blank"
+                           class="btn btn-primary btn-sm">快速登录</a>
 
                     </td>
                 </tr>
