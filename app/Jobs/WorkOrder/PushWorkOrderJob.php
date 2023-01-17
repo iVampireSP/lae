@@ -50,7 +50,6 @@ class PushWorkOrderJob implements ShouldQueue
 
                 $workOrder->status = 'open';
 
-
                 $success = false;
                 try {
                     $response = $workOrder->module->http()->retry(3, 100)->post('work-orders', $workOrder->toArray());
