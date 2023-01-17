@@ -25,9 +25,8 @@
             @foreach ($transactions as $t)
                 <tr>
 
-                    <td> &nbsp;
+                    <td>
                         <span class="module_name" module="{{ $t->module_id }}">{{ $t->module_id }}</span>
-
                     </td>
                     <td>
                         <x-payment :payment="$t->payment"></x-payment>
