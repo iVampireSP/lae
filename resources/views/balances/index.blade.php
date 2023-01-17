@@ -3,7 +3,9 @@
 @section('title', '余额')
 
 @section('content')
-    <h1><small class="fs-5">余额</small> {{ $balance }} <small class="fs-5">元</small></h1>
+    <h1><small class="fs-5">余额</small>
+        {{ bcadd($balance, 0, 2) }}
+        <small class="fs-5">元</small></h1>
     <p><small class="text-danger"><i class="bi bi-exclamation-circle"></i> 余额不可用于提现</small></p>
 
 
