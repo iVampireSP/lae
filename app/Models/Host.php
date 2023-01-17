@@ -177,7 +177,7 @@ class Host extends Model
         $append_description = '';
         if ($user_group) {
             if ($user_group->discount !== 100 && $user_group->discount !== null) {
-                $real_price = bcmul($real_price, bcdiv($user_group->discount, "100", 2), 2);
+                $real_price = bcmul($real_price, bcdiv($user_group->discount, "100", 4), 4);
 
                 $append_description = ' (折扣 ' . $user_group->discount . '%)';
             }
@@ -188,11 +188,12 @@ class Host extends Model
             $days = now()->daysInMonth;
             // 本月每天的每小时的价格
             // 使用 bcmath 函数，解决浮点数计算精度问题
-            $real_price = bcdiv($real_price, $days, 8);
-            $real_price = bcdiv($real_price, 24, 8);
+            $real_price = bcdiv($real_price, $days, 4);
+            $real_price = bcdiv($real_price, 24, 4);
         }
 
         if ($real_price == 0) {
+            echo '价格为 0，不扣费';
             return true;
         }
 
@@ -236,7 +237,7 @@ class Host extends Model
 
         $left = $user->reduce($real_price, $description, false, $data);
 
-        $this->addLog($real_price);
+        $this->addLog($this, $real_price);
 
         broadcast(new Users($this->user, 'balances.amount.reduced', $this->user));
 
@@ -249,7 +250,7 @@ class Host extends Model
         return true;
     }
 
-    public function addLog(string $amount = "0"): bool
+    public function addLog(Host $host, string $amount = "0"): bool
     {
         if ($amount === "0") {
             return false;
@@ -261,12 +262,16 @@ class Host extends Model
 
         $cache_key = 'module_earning_' . $this->module_id;
 
+        // 应支付的提成
         $commission = config('billing.commission');
-
-        $should_amount = bcmul($amount, $commission, 2);
+        $should_amount = bcmul($amount, $commission, 4);
 
         // 应得的余额
-        $should_balance = bcsub($amount, $should_amount, 2);
+        $should_balance = bcsub($amount, $should_amount, 4);
+        // 如果太小，则重置为 0.0001
+        if ($should_balance < 0.0001) {
+            $should_balance = 0.0001;
+        }
 
         $earnings = Cache::get($cache_key, []);
 
@@ -275,10 +280,8 @@ class Host extends Model
         }
 
         if (isset($earnings[$current_year][$current_month])) {
-            $earnings[$current_year][$current_month]['balance'] = bcadd($earnings[$current_year][$current_month]['balance'], $amount, 2);
-            $earnings[$current_year][$current_month]['should_balance'] = bcadd($earnings[$current_year][$current_month]['should_balance'], $should_balance, 2);
-
-
+            $earnings[$current_year][$current_month]['balance'] = bcadd($earnings[$current_year][$current_month]['balance'], $amount, 4);
+            $earnings[$current_year][$current_month]['should_balance'] = bcadd($earnings[$current_year][$current_month]['should_balance'], $should_balance, 4);
         } else {
             $earnings[$current_year][$current_month] = [
                 'balance' => $amount,
@@ -291,6 +294,8 @@ class Host extends Model
         if (count($earnings) > 3) {
             $earnings = array_slice($earnings, -3, 3, true);
         }
+
+        $this->module->charge($should_balance, 'balance', null);
 
         // 保存 1 年
         Cache::forever($cache_key, $earnings);
