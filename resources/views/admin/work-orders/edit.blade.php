@@ -5,8 +5,14 @@
 @section('content')
 
     <h3>{{ $workOrder->title }}</h3>
+    <p>
+        UUID: {{ $workOrder->uuid }}
+    </p>
     <x-work-order-status :status="$workOrder->status"></x-work-order-status>
     <a href="{{ route('admin.work-orders.show', $workOrder) }}">查看工单</a>
+
+
+
 
 
     @if ($workOrder->status !== 'pending')
