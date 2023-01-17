@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Host;
 use App\Models\Module;
 use App\Models\ModuleAllow;
+use App\Models\Transaction;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -72,6 +73,7 @@ class ModuleController extends Controller
             'name' => 'required|string|max:255',
             'url' => 'required|url',
             'status' => 'required|string|in:up,down,maintenance',
+            'balance' => 'required|numeric',
             'wecom_key' => 'nullable|string|max:255',
         ];
     }
@@ -133,6 +135,24 @@ class ModuleController extends Controller
         $module->save();
 
         $text = '模块更新成功';
+
+        if ($request->filled('balance')) {
+            // 判断有无差异
+            if ($module->balance != $request->input('balance')) {
+                // bc 获取差异
+                $diff = bcsub($request->input('balance'), $module->balance, 4);
+
+                // 充值或者扣费
+                if ($diff > 0) {
+                    $description = '管理员 ' . auth('admin')->user()->name . ' 充值 ' . $diff . ' 元';
+                    $module->charge($diff, 'console', $description);
+                } else {
+                    $description = '管理员 ' . auth('admin')->user()->name . ' 扣除 ' . abs($diff) . ' 元';
+                    $module->reduce(abs($diff), $description, false);
+                }
+            }
+        }
+
 
         if ($request->input('reset_api_token')) {
             $text .= ', API Token 为 ' . $module->api_token . '。';
