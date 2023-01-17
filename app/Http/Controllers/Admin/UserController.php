@@ -96,7 +96,7 @@ class UserController extends Controller
     {
         //
         $request->validate([
-            'balance' => 'nullable|numeric|min:0.01|max:1000',
+            'balance' => 'nullable|numeric|min:0.01|max:10000000',
             'id_card' => 'nullable|string|size:18',
         ]);
 
