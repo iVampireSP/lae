@@ -169,15 +169,19 @@ class User extends Authenticatable
     /**
      * 扣除费用
      *
-     * @param string $amount
-     * @param string $description
-     * @param bool   $fail
-     * @param array  $options
+     * @param string|null $amount
+     * @param string      $description
+     * @param bool        $fail
+     * @param array       $options
      *
      * @return string
      */
-    public function reduce(string $amount = "0", string $description = "消费", bool $fail = false, array $options = []): string
+    public function reduce(string|null $amount = "0", string $description = "消费", bool $fail = false, array $options = []): string
     {
+        if ($amount === null || $amount === '') {
+            return $this->balance;
+        }
+
         Cache::lock('user_balance_' . $this->id, 10)->block(10, function () use ($amount, $fail, $description, $options) {
             $this->refresh();
 
