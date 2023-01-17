@@ -7,6 +7,7 @@ use App\Jobs\User\SendUserNotificationsJob;
 use App\Models\Module;
 use App\Models\User;
 use GeneaLabs\LaravelModelCaching\CachedBuilder;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -30,7 +31,7 @@ class NotificationController extends Controller
         return view('admin.notifications.create', compact('modules', 'users'));
     }
 
-    public function query(Request|array $request): User|CachedBuilder
+    public function query(Request|array $request): User|CachedBuilder|Builder
     {
         if ($request instanceof Request) {
             $request = $request->all();
