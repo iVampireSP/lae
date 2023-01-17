@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Host;
 use App\Models\Module;
 use App\Models\ModuleAllow;
-use App\Models\Transaction;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
