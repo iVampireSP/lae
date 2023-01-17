@@ -37,8 +37,6 @@ class HostJob implements ShouldQueue
      */
     public function handle(): void
     {
-        //
-
         $host = $this->host;
         $host->load(['module']);
 

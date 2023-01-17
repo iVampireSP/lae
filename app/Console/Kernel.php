@@ -3,7 +3,7 @@
 namespace App\Console;
 
 use App\Jobs\Host\DeleteHostJob;
-use App\Jobs\Host\HostCostJob;
+use App\Jobs\Host\DispatchHostCostQueueJob;
 use App\Jobs\Host\ScanAllHostsJob;
 use App\Jobs\Module\FetchModuleJob;
 use App\Jobs\Module\SendModuleEarningsJob;
@@ -31,7 +31,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('sanctum:prune-expired --hours=24')->daily();
 
         // 扣费
-        $schedule->job(new HostCostJob(now()->minute))->everyMinute()->withoutOverlapping()->onOneServer();
+        $schedule->job(new DispatchHostCostQueueJob(now()->minute))->everyMinute()->withoutOverlapping()->onOneServer();
 
         // 获取模块暴露的信息（服务器等）
         $schedule->job(new FetchModuleJob())->withoutOverlapping()->everyMinute();
