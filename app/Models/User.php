@@ -41,6 +41,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'real_name',
         'id_card',
     ];
 
@@ -59,7 +60,13 @@ class User extends Authenticatable
         'birthday_at',
     ];
 
-    // id card 必须加密
+    public array $publics = [
+        'id',
+        'name',
+        'email',
+        'real_name',
+        'balance',
+    ];
 
     protected static function boot()
     {
@@ -145,8 +152,8 @@ class User extends Authenticatable
 
     public function selectPublic(): User
     {
-        // 过滤掉私有字段
-        return $this->select(['id', 'name', 'email_md5', 'created_at']);
+        // 仅需选择公开的
+        return $this->select($this->publics);
     }
 
     public function startTransfer(User $to, string $amount, string|null $description)

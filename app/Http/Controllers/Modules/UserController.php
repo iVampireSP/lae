@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers\Controller;
 use App\Models\Host;
+use App\Models\PersonalAccessToken;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 
 class UserController extends Controller
 {
@@ -89,6 +91,23 @@ class UserController extends Controller
         }
 
         return $this->updated();
+    }
+
+    public function auth($token): JsonResponse
+    {
+        $token = PersonalAccessToken::findToken($token);
+
+        // 画饼: 验证 Token 能力，比如是否可以访问这个模块
+
+        return $token ? $this->success(Arr::only(
+            $token->tokenable
+                ->makeVisible('real_name')
+                ->toArray()
+            ,
+            [
+                'id', 'name', 'email', 'real_name'
+            ]
+        )) : $this->notFound();
     }
 
 }

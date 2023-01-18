@@ -22,6 +22,7 @@ Route::apiResource('work-orders.replies', ReplyController::class);
 // 用户信息
 Route::resource('users', UserController::class)->only(['index', 'show', 'update']);
 
+Route::get('token/{token}', [UserController::class, 'auth']);
 Route::get('users/{user}/hosts', [UserController::class, 'hosts']);
 
 Route::post('broadcast/users/{user}', [BroadcastController::class, 'broadcast_to_user']);
