@@ -32,8 +32,8 @@ class ScanAllHostsJob implements ShouldQueue
      */
     public function handle(): void
     {
-        // 删除所有模块中不存在的主机
-        Host::with('module')->where('created_at', '<', now()->subHour())->chunk(100, function ($hosts) {
+        // 扫描全部主机
+        Host::with('module')->chunk(100, function ($hosts) {
             foreach ($hosts as $host) {
                 // 忽略维护中的模块
                 if ($host->module->status !== 'up') {
@@ -41,7 +41,6 @@ class ScanAllHostsJob implements ShouldQueue
                 }
 
                 $host->updateOrDelete();
-
             }
         });
     }
