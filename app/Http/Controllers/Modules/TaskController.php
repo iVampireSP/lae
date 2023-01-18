@@ -39,7 +39,7 @@ class TaskController extends Controller
         //
         $this->validate($request, [
             'title' => 'required|max:255',
-            'progress' => 'sometimes|integer|max:100',
+            'progress' => 'nullable|integer|max:100',
             'status' => 'required|in:pending,processing,need_operation,done,success,failed,error,canceled',
         ]);
 
