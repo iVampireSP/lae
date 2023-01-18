@@ -30,6 +30,7 @@
                 <option value="stopped" {{ $host->status == 'stopped' ? 'selected' : '' }}>已停止</option>
                 <option value="suspended" {{ $host->status == 'suspended' ? 'selected' : '' }}>已暂停</option>
                 <option value="error" {{ $host->status == 'error' ? 'selected' : '' }}>错误 (提交此项目将会被忽略)</option>
+                <option value="error" {{ $host->status == 'pending' ? 'selected' : '' }}>等待中 (提交此项目将会被忽略)</option>
             </select>
         </div>
 
