@@ -105,7 +105,7 @@ class Module extends Authenticatable
 
         if ($user) {
             $this->http()->withHeaders([
-                'X-User-id' => $user->id,
+                'X-User-Id' => $user->id,
             ]);
             $requests['user_id'] = $user->id;
             if ($method == 'post') {
