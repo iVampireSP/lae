@@ -18,7 +18,6 @@ class UserController extends Controller
             'name' => 'sometimes|string',
         ]);
 
-
         $users = User::query();
 
         // 搜索 name, email, balance
@@ -75,7 +74,6 @@ class UserController extends Controller
             $module->charge($balance, 'balance', $request->description, [
                 'user_id' => $user->id,
             ]);
-
         } else {
             // 如果模块余额不足，抛出异常，使用 bc 函数判断
             if (bccomp($module->balance, $balance, 2) === -1) {
