@@ -16,7 +16,7 @@ return [
         'birthday_path' => env('DASHBOARD_BIRTHDAY_PATH', '/birthdays'),
     ],
     'node' => [
-        'type' => env('NODE_TYPE', 'master'),
+        'type' => env('NODE_TYPE', 'slave'),
         'id' => env('NODE_ID'),
         'ip' => env('NODE_IP'),
     ],
