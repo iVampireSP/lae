@@ -8,6 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 
 class UpdateOrDeleteHostJob implements ShouldQueue
@@ -39,8 +40,10 @@ class UpdateOrDeleteHostJob implements ShouldQueue
 
         $status = $response->status();
 
+        $json = $response->json();
+
         if ($status === 200) {
-            $host->update($response->json());
+            $host->update(Arr::except($json, ['id', 'user_id', 'module_id', 'created_at', 'updated_at']));
         } else if ($status === 404) {
             Log::warning($host->module->name . ' ' . $host->name . ' ' . $host->id . ' 不存在，删除。');
             dispatch(new HostJob($host, 'delete'));
