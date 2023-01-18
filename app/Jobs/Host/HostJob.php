@@ -50,10 +50,10 @@ class HostJob implements ShouldQueue
 
                 break;
             case 'delete':
-                $response = $host->module->http()->delete('hosts/' . $host->id);
+                $response = $host->module->baseRequest('delete', 'hosts/' . $host->id);
 
                 // if successful
-                if ($response->successful() || $response->status() === 404) {
+                if ($response['status'] === 404) {
                     $host->delete();
                 }
 

@@ -76,14 +76,23 @@ class Module extends Authenticatable
 
     private function getResponse(Response $response): array
     {
-        $json = $response->json();
-        $status = $response->status();
+        $module_token = $response->header('x-module-api-token');
 
         $success = true;
+        $json = $response->json();
+        $status = $response->status();
 
         // if status code is not 20x
         if ($status < 200 || $status >= 300) {
             $success = false;
+
+            // 防止误删除
+            if ($module_token !== $this->api_token) {
+                $this->status = 'maintenance';
+                $this->save();
+
+                $status = 401;
+            }
         }
 
         return [
@@ -99,7 +108,7 @@ class Module extends Authenticatable
         return $this->baseRequest($method, "functions/$path", $requests);
     }
 
-    public function baseRequest($method, $path, $requests): array
+    public function baseRequest($method, $path, $requests = []): array
     {
         $user = auth('sanctum')->user();
 
