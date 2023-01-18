@@ -57,6 +57,7 @@ class Log extends Command
             'node.offline' => '将不再处理任何任务。',
             'cluster_ready.ok' => 'ClusterSupport Ready 就绪了，已经可以处理请求了。',
             'config.updated' => '集群配置文件已经更新，请所有 slave 节点下载。',
+            'config.ssl.updated' => '边缘节点的证书已经更新。',
             'config.synced' => '我已下载配置文件。',
             'edge.deployed' => '已成功根据集群节点生成配置文件并应用。',
             'edge.launched' => '边缘节点成功启动。',

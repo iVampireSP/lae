@@ -43,7 +43,7 @@ class Upload extends Command
             return CommandAlias::SUCCESS;
         }
 
-        $this->warn('此节点为主节点，将同时上传两份版本（如果有 .env.slave 的话）。');
+        $this->warn('此节点为主节点，将同时上传两份版本（如果有 .env.slave 的话）。以及让边缘节点重载 SSL。');
 
         // 上传 master
         $this->upload('master');
@@ -108,6 +108,32 @@ class Upload extends Command
             ClusterSupport::forever($cache_md5_key, md5_file($cacheZip));
 
             unlink($cacheZip);
+
+            // 上传 config/secrets/ssl_fullchain.pem 和 config/secrets/ssl_privkey.pem
+            $ssl_fullchain_key = "config/secrets/ssl_fullchain.pem";
+            $ssl_privkey_key = "config/secrets/ssl_privkey.pem";
+
+            if (file_exists(base_path($ssl_fullchain_key)) && file_exists(base_path($ssl_privkey_key))) {
+
+                $this->info('正在上传 SSL 证书。');
+
+                ClusterSupport::forever("ssl_fullchain", file_get_contents(base_path($ssl_fullchain_key)));
+                ClusterSupport::forever("ssl_privkey", file_get_contents(base_path($ssl_privkey_key)));
+
+                // 计算 md5
+                $ssl_fullchain_md5 = md5_file(base_path($ssl_fullchain_key));
+                $ssl_privkey_md5 = md5_file(base_path($ssl_privkey_key));
+
+                $this->info('正在报告 SSL 证书的 MD5 值。');
+                ClusterSupport::forever("ssl_fullchain_md5", $ssl_fullchain_md5);
+                ClusterSupport::forever("ssl_privkey_md5", $ssl_privkey_md5);
+
+                ClusterSupport::publish('config.ssl.updated');
+
+            } else {
+                $this->warn('SSL 证书不存在，跳过。');
+            }
+
         }
 
         // 上传 .env 文件
