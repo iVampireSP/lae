@@ -9,7 +9,7 @@
     <table class="table table-hover">
         <thead>
         <th>
-            设备 ID
+            Client ID
         </th>
         <th>
             用户 ID
