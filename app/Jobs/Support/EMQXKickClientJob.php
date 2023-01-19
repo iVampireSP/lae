@@ -56,20 +56,16 @@ class EMQXKickClientJob implements ShouldQueue
                 return;
             }
 
-            if ($clients) {
-                // 循环翻页
-                for ($i = 1; $i <= $clients['meta']['count']; $i++) {
-                    try {
-                        $clients = $emqx->clients([$query => $this->username, 'page' => $i]);
-                    } catch (EmqxSupportException $e) {
-                        Log::error('emqx connect failed.', [$e]);
-                        continue;
-                    }
 
+            if ($clients) {
+                if (count($clients['data']) > 0) {
                     foreach ($clients['data'] as $client) {
                         dispatch(new self($client['clientid'], null));
                     }
+
+                    dispatch(new self(null, $this->username, $this->like_username));
                 }
+
             }
         }
     }
