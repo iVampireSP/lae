@@ -44,11 +44,17 @@ class Module extends Authenticatable
     protected static function boot()
     {
         parent::boot();
-        static::creating(function ($model) {
-            // if local
+        static::creating(function (self $model) {
             if (!app()->environment('local')) {
                 $model->api_token = Str::random(60);
             }
+
+            // 如果结尾有 / 则去掉
+            $model->url = rtrim($model->url, '/');
+        });
+        static::updating(function (self $model) {
+            // 如果结尾有 / 则去掉
+            $model->url = rtrim($model->url, '/');
         });
     }
 
@@ -71,7 +77,7 @@ class Module extends Authenticatable
 
     public function http(): PendingRequest
     {
-        return Http::module($this->api_token, $this->url)->acceptJson()->timeout(5);
+        return Http::module($this->api_token, $this->url . '/remote')->acceptJson()->timeout(5);
     }
 
     private function getResponse(Response $response): array
