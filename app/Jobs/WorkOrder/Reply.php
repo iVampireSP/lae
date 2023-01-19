@@ -22,7 +22,7 @@ class Reply implements ShouldQueue
      */
     public function __construct(WorkOrderReply $reply, $type = 'post')
     {
-        $this->reply = $reply;
+        $this->reply = $reply->load(['workOrder', 'user']);
         $this->type = $type;
     }
 
@@ -33,7 +33,14 @@ class Reply implements ShouldQueue
      */
     public function handle(): void
     {
-        $this->reply->load(['workOrder', 'user']);
+        if ($this->reply->workOrder->isPlatform()) {
+            if ($this->reply->is_pending) {
+                $this->reply->update(['is_pending' => false]);
+            }
+
+            return;
+        }
+
         $this->reply->workOrder->load(['module']);
 
         $reply = $this->reply->toArray();
@@ -52,6 +59,16 @@ class Reply implements ShouldQueue
             }
 
         } else if ($this->type == 'patch') {
+
+            // 不更新 is_pending
+            if ($this->reply->workOrder->isPlatform()) {
+                $this->reply->update([
+                    'is_pending' => false
+                ]);
+
+                return;
+            }
+
             $this->reply->workOrder->module->http()->patch('work-orders/' . $this->reply->workOrder->id . '/replies/' . $this->reply->id, $reply);
         } else if ($this->type == 'delete') {
             $response = $this->reply->workOrder->module->http()->delete('work-orders/' . $this->reply->workOrder->id . '/replies/' . $this->reply->id);

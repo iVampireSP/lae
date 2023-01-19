@@ -10,8 +10,6 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-// use Illuminate\Contracts\Queue\ShouldBeUnique;
-
 class PushWorkOrderJob implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;
@@ -33,16 +31,21 @@ class PushWorkOrderJob implements ShouldQueue
      */
     public function handle(): void
     {
-        //
         (new WorkOrder)->whereIn('status', ['pending'])->with(['module', 'user', 'host', 'replies'])->chunk(100, function ($workOrders) {
             foreach ($workOrders as $workOrder) {
+                if ($workOrder->isPlatform()) {
+                    if ($workOrder->status == 'pending') {
+                        $workOrder->update(['status' => 'open']);
+                    }
+
+                    continue;
+                }
 
                 if ($workOrder->host) {
                     if ($workOrder->host->status === 'pending') {
                         continue;
                     }
                 }
-
 
                 if ($workOrder->status === 'error') {
                     continue;

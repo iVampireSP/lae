@@ -29,16 +29,6 @@ class WorkOrderController extends Controller
             'host_id' => 'nullable|sometimes|exists:hosts,id',
         ]);
 
-        // module_id 和 host_id 必须有个要填写
-        if ($request->input('module_id') === null && $request->input('host_id') === null) {
-            $message = 'module_id 和 host_id 必须有个要填写';
-
-            throw ValidationException::withMessages([
-                'module_id' => $message,
-                'host_id' => $message,
-            ]);
-        }
-
         $workOrder = (new WorkOrder)->create([
             'title' => $request->input('title'),
             'content' => $request->input('content'),
@@ -68,7 +58,7 @@ class WorkOrderController extends Controller
 
         // 访客不能关闭
         if ($request->input('status') === 'closed' && !auth('sanctum')->check()) {
-            return $this->error('访客不能修改工单状态。');
+            return $this->forbidden('访客不能修改工单状态。');
         }
 
         $workOrder->update($request->only('status'));

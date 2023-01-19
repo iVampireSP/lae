@@ -85,7 +85,7 @@ class WorkOrder extends Model
         static::updated(function (self $model) {
             dispatch(new WorkOrderJob($model, 'put'));
 
-            if ($model->notify) {
+            if ($model->notify && $model->isDirty('status')) {
                 $model->notify(new WorkOrderNotification($model));
             }
         });
@@ -134,6 +134,11 @@ class WorkOrder extends Model
     public function isClosed(): bool
     {
         return $this->status === 'closed';
+    }
+
+    public function isPlatform(): bool
+    {
+        return $this->module_id === null && $this->host_id === null;
     }
 
     /**

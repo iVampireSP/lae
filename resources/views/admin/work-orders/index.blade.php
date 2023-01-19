@@ -30,11 +30,15 @@
                         </a>
                     </td>
                     <td>
-                        <a
-                            href="{{ route('admin.modules.show', $workOrder->module_id) }}"
-                            class="module_name"
-                            module="{{ $workOrder->module_id }}">{{ $workOrder->module_id }}
-                        </a>
+                        @if ($workOrder->module_id)
+                            <a
+                                href="{{ route('admin.modules.show', $workOrder->module_id) }}"
+                                class="module_name"
+                                module="{{ $workOrder->module_id }}">{{ $workOrder->module_id }}
+                            </a>
+                        @else
+                            {{ config('app.display_name') }}
+                        @endif
                     </td>
                     <td>
                         @if ($workOrder->host_id)

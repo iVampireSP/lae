@@ -73,11 +73,7 @@ class WorkOrder extends Notification implements ShouldQueue
     {
         $array = $workOrder->toArray();
 
-        $array['event'] = 'WorkOrder.updated';
-
-        if ($workOrder->status === 'replied') {
-            $array['event'] = 'WorkOrder.replied';
-        }
+        $array['event'] = 'work-order.' . $workOrder->status;
 
         return $array;
     }
@@ -86,12 +82,16 @@ class WorkOrder extends Notification implements ShouldQueue
     {
         $workOrder->load(['module', 'user']);
 
-        $module = $workOrder->module;
+        $module = null;
+        if ($workOrder->module) {
+            $module = $workOrder->module;
 
-        // 取消隐藏字段
-        $module->makeVisible(['wecom_key']);
+            // 取消隐藏字段
+            $module->makeVisible(['wecom_key']);
 
-        if ($module->wecom_key == null) {
+        }
+
+        if ($module?->wecom_key == null) {
             $wecom_key = config('settings.wecom.robot_hook.default');
         } else {
             $wecom_key = $module->wecom_key;

@@ -24,7 +24,7 @@ class WorkOrder implements ShouldQueue
      */
     public function __construct(WorkOrderModel $workOrder, $type = 'post')
     {
-        $this->workOrder = $workOrder;
+        $this->workOrder = $workOrder->load(['module']);
         $this->type = $type;
     }
 
@@ -35,7 +35,10 @@ class WorkOrder implements ShouldQueue
      */
     public function handle(): void
     {
-        $this->workOrder->load(['module']);
+        if ($this->workOrder->isPlatform()) {
+            return;
+        }
+
 
         if ($this->type == 'post') {
             $response = $this->workOrder->module->http()->post('work-orders', $this->workOrder->toArray());

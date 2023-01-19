@@ -34,7 +34,7 @@ class Reply extends Model
     {
         parent::boot();
         static::creating(function (self $model) {
-            $model->is_pending = 1;
+            $model->is_pending = false;
 
             // load work order
             $model->load(['workOrder']);
@@ -69,6 +69,10 @@ class Reply extends Model
             }
 
             $model->workOrder->save();
+
+            if ($model->workOrder->isPlatform()) {
+                $model->is_pending = false;
+            }
 
             $model->ip = request()->ip();
         });
