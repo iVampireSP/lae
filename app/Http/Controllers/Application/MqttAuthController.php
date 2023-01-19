@@ -14,10 +14,6 @@ class MqttAuthController extends Controller
     {
         $client_id = explode('.', $request->input('client_id'));
 
-        if (count($client_id) < 2) {
-            return $this->ignore();
-        }
-
         $username = $request->input('username');
         $usernames = explode('.', $username);
 
@@ -49,6 +45,12 @@ class MqttAuthController extends Controller
             }
         } else {
             // 如果设置了 device_id，那么就是设备的连接，此时，我们得联系模块，让模块去验证设备。
+
+            // 设备必须有两段 ID
+            if (count($client_id) < 2) {
+                return $this->ignore();
+            }
+
             $response = $module->baseRequest('post', 'mqtt/authentication', [
                 'client_id' => $client_id[1],
                 'device_id' => $device_id,
