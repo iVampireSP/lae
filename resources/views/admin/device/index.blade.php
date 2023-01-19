@@ -70,15 +70,26 @@
                         @if ($c['subscriptions_cnt'] > 0)
                             <span class="text-success">{{ $c['subscriptions_cnt'] }} 个</span>
                         @else
-                            <span class="text-danger">没有</span>
+                            <span class="text-danger">没有订阅</span>
                         @endif
                     </td>
                     <td>
-                        <form action="{{ route('admin.devices.destroy', $c['clientid']) }}" method="post">
+                        <form action="{{ route('admin.devices.destroy') }}" method="post">
                             @csrf
                             @method('DELETE')
+                            <input type="hidden" name="client_id" value="{{ $c['clientid'] }}">
                             <button type="submit" class="btn btn-danger btn-sm">踢出</button>
                         </form>
+
+                        <form class="mt-2" action="{{ route('admin.devices.destroy') }}" method="post"
+                              onsubmit="return confirm('将踢出此模块以及它的所有客户端。')">
+                            @csrf
+                            @method('DELETE')
+                            <input type="hidden" name="username" value="{{ $c['username'] }}">
+                            <input type="hidden" name="like_username" value="1"/>
+                            <button type="submit" class="btn btn-danger btn-sm">踢出所有</button>
+                        </form>
+
                     </td>
                 </tr>
             @endforeach

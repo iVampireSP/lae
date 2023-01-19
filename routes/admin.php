@@ -47,7 +47,9 @@ Route::group([
 
     Route::resource('user-groups', UserGroupController::class);
 
-    Route::resource('devices', DeviceController::class)->only(['index', 'destroy']);
+    Route::get('devices', [DeviceController::class, 'index'])->name('devices.index');
+    Route::delete('devices', [DeviceController::class, 'destroy'])->name('devices.destroy');
+
 
     Route::resource('notifications', NotificationController::class)->only(['create', 'store']);
 

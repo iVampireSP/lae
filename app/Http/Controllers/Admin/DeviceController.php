@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Exceptions\EmqxSupportException;
 use App\Http\Controllers\Controller;
+use App\Jobs\Support\EMQXKickClientJob;
 use App\Support\EmqxSupport;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -38,16 +39,22 @@ class DeviceController extends Controller
     //     return view('admin.device.show', compact('client'));
     // }
 
-
-    /**
-     * @throws EmqxSupportException
-     */
-    public function destroy($client_id): RedirectResponse
+    public function destroy(Request $request): RedirectResponse
     {
         $emqx = new EmqxSupport();
 
-        $emqx->kickClient($client_id);
+        if ($request->filled('client_id')) {
+            $emqx->kickClient($request->input('client_id'));
+        }
 
-        return back()->with('success', '此客户端已下线。');
+        if ($request->filled('username')) {
+            $username = $request->input('username');
+            $module_name = explode('.', $username)[0];
+
+            $this->dispatch(new EMQXKickClientJob(null, $module_name, false));
+            $this->dispatch(new EMQXKickClientJob(null, $module_name . '.', true));
+        }
+
+        return back()->with('success', '正在让它们下线。');
     }
 }

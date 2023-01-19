@@ -3,6 +3,7 @@
 namespace App\Support;
 
 use App\Exceptions\EmqxSupportException;
+use App\Jobs\Support\EMQXKickClientJob;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
@@ -11,9 +12,9 @@ use Illuminate\Support\Facades\Log;
 class EmqxSupport
 {
     /**
-     * @throws EmqxSupportException
+     * 移除客户端
      */
-    public function kickClient($client_id = null, $username = null): void
+    public function kickClient($client_id = null, $username = null, bool $like_username = false): void
     {
         // 如果都为空，直接返回
         if (empty($client_id) && empty($username)) {
@@ -25,26 +26,11 @@ class EmqxSupport
         }
 
         if ($username) {
-            try {
-                $clients = $this->clients(['username' => $username]);
-            } catch (EmqxSupportException $e) {
-                throw new EmqxSupportException($e->getMessage());
-            }
-
-            if ($clients) {
-                // 循环翻页
-                for ($i = 1; $i <= $clients['meta']['count']; $i++) {
-                    $clients = $this->clients(['username' => $username, 'page' => $i]);
-
-                    foreach ($clients['data'] as $client) {
-                        $this->api()->delete('/clients/' . $client['clientid']);
-                    }
-                }
-            }
+            dispatch(new EMQXKickClientJob(null, $username, $like_username));
         }
     }
 
-    private function api(): PendingRequest
+    public function api(): PendingRequest
     {
         return Http::baseUrl(config('emqx.api_url'))->withBasicAuth(config('emqx.api_key'), config('emqx.api_secret'));
     }
