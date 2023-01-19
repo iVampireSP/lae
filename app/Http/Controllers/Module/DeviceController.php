@@ -48,24 +48,28 @@ class DeviceController extends Controller
 
             $module_name = explode('.', $client['username'])[0];
 
-            if ($request->user('module')->id === $module_name) {
-                $emqx->kickClient($client_id);
-
-                return $this->deleted();
-            } else {
+            if ($request->user('module')->id !== $module_name) {
                 return $this->failed('client not found');
             }
-        }
 
-        if ($request->filled('name')) {
-            $username = $request->input('name');
-            $username = $request->user('module')->id . '.' . $username;
-
-            $this->dispatch(new EMQXKickClientJob(null, $username, false));
+            $emqx->kickClient($client_id);
 
             return $this->deleted();
         }
 
-        return $this->failed('missing client_id or username');
+        if ($request->filled('name')) {
+            $name = $request->input('name');
+            $module_name = explode('.', $name)[0];
+
+            if ($request->user('module')->id !== $module_name) {
+                return $this->failed('client not found');
+            }
+
+            $this->dispatch(new EMQXKickClientJob(null, $name, false));
+
+            return $this->deleted();
+        }
+
+        return $this->failed('missing client_id or name');
     }
 }
