@@ -6,11 +6,15 @@ use App\Exceptions\EmqxSupportException;
 use App\Jobs\Support\EMQXKickClientJob;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Request;
 
 class EmqxSupport
 {
+    private int $limit_per_page = 50;
+
     /**
      * 移除客户端
      */
@@ -42,7 +46,7 @@ class EmqxSupport
     {
         //    merge params
         $params = array_merge([
-            'limit' => 100,
+            'limit' => $this->limit_per_page,
             'isTrusted' => true,
         ], $params);
 
@@ -58,5 +62,26 @@ class EmqxSupport
         } else {
             throw new EmqxSupportException('无法获取客户端列表。');
         }
+    }
+
+    /**
+     * @throws EmqxSupportException
+     */
+    public function pagination($params = []): LengthAwarePaginator
+    {
+        $page = Request::input('page', 1);
+        $params = array_merge([
+            'page' => $page,
+        ], $params);
+
+        $clients = $this->clients($params);
+
+        $data = $clients['data'];
+        $total = $clients['meta']['count'];
+        $limit = $clients['meta']['limit'];
+
+        return new LengthAwarePaginator($data, $total, $limit, $page, [
+            'path' => route('admin.devices.index'),
+        ]);
     }
 }

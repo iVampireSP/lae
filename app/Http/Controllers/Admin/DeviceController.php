@@ -17,10 +17,9 @@ class DeviceController extends Controller
         $emqx = new EmqxSupport();
 
         try {
-            $clients = $emqx->clients([
+            $clients = $emqx->pagination([
                 'clientid' => $request->input('client_id'),
                 'username' => $request->input('username'),
-                'page' => $request->input('page'),
             ]);
         } catch (EmqxSupportException $e) {
             return back()->with('error', $e->getMessage());
