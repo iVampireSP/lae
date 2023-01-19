@@ -71,7 +71,7 @@ class Module extends Authenticatable
 
     public function http(): PendingRequest
     {
-        return Http::module($this->api_token, $this->url)->acceptJson()->timeout(5)->withUserAgent('LAECloud-Client');
+        return Http::module($this->api_token, $this->url)->acceptJson()->timeout(5);
     }
 
     private function getResponse(Response $response): array

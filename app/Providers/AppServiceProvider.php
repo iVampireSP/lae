@@ -34,13 +34,15 @@ class AppServiceProvider extends ServiceProvider
 
         Http::macro('module', function ($api_token, $url) {
             // 关闭证书验证
-            return Http::withoutVerifying()->withHeaders([
-                'X-Module-Api-Token' => $api_token,
-                'Content-Type' => 'application/json',
-                'Accept' => 'application/json',
-            ])->withOptions([
-                'version' => 2,
-            ])->baseUrl($url);
+            return Http::baseUrl($url)
+                ->withUserAgent('LAECloud-Client')
+                ->withHeaders([
+                    'X-Module-Api-Token' => $api_token,
+                    'Content-Type' => 'application/json',
+                    'Accept' => 'application/json',
+                ])->withOptions([
+                    'version' => 2,
+                ]);
         });
 
 
