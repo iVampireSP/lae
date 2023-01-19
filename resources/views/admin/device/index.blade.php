@@ -87,23 +87,27 @@
     </table>
 
     @if(isset($clients))
-        <div class="d-none flex-sm-fill d-sm-flex align-items-sm-center justify-content-sm-end">
+        <div class="d-none flex-sm-fill d-sm-flex align-items-sm-center justify-content-sm-between">
+            <div>
+                <p class="small text-muted">
+                    共 {{ $clients['meta']['count'] }} 个设备，当前在第 {{ Request::input('page', 1) }} 页。
+                </p>
+            </div>
+
             <div>
                 <ul class="pagination">
-                    @if ($clients['meta']['page'] > 1)
-                        <li class="page-item">
-                            <a class="page-link" href="?page={{ $clients['meta']['page'] - 1 }}">上一页</a>
-                        </li>
-                    @endif
+                    <li class="page-item @if (!($clients['meta']['page'] > 1)) disabled @endif">
+                        <a class="page-link" href="?page={{ $clients['meta']['page'] - 1 }}">上一页</a>
+                    </li>
 
 
-                    <li class="page-item">
+                    <li class="page-item @if ($clients['meta']['limit'] !== count($clients['data'])) disabled @endif">
                         <a class="page-link" href="?page={{ $clients['meta']['page'] + 1}}" rel="next"
                            aria-label="下一页 &raquo;">下一页</a>
                     </li>
+
                 </ul>
             </div>
         </div>
     @endif
-
 @endsection

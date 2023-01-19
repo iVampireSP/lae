@@ -25,7 +25,6 @@ class DeviceController extends Controller
             return back()->with('error', $e->getMessage());
         }
 
-        // dd($clients);
         return view('admin.device.index', compact('clients'));
     }
 
