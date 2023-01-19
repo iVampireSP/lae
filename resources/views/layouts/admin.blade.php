@@ -37,7 +37,7 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUser" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">
-                            用户和业务
+                            用户
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownUser">
                             <li>
@@ -58,11 +58,14 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownSupport" role="button"
                            data-bs-toggle="dropdown" aria-expanded="false">
-                            对接和支持
+                            服务
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownSupport">
                             <li>
                                 <a class="dropdown-item" href="{{ route('admin.modules.index') }}">模块</a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="{{ route('admin.hosts.index') }}">主机</a>
                             </li>
                             <li>
                                 <a class="dropdown-item" href="{{ route('admin.work-orders.index') }}">工单</a>
@@ -70,7 +73,15 @@
                             <li>
                                 <a class="dropdown-item" href="{{ route('admin.notifications.create') }}">通知</a>
                             </li>
+                        </ul>
+                    </li>
 
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownSupport" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            系统
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownSupport">
                             <li>
                                 <a class="dropdown-item" href="{{ route('admin.devices.index') }}">物联设备</a>
                             </li>
@@ -81,15 +92,24 @@
                         </ul>
                     </li>
 
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownSupport" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            管理
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownSupport">
+                            <li>
+                                <a class="dropdown-item" href="{{ route('admin.transactions') }}">管理员</a>
+                            </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.transactions') }}">交易记录</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.admins.index') }}">管理员</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('admin.commands') }}">速查表</a>
+                            <li>
+                                <a class="dropdown-item" href="{{ route('admin.transactions') }}">交易记录</a>
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item" href="{{ route('admin.commands') }}">速查表</a>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
 
