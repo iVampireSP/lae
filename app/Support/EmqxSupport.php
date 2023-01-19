@@ -64,7 +64,7 @@ class EmqxSupport
             $response = $this->api()->get('clients', $params);
         } /** @noinspection PhpRedundantCatchClauseInspection */ catch (ConnectionException $e) {
             Log::error('emqx connect failed.', [$e]);
-            throw new EmqxSupportException('EMQX API 无法连接。');
+            throw new EmqxSupportException('EMQX API 无法连接。' . $e->getMessage());
         }
 
         if ($response->successful()) {

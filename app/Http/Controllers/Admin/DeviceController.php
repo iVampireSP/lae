@@ -11,8 +11,6 @@ use Illuminate\View\View;
 
 class DeviceController extends Controller
 {
-    //
-
     public function index(Request $request): RedirectResponse|View
     {
         $emqx = new EmqxSupport();
