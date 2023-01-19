@@ -97,13 +97,26 @@
             <div>
                 <ul class="pagination">
                     <li class="page-item @if (!($clients['meta']['page'] > 1)) disabled @endif">
-                        <a class="page-link" href="?page={{ $clients['meta']['page'] - 1 }}">上一页</a>
+                        <a class="page-link" href="?page={{ $clients['meta']['page'] - 1 }}"
+                           aria-label="上一页 &raquo;">&lsaquo;</a>
                     </li>
+
+                    @for($i = 1; $i <= ceil($clients['meta']['count'] / $clients['meta']['limit']); $i++)
+                        @if ($i == Request::input('page', 1))
+                            <li class="page-item @if ($i == Request::input('page', 1)) active @endif">
+                                <span class="page-link" href="?page={{ $i }}">{{ $i }}</span>
+                            </li>
+                        @else
+                            <li class="page-item @if ($i == Request::input('page', 1)) active @endif">
+                                <a class="page-link" href="?page={{ $i }}">{{ $i }}</a>
+                            </li>
+                        @endif
+                    @endfor
 
 
                     <li class="page-item @if ($clients['meta']['count'] == Request::input('page', 1) * count($clients['data'])) disabled @endif">
                         <a class="page-link" href="?page={{ $clients['meta']['page'] + 1}}" rel="next"
-                           aria-label="下一页 &raquo;">下一页</a>
+                           aria-label="下一页 &raquo;">&rsaquo;</a>
                     </li>
 
                 </ul>
