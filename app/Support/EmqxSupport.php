@@ -64,6 +64,21 @@ class EmqxSupport
         }
     }
 
+
+    /**
+     * @throws EmqxSupportException
+     */
+    public function client(string $client_id)
+    {
+        $response = $this->api()->get('clients/' . $client_id);
+
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            throw new EmqxSupportException('无法获取客户端信息。');
+        }
+    }
+
     /**
      * @throws EmqxSupportException
      */
