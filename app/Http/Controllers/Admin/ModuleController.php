@@ -72,7 +72,7 @@ class ModuleController extends Controller
             'name' => 'required|string|max:255',
             'url' => 'required|url',
             'status' => 'required|string|in:up,down,maintenance',
-            'balance' => 'required|numeric',
+            'balance' => 'nullable|numeric',
             'wecom_key' => 'nullable|string|max:255',
         ];
     }
