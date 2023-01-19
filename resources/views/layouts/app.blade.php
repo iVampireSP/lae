@@ -11,8 +11,8 @@
     <title>@yield('title', '莱云')</title>
 
 
-    <link rel="icon" href="/images/fav.jpg"/>
-    <link rel="apple-touch-icon" href="/images/fav.jpg"/>
+    <link rel="icon" href="/images/lae-fav.png"/>
+    <link rel="apple-touch-icon" href="/images/lae-fav.png"/>
 
     <!-- Fonts -->
     {{-- <link rel="dns-prefetch" href="//fonts.gstatic.com"> --}}
