@@ -10,26 +10,29 @@ use Illuminate\Http\Response;
 
 class MqttAuthController extends Controller
 {
-    //
-
     public function authentication(Request $request): Response
     {
-        //
-        $client_id = $request->input('client_id');
+        $client_id = explode('.', $request->input('client_id'));
+
+        if (count($client_id) < 2) {
+            return $this->ignore();
+        }
+
         $username = $request->input('username');
-        $password = $request->input('password');
-
-
-        //    分割 username
         $usernames = explode('.', $username);
+
+        $password = $request->input('password');
 
         $module_id = $usernames[0] ?? null;
         $device_id = $usernames[1] ?? null;
 
-
         $module = (new Module)->where('id', $module_id)->first();
 
         if (!$module) {
+            return $this->ignore();
+        }
+
+        if ($client_id[0] !== $module->id) {
             return $this->ignore();
         }
 
@@ -45,12 +48,9 @@ class MqttAuthController extends Controller
                 return $this->deny();
             }
         } else {
-            // 如果设置了 device_id，那么就是设备的连接
-
-            // 此时，我们得联系模块，让模块去验证设备。
-
+            // 如果设置了 device_id，那么就是设备的连接，此时，我们得联系模块，让模块去验证设备。
             $response = $module->baseRequest('post', 'mqtt/authentication', [
-                'client_id' => $client_id,
+                'client_id' => $client_id[1],
                 'device_id' => $device_id,
                 'password' => $password,
             ]);
@@ -93,8 +93,13 @@ class MqttAuthController extends Controller
             return $this->deny();
         }
 
+        $client_id = explode('.', $request->input('client_id'));
+        if (count($client_id) < 2) {
+            return $this->deny();
+        }
+
         $action = $request->input('action');
-        $client_id = $request->input('client_id');
+
         $username = $request->input('username');
         $topic = $request->input('topic');
 
@@ -114,7 +119,6 @@ class MqttAuthController extends Controller
 
         if (!$module) {
             // 不属于我们管理，跳过。
-            // Log::debug('不属于我们管理，跳过。');
             return $this->ignore();
         }
 
@@ -141,7 +145,7 @@ class MqttAuthController extends Controller
 
         // 联系模块，让模块去验证设备授权。
         $response = $module->baseRequest('post', 'mqtt/authorization', [
-            'client_id' => $client_id,
+            'client_id' => $client_id[1],
             'device_id' => $device_id,
             'type' => $action,
             'topic' => $topic,
