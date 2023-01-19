@@ -101,7 +101,7 @@
                     </li>
 
 
-                    <li class="page-item @if ($clients['meta']['count'] == $clients['meta']['limit'] * count($clients['data'])) disabled @endif">
+                    <li class="page-item @if ($clients['meta']['count'] == Request::input('page', 1) * count($clients['data'])) disabled @endif">
                         <a class="page-link" href="?page={{ $clients['meta']['page'] + 1}}" rel="next"
                            aria-label="下一页 &raquo;">下一页</a>
                     </li>
