@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Modules\DeviceController;
 use App\Http\Controllers\Modules\BroadcastController;
 use App\Http\Controllers\Modules\HostController;
 use App\Http\Controllers\Modules\ModuleController;
@@ -27,6 +28,11 @@ Route::get('users/{user}/hosts', [UserController::class, 'hosts']);
 
 Route::post('broadcast/users/{user}', [BroadcastController::class, 'broadcast_to_user']);
 // Route::post('broadcast/hosts/{host}', [BroadcastController::class, 'broadcast_to_host']);
+
+// MQTT
+Route::get('devices', [DeviceController::class, 'index']);
+Route::delete('devices', [DeviceController::class, 'destroy']);
+
 
 // 模块间调用
 Route::any('modules/{module}/{path?}', [ModuleController::class, 'exportCall'])
