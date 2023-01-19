@@ -1,13 +1,13 @@
 <?php
 
-use App\Http\Controllers\Modules\DeviceController;
-use App\Http\Controllers\Modules\BroadcastController;
-use App\Http\Controllers\Modules\HostController;
-use App\Http\Controllers\Modules\ModuleController;
-use App\Http\Controllers\Modules\ReplyController;
-use App\Http\Controllers\Modules\TaskController;
-use App\Http\Controllers\Modules\UserController;
-use App\Http\Controllers\Modules\WorkOrderController;
+use App\Http\Controllers\Module\DeviceController;
+use App\Http\Controllers\Module\BroadcastController;
+use App\Http\Controllers\Module\HostController;
+use App\Http\Controllers\Module\ModuleController;
+use App\Http\Controllers\Module\ReplyController;
+use App\Http\Controllers\Module\TaskController;
+use App\Http\Controllers\Module\UserController;
+use App\Http\Controllers\Module\WorkOrderController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('modules', [ModuleController::class, 'index']);

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Modules;
+namespace App\Http\Controllers\Module;
 
 use App\Http\Controllers\Controller;
 use App\Models\WorkOrder\Reply;

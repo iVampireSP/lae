@@ -19,6 +19,6 @@ class ModuleController extends Controller
 
     public function call(Request $request, Module $module): JsonResponse|Response
     {
-        return (new \App\Http\Controllers\Modules\ModuleController())->call($request, $module);
+        return (new \App\Http\Controllers\Module\ModuleController())->call($request, $module);
     }
 }
