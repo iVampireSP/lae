@@ -22,7 +22,7 @@ Route::resource('balances', BalanceController::class);
 
 Route::get('nodes', [IndexController::class, 'nodes']);
 Route::get('modules', [ModuleController::class, 'index']);
-Route::get('modules/{module}/servers', [ModuleController::class, 'servers']);
+Route::get('servers/{module}', [ModuleController::class, 'servers']);
 
 
 Route::resource('tasks', TaskController::class)->only(['index', 'show']);
