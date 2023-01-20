@@ -6,7 +6,6 @@ use App\Http\Controllers\Api\HostController;
 use App\Http\Controllers\Api\IndexController;
 use App\Http\Controllers\Api\ModuleController;
 use App\Http\Controllers\Api\ReplyController;
-use App\Http\Controllers\Api\ServerController;
 use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\WorkOrderController;
@@ -21,9 +20,9 @@ Route::get('users', [UserController::class, 'index']);
 Route::resource('balances', BalanceController::class);
 
 
-Route::get('servers', [ServerController::class, 'module_reports']);
-Route::get('nodes', [ServerController::class, 'nodes']);
+Route::get('nodes', [IndexController::class, 'nodes']);
 Route::get('modules', [ModuleController::class, 'index']);
+Route::get('modules/{module}/servers', [ModuleController::class, 'servers']);
 
 
 Route::resource('tasks', TaskController::class)->only(['index', 'show']);

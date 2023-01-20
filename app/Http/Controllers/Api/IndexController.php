@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Support\ClusterSupport;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -23,5 +24,17 @@ class IndexController extends Controller
         $users = (new User)->birthday()->simplePaginate(20);
 
         return $this->success($users);
+    }
+
+    public function nodes(): JsonResponse
+    {
+        $nodes = ClusterSupport::nodes(true);
+
+        $current_node_id = ClusterSupport::currentNode()['id'];
+
+        return $this->success([
+            'nodes' => $nodes,
+            'current_node_id' => $current_node_id,
+        ]);
     }
 }
