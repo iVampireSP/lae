@@ -41,10 +41,13 @@ class UpdateOrDeleteHostJob implements ShouldQueue
         if ($response['status'] === 200) {
             $host->update(Arr::except($response['json'], ['id', 'user_id', 'module_id', 'created_at', 'updated_at']));
         } else if ($response['status'] === 404) {
-            Log::warning($host->module->name . ' ' . $host->name . ' ' . $host->id . ' 不存在，标记为不可用。');
+            if ($host->status !== 'unavailable') {
+                Log::warning($host->module->name . ' ' . $host->name . ' ' . $host->id . ' 不存在，标记为不可用。');
+                $host->status = 'unavailable';
+                $host->save();
+            }
             // dispatch(new HostJob($host, 'delete'));
-            $host->status = 'unavailable';
-            $host->save();
+
         }
     }
 }
