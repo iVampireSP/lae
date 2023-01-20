@@ -48,7 +48,7 @@
                     </td>
 
                     <td>
-                        {{ $t->amount ?? $t->balance }} 元
+                        {{ $t->user_remain }} 元
                     </td>
                     <td>
                         {{ $t->created_at }}
