@@ -82,7 +82,7 @@ class Module extends Authenticatable
 
     private function getResponse(Response $response): array
     {
-        $module_token = $response->header('x-module-api-token');
+        // $module_token = $response->header('x-module-api-token');
 
         $success = true;
         $json = $response->json();
@@ -93,12 +93,12 @@ class Module extends Authenticatable
             $success = false;
 
             // 防止误删除
-            if ($module_token !== $this->api_token) {
-                $this->status = 'maintenance';
-                $this->save();
-
-                $status = 401;
-            }
+            // if ($module_token !== $this->api_token) {
+            //     $this->status = 'maintenance';
+            //     $this->save();
+            //
+            //     $status = 401;
+            // }
         }
 
         return [
