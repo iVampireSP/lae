@@ -7,6 +7,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 // use Illuminate\Contracts\Queue\ShouldBeUnique;
 
@@ -53,6 +54,8 @@ class WorkOrder implements ShouldQueue
         }
 
         if (!$response->successful()) {
+            Log::debug('WorkOrder push failed', $response->json());
+
             $this->workOrder->update([
                 'status' => 'error'
             ]);
