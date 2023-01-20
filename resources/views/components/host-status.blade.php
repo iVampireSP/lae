@@ -20,6 +20,14 @@
             <span class="badge bg-danger">错误</span>
             @break
 
+        @case('unavailable')
+            <span class="badge bg-secondary">不可用</span>
+            @break
+
+        @case('locked')
+            <span class="badge bg-danger">锁定</span>
+            @break
+
         @default
             <span class="badge bg-secondary">{{ $status }}</span>
     @endswitch

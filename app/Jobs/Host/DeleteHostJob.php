@@ -10,7 +10,7 @@ use Illuminate\Queue\SerializesModels;
 
 // use Illuminate\Contracts\Queue\ShouldBeUnique;
 
-class DeleteSuspendedHostJob implements ShouldQueue
+class DeleteHostJob implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;
 
@@ -38,8 +38,22 @@ class DeleteSuspendedHostJob implements ShouldQueue
             }
         });
 
-        // 查找部署时间超过3天以上的 host
+        // 查找部署时间超过 3 天以上的 host
         (new Host)->where('status', 'pending')->where('created_at', '<', now()->subDays(3))->chunk(100, function ($hosts) {
+            foreach ($hosts as $host) {
+                dispatch(new HostJob($host, 'delete'));
+            }
+        });
+
+        // 查找不可用时间超过 3 天以上的 host
+        (new Host)->where('status', 'unavailable')->where('unavailable_at', '<', now()->subDays(3))->chunk(100, function ($hosts) {
+            foreach ($hosts as $host) {
+                dispatch(new HostJob($host, 'delete'));
+            }
+        });
+
+        // 查找锁定时间超过 3 天以上的 host
+        (new Host)->where('status', 'locked')->where('locked_at', '<', now()->subDays(3))->chunk(100, function ($hosts) {
             foreach ($hosts as $host) {
                 dispatch(new HostJob($host, 'delete'));
             }

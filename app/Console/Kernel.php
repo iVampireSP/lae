@@ -2,10 +2,10 @@
 
 namespace App\Console;
 
-use App\Jobs\Host\DeleteSuspendedHostJob;
+use App\Jobs\Host\DeleteHostJob;
 use App\Jobs\Host\DispatchHostCostQueueJob;
 use App\Jobs\Host\ScanAllHostsJob;
-use App\Jobs\Module\FetchModuleJob;
+use App\Jobs\Module\DispatchFetchModuleJob;
 use App\Jobs\Module\SendModuleEarningsJob;
 use App\Jobs\User\CheckAndChargeBalanceJob;
 use App\Jobs\User\ClearTasksJob;
@@ -33,8 +33,8 @@ class Kernel extends ConsoleKernel
         // 扣费
         $schedule->job(new DispatchHostCostQueueJob(now()->minute))->everyMinute()->withoutOverlapping()->onOneServer();
 
-        // 获取模块暴露的信息（服务器等）
-        $schedule->job(new FetchModuleJob())->withoutOverlapping()->everyMinute();
+        // 获取模块暴露的信息（服务器等,检查模块状态）
+        $schedule->job(new DispatchFetchModuleJob())->withoutOverlapping()->everyMinute();
 
         // 推送工单
         $schedule->job(new PushWorkOrderJob())->everyMinute()->onOneServer();
@@ -45,7 +45,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new ClearTasksJob())->weekly();
 
         // 删除暂停或部署时间超过 3 天以上的主机
-        $schedule->job(new DeleteSuspendedHostJob())->hourly();
+        $schedule->job(new DeleteHostJob())->hourly();
 
         // 检查主机是否存在于模块
         $schedule->job(new ScanAllHostsJob())->everyThirtyMinutes()->withoutOverlapping()->onOneServer();

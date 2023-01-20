@@ -20,10 +20,9 @@ class Module extends Authenticatable
 
     public $incrementing = false;
 
-    // primary key
-    public $timestamps = false;
     protected $table = 'modules';
     protected $keyType = 'string';
+
     protected $fillable = [
         'id',
         'name',

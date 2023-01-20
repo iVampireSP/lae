@@ -11,7 +11,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 
-class UpdateOrSuspendedHostJob implements ShouldQueue
+class UpdateOrDeleteHostJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -41,8 +41,10 @@ class UpdateOrSuspendedHostJob implements ShouldQueue
         if ($response['status'] === 200) {
             $host->update(Arr::except($response['json'], ['id', 'user_id', 'module_id', 'created_at', 'updated_at']));
         } else if ($response['status'] === 404) {
-            Log::warning($host->module->name . ' ' . $host->name . ' ' . $host->id . ' 不存在，标记为暂停。');
-            dispatch(new HostJob($host, 'delete'));
+            Log::warning($host->module->name . ' ' . $host->name . ' ' . $host->id . ' 不存在，标记为不可用。');
+            // dispatch(new HostJob($host, 'delete'));
+            $host->status = 'unavailable';
+            $host->save();
         }
     }
 }

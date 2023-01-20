@@ -30,6 +30,10 @@ class HostController extends Controller
             'status' => 'required|in:running,stopped',
         ]);
 
+        if ($host->status === 'locked' || $host->status === 'unavailable') {
+            return $this->error('当前主机状态不允许操作');
+        }
+
         $user = $request->user();
 
         if ($user->balance < 0.5) {

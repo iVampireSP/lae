@@ -38,6 +38,13 @@ class HostJob implements ShouldQueue
     public function handle(): void
     {
         $host = $this->host;
+
+        // 忽略 unavailable 状态的 host
+        if ($host->status === 'unavailable') {
+            return;
+        }
+
+
         $host->load(['module']);
 
         switch ($this->type) {

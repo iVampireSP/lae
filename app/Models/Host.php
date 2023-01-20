@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Events\Users;
 use App\Jobs\Host\HostJob;
-use App\Jobs\Host\UpdateOrSuspendedHostJob;
+use App\Jobs\Host\UpdateOrDeleteHostJob;
 use App\Notifications\WebNotification;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Collection;
@@ -54,23 +54,35 @@ class Host extends Model
         });
 
         static::created(function (self $model) {
-
             $model->user->notify(new WebNotification($model, 'hosts.created'));
-
         });
 
 
-        static::updating(function ($model) {
+        static::updating(function (self $model) {
             if ($model->isDirty('status')) {
                 if ($model->status == 'suspended') {
                     $model->suspended_at = now();
                 } else {
                     $model->suspended_at = null;
                 }
+
+                if ($model->status == 'locked') {
+                    $model->locked_at = now();
+                } else {
+                    $model->locked_at = null;
+                }
+
+                if ($model->status == 'unavailable') {
+                    $model->unavailable_at = now();
+                } else {
+                    $model->unavailable_at = null;
+                }
             }
 
             // 调度任务
-            dispatch(new HostJob($model, 'patch'));
+            if ($model->status !== 'unavailable') {
+                dispatch(new HostJob($model, 'patch'));
+            }
 
             broadcast(new Users($model->user_id, 'hosts.updating', $model));
         });
@@ -307,7 +319,7 @@ class Host extends Model
 
     public function updateOrDelete(): bool
     {
-        dispatch(new UpdateOrSuspendedHostJob($this));
+        dispatch(new UpdateOrDeleteHostJob($this));
 
         return true;
     }

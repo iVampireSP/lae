@@ -58,7 +58,7 @@ class HostController extends Controller
     {
         $request->validate([
             'name' => 'sometimes|string|max:255',
-            'status' => 'sometimes|in:running,stopped,suspended,pending',
+            'status' => 'sometimes|in:running,stopped,suspended,pending,locked,unavailable',
             'price' => 'sometimes|numeric',
             'managed_price' => 'nullable|numeric',
         ]);
