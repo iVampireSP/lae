@@ -39,7 +39,7 @@ class FetchModuleJob implements ShouldQueue
     {
         $module = $this->module;
 
-        $servers = Cache::get('module:' . $module->id . ':servers', []);
+        $servers = [];
 
         try {
             $response = $module->http()->get('remote');
