@@ -10,7 +10,7 @@ use Illuminate\Queue\SerializesModels;
 
 // use Illuminate\Contracts\Queue\ShouldBeUnique;
 
-class DeleteHostJob implements ShouldQueue
+class DeleteSuspendedHostJob implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;
 

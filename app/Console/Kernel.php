@@ -2,7 +2,7 @@
 
 namespace App\Console;
 
-use App\Jobs\Host\DeleteHostJob;
+use App\Jobs\Host\DeleteSuspendedHostJob;
 use App\Jobs\Host\DispatchHostCostQueueJob;
 use App\Jobs\Host\ScanAllHostsJob;
 use App\Jobs\Module\FetchModuleJob;
@@ -45,7 +45,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new ClearTasksJob())->weekly();
 
         // 删除暂停或部署时间超过 3 天以上的主机
-        $schedule->job(new DeleteHostJob())->hourly();
+        $schedule->job(new DeleteSuspendedHostJob())->hourly();
 
         // 检查主机是否存在于模块
         $schedule->job(new ScanAllHostsJob())->everyThirtyMinutes()->withoutOverlapping()->onOneServer();
