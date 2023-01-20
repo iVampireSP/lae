@@ -11,6 +11,7 @@
             <thead>
             <th>ID</th>
             <th>名称</th>
+            <th>状态</th>
             <th>余额</th>
             <th>操作</th>
             </thead>
@@ -25,6 +26,9 @@
                     </td>
                     <td>
                         {{ $module->name }}
+                    </td>
+                    <td>
+                        {{ $module->status }}
                     </td>
                     <td>
                         {{ $module->balance }} 元
