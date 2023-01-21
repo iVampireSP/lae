@@ -10,7 +10,7 @@ class ModuleController extends Controller
 {
     public function index()
     {
-        $modules = (new Module)->all()->makeVisible('api_token');
+        $modules = (new Module)->all()->makeVisible(['api_token', 'url']);
 
         return $this->success($modules);
     }

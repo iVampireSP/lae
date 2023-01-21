@@ -32,7 +32,8 @@ class Module extends Authenticatable
     protected $hidden = [
         'api_token',
         'wecom_key',
-        'balance'
+        'balance',
+        'url'
     ];
 
     protected $casts = [
