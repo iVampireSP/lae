@@ -117,18 +117,20 @@ class Module extends Authenticatable
     {
         $user = auth('sanctum')->user();
 
+        $http = $this->http();
         if ($user) {
-            $this->http()->withHeaders([
+            $http = $http->withHeaders([
                 'X-User-Id' => $user->id,
             ]);
-            $requests['user_id'] = $user->id;
-            if ($method == 'post') {
-                // add user to requests
-                $requests['user'] = $user;
-            }
+
+            // $requests['user_id'] = $user->id;
+            // if ($method == 'post') {
+            //     // add user to requests
+            //     $requests['user'] = $user;
+            // }
         }
 
-        $response = $this->http()->{$method}($path, $requests);
+        $response = $http->{$method}($path, $requests);
 
         return $this->getResponse($response);
     }

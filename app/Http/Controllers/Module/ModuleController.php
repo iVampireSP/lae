@@ -37,7 +37,8 @@ class ModuleController extends Controller
     {
         $path = substr($request->path(), strlen("/$prefix/modules/$module->id"));
 
-        return preg_replace('/[^a-zA-Z0-9\/]/', '', $path);
+        // 去除 非法字符
+        return preg_replace('/[^a-zA-Z0-9\/\-]/', '', $path);
     }
 
     public function exportCall(Request $request, Module $module): Response|JsonResponse
