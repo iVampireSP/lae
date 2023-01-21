@@ -37,8 +37,8 @@ class ModuleController extends Controller
     {
         $path = substr($request->path(), strlen("/$prefix/modules/$module->id"));
 
-        // 只允许最基本的字符
-        return preg_replace('/[^a-zA-Z0-9\/]/', '', $path);
+        // 只允许最基本的字符，以及 _,-
+        return preg_replace('/[^a-zA-Z0-9_\-\/]/', '', $path);
     }
 
     public function exportCall(Request $request, Module $module): Response|JsonResponse
