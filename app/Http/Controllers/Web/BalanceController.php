@@ -256,7 +256,7 @@ class BalanceController extends Controller
 
         $modules = Module::all();
 
-        $transactions = (new Transaction)->where('user_id', auth()->id());
+        $transactions = (new Transaction)->where('user_id', auth('web')->id())->where('payment', '!=', 'module_balance');
 
         if ($request->has('type')) {
             $transactions = $transactions->where('type', $request->type);
