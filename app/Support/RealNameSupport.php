@@ -105,6 +105,8 @@ class RealNameSupport
     {
         $data = json_decode($request['data'], true);
 
+        Log::debug('实名认证回调', $request);
+
         $verify = $this->verifyIfSuccess($request['data'], $request['sign']);
 
         if (!$verify) {
