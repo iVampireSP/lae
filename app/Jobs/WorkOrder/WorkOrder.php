@@ -54,7 +54,10 @@ class WorkOrder implements ShouldQueue
         }
 
         if (!$response->successful()) {
-            Log::debug('WorkOrder push failed', $response->json());
+            Log::debug('WorkOrder push failed', [
+                'response' => $response->json(),
+                'workOrder' => $this->workOrder->toArray(),
+            ]);
 
             $this->workOrder->update([
                 'status' => 'error'
