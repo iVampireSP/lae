@@ -40,6 +40,10 @@ class WorkOrder implements ShouldQueue
             return;
         }
 
+        if ($this->workOrder->status === 'error' && $this->type !== 'delete') {
+            $this->type = 'post';
+        }
+
 
         if ($this->type == 'post') {
             $response = $this->workOrder->module->http()->post('work-orders', $this->workOrder->toArray());
