@@ -99,7 +99,7 @@
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownSupport">
                             <li>
-                                <a class="dropdown-item" href="{{ route('admin.transactions') }}">管理员</a>
+                                <a class="dropdown-item" href="{{ route('admin.admins.index') }}">管理员</a>
                             </li>
 
                             <li>

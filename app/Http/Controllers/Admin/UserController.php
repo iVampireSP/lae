@@ -22,35 +22,35 @@ class UserController extends Controller
      */
     public function index(Request $request): View
     {
-        $users = new User();
+        $users = (new User())->with('user_group')->paginate(50)->withQueryString();
 
-        $users = $users->with('user_group');
+        // $users = $users->with('user_group');
 
-        if ($request->filled('id')) {
-            $users = $users->where('id', $request->input('id'));
-        }
+        // if ($request->filled('id')) {
+        //     $users = $users->where('id', $request->input('id'));
+        // }
+        //
+        // if ($request->filled('name')) {
+        //     $users = $users->where('name', 'like', '%' . $request->input('name') . '%');
+        // }
+        //
+        // if ($request->filled('email')) {
+        //     $users = $users->where('email', 'like', '%' . $request->input('email') . '%');
+        // }
+        //
+        // if ($request->filled('real_name')) {
+        //     $users = $users->where('real_name', 'like', '%' . $request->input('real_name') . '%');
+        // }
+        //
+        // if ($request->has('banned_at')) {
+        //     $users = $users->whereNotNull('banned_at');
+        // }
+        //
+        // if ($request->has('real_name_verified_at')) {
+        //     $users = $users->whereNotNull('real_name_verified_at');
+        // }
 
-        if ($request->filled('name')) {
-            $users = $users->where('name', 'like', '%' . $request->input('name') . '%');
-        }
-
-        if ($request->filled('email')) {
-            $users = $users->where('email', 'like', '%' . $request->input('email') . '%');
-        }
-
-        if ($request->filled('real_name')) {
-            $users = $users->where('real_name', 'like', '%' . $request->input('real_name') . '%');
-        }
-
-        if ($request->has('banned_at')) {
-            $users = $users->whereNotNull('banned_at');
-        }
-
-        if ($request->has('real_name_verified_at')) {
-            $users = $users->whereNotNull('real_name_verified_at');
-        }
-
-        $users = $users->paginate(50)->withQueryString();
+        // $users = $users->paginate(50)->withQueryString();
 
         return view('admin.users.index', compact('users'));
     }

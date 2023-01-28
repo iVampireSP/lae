@@ -143,7 +143,7 @@ class User extends Authenticatable
         return $this->belongsTo(UserGroup::class);
     }
 
-    public function scopeBirthday()
+    public function scopeBirthday(): User
     {
         /** @noinspection PhpUndefinedMethodInspection */
         return $this->select(['id', 'name', 'birthday_at', 'email_md5', 'created_at'])->whereMonth('birthday_at', now()->month)
