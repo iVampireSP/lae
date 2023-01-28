@@ -24,6 +24,8 @@ class UserController extends Controller
     {
         $users = new User();
 
+        $users = $users->with('user_group');
+
         if ($request->filled('id')) {
             $users = $users->where('id', $request->input('id'));
         }
@@ -48,7 +50,7 @@ class UserController extends Controller
             $users = $users->whereNotNull('real_name_verified_at');
         }
 
-        $users = $users->with('user_group')->paginate(50)->withQueryString();
+        $users = $users->paginate(50)->withQueryString();
 
         return view('admin.users.index', compact('users'));
     }
