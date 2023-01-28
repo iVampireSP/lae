@@ -20,7 +20,7 @@ class HostController extends Controller
      */
     public function index(Request $request): View
     {
-        $hosts = Host::with('user');
+        $hosts = new Host();
 
         // 遍历所有的搜索条件
         foreach (['name', 'module_id', 'status', 'user_id', 'price', 'managed_price', 'created_at', 'updated_at'] as $field) {
@@ -28,6 +28,8 @@ class HostController extends Controller
                 $hosts->where($field, 'like', '%' . $request->input($field) . '%');
             }
         }
+
+        $hosts = $hosts->with(['user', 'module']);
 
         $hosts = $hosts->paginate(50)->withQueryString();
 
