@@ -24,7 +24,7 @@ class WorkOrderController extends Controller
     {
         $this->validate($request, [
             'title' => 'required|max:255',
-            'content' => 'required',
+            'content' => 'required|string|max:255',
             'module_id' => 'nullable|sometimes|string|exists:modules,id',
             'host_id' => 'nullable|sometimes|exists:hosts,id',
         ]);
