@@ -126,7 +126,7 @@ class AuthController extends Controller
         if (is_null($user)) {
             $name = $oauth_user->name;
             $email = $oauth_user->email;
-            $email_verified_at = $oauth_user->email_verified_at;
+            $email_verified_at = $oauth_user->email_verified_at ?? now();
 
             $user = new User();
             $user->name = $name;
