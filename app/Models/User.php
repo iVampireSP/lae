@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Exceptions\User\BalanceNotEnoughException;
 use Carbon\Exceptions\InvalidFormatException;
+use GeneaLabs\LaravelModelCaching\CachedBuilder;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -143,7 +144,7 @@ class User extends Authenticatable
         return $this->belongsTo(UserGroup::class);
     }
 
-    public function scopeBirthday(): User
+    public function scopeBirthday(): User|CachedBuilder
     {
         /** @noinspection PhpUndefinedMethodInspection */
         return $this->select(['id', 'name', 'birthday_at', 'email_md5', 'created_at'])->whereMonth('birthday_at', now()->month)
