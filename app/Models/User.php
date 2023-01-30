@@ -128,6 +128,11 @@ class User extends Authenticatable
         return $year . '-' . $month . '-' . $day;
     }
 
+    public function hasBalance(string $amount = "0.01"): bool
+    {
+        return bccomp($this->balance, $amount, 4) >= 0;
+    }
+
     public function isAdult(): bool
     {
         // 如果 birthday_at 为空，那么就返回 false
