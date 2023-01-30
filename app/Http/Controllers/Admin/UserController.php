@@ -48,7 +48,7 @@ class UserController extends Controller
             $users = $users->whereNotNull('real_name_verified_at');
         }
 
-        $users = $users->with(['group', 'balance']);
+        $users = $users->with(['user_group']);
 
         $users = $users->paginate(50)->withQueryString();
 
