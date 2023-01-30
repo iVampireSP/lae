@@ -4,5 +4,4 @@ namespace App\Helpers;
 
 trait HttpEvent
 {
-
 }

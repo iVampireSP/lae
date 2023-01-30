@@ -4,8 +4,8 @@ use Adapterman\Adapterman;
 use Workerman\Connection\TcpConnection;
 use Workerman\Worker;
 
-require_once __DIR__ . '/vendor/autoload.php';
-$app = require_once __DIR__ . '/bootstrap/app.php';
+require_once __DIR__.'/vendor/autoload.php';
+$app = require_once __DIR__.'/bootstrap/app.php';
 
 Adapterman::init();
 
@@ -21,7 +21,6 @@ $http_worker->onMessage = static function (TcpConnection $connection) use ($kern
     $response = $kernel->handle(
         $request = Illuminate\Http\Request::capture()
     );
-
 
     $response->send();
 

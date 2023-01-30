@@ -47,8 +47,7 @@ class UserCharged extends Notification implements ShouldQueue
             'data' => [
                 'user' => $user,
                 'balance' => $notifiable,
-            ]
+            ],
         ];
-
     }
 }

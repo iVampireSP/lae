@@ -28,7 +28,7 @@ class WorkOrder extends Model
         'user_id',
         'module_id',
         'status',
-        'notify'
+        'notify',
     ];
 
     protected $hidden = [
@@ -36,7 +36,7 @@ class WorkOrder extends Model
     ];
 
     protected $casts = [
-        'notify' => 'boolean'
+        'notify' => 'boolean',
     ];
 
     protected static function boot()
@@ -55,12 +55,12 @@ class WorkOrder extends Model
                 $model->user_id = auth()->id();
 
                 if ($model->host_id) {
-                    if (!$model->user_id == $model->host->user_id) {
+                    if (! $model->user_id == $model->host->user_id) {
                         throw new CommonException('user_id not match host user_id');
                     }
                 }
             } else {
-                if (!$model->user_id) {
+                if (! $model->user_id) {
                     throw new CommonException('user_id is required');
                 }
             }

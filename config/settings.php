@@ -28,9 +28,9 @@ return [
             'code' => env('SUPPORT_REAL_NAME_APP_CODE'),
             'min_age' => env('SUPPORT_REAL_NAME_MIN_AGE', 13),
             'max_age' => env('SUPPORT_REAL_NAME_MAX_AGE', 60),
-        ]
+        ],
     ],
     'forum' => [
-        'base_url' => env('FORUM_BASEURL')
+        'base_url' => env('FORUM_BASEURL'),
     ],
 ];

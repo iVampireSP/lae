@@ -35,7 +35,7 @@ class HostCost extends Command
             if ($this->confirm('如果不指定主机名，将会扣除所有主机的费用，是否继续？', true)) {
                 (new Host)->chunk(100, function ($hosts) {
                     foreach ($hosts as $host) {
-                        $this->info('正在扣除主机 ' . $host->name . ' 的费用: ' . $host->getPrice() . ' 元');
+                        $this->info('正在扣除主机 '.$host->name.' 的费用: '.$host->getPrice().' 元');
                         $host->cost();
                     }
                 });
@@ -43,12 +43,10 @@ class HostCost extends Command
         } else {
             $host_model = (new Host)->where('id', $host)->firstOrFail();
 
-
-            if ($this->confirm('是否扣除主机 ' . $host_model->name . ' 的费用？', true)) {
+            if ($this->confirm('是否扣除主机 '.$host_model->name.' 的费用？', true)) {
                 $host_model->cost();
             }
         }
-
 
         return CommandAlias::SUCCESS;
     }

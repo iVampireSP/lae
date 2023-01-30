@@ -57,7 +57,7 @@ class PushWorkOrderJob implements ShouldQueue
                 try {
                     $response = $workOrder->module->http()->retry(3, 100)->post('work-orders', $workOrder->toArray());
 
-                    if (!$response->successful()) {
+                    if (! $response->successful()) {
                         Log::warning('推送工单失败', [
                             'work_order_id' => $workOrder->id,
                             'response' => $response->body(),
@@ -69,13 +69,11 @@ class PushWorkOrderJob implements ShouldQueue
                     Log::warning($e->getMessage());
                 }
 
-                if (!$success) {
+                if (! $success) {
                     $workOrder->status = 'error';
                 }
 
-
                 $workOrder->save();
-
             }
         });
 
@@ -84,6 +82,5 @@ class PushWorkOrderJob implements ShouldQueue
                 dispatch(new Reply($reply));
             }
         });
-
     }
 }

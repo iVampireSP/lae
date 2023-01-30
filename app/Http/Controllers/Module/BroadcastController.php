@@ -16,7 +16,7 @@ class BroadcastController extends Controller
 
         $user->notify(new WebNotification($request->all(), $request->input('event')));
 
-        return $this->created("message sent.");
+        return $this->created('message sent.');
     }
 
     private function rules(): array

@@ -1,11 +1,11 @@
 <?php
 
-use App\Models\Module;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -27,7 +27,7 @@ return new class extends Migration {
             $module = [
                 'id' => 'test',
                 'name' => 'Example Module',
-                'api_token' => '123456'
+                'api_token' => '123456',
             ];
 
             (new App\Models\Module)->create($module);

@@ -8,10 +8,12 @@ use Jenssegers\Mongodb\Eloquent\Model;
 class Transaction extends Model
 {
     const UPDATED_AT = null;
+
     protected $connection = 'mongodb';
 
     // 停用 updated_at
     protected $collection = 'transactions';
+
     protected $dates = [
         'created_at',
         'updated_at',

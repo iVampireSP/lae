@@ -31,9 +31,8 @@ class Work extends Command
      */
     public function handle(): int
     {
-
         // 检测目录下是否有 rr
-        if (!file_exists(base_path('rr'))) {
+        if (! file_exists(base_path('rr'))) {
             $this->warn('未找到 rr 文件，将自动下载。');
 
             // 获取操作系统是 darwin 还是 linux
@@ -65,14 +64,15 @@ class Work extends Command
             exec("rm -rf roadrunner-$version-$os-$arch");
 
             // 设置 rr 可执行权限
-            exec("chmod +x rr");
+            exec('chmod +x rr');
         }
 
         // 关闭 Octane
         Artisan::call('octane:stop');
 
-        if (!config('settings.node.ip')) {
+        if (! config('settings.node.ip')) {
             $this->error('请先配置节点 IP。');
+
             return CommandAlias::FAILURE;
         }
 
@@ -92,29 +92,28 @@ class Work extends Command
         $pid = pcntl_fork();
         if ($pid === -1) {
             $this->error('无法创建子进程。');
+
             return CommandAlias::FAILURE;
-        } else if ($pid === 0) {
+        } elseif ($pid === 0) {
             // 再打开一个，负责 octane
             $pid = pcntl_fork();
             if ($pid === -1) {
                 $this->error('无法创建子进程。');
+
                 return CommandAlias::FAILURE;
-            } else if ($pid === 0) {
+            } elseif ($pid === 0) {
                 // 子进程
                 $this->info('正在启动 Web。');
 
                 $command = 'php artisan octane:start --host=0.0.0.0 --rpc-port=6001 --port=8000';
                 $this->pipeCommand($command);
-
             } else {
                 $this->report();
             }
-
         } else {
             // 父进程
             $this->work();
         }
-
 
         return CommandAlias::SUCCESS;
     }
@@ -146,7 +145,6 @@ class Work extends Command
         // 关闭进程
 
         proc_close($process);
-
     }
 
     private function report(): void
@@ -170,6 +168,7 @@ class Work extends Command
     {
         // 获取 CPU 使用率
         $cpu = sys_getloadavg();
+
         return $cpu[0];
     }
 
@@ -194,13 +193,11 @@ class Work extends Command
                 ]);
 
                 $this->info('配置文件更新完成。');
-
             },
             'cluster.restart.web' => function () {
                 $this->info('正在重启 Web。');
 
                 exec('php artisan octane:reload');
-
 
                 ClusterSupport::publish('cluster.restarted.web');
 

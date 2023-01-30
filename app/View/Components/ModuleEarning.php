@@ -28,6 +28,7 @@ class ModuleEarning extends Component
     public function render(): View
     {
         $years = $this->module->calculate();
+
         return view('components.module-earning', compact('years'));
     }
 }

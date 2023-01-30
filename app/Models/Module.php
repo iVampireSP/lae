@@ -21,19 +21,20 @@ class Module extends Authenticatable
     public $incrementing = false;
 
     protected $table = 'modules';
+
     protected $keyType = 'string';
 
     protected $fillable = [
         'id',
         'name',
-        'api_token'
+        'api_token',
     ];
 
     protected $hidden = [
         'api_token',
         'wecom_key',
         'balance',
-        'url'
+        'url',
     ];
 
     protected $casts = [
@@ -45,7 +46,7 @@ class Module extends Authenticatable
     {
         parent::boot();
         static::creating(function (self $model) {
-            if (!app()->environment('local')) {
+            if (! app()->environment('local')) {
                 $model->api_token = Str::random(60);
             }
 
@@ -66,18 +67,17 @@ class Module extends Authenticatable
     //     return $this->getResponse($response);
     // }
 
-
     // post, get, patch, delete 等请求
     public function remote($func, $requests): array
     {
-        $response = $this->http()->post('functions/' . $func, $requests);
+        $response = $this->http()->post('functions/'.$func, $requests);
 
         return $this->getResponse($response);
     }
 
     public function http(): PendingRequest
     {
-        return Http::module($this->api_token, $this->url . '/remote')->acceptJson()->timeout(5);
+        return Http::module($this->api_token, $this->url.'/remote')->acceptJson()->timeout(5);
     }
 
     private function getResponse(Response $response): array
@@ -141,7 +141,7 @@ class Module extends Authenticatable
         $module_id = auth('module')->id();
 
         $http = $this->http()->withHeaders([
-            'X-Module' => $module_id
+            'X-Module' => $module_id,
         ]);
 
         $requests['module_id'] = $module_id;
@@ -175,31 +175,30 @@ class Module extends Authenticatable
         return $success;
     }
 
-    #[ArrayShape(['transactions' => "array"])]
+    #[ArrayShape(['transactions' => 'array'])]
     public function calculate(): array
     {
-        $cache_key = 'module_earning_' . $this->id;
+        $cache_key = 'module_earning_'.$this->id;
+
         return Cache::get($cache_key, []);
     }
-
 
     /**
      * 扣除费用
      *
-     * @param string|null $amount
-     * @param string|null $description
-     * @param bool        $fail
-     * @param array       $options
-     *
+     * @param  string|null  $amount
+     * @param  string|null  $description
+     * @param  bool  $fail
+     * @param  array  $options
      * @return string
      */
-    public function reduce(string|null $amount = "0", string|null $description = "消费", bool $fail = false, array $options = []): string
+    public function reduce(string|null $amount = '0', string|null $description = '消费', bool $fail = false, array $options = []): string
     {
         if ($amount === null || $amount === '') {
             return $this->balance;
         }
 
-        Cache::lock('module_balance_' . $this->id, 10)->block(10, function () use ($amount, $fail, $description, $options) {
+        Cache::lock('module_balance_'.$this->id, 10)->block(10, function () use ($amount, $fail, $description, $options) {
             $this->refresh();
 
             if ($this->balance < $amount) {
@@ -225,9 +224,7 @@ class Module extends Authenticatable
                 }
 
                 (new Transaction)->create($data);
-
             }
-
         });
 
         return $this->balance;
@@ -236,20 +233,19 @@ class Module extends Authenticatable
     /**
      * 增加余额
      *
-     * @param string|null $amount
-     * @param string      $payment
-     * @param string|null $description
-     * @param array       $options
-     *
+     * @param  string|null  $amount
+     * @param  string  $payment
+     * @param  string|null  $description
+     * @param  array  $options
      * @return string
      */
-    public function charge(string|null $amount = "0", string $payment = 'console', string|null $description = '充值', array $options = []): string
+    public function charge(string|null $amount = '0', string $payment = 'console', string|null $description = '充值', array $options = []): string
     {
         if ($amount === null || $amount === '') {
             return $this->balance;
         }
 
-        Cache::lock('module_balance_' . $this->id, 10)->block(10, function () use ($amount, $description, $payment, $options) {
+        Cache::lock('module_balance_'.$this->id, 10)->block(10, function () use ($amount, $description, $payment, $options) {
             $this->refresh();
 
             $this->balance = bcadd($this->balance, $amount, 4);
@@ -271,8 +267,6 @@ class Module extends Authenticatable
 
                 (new Transaction)->create($data);
             }
-
-
         });
 
         return $this->balance;

@@ -57,7 +57,7 @@ return [
         ],
 
         'api' => [
-            'driver' => 'api'
+            'driver' => 'api',
         ],
     ],
 

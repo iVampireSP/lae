@@ -16,8 +16,7 @@ class ModuleController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param Module $module
-     *
+     * @param  Module  $module
      * @return View
      */
     public function index(Module $module): View
@@ -40,8 +39,7 @@ class ModuleController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return RedirectResponse
      */
     public function store(Request $request): RedirectResponse
@@ -62,7 +60,6 @@ class ModuleController extends Controller
         $module->save();
 
         return redirect()->route('admin.modules.edit', $module)->with('success', '模块创建成功。');
-
     }
 
     private function rules(): array
@@ -80,8 +77,7 @@ class ModuleController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param Module $module
-     *
+     * @param  Module  $module
      * @return View
      */
     public function show(Module $module): View
@@ -96,8 +92,7 @@ class ModuleController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param Module $module
-     *
+     * @param  Module  $module
      * @return View
      */
     public function edit(Module $module): View
@@ -110,9 +105,8 @@ class ModuleController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param Module  $module
-     *
+     * @param  Request  $request
+     * @param  Module  $module
      * @return RedirectResponse
      */
     public function update(Request $request, Module $module): RedirectResponse
@@ -125,7 +119,7 @@ class ModuleController extends Controller
         $module->status = $request->input('status');
         $module->wecom_key = $request->input('wecom_key');
 
-        if (!$request->filled('api_token')) {
+        if (! $request->filled('api_token')) {
             $module->api_token = Str::random(60);
         } else {
             $module->api_token = $request->input('api_token');
@@ -143,18 +137,17 @@ class ModuleController extends Controller
 
                 // 充值或者扣费
                 if ($diff > 0) {
-                    $description = '管理员 ' . auth('admin')->user()->name . ' 充值 ' . $diff . ' 元';
+                    $description = '管理员 '.auth('admin')->user()->name.' 充值 '.$diff.' 元';
                     $module->charge($diff, 'console', $description);
                 } else {
-                    $description = '管理员 ' . auth('admin')->user()->name . ' 扣除 ' . abs($diff) . ' 元';
+                    $description = '管理员 '.auth('admin')->user()->name.' 扣除 '.abs($diff).' 元';
                     $module->reduce(abs($diff), $description);
                 }
             }
         }
 
-
         if ($request->input('reset_api_token')) {
-            $text .= ', API Token 为 ' . $module->api_token . '。';
+            $text .= ', API Token 为 '.$module->api_token.'。';
         } else {
             $text .= '。';
         }
@@ -165,8 +158,7 @@ class ModuleController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param Module $module
-     *
+     * @param  Module  $module
      * @return RedirectResponse
      */
     public function destroy(Module $module): RedirectResponse
@@ -198,7 +190,6 @@ class ModuleController extends Controller
         return back()->with('success', '已信任该模块。');
     }
 
-
     // fast login
 
     public function allows_destroy(Module $module, ModuleAllow $allow): RedirectResponse
@@ -214,6 +205,7 @@ class ModuleController extends Controller
 
         if ($resp['success']) {
             $resp = $resp['json'];
+
             return view('admin.modules.login', compact('module', 'resp'));
         } else {
             return redirect()->route('admin.modules.show', $module)->with('error', '快速登录失败，可能是模块不支持。');

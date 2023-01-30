@@ -1,11 +1,11 @@
 <?php
 
-use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -22,7 +22,7 @@ return new class extends Migration {
 
         (new App\Models\User)->chunk(100, function ($users) use (&$i, $count) {
             foreach ($users as $user) {
-                echo sprintf('Updating %d/%d', ++$i, $count) . PHP_EOL;
+                echo sprintf('Updating %d/%d', ++$i, $count).PHP_EOL;
 
                 $user->email_md5 = md5($user->email);
                 $user->uuid = Str::uuid();

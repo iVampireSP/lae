@@ -26,7 +26,7 @@ class EmqxSupport
         }
 
         if ($client_id) {
-            $this->api()->delete('/clients/' . $client_id);
+            $this->api()->delete('/clients/'.$client_id);
         }
 
         if ($username) {
@@ -42,35 +42,9 @@ class EmqxSupport
     /**
      * @throws EmqxSupportException
      */
-    public function clients($params = [])
-    {
-        //    merge params
-        $params = array_merge([
-            'limit' => $this->limit_per_page,
-            'isTrusted' => true,
-        ], $params);
-
-        try {
-            $response = $this->api()->get('clients', $params);
-        } /** @noinspection PhpRedundantCatchClauseInspection */ catch (ConnectionException $e) {
-            Log::error('emqx connect failed.', [$e]);
-            throw new EmqxSupportException('EMQX API 无法连接。' . $e->getMessage());
-        }
-
-        if ($response->successful()) {
-            return $response->json();
-        } else {
-            throw new EmqxSupportException('无法获取客户端列表。');
-        }
-    }
-
-
-    /**
-     * @throws EmqxSupportException
-     */
     public function client(string $client_id)
     {
-        $response = $this->api()->get('clients/' . $client_id);
+        $response = $this->api()->get('clients/'.$client_id);
 
         if ($response->successful()) {
             return $response->json();
@@ -98,5 +72,30 @@ class EmqxSupport
         return new LengthAwarePaginator($data, $total, $limit, $page, [
             'path' => route('admin.devices.index'),
         ]);
+    }
+
+    /**
+     * @throws EmqxSupportException
+     */
+    public function clients($params = [])
+    {
+        //    merge params
+        $params = array_merge([
+            'limit' => $this->limit_per_page,
+            'isTrusted' => true,
+        ], $params);
+
+        try {
+            $response = $this->api()->get('clients', $params);
+        } /** @noinspection PhpRedundantCatchClauseInspection */ catch (ConnectionException $e) {
+            Log::error('emqx connect failed.', [$e]);
+            throw new EmqxSupportException('EMQX API 无法连接。'.$e->getMessage());
+        }
+
+        if ($response->successful()) {
+            return $response->json();
+        } else {
+            throw new EmqxSupportException('无法获取客户端列表。');
+        }
     }
 }

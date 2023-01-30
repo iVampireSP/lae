@@ -7,7 +7,6 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
 class Servers extends Event implements ShouldBroadcast
 {
-
     public array $data;
 
     public string $type = 'servers.updated';

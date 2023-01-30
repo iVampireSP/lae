@@ -34,7 +34,7 @@ class SetBirthdayGroupJob implements ShouldQueue
     {
         $birthday_group = (new UserGroup)->find(config('settings.user_groups.birthday_group_id'));
 
-        if (!$birthday_group) {
+        if (! $birthday_group) {
             return;
         }
 

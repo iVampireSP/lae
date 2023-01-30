@@ -18,7 +18,6 @@ class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
      */
     public function index(Request $request): View
     {
@@ -29,15 +28,15 @@ class UserController extends Controller
         }
 
         if ($request->filled('name')) {
-            $users = $users->where('name', 'like', '%' . $request->input('name') . '%');
+            $users = $users->where('name', 'like', '%'.$request->input('name').'%');
         }
 
         if ($request->filled('email')) {
-            $users = $users->where('email', 'like', '%' . $request->input('email') . '%');
+            $users = $users->where('email', 'like', '%'.$request->input('email').'%');
         }
 
         if ($request->filled('real_name')) {
-            $users = $users->where('real_name', 'like', '%' . $request->input('real_name') . '%');
+            $users = $users->where('real_name', 'like', '%'.$request->input('real_name').'%');
         }
 
         if ($request->has('banned_at')) {
@@ -58,22 +57,20 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param User $user
-     *
+     * @param  User  $user
      * @return RedirectResponse
      */
     public function show(User $user): RedirectResponse
     {
         Auth::guard('web')->login($user);
 
-        return back()->with('success', '您已切换到用户 ' . $user->name . ' 的身份。');
+        return back()->with('success', '您已切换到用户 '.$user->name.' 的身份。');
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param User $user
-     *
+     * @param  User  $user
      * @return View
      */
     public function edit(User $user): View
@@ -89,9 +86,8 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param User    $user
-     *
+     * @param  Request  $request
+     * @param  User  $user
      * @return RedirectResponse
      */
     public function update(Request $request, User $user): RedirectResponse
@@ -119,20 +115,19 @@ class UserController extends Controller
         if ($request->filled('one_time_action')) {
             if ($one_time_action == 'clear_all_keys') {
                 $user->tokens()->delete();
-            } else if ($one_time_action == 'suspend_all_hosts') {
+            } elseif ($one_time_action == 'suspend_all_hosts') {
                 $user->hosts()->update(['status' => 'suspended', 'suspended_at' => now()]);
-            } else if ($one_time_action == 'stop_all_hosts') {
+            } elseif ($one_time_action == 'stop_all_hosts') {
                 $user->hosts()->update(['status' => 'stopped', 'suspended_at' => null]);
-            } else if ($one_time_action == 'add_balance') {
-                $description = '管理员 ' . $request->user('admin')->name . " 增加。";
+            } elseif ($one_time_action == 'add_balance') {
+                $description = '管理员 '.$request->user('admin')->name.' 增加。';
 
                 $user->charge($request->input('balance'), 'console', $description);
-            } else if ($one_time_action == 'reduce_balance') {
-                $description = '管理员 ' . $request->user('admin')->name . " 扣除。";
+            } elseif ($one_time_action == 'reduce_balance') {
+                $description = '管理员 '.$request->user('admin')->name.' 扣除。';
 
                 $user->reduce($request->input('balance'), $description);
             }
-
         }
 
         if ($request->has('user_group_id')) {

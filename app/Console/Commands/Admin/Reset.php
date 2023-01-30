@@ -29,7 +29,6 @@ class Reset extends Command
      */
     public function handle(): int
     {
-
         // 获取管理员ID
         $id = $this->ask('请输入管理员ID');
 
@@ -39,6 +38,7 @@ class Reset extends Command
         // 验证管理员
         if (is_null($admin)) {
             $this->error('管理员不存在。');
+
             return CommandAlias::FAILURE;
         }
 

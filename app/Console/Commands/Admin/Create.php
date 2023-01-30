@@ -29,10 +29,8 @@ class Create extends Command
      */
     public function handle(): int
     {
-
         // 邮箱
         $email = $this->ask('请输入邮箱');
-
 
         // 密码
         $password = $this->secret('请输入密码');
@@ -42,17 +40,18 @@ class Create extends Command
         // 验证密码
         if ($password !== $password_confirmation) {
             $this->error('两次输入的密码不一致。');
+
             return CommandAlias::FAILURE;
         }
 
         // 创建管理员
         $admin = (new Admin)->create([
             'email' => $email,
-            'password' => bcrypt($password)
+            'password' => bcrypt($password),
         ]);
 
         // 输出信息
-        $this->info('管理员创建成功，ID为：' . $admin->id);
+        $this->info('管理员创建成功，ID为：'.$admin->id);
 
         return CommandAlias::SUCCESS;
     }

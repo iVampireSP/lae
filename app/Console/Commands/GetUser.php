@@ -45,15 +45,14 @@ class GetUser extends Command
 
         $user = (new User)->where('email', $email_or_id)->orWhere('id', $email_or_id)->orWhere('name', $email_or_id)->first();
 
-
         // $transaction = new Transaction();
 
         $this->warn('用户基本信息');
 
-        $this->info('用户 ID: ' . $user->id);
-        $this->info('名称: ' . $user->name);
-        $this->info('邮箱: ' . $user->email);
-        $this->info('余额：' . $user->balance . ' 元');
+        $this->info('用户 ID: '.$user->id);
+        $this->info('名称: '.$user->name);
+        $this->info('邮箱: '.$user->email);
+        $this->info('余额：'.$user->balance.' 元');
 
         $this->warn('前 10 条充值记录');
 
@@ -61,7 +60,7 @@ class GetUser extends Command
 
         // 倒序输出
         foreach (array_reverse($balances->toArray()) as $balance) {
-            $this->info('[' . $balance['paid_at'] . '] 支付方式: ' . $balance['payment'] . ' 金额：' . $balance['amount'] . ' 元');
+            $this->info('['.$balance['paid_at'].'] 支付方式: '.$balance['payment'].' 金额：'.$balance['amount'].' 元');
         }
 
         $this->warn('前 10 个主机');
@@ -70,7 +69,7 @@ class GetUser extends Command
 
         // 倒序
         foreach (array_reverse($hosts->toArray()) as $host) {
-            $this->info('[' . $host['module']['name'] . '](' . $host['price'] . ' 元) ' . $host['name']);
+            $this->info('['.$host['module']['name'].']('.$host['price'].' 元) '.$host['name']);
         }
 
         return 0;

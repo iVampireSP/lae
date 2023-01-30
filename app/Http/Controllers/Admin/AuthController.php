@@ -14,7 +14,7 @@ class AuthController extends Controller
      */
     public function index(): View|RedirectResponse
     {
-        if (!auth('admin')->check()) {
+        if (! auth('admin')->check()) {
             return view('admin.login');
         } else {
             return redirect()->route('admin.index');
@@ -22,8 +22,7 @@ class AuthController extends Controller
     }
 
     /**
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return RedirectResponse
      */
     public function login(Request $request): RedirectResponse
@@ -41,6 +40,7 @@ class AuthController extends Controller
     public function logout(): RedirectResponse
     {
         auth('admin')->logout();
+
         return redirect()->route('admin.login');
     }
 }

@@ -17,12 +17,14 @@ class Users extends Event implements ShouldBroadcastNow
     use SerializesModels;
 
     public User $user;
+
     public array|Model $data;
+
     public null|Module $module = null;
+
     public string $event = 'notification';
 
     public Carbon $sent_at;
-
 
     /**
      * Create a new event instance.
@@ -57,7 +59,6 @@ class Users extends Event implements ShouldBroadcastNow
             // }
         }
 
-
         // log
         if (config('app.env') != 'production') {
             Log::debug('Users Event', [
@@ -69,14 +70,12 @@ class Users extends Event implements ShouldBroadcastNow
         }
     }
 
-    public
-    function broadcastOn(): PrivateChannel
+    public function broadcastOn(): PrivateChannel
     {
-        return new PrivateChannel('users.' . $this->user->id);
+        return new PrivateChannel('users.'.$this->user->id);
     }
 
-    public
-    function broadcastAs(): string
+    public function broadcastAs(): string
     {
         return 'messages';
     }

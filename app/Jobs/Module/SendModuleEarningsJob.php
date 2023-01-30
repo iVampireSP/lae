@@ -31,20 +31,18 @@ class SendModuleEarningsJob extends Job
                 $this->send($module);
             }
         });
-
     }
 
     private function send(Module $module): void
     {
         $data = $module->calculate();
 
-        if (!$data) {
+        if (! $data) {
             return;
         }
 
         // make wecom_key visible
         $wecom_key = $module->wecom_key ?? config('settings.wecom.robot_hook.billing');
-
 
         $text = "# $module->name 收益";
         foreach ($data as $year => $months) {
@@ -68,14 +66,12 @@ EOF;
             }
         }
 
-
-        $resp = Http::post('https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=' . $wecom_key, [
+        $resp = Http::post('https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key='.$wecom_key, [
             'msgtype' => 'markdown',
             'markdown' => [
                 'content' => $text,
             ],
         ]);
-
 
         if ($resp->failed()) {
             Log::error('发送模块盈利到企业微信时失败', [

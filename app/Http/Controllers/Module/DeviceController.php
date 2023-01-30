@@ -18,10 +18,11 @@ class DeviceController extends Controller
 
         try {
             $clients = $emqx->pagination([
-                'like_username' => $request->user('module')->id . '.',
+                'like_username' => $request->user('module')->id.'.',
             ]);
         } catch (EmqxSupportException $e) {
             Log::error('emqx connect failed.', [$e]);
+
             return $this->error('unable connectto emqx');
         }
 

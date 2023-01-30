@@ -5,7 +5,6 @@ use App\Http\Controllers\Application\MqttAuthController;
 use App\Http\Controllers\Application\UserController;
 use Illuminate\Support\Facades\Route;
 
-
 // MQTT Auth
 Route::prefix('mqtt')->as('mqtt.')->group(function () {
     // 登录
@@ -18,7 +17,5 @@ Route::prefix('mqtt')->as('mqtt.')->group(function () {
 Route::get('modules', [ModuleController::class, 'index'])->name('modules.index');
 Route::get('modules/{module}', [ModuleController::class, 'show'])->name('modules.show');
 
-
 Route::resource('users', UserController::class)->only(['index', 'show']);
 Route::get('token/{token}', [UserController::class, 'auth']);
-

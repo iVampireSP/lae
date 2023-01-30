@@ -14,9 +14,8 @@ class ReplyController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request   $request
-     * @param WorkOrder $work_order
-     *
+     * @param  Request  $request
+     * @param  WorkOrder  $work_order
      * @return RedirectResponse
      */
     public function store(Request $request, WorkOrder $work_order): RedirectResponse
@@ -32,7 +31,7 @@ class ReplyController extends Controller
         (new Reply)->create([
             'content' => $request->input('content'),
             'work_order_id' => $work_order->id,
-            'name' => auth('admin')->user()->name
+            'name' => auth('admin')->user()->name,
         ]);
 
         return back()->with('success', '回复成功，请等待同步。');
@@ -41,9 +40,8 @@ class ReplyController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param WorkOrder $work_order
-     * @param Reply     $reply
-     *
+     * @param  WorkOrder  $work_order
+     * @param  Reply  $reply
      * @return View
      */
     public function edit(WorkOrder $work_order, Reply $reply): View
@@ -54,10 +52,9 @@ class ReplyController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request   $request
-     * @param WorkOrder $work_order
-     * @param Reply     $reply
-     *
+     * @param  Request  $request
+     * @param  WorkOrder  $work_order
+     * @param  Reply  $reply
      * @return RedirectResponse
      */
     public function update(Request $request, WorkOrder $work_order, Reply $reply): RedirectResponse
@@ -67,7 +64,7 @@ class ReplyController extends Controller
         ]);
 
         $reply->update([
-            'content' => $request->input('content')
+            'content' => $request->input('content'),
         ]);
 
         return redirect()->route('admin.work-orders.show', $work_order)->with('success', '修改成功。');
@@ -76,9 +73,8 @@ class ReplyController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param WorkOrder $work_order
-     * @param Reply     $reply
-     *
+     * @param  WorkOrder  $work_order
+     * @param  Reply  $reply
      * @return RedirectResponse
      */
     public function destroy(WorkOrder $work_order, Reply $reply): RedirectResponse

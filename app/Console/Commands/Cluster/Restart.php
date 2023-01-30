@@ -32,12 +32,13 @@ class Restart extends Command
         // 检测 service 参数
         $service = $this->argument('service');
 
-        if (!in_array($service, ['web', 'all'])) {
+        if (! in_array($service, ['web', 'all'])) {
             $this->error('service 参数错误，只能是 web 或 all。');
+
             return CommandAlias::FAILURE;
         }
 
-        ClusterSupport::publish('cluster.restart.' . $service);
+        ClusterSupport::publish('cluster.restart.'.$service);
 
         $this->info('已经向集群广播重启命令，等待集群响应。');
 

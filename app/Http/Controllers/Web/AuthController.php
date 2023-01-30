@@ -7,6 +7,8 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Notifications\User\UserNotification;
+use function back;
+use function config;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\GuzzleException;
@@ -15,8 +17,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
-use function back;
-use function config;
 use function redirect;
 use function session;
 use function view;
@@ -27,26 +27,22 @@ class AuthController extends Controller
     {
         // if logged in
         if ($request->filled('callback')) {
-
             $callback = $request->input('callback');
 
             session(['callback' => $callback]);
 
             if (Auth::guard('web')->check()) {
-
-
                 $callbackHost = parse_url($callback, PHP_URL_HOST);
                 $dashboardHost = parse_url(config('settings.dashboard.base_url'), PHP_URL_HOST);
 
                 if ($callbackHost === $dashboardHost) {
-
-                    if (!Auth::guard('web')->user()->isRealNamed()) {
+                    if (! Auth::guard('web')->user()->isRealNamed()) {
                         return redirect()->route('real_name.create')->with('status', '重定向已被打断，需要先实人认证。');
                     }
 
                     $token = $request->user()->createToken('Dashboard')->plainTextToken;
 
-                    return redirect($callback . '?token=' . $token);
+                    return redirect($callback.'?token='.$token);
                 }
 
                 return redirect()->route('confirm_redirect');
@@ -78,14 +74,14 @@ class AuthController extends Controller
             'meta' => 'test_meta',
         ]);
 
-        return redirect()->to(config('oauth.oauth_auth_url') . '?' . $query);
+        return redirect()->to(config('oauth.oauth_auth_url').'?'.$query);
     }
 
     public function callback(Request $request): RedirectResponse
     {
         $state = $request->session()->pull('state');
 
-        if (!strlen($state) > 0 && $state === $request->input('state')) {
+        if (! strlen($state) > 0 && $state === $request->input('state')) {
             return redirect(route('login'));
         }
 
@@ -111,14 +107,13 @@ class AuthController extends Controller
             $oauth_user = $http->get(config('oauth.oauth_user_url'), [
                 'headers' => [
                     'Accept' => 'application/json',
-                    'Authorization' => 'Bearer ' . $authorize->access_token,
+                    'Authorization' => 'Bearer '.$authorize->access_token,
                 ],
             ])->getBody();
         } catch (GuzzleException) {
             return redirect(route('login'));
         }
         $oauth_user = json_decode($oauth_user);
-
 
         $user_sql = (new User)->where('email', $oauth_user->email);
         $user = $user_sql->first();
@@ -139,7 +134,7 @@ class AuthController extends Controller
         } else {
             if ($user->name != $oauth_user->name) {
                 (new User)->where('email', $oauth_user->email)->update([
-                    'name' => $oauth_user->name
+                    'name' => $oauth_user->name,
                 ]);
             }
         }

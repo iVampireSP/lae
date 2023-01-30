@@ -15,6 +15,7 @@ class HostJob implements ShouldQueue
     use InteractsWithQueue, Queueable, SerializesModels;
 
     public HostModel $host;
+
     public string $type;
 
     /**
@@ -33,6 +34,7 @@ class HostJob implements ShouldQueue
      * Execute the job.
      *
      * @return void
+     *
      * @noinspection PhpUndefinedVariableInspection
      */
     public function handle(): void
@@ -44,12 +46,11 @@ class HostJob implements ShouldQueue
             return;
         }
 
-
         $host->load(['module']);
 
         switch ($this->type) {
             case 'patch':
-                $response = $host->module->http()->patch('hosts/' . $host->id, $host->toArray());
+                $response = $host->module->http()->patch('hosts/'.$host->id, $host->toArray());
 
                 break;
             case 'post':
@@ -57,7 +58,7 @@ class HostJob implements ShouldQueue
 
                 break;
             case 'delete':
-                $response = $host->module->baseRequest('delete', 'hosts/' . $host->id);
+                $response = $host->module->baseRequest('delete', 'hosts/'.$host->id);
 
                 // if successful
                 if ($response['status'] === 404) {
@@ -68,7 +69,7 @@ class HostJob implements ShouldQueue
         }
 
         if ($this->type !== 'delete') {
-            if (!$response->successful()) {
+            if (! $response->successful()) {
                 $host->status = 'error';
             }
 

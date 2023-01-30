@@ -6,10 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\User\HostRequest;
 use App\Jobs\Host\HostJob;
 use App\Models\Host;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Cache;
 use function auth;
 use function dispatch;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Cache;
 use function now;
 
 class HostController extends Controller
@@ -37,7 +37,7 @@ class HostController extends Controller
         $user = $request->user();
 
         if ($user->balance < 0.5) {
-            return $this->error('余额不足，无法开启计费项目。请确保您的余额至少为 0.5 元，您当前有 ' . $user->balance . ' 元。');
+            return $this->error('余额不足，无法开启计费项目。请确保您的余额至少为 0.5 元，您当前有 '.$user->balance.' 元。');
         }
 
         $host->update([
@@ -74,11 +74,11 @@ class HostController extends Controller
     {
         $month = now()->month;
 
-        $month_cache_key = 'user_' . auth()->id() . '_month_' . $month . '_hosts_balances';
+        $month_cache_key = 'user_'.auth()->id().'_month_'.$month.'_hosts_balances';
         $hosts_balances = Cache::get($month_cache_key, []);
 
         return $this->success([
-            'balances' => $hosts_balances
+            'balances' => $hosts_balances,
         ]);
     }
 }

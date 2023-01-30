@@ -134,7 +134,6 @@ return [
             'persistent' => true,
         ],
 
-
         'cache_2' => [
             'url' => env('REDIS_URL'),
             'host' => env('REDIS_HOST', '127.0.0.1'),

@@ -27,7 +27,6 @@ class Payment extends Component
      */
     public function render(): View
     {
-
         $this->payment = match ($this->payment) {
             'alipay' => '支付宝',
             'wechat', 'wepay' => '微信支付',

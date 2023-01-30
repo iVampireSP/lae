@@ -37,33 +37,32 @@ class Sync extends Command
         $node_type = config('settings.node.type');
 
         if ($node_type === 'master') {
-
             // if force is true, delete the old file
             if ($this->option('force') === 'true') {
                 $confirm = 'yes';
             } else {
                 $confirm = $this->ask('主节点同步将会恢复上一次数据，确定吗？', true);
-
             }
 
-
-            if (!$confirm) {
+            if (! $confirm) {
                 $this->warn('已取消。');
+
                 return CommandAlias::SUCCESS;
             }
         }
 
-        $cache_key = "master_config_zip";
+        $cache_key = 'master_config_zip';
         $config = ClusterSupport::get($cache_key);
 
         if ($config) {
             $this->info('检查下载目录的 MD5 值。');
-            $config_md5_key = "master_config_zip_md5";
+            $config_md5_key = 'master_config_zip_md5';
             $config_md5 = ClusterSupport::get($config_md5_key, '');
 
             $md5 = md5($config);
             if ($md5 !== $config_md5) {
                 $this->error('下载目录 MD5 值被篡改。请尝试从其他节点重新同步。');
+
                 return CommandAlias::FAILURE;
             }
 
@@ -84,7 +83,6 @@ class Sync extends Command
             $cmd = "rm -rf $cache_path";
             exec($cmd);
 
-
             $this->info('正在解压缩。');
             $zip = new ZipArchive();
             $zip->open($path);
@@ -103,6 +101,7 @@ class Sync extends Command
                 $this->info('检查 .env 文件的 MD5 值。');
                 if (md5($env) !== $env_md5) {
                     $this->error('.env 文件 MD5 值被篡改。请尝试从其他节点重新同步。');
+
                     return CommandAlias::FAILURE;
                 } else {
                     $this->info('正在写入 .env 文件。');
@@ -121,9 +120,7 @@ class Sync extends Command
                     $env = preg_replace('/^NODE_IP=.*$/m', "NODE_IP=$node_ip", $env);
 
                     file_put_contents(base_path('.env'), $env);
-
                 }
-
             }
 
             $this->info('正在清理。');
@@ -139,9 +136,9 @@ class Sync extends Command
             ClusterSupport::publish('synced');
         } else {
             $this->error('没有找到缓存。请尝试从其他节点重新同步。');
+
             return CommandAlias::FAILURE;
         }
-
 
         return CommandAlias::SUCCESS;
     }

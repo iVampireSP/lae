@@ -44,7 +44,7 @@ class SuspendUserAllHosts extends Command
 
         (new Host)->where('user_id', $user_id)->update([
             'status' => 'suspended',
-            'suspended_at' => now()
+            'suspended_at' => now(),
         ]);
 
         $this->info('暂停用户的所有主机成功。');

@@ -1,11 +1,11 @@
 <?php
 
-use App\Models\Host;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      *
@@ -19,15 +19,15 @@ return new class extends Migration {
             $table->tinyInteger('minute_at')->index()->nullable()->after('hour_at');
         });
 
-        echo PHP_EOL . '将开始刷新主机的分钟数...';
+        echo PHP_EOL.'将开始刷新主机的分钟数...';
         (new App\Models\Host)->chunk(100, function ($hosts) {
             foreach ($hosts as $host) {
-                echo '刷新: ' . $host->id . PHP_EOL;
+                echo '刷新: '.$host->id.PHP_EOL;
                 $host->minute_at = $host->created_at->minute;
                 $host->save();
             }
         });
-        echo ' 完成!' . PHP_EOL;
+        echo ' 完成!'.PHP_EOL;
     }
 
     /**

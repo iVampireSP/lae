@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Requests;
+
 use Illuminate\Http\Request as HttpRequest;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\ParameterBag;

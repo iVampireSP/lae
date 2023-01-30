@@ -14,13 +14,14 @@ class RealHostCostJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public Host $host;
+
     public string $price;
 
     /**
      * Create a new job instance.
      *
-     * @param Host   $host
-     * @param string $price
+     * @param  Host  $host
+     * @param  string  $price
      */
     public function __construct(Host $host, string $price)
     {

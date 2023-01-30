@@ -13,7 +13,6 @@ class WorkOrderRequest extends FormRequest
      */
     public function authorize(): bool
     {
-
         $work_order = $this->route('workOrder');
 
         return $work_order->user_id == auth()->id();

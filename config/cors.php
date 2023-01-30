@@ -6,7 +6,6 @@ if (env('APP_ENV') === 'local') {
     $cors_origin = ['*'];
 }
 
-
 return [
 
     /*

@@ -26,6 +26,7 @@ class ModuleScript extends Component
     public function render(): View
     {
         $modules = Module::all();
+
         return view('components.module-script', compact('modules'));
     }
 }

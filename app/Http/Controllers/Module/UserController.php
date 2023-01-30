@@ -24,15 +24,15 @@ class UserController extends Controller
 
         // 搜索 name, email, balance
         if ($request->has('name')) {
-            $users->where('name', 'like', '%' . $request->input('name') . '%');
+            $users->where('name', 'like', '%'.$request->input('name').'%');
         }
 
         if ($request->has('email')) {
-            $users->where('email', 'like', '%' . $request->input('email') . '%');
+            $users->where('email', 'like', '%'.$request->input('email').'%');
         }
 
         if ($request->has('balance')) {
-            $users->where('balance', 'like', '%' . $request->input('balance') . '%');
+            $users->where('balance', 'like', '%'.$request->input('balance').'%');
         }
 
         $users = $users->simplePaginate(100);
@@ -84,7 +84,7 @@ class UserController extends Controller
 
             $module->reduce($balance, $request->description, true, [
                 'user_id' => $user->id,
-                'payment' => 'module_balance'
+                'payment' => 'module_balance',
             ]);
 
             $user->charge($balance, 'module_balance', $request->description);
@@ -102,12 +102,10 @@ class UserController extends Controller
         return $token ? $this->success(Arr::only(
             $token->tokenable
                 ->makeVisible('real_name')
-                ->toArray()
-            ,
+                ->toArray(),
             [
-                'id', 'name', 'email', 'real_name'
+                'id', 'name', 'email', 'real_name',
             ]
         )) : $this->notFound();
     }
-
 }

@@ -14,27 +14,26 @@ class WeComChannel extends Notification
     /**
      * Send the given notification.
      *
-     * @param mixed        $notifiable
-     * @param Notification $notification
-     *
+     * @param  mixed  $notifiable
+     * @param  Notification  $notification
      * @return void
      */
     public function send(mixed $notifiable, Notification $notification): void
     {
         $data = $notification->toWeCom($notifiable);
 
-        if (!$data) {
+        if (! $data) {
             return;
         }
 
         $view = $data['view'];
         $key = $data['wecom_key'] ?? null;
 
-        if (!$key) {
+        if (! $key) {
             $key = config('settings.wecom.robot_hook.default');
         }
 
-        $resp = Http::post('https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=' . $key, [
+        $resp = Http::post('https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key='.$key, [
             'msgtype' => 'markdown',
             'markdown' => [
                 'content' => view($view, [
@@ -43,7 +42,7 @@ class WeComChannel extends Notification
             ],
         ]);
 
-        if (!$resp->successful()) {
+        if (! $resp->successful()) {
             Log::error('企业微信机器人发送失败', $data['data']);
         }
     }

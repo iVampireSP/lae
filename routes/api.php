@@ -19,11 +19,9 @@ Route::get('users', [UserController::class, 'index']);
 
 Route::resource('balances', BalanceController::class);
 
-
 Route::get('nodes', [IndexController::class, 'nodes']);
 Route::get('modules', [ModuleController::class, 'index']);
 Route::get('servers/{module}', [ModuleController::class, 'servers']);
-
 
 Route::resource('tasks', TaskController::class)->only(['index', 'show']);
 

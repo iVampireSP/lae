@@ -14,12 +14,10 @@ use Illuminate\View\View;
 
 class NotificationController extends Controller
 {
-
     /**
      * Show the form for creating a new resource.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return View
      */
     public function create(Request $request): View
@@ -37,26 +35,26 @@ class NotificationController extends Controller
             $request = $request->all();
         }
 
-        if (!empty($request['user_id'])) {
+        if (! empty($request['user_id'])) {
             $users = (new User)->where('id', $request['user_id']);
         } else {
             $users = User::query();
 
-            if (!empty($request['user'])) {
+            if (! empty($request['user'])) {
                 $user = $request['user'];
 
                 if ($user == 'active') {
                     // 寻找有 host 的用户
                     $users = $users->whereHas('hosts');
-                } else if ($user == 'normal') {
+                } elseif ($user == 'normal') {
                     $users = $users->whereNull('banned_at');
-                } else if ($user == 'banned') {
+                } elseif ($user == 'banned') {
                     $users = $users->whereNotNull('banned_at');
                 }
             }
         }
 
-        if (!empty($request['module_id'])) {
+        if (! empty($request['module_id'])) {
             // 从 hosts 中找到 module_id，然后找到拥有此 host 的用户
             $users = $users->whereHas('hosts', function ($query) use ($request) {
                 $query->where('module_id', $request['module_id']);
@@ -69,8 +67,7 @@ class NotificationController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return RedirectResponse
      */
     public function store(Request $request): RedirectResponse

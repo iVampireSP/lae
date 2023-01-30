@@ -16,10 +16,9 @@ class RealNamed
     /**
      * Handle an incoming request.
      *
-     * @param Request $request
-     * @param Closure $next
-     * @param string  $guard
-     *
+     * @param  Request  $request
+     * @param  Closure  $next
+     * @param  string  $guard
      * @return Response|RedirectResponse|JsonResponse
      */
     public function handle(Request $request, Closure $next, string $guard = 'web'): Response|RedirectResponse|JsonResponse

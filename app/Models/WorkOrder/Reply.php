@@ -23,7 +23,7 @@ class Reply extends Model
         'name',
         'module_id',
         'is_pending',
-        'role'
+        'role',
     ];
 
     protected $hidden = [
@@ -46,24 +46,20 @@ class Reply extends Model
 
             throw_if($model->workOrder->isFailure(), CommonException::class, '工单还没有就绪。');
 
-
             // change work order status
             if (auth('admin')->check()) {
                 $model->role = 'admin';
                 $model->workOrder->status = 'replied';
-
-            } else if (auth('sanctum')->check()) {
+            } elseif (auth('sanctum')->check()) {
                 $model->user_id = auth('sanctum')->id();
                 $model->role = 'user';
                 $model->workOrder->status = 'user_replied';
-
-            } else if (auth('module')->check()) {
+            } elseif (auth('module')->check()) {
                 $model->user_id = null;
                 $model->role = 'module';
                 $model->workOrder->status = 'replied';
 
                 broadcast(new Users($model->user, 'work-order.replied', $model->workOrder));
-
             } else {
                 $model->role = 'guest';
             }

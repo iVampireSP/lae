@@ -7,7 +7,6 @@ use Illuminate\View\Component;
 
 class BasicCard extends Component
 {
-
     public string $title;
 
     /**

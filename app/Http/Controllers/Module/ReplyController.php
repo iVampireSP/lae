@@ -13,8 +13,7 @@ class ReplyController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return JsonResponse
      */
     public function index(Request $request): JsonResponse
@@ -26,8 +25,6 @@ class ReplyController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     *
      */
     public function store(Request $request, WorkOrder $work_order): JsonResponse
     {

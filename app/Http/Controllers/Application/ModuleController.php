@@ -15,7 +15,6 @@ class ModuleController extends Controller
         return $this->success($modules);
     }
 
-
     public function show(Module $module): JsonResponse
     {
         return $this->success($module);

@@ -4,22 +4,22 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Closure;
+use function config;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
-use function config;
 
 class ForumController extends Controller
 {
-
     private mixed $baseUrl;
+
     private PendingRequest $http;
 
     public function __construct()
     {
         $this->baseUrl = config('settings.forum.base_url');
-        $this->http = Http::baseUrl($this->baseUrl . '/api')->throw();
+        $this->http = Http::baseUrl($this->baseUrl.'/api')->throw();
     }
 
     public function announcements(): JsonResponse
@@ -36,7 +36,7 @@ class ForumController extends Controller
         // 获取调用方法名
         $method = debug_backtrace()[1]['function'];
 
-        return Cache::remember('forum.func.' . $method, 60, function () use ($callback) {
+        return Cache::remember('forum.func.'.$method, 60, function () use ($callback) {
             return $callback();
         });
     }

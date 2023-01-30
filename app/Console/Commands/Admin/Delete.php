@@ -37,6 +37,7 @@ class Delete extends Command
 
         // 输出信息
         $this->info('管理员删除成功。');
+
         return CommandAlias::SUCCESS;
     }
 }

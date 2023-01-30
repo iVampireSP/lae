@@ -30,8 +30,7 @@ class WorkOrder extends Notification implements ShouldQueue
      * Get the notification's delivery channels.
      *
      *
-     * @param WorkOrderModel $workOrder
-     *
+     * @param  WorkOrderModel  $workOrder
      * @return array
      */
     public function via(WorkOrderModel $workOrder): array
@@ -49,14 +48,13 @@ class WorkOrder extends Notification implements ShouldQueue
      * Get the mail representation of the notification.
      *
      *
-     * @param WorkOrderModel $workOrder
-     *
+     * @param  WorkOrderModel  $workOrder
      * @return MailMessage
      */
     public function toMail(WorkOrderModel $workOrder): MailMessage
     {
         return (new MailMessage)
-            ->subject('工单: ' . $workOrder->title . ' 状态更新。')
+            ->subject('工单: '.$workOrder->title.' 状态更新。')
             ->line('我们查阅了您的工单并做出了相应处理。')
             ->line('请前往我们的仪表盘继续跟进问题。');
     }
@@ -65,15 +63,14 @@ class WorkOrder extends Notification implements ShouldQueue
      * Get the array representation of the notification.
      *
      *
-     * @param WorkOrderModel $workOrder
-     *
+     * @param  WorkOrderModel  $workOrder
      * @return array
      */
     public function toArray(WorkOrderModel $workOrder): array
     {
         $array = $workOrder->toArray();
 
-        $array['event'] = 'work-order.' . $workOrder->status;
+        $array['event'] = 'work-order.'.$workOrder->status;
 
         return $array;
     }
@@ -88,7 +85,6 @@ class WorkOrder extends Notification implements ShouldQueue
 
             // 取消隐藏字段
             $module->makeVisible(['wecom_key']);
-
         }
 
         if ($module?->wecom_key == null) {
@@ -100,7 +96,7 @@ class WorkOrder extends Notification implements ShouldQueue
         return [
             'key' => $wecom_key,
             'view' => 'notifications.work_order',
-            'data' => $workOrder
+            'data' => $workOrder,
         ];
     }
 
@@ -108,5 +104,4 @@ class WorkOrder extends Notification implements ShouldQueue
     // {
     //     return new BroadcastMessage($workOrder->toArray());
     // }
-
 }

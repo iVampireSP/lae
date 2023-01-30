@@ -91,7 +91,7 @@ class Upload extends Command
             // 相对路径
             $cache = 'config';
 
-            $cacheZip = $cache . '.zip';
+            $cacheZip = $cache.'.zip';
             $zip = new ZipArchive();
             $zip->open($cacheZip, ZipArchive::CREATE);
             $this->addFileToZip($cache, $zip);
@@ -110,30 +110,27 @@ class Upload extends Command
             unlink($cacheZip);
 
             // 上传 config/secrets/ssl_fullchain.pem 和 config/secrets/ssl_privkey.pem
-            $ssl_fullchain_key = "config/secrets/ssl_fullchain.pem";
-            $ssl_privkey_key = "config/secrets/ssl_privkey.pem";
+            $ssl_fullchain_key = 'config/secrets/ssl_fullchain.pem';
+            $ssl_privkey_key = 'config/secrets/ssl_privkey.pem';
 
             if (file_exists(base_path($ssl_fullchain_key)) && file_exists(base_path($ssl_privkey_key))) {
-
                 $this->info('正在上传 SSL 证书。');
 
-                ClusterSupport::forever("ssl_fullchain", file_get_contents(base_path($ssl_fullchain_key)));
-                ClusterSupport::forever("ssl_privkey", file_get_contents(base_path($ssl_privkey_key)));
+                ClusterSupport::forever('ssl_fullchain', file_get_contents(base_path($ssl_fullchain_key)));
+                ClusterSupport::forever('ssl_privkey', file_get_contents(base_path($ssl_privkey_key)));
 
                 // 计算 md5
                 $ssl_fullchain_md5 = md5_file(base_path($ssl_fullchain_key));
                 $ssl_privkey_md5 = md5_file(base_path($ssl_privkey_key));
 
                 $this->info('正在报告 SSL 证书的 MD5 值。');
-                ClusterSupport::forever("ssl_fullchain_md5", $ssl_fullchain_md5);
-                ClusterSupport::forever("ssl_privkey_md5", $ssl_privkey_md5);
+                ClusterSupport::forever('ssl_fullchain_md5', $ssl_fullchain_md5);
+                ClusterSupport::forever('ssl_privkey_md5', $ssl_privkey_md5);
 
                 ClusterSupport::publish('config.ssl.updated');
-
             } else {
                 $this->warn('SSL 证书不存在，跳过。');
             }
-
         }
 
         // 上传 .env 文件
@@ -154,10 +151,10 @@ class Upload extends Command
         $handler = opendir($path);
         while (($filename = readdir($handler)) !== false) {
             if ($filename != '.' && $filename != '..') {
-                if (is_dir($path . '/' . $filename)) {
-                    $this->addFileToZip($path . '/' . $filename, $zip);
+                if (is_dir($path.'/'.$filename)) {
+                    $this->addFileToZip($path.'/'.$filename, $zip);
                 } else {
-                    $zip->addFile($path . '/' . $filename);
+                    $zip->addFile($path.'/'.$filename);
                 }
             }
         }

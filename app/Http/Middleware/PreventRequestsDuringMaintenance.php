@@ -14,6 +14,6 @@ class PreventRequestsDuringMaintenance extends Middleware
     protected $except = [
         // except modules
         'admin/*',
-        'remote/*'
+        'remote/*',
     ];
 }

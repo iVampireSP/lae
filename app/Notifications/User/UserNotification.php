@@ -13,7 +13,9 @@ class UserNotification extends Notification implements ShouldQueue
     use Queueable;
 
     public string $title;
+
     public string $content;
+
     public bool $send_mail;
 
     /**

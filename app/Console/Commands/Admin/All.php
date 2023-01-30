@@ -29,7 +29,6 @@ class All extends Command
      */
     public function handle(): int
     {
-
         $admins = Admin::all();
 
         $this->table(['ID', '邮箱'], $admins->map(function ($admin) {

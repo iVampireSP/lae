@@ -50,9 +50,7 @@ Route::group([
     Route::get('devices', [DeviceController::class, 'index'])->name('devices.index');
     Route::delete('devices', [DeviceController::class, 'destroy'])->name('devices.destroy');
 
-
     Route::resource('notifications', NotificationController::class)->only(['create', 'store']);
-
 
     Route::view('commands', 'admin.commands')->name('commands');
 

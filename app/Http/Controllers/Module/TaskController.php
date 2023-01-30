@@ -10,13 +10,14 @@ use Illuminate\Validation\ValidationException;
 
 class TaskController extends Controller
 {
-    public int $user_id, $host_id;
+    public int $user_id;
+
+    public int $host_id;
 
     /**
      * Display a listing of the resource.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return JsonResponse
      */
     public function index(Request $request): JsonResponse
@@ -29,9 +30,9 @@ class TaskController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return JsonResponse
+     *
      * @throws ValidationException
      */
     public function store(Request $request): JsonResponse
@@ -51,10 +52,10 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param Task    $task
-     *
+     * @param  Request  $request
+     * @param  Task  $task
      * @return JsonResponse
+     *
      * @throws ValidationException
      */
     public function update(Request $request, Task $task): JsonResponse
@@ -65,9 +66,7 @@ class TaskController extends Controller
             'status' => 'sometimes|in:pending,processing,need_operation,done,success,failed,error,canceled',
         ]);
 
-
         $task->update($request->all());
-
 
         return $this->updated($task);
     }

@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Yansongda\Pay\Pay;
 
 $alipay_app_private_key = env('ALIPAY_APP_SECERT_CERT_PATH', config_path('secrets/alipayAppPriv.key'));
-if (!file_exists($alipay_app_private_key)) {
+if (! file_exists($alipay_app_private_key)) {
     $alipay_app_private_key = '';
 } else {
     $alipay_app_private_key = trim(file_get_contents($alipay_app_private_key));

@@ -40,11 +40,11 @@ class Log extends Command
     {
         $status = $this->switch($event, $message['data']);
 
-        if (!$status) {
+        if (! $status) {
             return;
         }
 
-        $message = "[{$message['node']['type']}] {$message['node']['id']}:$event: " . $status;
+        $message = "[{$message['node']['type']}] {$message['node']['id']}:$event: ".$status;
 
         $this->info($message);
     }

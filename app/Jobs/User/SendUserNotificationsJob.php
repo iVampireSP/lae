@@ -17,8 +17,13 @@ class SendUserNotificationsJob implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     protected array $requests;
+
     protected User|CachedBuilder $users;
-    protected string $title, $content;
+
+    protected string $title;
+
+    protected string $content;
+
     protected bool $send_mail;
 
     /**

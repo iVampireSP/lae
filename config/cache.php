@@ -109,6 +109,6 @@ return [
     |
     */
 
-    'prefix' => 'laev3_cache'
+    'prefix' => 'laev3_cache',
 
 ];

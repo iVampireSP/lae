@@ -43,7 +43,7 @@ return [
 
             // A specific client id to be used for the connection. If omitted,
             // a random client id will be generated for each new connection.
-            'client_id' => 'lae-' . uniqid(),
+            'client_id' => 'lae-'.uniqid(),
 
             // Whether a clean session shall be used and requested by the client.
             // A clean session will let the broker forget about subscriptions and

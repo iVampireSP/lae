@@ -3,13 +3,10 @@
 namespace App\Jobs\Module;
 
 use App\Models\Module;
-use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Log;
 
 class DispatchFetchModuleJob implements ShouldQueue
 {

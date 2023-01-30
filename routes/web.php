@@ -6,15 +6,12 @@ use App\Http\Controllers\Web\RealNameController;
 use App\Http\Controllers\Web\TransferController;
 use Illuminate\Support\Facades\Route;
 
-
 Route::get('/', [AuthController::class, 'index'])->name('index')->middleware('banned');
-
 
 Route::prefix('auth')->group(function () {
     Route::get('redirect', [AuthController::class, 'redirect'])->name('login');
     Route::get('callback', [AuthController::class, 'callback'])->name('callback');
 });
-
 
 Route::middleware(['auth', 'banned'])->group(
     function () {
@@ -28,13 +25,11 @@ Route::middleware(['auth', 'banned'])->group(
         Route::delete('deleteAll', [AuthController::class, 'deleteAll'])->name('deleteAll');
         /* End 账户区域 */
 
-
         /* Start 财务 */
         Route::get('transactions', [BalanceController::class, 'transactions'])->name('transactions');
 
         Route::resource('balances', BalanceController::class)->except('show');
         Route::get('/balances/{balance:order_id}', [BalanceController::class, 'show'])->name('balances.show')->withoutMiddleware('auth');
-
 
         Route::middleware(['real_named'])->group(
             function () {
@@ -44,7 +39,6 @@ Route::middleware(['auth', 'banned'])->group(
         );
         /* End 财务 */
 
-
         /* Start 实名认证 */
         Route::get('real_name', [RealNameController::class, 'create'])->name('real_name.create');
         Route::post('real_name', [RealNameController::class, 'store'])->name('real_name.store');
@@ -52,9 +46,6 @@ Route::middleware(['auth', 'banned'])->group(
     }
 );
 
-
 Route::view('contact', 'contact')->name('contact');
 
 Route::match(['get', 'post'], '/balances/notify/{payment}', [BalanceController::class, 'notify'])->name('balances.notify');
-
-

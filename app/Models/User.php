@@ -23,6 +23,14 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, Cachable;
 
+    public array $publics = [
+        'id',
+        'name',
+        'email',
+        'real_name',
+        'balance',
+    ];
+
     /**
      * The attributes that are mass assignable.
      *
@@ -52,7 +60,7 @@ class User extends Authenticatable
         'real_name_verified_at' => 'datetime',
         'balance' => 'decimal:4',
         'banned_at' => 'datetime',
-        'birthday_at' => 'date:Y-m-d'
+        'birthday_at' => 'date:Y-m-d',
     ];
 
     protected $dates = [
@@ -60,14 +68,6 @@ class User extends Authenticatable
         'real_name_verified_at',
         'banned_at',
         'birthday_at',
-    ];
-
-    public array $publics = [
-        'id',
-        'name',
-        'email',
-        'real_name',
-        'balance',
     ];
 
     protected static function boot()
@@ -96,19 +96,20 @@ class User extends Authenticatable
                 $user->id_card = Crypt::encryptString($user->id_card);
             }
 
-            if ($user->isDirty('id_card') || $user->isDirty('real_name')) if (empty($user->id_card) || empty($user->real_name)) {
-                $user->real_name_verified_at = null;
-            } else {
-                $user->real_name_verified_at = now();
+            if ($user->isDirty('id_card') || $user->isDirty('real_name')) {
+                if (empty($user->id_card) || empty($user->real_name)) {
+                    $user->real_name_verified_at = null;
+                } else {
+                    $user->real_name_verified_at = now();
 
-                // 更新生日
-                try {
-                    $user->birthday_at = $user->getBirthdayFromIdCard();
-                } catch (InvalidFormatException) {
-                    $user->birthday_at = null;
+                    // 更新生日
+                    try {
+                        $user->birthday_at = $user->getBirthdayFromIdCard();
+                    } catch (InvalidFormatException) {
+                        $user->birthday_at = null;
+                    }
                 }
             }
-
         });
     }
 
@@ -122,14 +123,14 @@ class User extends Authenticatable
         $idCard = $this->id_card;
 
         $bir = substr($idCard, 6, 8);
-        $year = (int)substr($bir, 0, 4);
-        $month = (int)substr($bir, 4, 2);
-        $day = (int)substr($bir, 6, 2);
+        $year = (int) substr($bir, 0, 4);
+        $month = (int) substr($bir, 4, 2);
+        $day = (int) substr($bir, 6, 2);
 
-        return $year . '-' . $month . '-' . $day;
+        return $year.'-'.$month.'-'.$day;
     }
 
-    public function hasBalance(string $amount = "0.01"): bool
+    public function hasBalance(string $amount = '0.01'): bool
     {
         return bccomp($this->balance, $amount, 4) >= 0;
     }
@@ -183,20 +184,19 @@ class User extends Authenticatable
     /**
      * 扣除费用
      *
-     * @param string|null $amount
-     * @param string      $description
-     * @param bool        $fail
-     * @param array       $options
-     *
+     * @param  string|null  $amount
+     * @param  string  $description
+     * @param  bool  $fail
+     * @param  array  $options
      * @return string
      */
-    public function reduce(string|null $amount = "0", string $description = "消费", bool $fail = false, array $options = []): string
+    public function reduce(string|null $amount = '0', string $description = '消费', bool $fail = false, array $options = []): string
     {
         if ($amount === null || $amount === '') {
             return $this->balance;
         }
 
-        Cache::lock('user_balance_' . $this->id, 10)->block(10, function () use ($amount, $fail, $description, $options) {
+        Cache::lock('user_balance_'.$this->id, 10)->block(10, function () use ($amount, $fail, $description, $options) {
             $this->refresh();
 
             if ($this->balance < $amount) {
@@ -229,20 +229,19 @@ class User extends Authenticatable
     /**
      * 增加余额
      *
-     * @param string|null $amount
-     * @param string      $payment
-     * @param string      $description
-     * @param array       $options
-     *
+     * @param  string|null  $amount
+     * @param  string  $payment
+     * @param  string  $description
+     * @param  array  $options
      * @return string
      */
-    public function charge(string|null $amount = "0", string $payment = 'console', string $description = '充值', array $options = []): string
+    public function charge(string|null $amount = '0', string $payment = 'console', string $description = '充值', array $options = []): string
     {
         if ($amount === null || $amount === '') {
             return $this->balance;
         }
 
-        Cache::lock('user_balance_' . $this->id, 10)->block(10, function () use ($amount, $description, $payment, $options) {
+        Cache::lock('user_balance_'.$this->id, 10)->block(10, function () use ($amount, $description, $payment, $options) {
             $this->refresh();
             $this->balance = bcadd($this->balance, $amount, 4);
             $this->save();

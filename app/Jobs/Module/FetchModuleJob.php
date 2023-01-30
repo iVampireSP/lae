@@ -2,7 +2,6 @@
 
 namespace App\Jobs\Module;
 
-use App\Jobs\Host\UpdateOrDeleteHostJob;
 use App\Models\Module;
 use Exception;
 use Illuminate\Bus\Queueable;
@@ -16,7 +15,6 @@ use Illuminate\Support\Facades\Log;
 class FetchModuleJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
 
     protected Module $module;
 
@@ -45,6 +43,7 @@ class FetchModuleJob implements ShouldQueue
             $response = $module->http()->get('remote');
         } catch (Exception $e) {
             Log::error($e->getMessage());
+
             return;
         }
 
@@ -68,13 +67,12 @@ class FetchModuleJob implements ShouldQueue
                         'module' => [
                             'id' => $module->id,
                             'name' => $module->name,
-                        ]
+                        ],
                     ];
                 }, $json['servers']));
 
                 // broadcast(new Servers($servers));
             }
-
         } else {
             // if module return maintenance, then set module status to maintenance
             $status = $response->status();
@@ -89,10 +87,9 @@ class FetchModuleJob implements ShouldQueue
 
         // if local
         if (config('app.env') === 'local') {
-            Cache::forever('module:' . $module->id . ':servers', $servers);
+            Cache::forever('module:'.$module->id.':servers', $servers);
         } else {
-            Cache::put('module:' . $module->id . ':servers', $servers, now()->addMinutes(10));
+            Cache::put('module:'.$module->id.':servers', $servers, now()->addMinutes(10));
         }
-
     }
 }

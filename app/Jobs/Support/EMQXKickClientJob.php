@@ -15,7 +15,10 @@ class EMQXKickClientJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected string|null $client_id, $username;
+    protected string|null $client_id;
+
+    protected string|null $username;
+
     protected bool $like_username;
 
     /**
@@ -40,7 +43,7 @@ class EMQXKickClientJob implements ShouldQueue
         $emqx = new EmqxSupport();
 
         if ($this->client_id) {
-            $emqx->api()->delete('/clients/' . $this->client_id);
+            $emqx->api()->delete('/clients/'.$this->client_id);
         }
 
         if ($this->username) {
@@ -53,9 +56,9 @@ class EMQXKickClientJob implements ShouldQueue
                 $clients = $emqx->clients([$query => $this->username]);
             } catch (EmqxSupportException $e) {
                 Log::error('emqx connect failed.', [$e]);
+
                 return;
             }
-
 
             if ($clients) {
                 if (count($clients['data']) > 0) {
@@ -65,7 +68,6 @@ class EMQXKickClientJob implements ShouldQueue
 
                     dispatch(new self(null, $this->username, $this->like_username));
                 }
-
             }
         }
     }
