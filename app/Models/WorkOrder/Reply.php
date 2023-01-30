@@ -2,7 +2,6 @@
 
 namespace App\Models\WorkOrder;
 
-use App\Events\Users;
 use App\Exceptions\CommonException;
 use App\Models\Module;
 use App\Models\User;
@@ -59,7 +58,7 @@ class Reply extends Model
                 $model->role = 'module';
                 $model->workOrder->status = 'replied';
 
-                broadcast(new Users($model->user, 'work-order.replied', $model->workOrder));
+            // broadcast(new Users($model->user_id, 'work-order.replied', $model->workOrder));
             } else {
                 $model->role = 'guest';
             }
