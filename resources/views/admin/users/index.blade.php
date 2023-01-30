@@ -11,15 +11,15 @@
                 <div class="form-row row">
                     <div class="col-2">
                         <input type="text" class="form-control" name="id" placeholder="用户 ID"
-                               value="{{ request('id') }}">
+                               value="{{ request('id') }}" aria-label="用户 ID">
                     </div>
                     <div class="col-2">
                         <input type="text" class="form-control" name="name" placeholder="用户名"
-                               value="{{ request('name') }}">
+                               value="{{ request('name') }}" aria-label="用户名">
                     </div>
                     <div class="col-2">
                         <input type="text" class="form-control" name="email" placeholder="邮箱"
-                               value="{{ request('email') }}">
+                               value="{{ request('email') }}" aria-label="邮箱">
                     </div>
                     <div class="col-2">
                         <button type="submit" class="btn btn-primary">搜索</button>
@@ -59,7 +59,11 @@
                         {{ $user->email }}
                     </td>
                     <td>
-                        {{ $user->balance }} 元
+                        @if ($user->hasBalance())
+                            <span class="text-danger">{{ $user->balance }} 元</span>
+                        @else
+                            <span class="text-muted">{{ $user->balance }} 元</span>
+                        @endif
                     </td>
                     <td>
                         @if ($user->user_group_id)
