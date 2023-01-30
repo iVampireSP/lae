@@ -8,6 +8,7 @@ use Carbon\Exceptions\InvalidFormatException;
 use GeneaLabs\LaravelModelCaching\CachedBuilder;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -149,20 +150,20 @@ class User extends Authenticatable
         return $this->belongsTo(UserGroup::class);
     }
 
-    public function scopeBirthday(): User|CachedBuilder
+    public function scopeBirthday(): Builder|CachedBuilder
     {
         /** @noinspection PhpUndefinedMethodInspection */
         return $this->select(['id', 'name', 'birthday_at', 'email_md5', 'created_at'])->whereMonth('birthday_at', now()->month)
             ->whereDay('birthday_at', now()->day)->whereNull('banned_at');
     }
 
-    public function selectPublic(): User
+    public function selectPublic(): self|Builder|CachedBuilder
     {
         // 仅需选择公开的
         return $this->select($this->publics);
     }
 
-    public function startTransfer(User $to, string $amount, string|null $description)
+    public function startTransfer(self $to, string $amount, string|null $description)
     {
         $description_from = "转账给 $to->name($to->email)";
         $description_to = "收到 $this->name($this->email) 的转账";
