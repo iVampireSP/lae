@@ -43,13 +43,6 @@ class ReplyController extends Controller
             return $this->error('工单状态异常，无法进行回复。请尝试重新建立工单。');
         }
 
-        // 访客必须填写姓名
-        if (!auth('sanctum')->check()) {
-            $this->validate($request, [
-                'name' => 'string|required|min:1|max:30',
-            ]);
-        }
-
         // 如果工单已经关闭，那么访客不能回复
         if ($workOrder->isClosed() && !auth('sanctum')->check()) {
             return $this->error('工单已关闭，无法进行回复。');
@@ -62,6 +55,7 @@ class ReplyController extends Controller
 
         if (auth('sanctum')->check()) {
             $create['user_id'] = auth('sanctum')->id();
+            $create['name'] = auth('sanctum')->user()->name;
         } else {
             $this->validate($request, [
                 'name' => 'string|required|min:1|max:255',
