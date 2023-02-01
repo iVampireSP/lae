@@ -36,7 +36,7 @@
                 <div class="card-header d-flex w-100 justify-content-between">
                     @if ($reply->role === 'user')
                         @if ($reply->user)
-                            <a href="{{ route('admin.users.edit', $reply->user) }}">{{ $workOrder->user->name }}</a>
+                            <a href="{{ route('admin.users.edit', $reply->user) }}">{{ $reply->user->name }}</a>
                         @else
                             {{ $reply->name }}
                         @endif
