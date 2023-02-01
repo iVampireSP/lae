@@ -150,8 +150,11 @@ class WorkOrder extends Model
             throw new CommonException('工单状态是 pending，无法删除');
         }
 
-        dispatch(new WorkOrderJob($this, 'delete'));
-
+        if ($this->isPlatform()) {
+            $this->delete();
+        } else {
+            dispatch(new WorkOrderJob($this, 'delete'));
+        }
         return true;
     }
 
