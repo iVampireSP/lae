@@ -20,11 +20,12 @@
     @endif
 
 
-    <p>余额: {{ $user->balance }} 元</p>
+    <br />
+    <span>余额: {{ $user->balance }} 元</span> <br />
 
-    <p>注册时间: {{ $user->created_at }}</p>
+    <span>注册时间: {{ $user->created_at }}</span> <br />
 
-    <p>邮箱: {{ $user->email }}</p>
+    <span>邮箱: {{ $user->email }}</span> <br />
 
 
     @if ($user->birthday_at)
@@ -37,7 +38,7 @@
 
 
     {{--  hosts  --}}
-    <h3>主机列表</h3>
+    <h3 class="mt-3">主机列表</h3>
     <table class="table table-hover">
         <thead>
         <th>ID</th>
