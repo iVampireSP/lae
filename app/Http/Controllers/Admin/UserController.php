@@ -148,4 +148,17 @@ class UserController extends Controller
 
         return back()->with('success', '已完成所有更改。');
     }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  User  $user
+     * @return RedirectResponse
+     */
+    public function destroy(User $user): RedirectResponse
+    {
+        $user->delete();
+
+        return redirect()->route('admin.users.index')->with('success', '已删除此用户。');
+    }
 }

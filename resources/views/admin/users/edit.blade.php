@@ -20,12 +20,12 @@
     @endif
 
 
-    <br />
-    <span>余额: {{ $user->balance }} 元</span> <br />
+    <br/>
+    <span>余额: {{ $user->balance }} 元</span> <br/>
 
-    <span>注册时间: {{ $user->created_at }}</span> <br />
+    <span>注册时间: {{ $user->created_at }}</span> <br/>
 
-    <span>邮箱: {{ $user->email }}</span> <br />
+    <span>邮箱: {{ $user->email }}</span> <br/>
 
 
     @if ($user->birthday_at)
@@ -234,6 +234,17 @@
             <button type="submit" class="btn btn-primary mt-3">提交</button>
         </form>
     </div>
+
+    <h3 class="mt-4">删除用户</h3>
+    <p>
+        这是个非常a危险的操作，请三思而后行。
+    </p>
+    <form action="{{ route('admin.users.destroy', $user) }}" method="post">
+        @csrf
+        @method('DELETE')
+
+        <button type="submit" class="btn btn-danger mt-3" onclick="return confirm('请再次确认要删除此用户吗？')">提交</button>
+    </form>
 
 
     <style>

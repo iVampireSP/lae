@@ -27,7 +27,7 @@ Route::group([
 ], function () {
     Route::resource('admins', AdminController::class)->except('show');
 
-    Route::resource('users', UserController::class)->only(['index', 'show', 'edit', 'update']);
+    Route::resource('users', UserController::class);
 
     Route::resource('modules', ModuleController::class);
 

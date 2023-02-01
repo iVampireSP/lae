@@ -2,18 +2,19 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Exceptions\User\BalanceNotEnoughException;
 use Carbon\Exceptions\InvalidFormatException;
 use GeneaLabs\LaravelModelCaching\CachedBuilder;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
-use Illuminate\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
@@ -21,9 +22,9 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable, Cachable, MustVerifyEmail;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, Prunable, Cachable;
 
     public array $publics = [
         'id',
@@ -114,6 +115,11 @@ class User extends Authenticatable
                 }
             }
         });
+
+        static::deleting(function (self $user) {
+            $user->tokens()->delete();
+            $user->hosts()->update(['status' => 'suspended', 'suspended_at' => now()]);
+        });
     }
 
     public function hosts(): HasMany
@@ -165,6 +171,11 @@ class User extends Authenticatable
     {
         // 仅需选择公开的
         return $this->select($this->publics);
+    }
+
+    public function prunable()
+    {
+        return static::where('deleted_at', '<=', now()->subWeek());
     }
 
     public function startTransfer(self $to, string $amount, string|null $description)
