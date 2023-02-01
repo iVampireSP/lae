@@ -41,7 +41,6 @@ Route::middleware(['auth', 'banned', 'verified'])->group(
         Route::withoutMiddleware(['banned', 'verified'])->group(
             function () {
                 Route::view('banned', 'banned')->name('banned')->withoutMiddleware(['banned', 'verified']);
-                Route::post('logout', [AuthController::class, 'logout'])->name('logout')->withoutMiddleware(['banned', 'verified']);
             }
         );
 
