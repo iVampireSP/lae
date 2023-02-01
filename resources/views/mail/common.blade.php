@@ -1,7 +1,7 @@
 @component('mail::message')
-# {{ $title }}
+    # {{ $title }}
 
-{{ $content }}
+    {{ $content }}
 
-<br />
+    <br/>
 @endcomponent

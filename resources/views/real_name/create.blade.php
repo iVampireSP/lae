@@ -35,20 +35,22 @@
             公安 CTID 实人认证服务由 北京一砂信息技术有限公司 提供。它将会引导您完成实人认证。
         </x-alert-warning>
         <x-alert-success>
-            为监管需要，我们会加密保存您的身份数据，不会泄露给任何第三方。更详细的隐私政策请查看上方的链接中的 "隐私及个人信息的保护"。
+            为监管需要，我们会加密保存您的身份数据，不会泄露给任何第三方。更详细的隐私政策请查看上方的链接中的
+            "隐私及个人信息的保护"。
         </x-alert-success>
         <x-alert-warning>
             如果您是怀抱志向的未成年人，请确保您的父母或监护人已经同意您进行实人认证。
-            <br />
+            <br/>
             但是请注意，如果您的父母或监护人不同意您进行实人认证，我们将无法为您提供服务。
         </x-alert-warning>
         <x-alert-warning>
             实人认证的人脸数据来自 "互联网+”可信身份认证平台"，我们不会保存您的人脸数据。
-            <br />
+            <br/>
             如果您未办理过身份证，则公安数据库中没有您的人脸信息，请勿进行实人认证。
         </x-alert-warning>
         <x-alert-warning>
-            您的年龄必须大于 {{ config('settings.supports.real_name.min_age') }} 岁，小于 {{ config('settings.supports.real_name.max_age') }} 岁，否则无法进行实人认证。
+            您的年龄必须大于 {{ config('settings.supports.real_name.min_age') }}
+            岁，小于 {{ config('settings.supports.real_name.max_age') }} 岁，否则无法进行实人认证。
         </x-alert-warning>
 
         <h3>实人认证</h3>
