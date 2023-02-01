@@ -1,4 +1,5 @@
-<!doctype html>
+@php use Illuminate\Support\Facades\Auth; @endphp
+    <!doctype html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-bs-theme="dark">
 
 <head>
@@ -131,7 +132,7 @@
                         @endif
                         <li class="nav-item dropdown">
 
-                            @php($admin = \Illuminate\Support\Facades\Auth::guard('admin')->user())
+                            @php($admin = Auth::guard('admin')->user())
 
                             <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
