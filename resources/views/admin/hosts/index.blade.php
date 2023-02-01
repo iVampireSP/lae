@@ -44,7 +44,7 @@
                         @endif
                     </td>
                     <td>
-                        <x-host-status :status="$host->status" />
+                        <x-host-status :status="$host->status"/>
                     </td>
                     <td>
                         {{ $host->updated_at }}

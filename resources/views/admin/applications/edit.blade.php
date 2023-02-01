@@ -4,7 +4,7 @@
 
 @section('content')
     <h3>{{ $application->name }}</h3>
-{{--    <a class="mt-3" href="{{ route('admin.applications.show', $application) }}">查看</a>--}}
+    {{--    <a class="mt-3" href="{{ route('admin.applications.show', $application) }}">查看</a>--}}
 
     <form method="POST" action="{{ route('admin.applications.update', $application)}}">
         @csrf

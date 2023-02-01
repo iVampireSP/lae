@@ -28,7 +28,7 @@
             <x-alert-warning>
                 <div>
                     像密码一样保管好您的 API Token。
-                    <br />
+                    <br/>
                     {{ session('token') }}
                 </div>
             </x-alert-warning>
