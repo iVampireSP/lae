@@ -51,7 +51,7 @@
         const inter = setInterval(function () {
             axios.get(location.href)
                 .then(function (response) {
-                    if (response.data.paid_at) {
+                    if (response.data.paid_at ?? null) {
                         document.getElementById('pay-success').classList.remove('d-none');
                         document.getElementById('pay').classList.add('d-none');
 
