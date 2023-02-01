@@ -15,9 +15,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [AuthController::class, 'index'])->name('index')->middleware('banned');
 
 Route::prefix('auth')->group(function () {
-    // Route::get('redirect', [AuthController::class, 'redirect'])->name('login');
-    // Route::get('callback', [AuthController::class, 'callback'])->name('callback');
-
     Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
     Route::post('login', [LoginController::class, 'login']);
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
