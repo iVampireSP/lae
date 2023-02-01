@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'failed' => '用户名或密码错误。',
     'password' => '密码错误',

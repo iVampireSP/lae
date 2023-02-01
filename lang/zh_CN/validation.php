@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'accepted' => '您必须接受 :attribute。',
     'accepted_if' => '当 :other 为 :value 时，必须接受 :attribute。',
@@ -10,6 +12,7 @@ return [
     'alpha_dash' => ':Attribute 只能由字母、数字、短划线(-)和下划线(_)组成。',
     'alpha_num' => ':Attribute 只能由字母和数字组成。',
     'array' => ':Attribute 必须是一个数组。',
+    'ascii' => ':Attribute 必须仅包含单字节字母数字字符和符号。',
     'before' => ':Attribute 必须要早于 :date。',
     'before_or_equal' => ':Attribute 必须要等于 :date 或更早。',
     'between' => [
@@ -24,6 +27,7 @@ return [
     'date' => ':Attribute 不是一个有效的日期。',
     'date_equals' => ':Attribute 必须要等于 :date。',
     'date_format' => ':Attribute 的格式必须为 :format。',
+    'decimal' => ':Attribute 必须有 :decimal 位小数。',
     'declined' => ':Attribute 必须是拒绝的。',
     'declined_if' => '当 :other 为 :value 时字段 :attribute 必须是拒绝的。',
     'different' => ':Attribute 和 :other 必须不同。',
@@ -59,6 +63,7 @@ return [
     'ipv4' => ':Attribute 必须是有效的 IPv4 地址。',
     'ipv6' => ':Attribute 必须是有效的 IPv6 地址。',
     'json' => ':Attribute 必须是正确的 JSON 格式。',
+    'lowercase' => ':Attribute 必须小写。',
     'lt' => [
         'array' => ':Attribute 必须少于 :value 个元素。',
         'file' => ':Attribute 必须小于 :value KB。',
@@ -88,6 +93,11 @@ return [
         'string' => ':Attribute 至少为 :min 个字符。',
     ],
     'min_digits' => ':Attribute 必须至少有 :min 位数。',
+    'missing' => '必须缺少 :attribute 字段。',
+    'missing_if' => '当 :other 为 :value 时，必须缺少 :attribute 字段。',
+    'missing_unless' => '必须缺少 :attribute 字段，除非 :other 是 :value。',
+    'missing_with' => '存在 :values 时，必须缺少 :attribute 字段。',
+    'missing_with_all' => '存在 :values 时，必须缺少 :attribute 字段。',
     'multiple_of' => ':Attribute 必须是 :value 中的多个值。',
     'not_in' => '已选的属性 :attribute 非法。',
     'not_regex' => ':Attribute 的格式错误。',
@@ -124,8 +134,10 @@ return [
     'starts_with' => ':Attribute 必须以 :values 为开头。',
     'string' => ':Attribute 必须是一个字符串。',
     'timezone' => ':Attribute 必须是一个合法的时区值。',
+    'ulid' => ':Attribute 必须是有效的 ULID。',
     'unique' => ':Attribute 已经存在。',
     'uploaded' => ':Attribute 上传失败。',
+    'uppercase' => ':Attribute 必须大写',
     'url' => ':Attribute 格式不正确。',
     'uuid' => ':Attribute 必须是有效的 UUID。',
     'attributes' => [
