@@ -155,6 +155,7 @@ class WorkOrder extends Model
         } else {
             dispatch(new WorkOrderJob($this, 'delete'));
         }
+
         return true;
     }
 
