@@ -237,7 +237,7 @@
 
     <h3 class="mt-4">删除用户</h3>
     <p>
-        这是个非常a危险的操作，请三思而后行。
+        这是个非常危险的操作，请三思而后行。
     </p>
     <form action="{{ route('admin.users.destroy', $user) }}" method="post">
         @csrf
