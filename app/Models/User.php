@@ -7,6 +7,7 @@ use App\Exceptions\User\BalanceNotEnoughException;
 use Carbon\Exceptions\InvalidFormatException;
 use GeneaLabs\LaravelModelCaching\CachedBuilder;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
+use Illuminate\Auth\MustVerifyEmail;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -17,11 +18,12 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, Cachable;
+    use HasApiTokens, HasFactory, Notifiable, Cachable, MustVerifyEmail;
 
     public array $publics = [
         'id',
@@ -76,6 +78,7 @@ class User extends Authenticatable
 
         static::creating(function (self $user) {
             $user->email_md5 = md5($user->email);
+            $user->uuid = Str::uuid();
         });
 
         static::updating(function (self $user) {
