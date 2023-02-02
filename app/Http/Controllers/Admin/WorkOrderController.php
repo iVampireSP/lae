@@ -22,11 +22,6 @@ class WorkOrderController extends Controller
     {
         $workOrders = $workOrder->with(['user', 'host', 'module'])->latest()->paginate(20)->withQueryString();
 
-        // 根据 status 排序， closed 的在后面
-        $workOrders = $workOrders->sortBy(function ($workOrder) {
-            return $workOrder->status === 'closed';
-        });
-
         return view('admin.work-orders.index', compact('workOrders'));
     }
 

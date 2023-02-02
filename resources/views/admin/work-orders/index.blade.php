@@ -4,6 +4,17 @@
 
 @section('content')
 
+    <h3>工单</h3>
+
+    <a href="?status=open">开启的工单</a>
+    <a href="?status=user_read">用户已读</a>
+    <a href="?status=replied">已回复</a>
+    <a href="?status=user_replied">用户已回复</a>
+    <a href="?status=read">您已读</a>
+    <a href="?status=on_hold">挂起</a>
+    <a href="?status=in_progress">正在处理</a>
+    <a href="?status=closed">已关闭</a>
+
     <div class="overflow-auto">
         <table class="table table-hover">
             <thead>
