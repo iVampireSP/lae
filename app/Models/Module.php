@@ -52,8 +52,10 @@ class Module extends Authenticatable
                 $model->api_token = Str::random(60);
             }
 
-            // 如果结尾有 / 则去掉
-            $model->url = rtrim($model->url, '/');
+            // 如果设置了 url 并且结尾有 / 则去掉
+            if ($model->url) {
+                $model->url = rtrim($model->url, '/');
+            }
         });
         static::updating(function (self $model) {
             // 如果结尾有 / 则去掉
