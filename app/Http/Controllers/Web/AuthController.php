@@ -102,6 +102,13 @@ class AuthController extends Controller
         return redirect()->route('index');
     }
 
+    public function exitSudo(): RedirectResponse
+    {
+        session()->forget('auth.password_confirmed_at');
+
+        return back()->with('success', '已退出 Sudo 模式。');
+    }
+
     public function showAuthRequest($token): View|RedirectResponse
     {
         $data = Cache::get('auth_request:'.$token);

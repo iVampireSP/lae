@@ -24,7 +24,7 @@
 
 <body>
 <div id="app">
-    <nav class="navbar navbar-expand-lg bd-navbar sticky-top bg-body">
+    <nav class="navbar navbar-expand-lg bd-navbar sticky-top bg-body" id="nav">
         <div class="container">
             <a class="navbar-brand" href="{{ route('index') }}">
                 {{ config('app.display_name') }}
@@ -92,10 +92,29 @@
                                 {{ Auth::user()->name }}
                             </a>
 
+
                             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 <a class="dropdown-item" href="{{ route('password.request') }}">
                                     {{ __('Reset Password') }}
                                 </a>
+
+
+                                @if (!session('auth.password_confirmed_at'))
+                                    <a class="dropdown-item" href="{{ route('password.confirm') }}">
+                                        进入 Sudo 模式
+                                    </a>
+                                @else
+                                    <a class="dropdown-item" href="{{ route('logout') }}"
+                                       onclick="document.getElementById('exit-sudo-form').submit();return false;">
+                                        退出 Sudo 模式
+                                    </a>
+
+                                    <form id="exit-sudo-form" action="{{ route('sudo.exit') }}" method="POST"
+                                          class="d-none">
+                                        @csrf
+                                    </form>
+                                @endif
+
 
                                 <a class="dropdown-item" href="{{ route('logout') }}"
                                    onclick="document.getElementById('logout-form').submit();return false;">
@@ -139,6 +158,17 @@
         </div>
     </main>
 </div>
+
+<script>
+    const nav = document.getElementById('nav');
+
+    @if (session('auth.password_confirmed_at'))
+       nav.style.backgroundColor = 'rgb(234 234 234 / 9%)';
+       nav.classList.remove('bg-body');
+
+    @endif
+</script>
+
 </body>
 
 </html>

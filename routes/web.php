@@ -54,6 +54,7 @@ Route::middleware(['auth:web', 'banned', 'verified'])->group(
         Route::delete('deleteAll', [AuthController::class, 'deleteAll'])->name('token.delete_all');
 
         Route::patch('update', [AuthController::class, 'update'])->name('users.update');
+        Route::post('sudo/exit', [AuthController::class, 'exitSudo'])->name('sudo.exit');
         /* End 账户区域 */
 
         /* Start 财务 */
