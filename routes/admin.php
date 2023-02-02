@@ -14,7 +14,6 @@ use App\Http\Controllers\Admin\UserGroupController;
 use App\Http\Controllers\Admin\WorkOrderController;
 use Illuminate\Support\Facades\Route;
 
-
 Route::get('/', [HomeController::class, 'index'])->name('index')->middleware('auth:admin')->withoutMiddleware('admin.validateReferer');
 
 Route::resource('admins', AdminController::class)->except('show');
