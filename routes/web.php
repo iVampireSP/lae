@@ -12,7 +12,7 @@ use App\Http\Controllers\Web\RealNameController;
 use App\Http\Controllers\Web\TransferController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [AuthController::class, 'index'])->name('index')->middleware('banned');
+Route::get('/', [AuthController::class, 'index'])->middleware('banned')->name('index');
 
 Route::prefix('auth')->group(function () {
     Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
@@ -40,25 +40,27 @@ Route::middleware(['auth', 'banned', 'verified'])->group(
         /* Start 账户区域 */
         Route::withoutMiddleware(['banned', 'verified'])->group(
             function () {
-                Route::view('banned', 'banned')->name('banned')->withoutMiddleware(['banned', 'verified']);
+                Route::view('banned', 'banned')->withoutMiddleware(['banned', 'verified'])->name('banned');
             }
         );
 
         Route::middleware(['real_named'])->group(
             function () {
-                Route::get('confirm_redirect', [AuthController::class, 'confirm_redirect'])->name('confirm_redirect')->middleware('real_named');
-                Route::post('newToken', [AuthController::class, 'newToken'])->name('token.new')->middleware('real_named');
+                Route::get('confirm_redirect', [AuthController::class, 'confirm_redirect'])->middleware('real_named')->name('confirm_redirect');
+                Route::post('newToken', [AuthController::class, 'newToken'])->middleware('real_named')->name('token.new');
             }
         );
 
         Route::delete('deleteAll', [AuthController::class, 'deleteAll'])->name('token.delete_all');
+
+        Route::patch('update', [AuthController::class, 'update'])->name('users.update');
         /* End 账户区域 */
 
         /* Start 财务 */
         Route::get('transactions', [BalanceController::class, 'transactions'])->name('transactions');
 
         Route::resource('balances', BalanceController::class)->except('show');
-        Route::get('/balances/{balance:order_id}', [BalanceController::class, 'show'])->name('balances.show')->withoutMiddleware('auth');
+        Route::get('/balances/{balance:order_id}', [BalanceController::class, 'show'])->withoutMiddleware('auth')->name('balances.show');
 
         Route::middleware(['real_named', 'password.confirm'])->group(
             function () {

@@ -61,6 +61,21 @@ class AuthController extends Controller
         return view('confirm_redirect', compact('callback'));
     }
 
+    public function update(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        $user = $request->user('web');
+
+        $user->update([
+            'name' => $request->input('name'),
+        ]);
+
+        return back()->with('success', '更新成功。');
+    }
+
     public function newToken(Request $request): RedirectResponse
     {
         $request->validate([

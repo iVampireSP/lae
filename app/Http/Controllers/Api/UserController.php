@@ -14,4 +14,13 @@ class UserController extends Controller
 
         return $this->success($user);
     }
+
+    public function update(Request $request): JsonResponse
+    {
+        $user = $request->user('api');
+
+        $user->update($request->only(['name']));
+
+        return $this->success($user);
+    }
 }

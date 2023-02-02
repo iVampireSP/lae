@@ -33,6 +33,22 @@
 
 
         <p>嗨, {{ auth('web')->user()->name }}
+        @php($user = auth('web')->user())
+        <form method="POST" action="{{ route('users.update') }}">
+            @csrf
+            @method('PATCH')
+            <div class="form-floating mb-2">
+                <input type="text" class="form-control" placeholder="用户名"
+                       aria-label="用户名" name="name" required maxlength="25"
+                       value="{{ $user->name }}">
+                <label>{{ __('Username') }}</label>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                更新
+            </button>
+        </form>
+
         <p>在这里，你可以获取新的 Token 来对接其他应用程序或者访问 控制面板。</p>
 
         <form action="{{ route('token.new') }}" name="newToken" method="POST">
