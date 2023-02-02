@@ -173,7 +173,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->select($this->publics);
     }
 
-    public function prunable()
+    public function prunable(): self|Builder|CachedBuilder
     {
         return static::where('deleted_at', '<=', now()->subWeek());
     }
