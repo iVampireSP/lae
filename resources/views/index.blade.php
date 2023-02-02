@@ -46,7 +46,7 @@
                 <label>用户名</label>
             </div>
 
-            <button type="submit" class="btn btn-primary">
+            <button type="submit" class="btn btn-primary visually-hidden">
                 更新
             </button>
         </form>
@@ -56,12 +56,15 @@
 
         <form action="{{ route('token.new') }}" name="newToken" method="POST">
             @csrf
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" id="token_name" name="token_name" placeholder="这个 Token 要用来做什么"
-                       aria-label="Example text with button addon"
-                       aria-describedby="button-addon1">
-                <button class="btn btn-outline-primary" type="submit" id="button-addon1">生成</button>
+            <div class="form-floating mb-2">
+                <input type="text" class="form-control" placeholder="Token 名称"
+                       aria-label="密钥名称" name="name" required maxlength="25">
+                <label>Token 名称</label>
             </div>
+
+            <button type="submit" class="btn btn-primary visually-hidden">
+                创建
+            </button>
         </form>
 
         <h3 class="mt-3">撤销密钥</h3>

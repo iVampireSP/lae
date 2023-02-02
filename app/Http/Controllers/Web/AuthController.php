@@ -75,10 +75,10 @@ class AuthController extends Controller
     public function newToken(Request $request): RedirectResponse
     {
         $request->validate([
-            'token_name' => 'required|string|max:255',
+            'token' => 'required|string|max:255',
         ]);
 
-        $token = $request->user()->createToken($request->input('token_name'));
+        $token = $request->user()->createToken($request->input('token'));
 
         return back()->with('token', $token->plainTextToken);
     }
