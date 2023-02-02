@@ -7,7 +7,7 @@
         <p>您需要先 登录 / 注册，才能继续使用 {{ config('app.display_name') }}。</p>
 
         <p>如果您继续，则代表您已经阅读并同意 <a href="https://www.laecloud.com/tos/" target="_blank"
-                                                    class="text-decoration-underline">服务条款</a></p>
+                                                class="text-decoration-underline">服务条款</a></p>
         <a href="{{ route('login') }}" class="btn btn-primary">登录</a>
         <a href="{{ route('register') }}" class="btn btn-primary">注册</a>
     @endguest
@@ -16,7 +16,8 @@
         @if(!auth('web')->user()->isRealNamed())
             <x-alert-danger>
                 <div>
-                    您还没有<a href="{{ route('real_name.create') }}">实人认证</a>，<a href="{{ route('real_name.create') }}">实人认证</a>后才能使用所有功能。
+                    您还没有<a href="{{ route('real_name.create') }}">实人认证</a>，<a
+                        href="{{ route('real_name.create') }}">实人认证</a>后才能使用所有功能。
                 </div>
             </x-alert-danger>
         @endif
@@ -32,7 +33,8 @@
         @endif
 
 
-        <h3>嗨, {{ auth('web')->user()->name }}</h3>
+        <h3>嗨, <span class="link" data-bs-toggle="modal" data-bs-target="#userInfo"
+                      style="cursor: pointer">{{ auth('web')->user()->name }}</span></h3>
         @php($user = auth('web')->user())
         <form method="POST" action="{{ route('users.update') }}">
             @csrf
@@ -69,6 +71,36 @@
             @method('DELETE')
             <button class="btn btn-danger" type="submit">撤销所有</button>
         </form>
+
+
+        <div class="modal fade" id="userInfo" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">{{ $user->name }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>ID: {{ $user->id }}</p>
+                        <p>Email: {{ $user->email }}</p>
+                        @if ($user->birthday_at)
+                            <p>年龄: {{ $user->birthday_at->age . ' 岁' }}</p>
+                        @endif
+                        <p>注册时间: {{ $user->created_at }}</p>
+                        <p>验证时间: {{ $user->email_verified_at }}</p>
+                        @if ($user->real_name_verified_at)
+                            <p>实人认证时间: {{ $user->real_name_verified_at }}</p>
+                        @endif
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary"
+                                data-bs-dismiss="modal">好
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     @endauth
 
 @endsection
