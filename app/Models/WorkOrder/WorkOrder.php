@@ -152,7 +152,7 @@ class WorkOrder extends Model
             return false;
         }
 
-        if (auth('admin')) {
+        if (auth('admin')->check()) {
             $this->status = 'read';
         } else {
             $this->status = 'user_read';
