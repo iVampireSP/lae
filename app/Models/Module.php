@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use App\Exceptions\User\BalanceNotEnoughException;
+use GeneaLabs\LaravelModelCaching\CachedBuilder;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use GuzzleHttp\Exception\ConnectException;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
@@ -270,5 +272,15 @@ class Module extends Authenticatable
         });
 
         return $this->balance;
+    }
+
+    public function hasBalance(string $amount = '0'): bool
+    {
+        return bccomp($this->balance, $amount, 4) >= 0;
+    }
+
+    public function whereHasBalance(string $amount = "0"): self|Builder|CachedBuilder
+    {
+        return $this->where('balance', '>=', $amount);
     }
 }
