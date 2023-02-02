@@ -136,9 +136,31 @@ class WorkOrder extends Model
         return $this->status === 'closed';
     }
 
+    public function isWaitingForResponse(): bool
+    {
+        return $this->status === 'replied' || $this->status === 'user_replied';
+    }
+
     public function isPlatform(): bool
     {
         return $this->module_id === null && $this->host_id === null;
+    }
+
+    public function markAsRead(): bool
+    {
+        if (! $this->isWaitingForResponse()) {
+            return false;
+        }
+
+        if (auth('admin')) {
+            $this->status = 'read';
+        } else {
+            $this->status = 'user_read';
+        }
+
+        $this->save();
+
+        return true;
     }
 
     /**

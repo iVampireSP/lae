@@ -44,6 +44,8 @@ class WorkOrderController extends Controller
     {
         $workOrder->load(['module', 'host']);
 
+        $workOrder->markAsRead();
+
         return $this->success($workOrder);
     }
 
