@@ -5,17 +5,12 @@ namespace App\Http\Controllers\Web;
 // use App\Helpers\ApiResponse;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
 use App\Notifications\User\UserNotification;
 use function back;
 use function config;
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
 use function redirect;
 use function session;
