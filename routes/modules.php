@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Module\AuthRequestController;
 use App\Http\Controllers\Module\BroadcastController;
 use App\Http\Controllers\Module\DeviceController;
 use App\Http\Controllers\Module\HostController;
@@ -36,3 +37,7 @@ Route::delete('devices', [DeviceController::class, 'destroy']);
 // 模块间调用
 Route::any('modules/{module}/{path?}', [ModuleController::class, 'exportCall'])
     ->where('path', '.*');
+
+// 认证请求
+Route::post('auth_request', [AuthRequestController::class, 'store']);
+Route::get('auth_request/{token}', [AuthRequestController::class, 'show']);

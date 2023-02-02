@@ -35,7 +35,7 @@ Route::prefix('auth')->group(function () {
     Route::post('email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
 });
 
-Route::middleware(['auth', 'banned', 'verified'])->group(
+Route::middleware(['auth:web', 'banned', 'verified'])->group(
     function () {
         /* Start 账户区域 */
         Route::withoutMiddleware(['banned', 'verified'])->group(
@@ -74,6 +74,11 @@ Route::middleware(['auth', 'banned', 'verified'])->group(
         Route::get('real_name', [RealNameController::class, 'create'])->name('real_name.create');
         Route::post('real_name', [RealNameController::class, 'store'])->name('real_name.store');
         /* End 实名认证 */
+
+        /* Start 匿名登录 */
+        Route::get('auth_request/{auth_request}', [AuthController::class, 'showAuthRequest'])->withoutMiddleware(['auth:web', 'verified'])->name('auth_request.show');
+        Route::post('auth_request', [AuthController::class, 'storeAuthRequest'])->name('auth_request.store');
+        /* End 匿名登录 */
     }
 );
 

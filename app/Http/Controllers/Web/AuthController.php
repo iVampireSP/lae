@@ -11,6 +11,7 @@ use function config;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
 use function redirect;
 use function session;
@@ -99,5 +100,45 @@ class AuthController extends Controller
         session()->regenerateToken();
 
         return redirect()->route('index');
+    }
+
+    public function showAuthRequest($token): View|RedirectResponse
+    {
+        $data = Cache::get('auth_request:'.$token);
+
+        if (empty($data)) {
+            return redirect()->route('index')->with('error', '登录请求的 Token 不存在或已过期。');
+        }
+
+        if (isset($data['user'])) {
+            return redirect()->route('index')->with('error', '登录请求的 Token 已被使用。');
+        }
+
+        return view('auth.request', [
+            'data' => $data,
+        ]);
+    }
+
+    public function storeAuthRequest(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'token' => 'required|string|max:128',
+        ]);
+
+        $data = Cache::get('auth_request:'.$request->input('token'));
+
+        if (empty($data)) {
+            return back()->with('error', '登录请求的 Token 不存在或已过期。');
+        }
+
+        if (isset($data['user'])) {
+            return back()->with('error', '登录请求的 Token 已被使用。');
+        }
+
+        $data['user'] = $request->user('web');
+
+        Cache::put('auth_request:'.$request->input('token'), $data, 120);
+
+        return redirect()->route('index')->with('success', '登录请求已确认。');
     }
 }
