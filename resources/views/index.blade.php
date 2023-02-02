@@ -3,8 +3,8 @@
 @section('content')
 
     @guest
-        <p>嗨，游客</p>
-        <p>您需要先 登录 / 注册，才能继续使用 莱云。</p>
+        <h3>欢迎使用 {{ config('app.display_name') }}</h3>
+        <p>您需要先 登录 / 注册，才能继续使用 {{ config('app.display_name') }}。</p>
 
         <p>如果您继续，则代表您已经阅读并同意 <a href="https://www.laecloud.com/tos/" target="_blank"
                                                     class="text-decoration-underline">服务条款</a></p>
@@ -32,7 +32,7 @@
         @endif
 
 
-        <p>嗨, {{ auth('web')->user()->name }}
+        <h3>嗨, {{ auth('web')->user()->name }}</h3>
         @php($user = auth('web')->user())
         <form method="POST" action="{{ route('users.update') }}">
             @csrf
@@ -49,6 +49,7 @@
             </button>
         </form>
 
+        <h3 class="mt-3">访问密钥</h3>
         <p>在这里，你可以获取新的 Token 来对接其他应用程序或者访问 控制面板。</p>
 
         <form action="{{ route('token.new') }}" name="newToken" method="POST">
@@ -58,25 +59,15 @@
                        aria-label="Example text with button addon"
                        aria-describedby="button-addon1">
                 <button class="btn btn-outline-primary" type="submit" id="button-addon1">生成</button>
-
             </div>
-
-
         </form>
 
-        <hr/>
+        <h3 class="mt-3">撤销密钥</h3>
         <p>如果你需要撤销对所有应用程序的授权，你可以在这里吊销所有 Token</p>
         <form action="{{ route('token.delete_all') }}" method="post">
             @csrf
             @method('DELETE')
-            <button class="btn btn-danger" type="submit">吊销所有 Token</button>
-        </form>
-        <p class="text-danger">*如果您的 Token 被泄漏，您应该立即吊销所有 Token</p>
-
-        <hr/>
-        <form action="{{ route('logout') }}" method="post">
-            @csrf
-            <button class="btn btn-danger" type="submit">退出登录</button>
+            <button class="btn btn-danger" type="submit">撤销所有</button>
         </form>
     @endauth
 
