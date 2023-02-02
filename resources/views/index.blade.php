@@ -41,7 +41,7 @@
                 <input type="text" class="form-control" placeholder="用户名"
                        aria-label="用户名" name="name" required maxlength="25"
                        value="{{ $user->name }}">
-                <label>{{ __('Username') }}</label>
+                <label>用户名</label>
             </div>
 
             <button type="submit" class="btn btn-primary">
