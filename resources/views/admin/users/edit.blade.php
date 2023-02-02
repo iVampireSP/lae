@@ -243,7 +243,7 @@
         @csrf
         @method('DELETE')
 
-        <button type="submit" class="btn btn-danger mt-3" onclick="return confirm('请再次确认要删除此用户吗？')">提交</button>
+        <button type="submit" class="btn btn-danger mt-3" onclick="return confirm('请再次确认要删除此用户吗？')">删除</button>
     </form>
 
 
