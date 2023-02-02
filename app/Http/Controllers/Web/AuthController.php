@@ -106,7 +106,7 @@ class AuthController extends Controller
     {
         session()->forget('auth.password_confirmed_at');
 
-        return back()->with('success', '已退出 Sudo 模式。');
+        return back();
     }
 
     public function showAuthRequest($token): View|RedirectResponse
