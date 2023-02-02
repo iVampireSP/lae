@@ -26,7 +26,7 @@ class SendModuleEarningsJob extends Job
      */
     public function handle(): void
     {
-        (new Module)->chunk(100, function ($modules) {
+        (new Module)->whereHasBalance("0.01")->chunk(100, function ($modules) {
             foreach ($modules as $module) {
                 $this->send($module);
             }
