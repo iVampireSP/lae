@@ -19,9 +19,9 @@ return new class extends Migration
             $table->decimal('balance', 20, 4)->default(0)->index();
             $table->string('api_token')->nullable()->unique();
             $table->string('url')->nullable()->index();
+            $table->string('wecom_key')->nullable()->comment('企业微信机器人 key');
             $table->enum('status', ['up', 'down', 'maintenance'])->default('down')->index();
             $table->timestamps();
-            $table->string('wecom_key')->nullable()->comment('企业微信机器人 key');
         });
     }
 
