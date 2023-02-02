@@ -14,9 +14,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [IndexController::class, 'index'])->withoutMiddleware('auth:sanctum');
 Route::get('/birthdays', [IndexController::class, 'birthdays']);
 
+Route::get('users', [UserController::class, 'index']);
+
 Route::get('user', [UserController::class, 'index']);
 Route::patch('user', [UserController::class, 'update']);
-// Route::get('users', [UserController::class, 'index']);
 
 Route::resource('balances', BalanceController::class);
 
