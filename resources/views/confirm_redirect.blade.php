@@ -22,18 +22,18 @@
         @else
 
             <h3>您确定吗？</h3>
-            <p>一个应用程序正在试图自动获取您的 Token，若您信任它，请点击 "好"。</p>
+            <p>一个应用程序正在试图自动获取您的 Token，若您信任它，请点击 "授权"。</p>
 
             <p>您点击"好"后，您将前往这个地址: <code>{{ $callback }}</code>。</p>
 
 
             <form action="{{ route('token.new') }}" name="newToken" method="POST">
                 @csrf
-                <input type="hidden" name="token_name" placeholder="Token 名字"
+                <input type="hidden" name="name" placeholder="Token 名字"
                        value="自动登录 - {{ date('Y-m-d H:i:s') }}"/>
-                <button type="submit" class="btn btn-primary">好</button>
+                <button type="submit" class="btn btn-primary">授权</button>
 
-                <a href="/" class="btn btn-danger">不，带我去首页。</a>
+                <a href="/" class="btn btn-danger">不</a>
 
             </form>
 
