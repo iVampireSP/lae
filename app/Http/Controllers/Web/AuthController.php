@@ -114,6 +114,9 @@ class AuthController extends Controller
             return redirect()->route('index')->with('error', '登录请求的 Token 已被使用。');
         }
 
+        // 登录后跳转的地址
+        session(['url.intended' => route('auth_request.show', $token)]);
+
         return view('auth.request', [
             'data' => $data,
         ]);

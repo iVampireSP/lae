@@ -109,7 +109,7 @@ trait AuthenticatesUsers
      * @param  Request  $request
      * @return JsonResponse|RedirectResponse
      */
-    protected function sendLoginResponse(Request $request)
+    protected function sendLoginResponse(Request $request): JsonResponse|RedirectResponse
     {
         $request->session()->regenerate();
 

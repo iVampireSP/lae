@@ -9,12 +9,15 @@
     <p>{{ $data['description'] }}</p>
 
     @auth('web')
-
         <form method="POST" action="{{ route('auth_request.store') }}">
             @csrf
             <input type="hidden" name="token" value="{{ $data['token'] }}">
             <button type="submit" class="btn btn-primary">同意</button>
         </form>
+    @else
+        <p>
+            在继续之前，请先<a href="{{ route('login') }}">登录</a>或<a href="{{ route('register') }}">注册</a>。
+        </p>
 
     @endauth
 
