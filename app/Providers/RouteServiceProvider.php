@@ -44,7 +44,7 @@ class RouteServiceProvider extends ServiceProvider
                 ->as('applications.')
                 ->group(base_path('routes/applications.php'));
 
-            Route::middleware(['web', 'admin.validateReferer'])
+            Route::middleware(['web', 'admin.validateReferer', 'auth:admin'])
                 ->prefix('admin')
                 ->as('admin.')
                 ->group(base_path('routes/admin.php'));
