@@ -140,7 +140,7 @@ class AuthController extends Controller
 
         $data['user'] = $request->user('web');
 
-        Cache::put('auth_request:'.$request->input('token'), $data, 120);
+        Cache::put('auth_request:'.$request->input('token'), $data, 60);
 
         return redirect()->route('index')->with('success', '登录请求已确认。');
     }
