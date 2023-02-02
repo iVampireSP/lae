@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -17,12 +16,11 @@ return new class extends Migration
             $table->id();
 
             $table->string('module_id')->index();
-            $table->foreign('module_id')->references('id')->on('modules')->cascadeOnDelete()->cascadeOnUpdate();
-
             $table->string('allowed_module_id')->index();
-            $table->foreign('allowed_module_id')->references('id')->on('modules')->cascadeOnDelete()->cascadeOnUpdate();
-
             $table->timestamps();
+
+            $table->foreign(['allowed_module_id'])->references(['id'])->on('modules')->onUpdate('CASCADE')->onDelete('CASCADE');
+            $table->foreign(['module_id'])->references(['id'])->on('modules')->onUpdate('CASCADE')->onDelete('CASCADE');
         });
     }
 

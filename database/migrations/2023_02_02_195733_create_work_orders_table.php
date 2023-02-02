@@ -16,28 +16,20 @@ return new class extends Migration
         Schema::create('work_orders', function (Blueprint $table) {
             $table->id();
 
-            // title
+            $table->uuid()->nullable()->unique();
             $table->string('title')->index();
-
-            // content
             $table->text('content');
-
-            // user id
             $table->unsignedBigInteger('user_id')->index();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-
-            // module id
-            $table->string('module_id')->index();
-            $table->foreign('module_id')->references('id')->on('modules')->onDelete('cascade');
-
-            // host id
-            $table->unsignedBigInteger('host_id')->index()->nullable();
-            $table->foreign('host_id')->references('id')->on('hosts')->onDelete('cascade');
-
-            // status
+            $table->string('module_id')->nullable()->index();
+            $table->unsignedBigInteger('host_id')->nullable()->index();
             $table->enum('status', ['open', 'user_read', 'closed', 'user_replied', 'replied', 'read', 'on_hold', 'in_progress', 'error', 'pending'])->default('pending')->index();
-
+            $table->string('ip')->nullable();
+            $table->boolean('notify')->default(true)->comment('是否通知');
             $table->timestamps();
+
+            $table->foreign(['host_id'])->references(['id'])->on('hosts')->onUpdate('NO ACTION')->onDelete('CASCADE');
+            $table->foreign(['module_id'])->references(['id'])->on('modules')->onUpdate('CASCADE')->onDelete('CASCADE');
+            $table->foreign(['user_id'])->references(['id'])->on('users')->onUpdate('NO ACTION')->onDelete('CASCADE');
         });
     }
 

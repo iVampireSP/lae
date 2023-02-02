@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      *
@@ -13,8 +12,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('modules', function (Blueprint $table) {
-            $table->decimal('balance', 20, 2)->default(0)->after('name');
+        Schema::create('applications', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->index();
+            $table->string('description')->nullable();
+            $table->string('api_token')->unique();
+            $table->timestamps();
         });
     }
 
@@ -25,8 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('modules', function (Blueprint $table) {
-            $table->dropColumn('balance');
-        });
+        Schema::dropIfExists('applications');
     }
 };

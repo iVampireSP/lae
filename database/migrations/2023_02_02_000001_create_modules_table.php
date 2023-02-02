@@ -13,8 +13,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('modules', function (Blueprint $table) {
-            //
+        Schema::create('modules', function (Blueprint $table) {
+            $table->string('id')->primary();
+            $table->string('name')->index();
+            $table->decimal('balance', 20, 4)->default(0)->index();
+            $table->string('api_token')->nullable()->unique();
+            $table->string('url')->nullable()->index();
+            $table->enum('status', ['up', 'down', 'maintenance'])->default('down')->index();
+            $table->timestamps();
             $table->string('wecom_key')->nullable()->comment('企业微信机器人 key');
         });
     }
@@ -26,13 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('modules', function (Blueprint $table) {
-            //
-
-            // drop if exists
-            if (Schema::hasColumn('modules', 'wecom_key')) {
-                $table->dropColumn('wecom_key');
-            }
-        });
+        Schema::dropIfExists('modules');
     }
 };
