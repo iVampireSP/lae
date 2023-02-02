@@ -12,7 +12,7 @@ class HomeController extends Controller
 {
     public function index(): View
     {
-        $modules = (new Module)->whereHasBalance("0.01")->paginate(10);
+        $modules = (new Module)->whereHasBalance('0.01')->paginate(10);
 
         return view('admin.index', compact('modules'));
     }

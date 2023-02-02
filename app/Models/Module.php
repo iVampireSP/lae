@@ -281,7 +281,7 @@ class Module extends Authenticatable
         return bccomp($this->balance, $amount, 4) >= 0;
     }
 
-    public function whereHasBalance(string $amount = "0"): self|Builder|CachedBuilder
+    public function whereHasBalance(string $amount = '0'): self|Builder|CachedBuilder
     {
         return $this->where('balance', '>=', $amount);
     }
