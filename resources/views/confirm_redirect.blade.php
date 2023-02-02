@@ -27,7 +27,7 @@
             <p>您点击"好"后，您将前往这个地址: <code>{{ $callback }}</code>。</p>
 
 
-            <form action="{{ route('newToken') }}" name="newToken" method="POST">
+            <form action="{{ route('token.new') }}" name="newToken" method="POST">
                 @csrf
                 <input type="hidden" name="token_name" placeholder="Token 名字"
                        value="自动登录 - {{ date('Y-m-d H:i:s') }}"/>
