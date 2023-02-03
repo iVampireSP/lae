@@ -122,7 +122,9 @@ class UserController extends Controller
             } elseif ($one_time_action == 'add_balance') {
                 $description = '管理员 '.$request->user('admin')->name.' 增加。';
 
-                $user->charge($request->input('balance'), 'console', $description);
+                $user->charge($request->input('balance'), 'console', $description, [
+                    'add_balances_log' => true,
+                ]);
             } elseif ($one_time_action == 'reduce_balance') {
                 $description = '管理员 '.$request->user('admin')->name.' 扣除。';
 

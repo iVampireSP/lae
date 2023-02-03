@@ -274,13 +274,15 @@ class User extends Authenticatable implements MustVerifyEmail
 
             (new Transaction)->create($data);
 
-            (new Balance)->create([
-                'user_id' => $this->id,
-                'amount' => $amount,
-                'payment' => $payment,
-                'description' => $description,
-                'paid_at' => now(),
-            ]);
+            if (isset($options['add_balances_log']) && $options['add_balances_log'] === true) {
+                (new Balance)->create([
+                    'user_id' => $this->id,
+                    'amount' => $amount,
+                    'payment' => $payment,
+                    'description' => $description,
+                    'paid_at' => now(),
+                ]);
+            }
         });
 
         return $this->balance;
