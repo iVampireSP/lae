@@ -37,21 +37,22 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <!-- Left Side Of Navbar -->
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('index') }}">密钥管理</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('balances.index') }}">余额与充值</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('transfer') }}">转账</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('transactions') }}">交易记录</a>
-                    </li>
-
-                </ul>
+                @auth('web')
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('index') }}">密钥管理</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('balances.index') }}">余额与充值</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('transfer') }}">转账</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('transactions') }}">交易记录</a>
+                        </li>
+                    </ul>
+                @endauth
 
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ms-auto">
@@ -163,8 +164,8 @@
     const nav = document.getElementById('nav');
 
     @if (session('auth.password_confirmed_at'))
-       nav.style.backgroundColor = 'rgb(234 234 234 / 9%)';
-       nav.classList.remove('bg-body');
+        nav.style.backgroundColor = 'rgb(234 234 234 / 9%)';
+    nav.classList.remove('bg-body');
 
     @endif
 </script>
