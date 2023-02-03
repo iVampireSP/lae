@@ -6,6 +6,10 @@
     <h3>{{ $workOrder->title }}</h3>
     <p>
         UUID: {{ $workOrder->uuid }}
+        <br />
+        创建时间: {{ $workOrder->created_at }}, {{ $workOrder->created_at->diffForHumans() }}。
+        <br />
+        最后更新时间: {{ $workOrder->updated_at }}。
     </p>
     <a href="{{ route('admin.work-orders.edit', $workOrder) }}">编辑此工单</a>
     <a href="{{ route('admin.users.edit', $workOrder->user_id) }}">用户: {{ $workOrder->user->name }}</a>

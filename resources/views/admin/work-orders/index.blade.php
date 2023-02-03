@@ -23,6 +23,7 @@
             <th>模块</th>
             <th>主机</th>
             <th>发起者</th>
+            <th>创建时间</th>
             <th>状态</th>
             <th>操作</th>
             </thead>
@@ -65,6 +66,9 @@
                     </td>
                     <td>
                         <a href="{{ route('admin.users.edit', $workOrder->user_id) }}">{{ $workOrder->user->name }}</a>
+                    </td>
+                    <td>
+                        {{ $workOrder->created_at }}, {{ $workOrder->created_at->diffForHumans() }}
                     </td>
                     <td>
                         <x-work-order-status :status="$workOrder->status"></x-work-order-status>
