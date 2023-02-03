@@ -53,8 +53,10 @@ class SendModuleEarningsJob extends Job
             $total_should = 0;
 
             foreach ($months as $month => $m) {
-                $total += round($m['balance'], 2);
-                $total_should += round($m['should_balance'], 2);
+                // bc 保留两位小数
+                $total = bcadd($total, $m['balance'], 2);
+                $total_should = bcadd($total_should, $m['should_balance'], 2);
+
                 $text .= <<<EOF
 
 ==========

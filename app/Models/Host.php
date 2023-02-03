@@ -280,7 +280,7 @@ class Host extends Model
         $cache_key = 'module_earning_'.$this->module_id;
 
         // 应支付的提成
-        $commission = config('billing.commission');
+        $commission = config('settings.billing.commission');
         $should_amount = bcmul($amount, $commission, 4);
 
         // 应得的余额

@@ -1,6 +1,9 @@
 <?php
 
 return [
+    'billing' => [
+        'commission' => '0.1',
+    ],
     'wecom' => [
         'robot_hook' => [
             'default' => env('WECOM_ROBOT_HOOK_DEFAULT', ''),
