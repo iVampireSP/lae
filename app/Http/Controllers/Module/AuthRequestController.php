@@ -39,7 +39,7 @@ class AuthRequestController extends Controller
         }
 
         if (! isset($data['user'])) {
-            $data['user'] = [];
+            $data['user'] = null;
         }
 
         return $this->success($data);
