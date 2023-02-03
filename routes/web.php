@@ -61,7 +61,7 @@ Route::middleware(['auth:web', 'banned', 'verified'])->group(
         Route::get('transactions', [BalanceController::class, 'transactions'])->name('transactions');
 
         Route::resource('balances', BalanceController::class)->except('show');
-        Route::get('/balances/{balance:order_id}', [BalanceController::class, 'show'])->withoutMiddleware('auth')->name('balances.show');
+        Route::get('/balances/{abalance:order_id}', [BalanceController::class, 'show'])->withoutMiddleware('auth')->name('balances.show');
 
         Route::middleware(['real_named', 'password.confirm'])->group(
             function () {
