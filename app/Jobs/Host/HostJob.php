@@ -14,20 +14,22 @@ class HostJob implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;
 
-    public HostModel $host;
+    protected HostModel $host;
 
-    public string $type;
+    protected string $type;
+
+    protected bool $pass_unavailable;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct(HostModel $host, $type = 'post')
+    public function __construct(HostModel $host, $type = 'post', $pass_unavailable = true)
     {
-        //
         $this->host = $host;
         $this->type = $type;
+        $this->pass_unavailable = $pass_unavailable;
     }
 
     /**
@@ -42,7 +44,7 @@ class HostJob implements ShouldQueue
         $host = $this->host;
 
         // 忽略 unavailable 状态的 host
-        if ($host->status === 'unavailable') {
+        if (! $this->pass_unavailable && $host->status === 'unavailable') {
             return;
         }
 

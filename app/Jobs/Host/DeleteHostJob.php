@@ -48,7 +48,7 @@ class DeleteHostJob implements ShouldQueue
         // 查找不可用时间超过 3 天以上的 host
         (new Host)->where('status', 'unavailable')->where('unavailable_at', '<', now()->subDays(3))->chunk(100, function ($hosts) {
             foreach ($hosts as $host) {
-                dispatch(new HostJob($host, 'delete'));
+                dispatch(new HostJob($host, 'delete', false));
             }
         });
 
