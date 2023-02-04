@@ -44,7 +44,7 @@ class HostJob implements ShouldQueue
         $host = $this->host;
 
         // 忽略 unavailable 状态的 host
-        if (! $this->pass_unavailable && $host->status === 'unavailable') {
+        if ($this->pass_unavailable && $host->status === 'unavailable') {
             return;
         }
 
