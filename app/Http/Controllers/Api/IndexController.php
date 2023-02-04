@@ -30,11 +30,6 @@ class IndexController extends Controller
     {
         $nodes = ClusterSupport::nodes(true);
 
-        $current_node_id = ClusterSupport::currentNode()['id'];
-
-        return $this->success([
-            'nodes' => $nodes,
-            'current_node_id' => $current_node_id,
-        ]);
+        return $this->success($nodes);
     }
 }

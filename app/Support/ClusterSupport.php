@@ -129,15 +129,19 @@ class ClusterSupport
     {
         $nodes = self::hgetAll('nodes');
 
+        $append_nodes = [];
+
         foreach ($nodes as $key => $node) {
             $nodes[$key] = json_decode($node, true);
 
             if ($hide_ip) {
                 unset($nodes[$key]['ip']);
             }
+
+            $append_nodes[] = $nodes[$key];
         }
 
-        return $nodes;
+        return $append_nodes;
     }
 
     public static function hgetAll($hashKey, $default = []): array
