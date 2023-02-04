@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\AddHeaders;
 use App\Http\Middleware\Admin\ValidateReferer;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\EncryptCookies;
@@ -48,6 +49,7 @@ class Kernel extends HttpKernel
         TrimStrings::class,
         ConvertEmptyStringsToNull::class,
         HandleCors::class,
+        AddHeaders::class,
     ];
 
     /**
