@@ -135,11 +135,11 @@ return [
         ],
 
         'cache_2' => [
-            'url' => env('REDIS_URL'),
-            'host' => env('REDIS_HOST', '127.0.0.1'),
-            'username' => env('REDIS_USERNAME'),
-            'password' => env('REDIS_PASSWORD'),
-            'port' => env('REDIS_PORT', '6379'),
+            'url' => env('REDIS_DB_CACHE_URL'),
+            'host' => env('REDIS_DB_CACHE_HOST', '127.0.0.1'),
+            'username' => env('REDIS_DB_CACHE_USERNAME'),
+            'password' => env('REDIS_DB_CACHE_PASSWORD'),
+            'port' => env('REDIS_DB_CACHE_PORT', '6379'),
             'database' => 2,
             'persistent' => true,
         ],
