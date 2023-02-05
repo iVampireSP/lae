@@ -41,6 +41,10 @@ class HostJob implements ShouldQueue
      */
     public function handle(): void
     {
+        if (! isset($this->host)) {
+            return;
+        }
+
         $host = $this->host;
 
         // 忽略 unavailable 状态的 host
