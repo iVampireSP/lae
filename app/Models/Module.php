@@ -8,6 +8,7 @@ use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use GuzzleHttp\Exception\ConnectException;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Cache;
@@ -113,9 +114,26 @@ class Module extends Authenticatable
         ];
     }
 
+    /**
+     * @param $method
+     * @param $path
+     * @param $requests
+     *
+     * @return array
+     */
     public function request($method, $path, $requests): array
     {
-        return $this->baseRequest($method, "functions/$path", $requests);
+        try {
+            return $this->baseRequest($method, "functions/$path", $requests);
+        } catch (ConnectException|ConnectionException $e) {
+            Log::error('在执行 call ' . $method . ' ' . $path . ' 时发生错误: ' . $e->getMessage());
+            return [
+                'body' => null,
+                'json' => null,
+                'status' => 502,
+                'success' => false,
+            ];
+        }
     }
 
     public function baseRequest($method, $path, $requests = []): array

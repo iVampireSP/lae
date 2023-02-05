@@ -26,12 +26,7 @@ class ModuleController extends Controller
 
         $method = Str::lower($request->method());
 
-        try {
-            $response = $module->request($method, $path, $request->all());
-        } catch (ConnectException $e) {
-            Log::error('在执行 call ' . $method . ' ' . $path . ' 时发生错误: ' . $e->getMessage());
-            return $this->serviceUnavailable();
-        }
+        $response = $module->request($method, $path, $request->all());
 
         if ($response['json'] === null && $response['body'] !== null) {
             return response($response['body'], $response['status']);
