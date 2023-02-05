@@ -14,7 +14,7 @@ trait ApiResponse
             201 => $this->created($response),
             204 => $this->noContent(),
             400 => $this->badRequest($response),
-            401 => $this->serviceUnavailable(),
+            401, 502 => $this->serviceUnavailable(),
             403 => $this->forbidden($response),
             404 => $this->notFound($response),
             405 => $this->methodNotAllowed(),

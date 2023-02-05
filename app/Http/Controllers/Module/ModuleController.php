@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Module;
 
 use App\Http\Controllers\Controller;
 use App\Models\Module;
+use GuzzleHttp\Exception\ConnectException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class ModuleController extends Controller
@@ -24,7 +26,12 @@ class ModuleController extends Controller
 
         $method = Str::lower($request->method());
 
-        $response = $module->request($method, $path, $request->all());
+        try {
+            $response = $module->request($method, $path, $request->all());
+        } catch (ConnectException $e) {
+            Log::error('在执行 call ' . $method . ' ' . $path . ' 时发生错误: ' . $e->getMessage());
+            return $this->serviceUnavailable();
+        }
 
         if ($response['json'] === null && $response['body'] !== null) {
             return response($response['body'], $response['status']);
