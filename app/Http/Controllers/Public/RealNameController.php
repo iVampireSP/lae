@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Notifications\User\UserNotification;
 use App\Support\RealNameSupport;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ class RealNameController extends Controller
     {
         $result = (new RealNameSupport())->verify($request->all());
 
-        if (! $result) {
+        if (!$result) {
             Log::warning('实名认证失败', $request->all());
 
             return $this->error('实名认证失败。');
@@ -27,7 +28,9 @@ class RealNameController extends Controller
         $user->id_card = $result['id_card'];
         $user->save();
 
-        $user->reduce('0.7', '实名认证费用。');
+        $user->reduce((string)config('settings.supports.real_name.price'), '实名认证费用。');
+
+        $user->notify(new UserNotification('再次欢迎您！', '再次欢迎您！您的实人认证已通过。', true));
 
         return $this->success('实名认证成功。');
     }
