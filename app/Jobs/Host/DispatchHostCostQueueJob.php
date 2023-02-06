@@ -40,7 +40,7 @@ class DispatchHostCostQueueJob implements ShouldQueue
 
         $host->whereIn('status', ['running', 'stopped'])->with('user')->chunk(500, function ($hosts) {
             foreach ($hosts as $host) {
-                dispatch(new RealHostCostJob($host, $host->getPrice()));
+                dispatch(new RealHostCostJob($host, $host->getPrice()))->onQueue('host-cost');
             }
         });
     }
