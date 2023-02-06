@@ -2,6 +2,7 @@
 
 namespace App\Support;
 
+use App\Exceptions\CommonException;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -36,7 +37,9 @@ class RealNameSupport
      * @param $user_id
      * @param $name
      * @param $id_card
+     *
      * @return string
+     * @throws CommonException
      */
     public function create($user_id, $name, $id_card): string
     {
@@ -55,8 +58,10 @@ class RealNameSupport
 
     /** 向 实名认证服务 发送请求
      *
-     * @param  string  $id
+     * @param string $id
+     *
      * @return string
+     * @throws CommonException
      */
     private function submit(string $id): string
     {
@@ -86,7 +91,7 @@ class RealNameSupport
         $resp = $this->http->asForm()->post('/edis_ctid_id_name_video_ocr_h5', $data)->json();
 
         if (! $resp || $resp['code'] !== '0000') {
-            abort(500, '调用远程服务器时出现了问题，请检查身份证号码是否正确。');
+            throw new CommonException('调用远程服务器时出现了问题，请检查身份证号码是否正确。');
         }
 
         return $resp['verifyUrl'];
