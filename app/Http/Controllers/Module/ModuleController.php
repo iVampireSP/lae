@@ -4,11 +4,9 @@ namespace App\Http\Controllers\Module;
 
 use App\Http\Controllers\Controller;
 use App\Models\Module;
-use GuzzleHttp\Exception\ConnectException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class ModuleController extends Controller
