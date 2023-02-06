@@ -2,6 +2,4 @@
     # {{ $title }}
 
     {{ $content }}
-
-    <br/>
 @endcomponent
