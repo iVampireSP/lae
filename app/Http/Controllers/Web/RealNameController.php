@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web;
 
+use App\Exceptions\CommonException;
 use App\Http\Controllers\Controller;
 use App\Support\RealNameSupport;
 use Illuminate\Http\RedirectResponse;
@@ -39,7 +40,11 @@ class RealNameController extends Controller
             return back()->with('error', '您的余额不足。请保证余额大于 1 元。');
         }
 
-        $output = $realNameSupport->create($user->id, $request->input('real_name'), $request->input('id_card'));
+        try {
+            $output = $realNameSupport->create($user->id, $request->input('real_name'), $request->input('id_card'));
+        } catch (CommonException $e) {
+            return back()->with('error', $e->getMessage());
+        }
 
         // 标记用户正在实名，缓存 600s
         if (Cache::has('real_name:user:'.$user->id)) {
