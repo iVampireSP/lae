@@ -31,6 +31,7 @@ class Module extends Authenticatable
         'id',
         'name',
         'api_token',
+        'status',
     ];
 
     protected $hidden = [
@@ -118,7 +119,6 @@ class Module extends Authenticatable
      * @param $method
      * @param $path
      * @param $requests
-     *
      * @return array
      */
     public function request($method, $path, $requests): array
@@ -126,7 +126,8 @@ class Module extends Authenticatable
         try {
             return $this->baseRequest($method, "functions/$path", $requests);
         } catch (ConnectException|ConnectionException $e) {
-            Log::error('在执行 call ' . $method . ' ' . $path . ' 时发生错误: ' . $e->getMessage());
+            Log::error('在执行 call '.$method.' '.$path.' 时发生错误: '.$e->getMessage());
+
             return [
                 'body' => null,
                 'json' => null,

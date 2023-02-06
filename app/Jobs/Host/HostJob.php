@@ -7,6 +7,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 // use Illuminate\Contracts\Queue\ShouldBeUnique;
 
@@ -53,6 +54,15 @@ class HostJob implements ShouldQueue
         }
 
         $host->load(['module']);
+
+        if ($host->module->status !== 'up') {
+            Log::warning('模块不可用，跳过主机更新。', [
+                'host' => $host->name,
+                'module' => $host->module->name,
+            ]);
+
+            return;
+        }
 
         switch ($this->type) {
             case 'patch':

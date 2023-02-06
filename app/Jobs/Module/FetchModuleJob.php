@@ -42,7 +42,13 @@ class FetchModuleJob implements ShouldQueue
         try {
             $response = $module->http()->get('remote');
         } catch (Exception $e) {
-            Log::error($e->getMessage());
+            Log::error('无法连接到模块 - down: '.$e->getMessage());
+
+            // 如果模块状态不为 down，则更新为 down
+            if ($module->status !== 'down') {
+                $module->status = 'down';
+                $module->save();
+            }
 
             return;
         }
@@ -51,6 +57,7 @@ class FetchModuleJob implements ShouldQueue
             // 如果模块状态不为 up，则更新为 up
             if ($module->status !== 'up') {
                 $module->status = 'up';
+                Log::error('模块状态更新为 up: '.$module->name);
             }
 
             $json = $response->json();
