@@ -22,6 +22,10 @@
             <label for="url">对端地址</label>
             <input type="text" class="form-control" id="url" name="url">
         </div>
+        <div class="form-group mt-1">
+            <label for="ip_port">源站 IP:Port</label>
+            <input type="text" class="form-control" id="ip_port" name="ip_port">
+        </div>
 
         <div class="form-group mt-1">
             <label for="wecom_key">企业微信 群机器人 WebHook Key</label>

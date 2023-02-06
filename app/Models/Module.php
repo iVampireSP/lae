@@ -83,7 +83,19 @@ class Module extends Authenticatable
 
     public function http(): PendingRequest
     {
-        return Http::module($this->api_token, $this->url.'/remote')->acceptJson()->timeout(5);
+        $http = Http::module($this->api_token, $this->url.'/remote')->acceptJson()->timeout(5);
+
+        if ($this->ip_port) {
+            // 如果设置了 ip_port 则使用 ip_port
+            $http->baseUrl($this->ip_port . '/remote');
+
+            // 添加 Host 头
+            $http->withHeaders([
+                'Host' => parse_url($this->url, PHP_URL_HOST),
+            ]);
+        }
+
+        return $http;
     }
 
     private function getResponse(Response $response): array

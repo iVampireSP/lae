@@ -54,6 +54,7 @@ class ModuleController extends Controller
         $module->name = $request->input('name');
         $module->api_token = $api_token;
         $module->url = $request->input('url');
+        $module->ip_port = $request->input('ip_port');
         $module->status = $request->input('status');
         $module->wecom_key = $request->input('wecom_key');
 
@@ -68,6 +69,7 @@ class ModuleController extends Controller
             'id' => 'required|string|max:255',
             'name' => 'required|string|max:255',
             'url' => 'required|url',
+            'ip_port' => 'nullable|string|max:255',
             'status' => 'required|string|in:up,down,maintenance',
             'balance' => 'nullable|numeric',
             'wecom_key' => 'nullable|string|max:255',
@@ -116,6 +118,7 @@ class ModuleController extends Controller
         $module->id = $request->input('id');
         $module->name = $request->input('name');
         $module->url = $request->input('url');
+        $module->ip_port = $request->input('ip_port');
         $module->status = $request->input('status');
         $module->wecom_key = $request->input('wecom_key');
 

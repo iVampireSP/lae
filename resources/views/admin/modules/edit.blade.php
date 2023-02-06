@@ -25,6 +25,10 @@
             <label for="url">对端地址</label>
             <input type="text" class="form-control" id="url" name="url" value="{{ $module->url }}">
         </div>
+        <div class="form-group mt-1">
+            <label for="ip_port">源站 IP:Port</label>
+            <input type="text" class="form-control" id="ip_port" name="ip_port" value="{{ $module->ip_port }}">
+        </div>
 
         <div class="form-group mt-1">
             <label for="api_token">通信密钥(即 Api Token, 非常重要，请勿泄露。)</label>
