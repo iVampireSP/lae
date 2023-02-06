@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Closure;
-use function config;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use function config;
 
 class ForumController extends Controller
 {
@@ -19,24 +19,12 @@ class ForumController extends Controller
     public function __construct()
     {
         $this->baseUrl = config('settings.forum.base_url');
-        $this->http = Http::baseUrl($this->baseUrl.'/api')->throw();
+        $this->http = Http::baseUrl($this->baseUrl . '/api')->throw();
     }
 
-    public function announcements(): JsonResponse
+    public function cache($tag, Closure $callback)
     {
-        $resp = $this->cache(function () {
-            return $this->get('discussions?filter[tag]=announcements&page[offset]=0&sort=-createdAt');
-        });
-
-        return $this->resp($resp);
-    }
-
-    public function cache(Closure $callback)
-    {
-        // 获取调用方法名
-        $method = debug_backtrace()[1]['function'];
-
-        return Cache::remember('forum.func.'.$method, 60, function () use ($callback) {
+        return Cache::remember('forum.tag:' . $tag, 60, function () use ($callback) {
             return $callback();
         });
     }
@@ -53,10 +41,10 @@ class ForumController extends Controller
         return $this->success($data);
     }
 
-    public function pinned(): JsonResponse
+    public function tag($tag): JsonResponse
     {
-        $resp = $this->cache(function () {
-            return $this->get('discussions?filter[tag]=pinned&page[offset]=0&sort=-createdAt');
+        $resp = $this->cache($tag, function () use ($tag) {
+            return $this->get('discussions?filter[tag]=' . $tag . '&page[offset]=0&sort=-createdAt');
         });
 
         return $this->resp($resp);

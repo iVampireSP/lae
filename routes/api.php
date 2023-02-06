@@ -27,8 +27,9 @@ Route::get('servers/{module}', [ModuleController::class, 'servers']);
 
 Route::resource('tasks', TaskController::class)->only(['index', 'show']);
 
-Route::get('forum/announcements', [ForumController::class, 'pinned']);
-Route::get('forum/pinned', [ForumController::class, 'announcements']);
+// Route::get('forum/announcements', [ForumController::class, 'pinned']);
+// Route::get('forum/pinned', [ForumController::class, 'announcements']);
+Route::get('forum/{tag}', [ForumController::class, 'tag']);
 
 Route::get('hosts/usages', [HostController::class, 'usages']);
 Route::apiResource('hosts', HostController::class);
