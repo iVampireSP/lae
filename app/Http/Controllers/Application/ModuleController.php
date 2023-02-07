@@ -8,7 +8,7 @@ use Illuminate\Http\JsonResponse;
 
 class ModuleController extends Controller
 {
-    public function index()
+    public function index(): JsonResponse
     {
         $modules = (new Module)->all()->makeVisible(['api_token', 'url']);
 
