@@ -204,7 +204,7 @@ class ModuleController extends Controller
 
     public function fast_login(Module $module): View|RedirectResponse
     {
-        $resp = $module->baseRequest('post', 'fast-login', []);
+        $resp = $module->baseRequest('post', 'fast-login');
 
         if ($resp['success']) {
             $resp = $resp['json'];
