@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\Module;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 class AuthRequestController extends Controller
 {
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
         $request->validate([
             'description' => 'required|string|max:255',
@@ -30,7 +31,7 @@ class AuthRequestController extends Controller
         return $this->success($data);
     }
 
-    public function show($token)
+    public function show($token): JsonResponse
     {
         $data = Cache::get('auth_request:'.$token);
 
