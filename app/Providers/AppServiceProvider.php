@@ -37,14 +37,11 @@ class AppServiceProvider extends ServiceProvider
                 ->withUserAgent('LAECloud-Client')
                 ->withHeaders([
                     'X-Module-Api-Token' => $api_token,
-                    'Content-Type' => 'application/json',
-                    'Accept' => 'application/json',
                 ])->withOptions([
                     'version' => 2,
                 ]);
         });
 
-        // Carbon setTestNow
         // Carbon::setTestNow(now()->addDays(1));
     }
 }

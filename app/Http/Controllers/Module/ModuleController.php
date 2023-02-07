@@ -24,7 +24,21 @@ class ModuleController extends Controller
 
         $method = Str::lower($request->method());
 
-        $response = $module->request($method, $path, $request->all());
+        $all_files = $request->allFiles();
+
+        if ($all_files) {
+            $files = [];
+            foreach ($all_files as $key => $file) {
+                $files[$key] = [
+                    'name' => $file->getClientOriginalName(),
+                    'content' => fopen($file->getRealPath(), 'r')
+                ];
+            }
+
+            $response = $module->request($method, $path, $request->all(), $files);
+        } else {
+            $response = $module->request($method, $path, $request->all());
+        }
 
         if ($response['json'] === null && $response['body'] !== null) {
             return response($response['body'], $response['status']);
