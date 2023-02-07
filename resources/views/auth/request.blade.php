@@ -20,12 +20,23 @@
         想要获取你的用户信息。
     </h3>
 
-    <p>{{ $data['description'] }}</p>
+    <p>{{ $data['meta']['description'] }}</p>
+
+    <br/>
+    <p>
+        在您同意后，您的 <b>ID</b>, <b>UUID</b>, <b>昵称</b>, <b>邮件信息 和 实人认证成功的时间(不包含个人信息)</b>, <b>余额</b>,
+        <b>用户组 ID</b> 将会被发送给它们。
+        @if ($data['meta']['require_token'])
+            <br />
+            你的 <b>Token</b> 将会新建一个，并发送给它们。
+        @endif
+    </p>
+
 
     @auth('web')
         <form method="POST" action="{{ route('auth_request.store') }}">
             @csrf
-            <input type="hidden" name="token" value="{{ $data['token'] }}">
+            <input type="hidden" name="token" value="{{ $data['meta']['token'] }}">
             <button type="submit" class="btn btn-primary">同意</button>
         </form>
     @else

@@ -29,10 +29,12 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public array $publics = [
         'id',
+        'uuid',
         'name',
         'email',
         'real_name',
         'balance',
+        'user_group_id'
     ];
 
     /**
@@ -174,10 +176,13 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->select($this->publics);
     }
 
-    public function getOnlyPublic($excepts = []): array
+    public function getOnlyPublic($appened_excepts = [], $display = []): array
     {
-        if ($excepts) {
-            $this->publics = array_diff($this->publics, $excepts);
+        if ($display) {
+            $this->publics = array_merge($this->publics, $display);
+        }
+        if ($appened_excepts) {
+            $this->publics = array_diff($this->publics, $appened_excepts);
         }
 
         return Arr::only($this->toArray(), $this->publics);
