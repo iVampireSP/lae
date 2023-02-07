@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\ReplyController;
 use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\WorkOrderController;
+use App\Http\Controllers\Public\AuthRequestController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [IndexController::class, 'index'])->withoutMiddleware('auth:sanctum');
@@ -47,3 +48,6 @@ Route::withoutMiddleware('auth:sanctum')->prefix('work-orders')->group(function 
 
 Route::any('modules/{module}/{path?}', [ModuleController::class, 'call'])
     ->where('path', '.*');
+
+Route::post('auth_request', [AuthRequestController::class, 'store']);
+Route::get('auth_request/{token}', [AuthRequestController::class, 'show']);

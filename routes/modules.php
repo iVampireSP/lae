@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Module\AuthRequestController;
 use App\Http\Controllers\Module\BroadcastController;
 use App\Http\Controllers\Module\DeviceController;
 use App\Http\Controllers\Module\HostController;
@@ -9,6 +8,7 @@ use App\Http\Controllers\Module\ReplyController;
 use App\Http\Controllers\Module\TaskController;
 use App\Http\Controllers\Module\UserController;
 use App\Http\Controllers\Module\WorkOrderController;
+use App\Http\Controllers\Public\AuthRequestController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('modules', [ModuleController::class, 'index']);

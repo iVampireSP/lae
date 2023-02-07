@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Module;
+namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
@@ -21,8 +21,21 @@ class AuthRequestController extends Controller
         $data = [
             'description' => $request->input('description'),
             'token' => $token,
-            'module' => $request->user('module')->toArray(),
         ];
+
+        if ($request->user('module')) {
+            $data['module'] = $request->user('module')->toArray();
+        }
+
+        if ($request->user('application')) {
+            $data['application'] = $request->user('application')->toArray();
+        }
+
+        if ($request->user('sanctum')) {
+            $data['from_user'] = $request->user('sanctum')->getOnlyPublic([
+                'balance',
+            ]);
+        }
 
         Cache::put('auth_request:'.$token, $data, 120);
 

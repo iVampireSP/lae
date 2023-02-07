@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Str;
@@ -171,6 +172,15 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         // 仅需选择公开的
         return $this->select($this->publics);
+    }
+
+    public function getOnlyPublic($excepts = []): array
+    {
+        if ($excepts) {
+            $this->publics = array_diff($this->publics, $excepts);
+        }
+
+        return Arr::only($this->toArray(), $this->publics);
     }
 
     public function prunable(): self|Builder|CachedBuilder
