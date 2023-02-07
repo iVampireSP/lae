@@ -27,8 +27,7 @@ trait RegistersUsers
     /**
      * Handle a registration request for the application.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return RedirectResponse|JsonResponse
      */
     public function register(Request $request): JsonResponse|RedirectResponse
@@ -61,9 +60,8 @@ trait RegistersUsers
     /**
      * The user has been registered.
      *
-     * @param Request $request
-     * @param mixed   $user
-     *
+     * @param  Request  $request
+     * @param  mixed  $user
      * @return void
      */
     protected function registered(Request $request, mixed $user): void

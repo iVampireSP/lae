@@ -25,8 +25,7 @@ trait SendsPasswordResetEmails
     /**
      * Send a reset link to the given user.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return RedirectResponse|JsonResponse
      */
     public function sendResetLinkEmail(Request $request): JsonResponse|RedirectResponse
@@ -48,8 +47,7 @@ trait SendsPasswordResetEmails
     /**
      * Validate the email for the given request.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return void
      */
     protected function validateEmail(Request $request): void
@@ -70,8 +68,7 @@ trait SendsPasswordResetEmails
     /**
      * Get the needed authentication credentials from the request.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return array
      */
     protected function credentials(Request $request): array
@@ -82,9 +79,8 @@ trait SendsPasswordResetEmails
     /**
      * Get the response for a successful password reset link.
      *
-     * @param Request $request
-     * @param string  $response
-     *
+     * @param  Request  $request
+     * @param  string  $response
      * @return RedirectResponse|JsonResponse
      */
     protected function sendResetLinkResponse(Request $request, string $response): JsonResponse|RedirectResponse
@@ -97,9 +93,8 @@ trait SendsPasswordResetEmails
     /**
      * Get the response for a failed password reset link.
      *
-     * @param Request $request
-     * @param string  $response
-     *
+     * @param  Request  $request
+     * @param  string  $response
      * @return RedirectResponse
      *
      * @throws ValidationException

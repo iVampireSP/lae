@@ -91,7 +91,7 @@ class Upload extends Command
             // 相对路径
             $cache = 'config';
 
-            $cacheZip = $cache . '.zip';
+            $cacheZip = $cache.'.zip';
             $zip = new ZipArchive();
             $zip->open($cacheZip, ZipArchive::CREATE);
             $this->addFileToZip($cache, $zip);
@@ -151,10 +151,10 @@ class Upload extends Command
         $handler = opendir($path);
         while (($filename = readdir($handler)) !== false) {
             if ($filename != '.' && $filename != '..') {
-                if (is_dir($path . '/' . $filename)) {
-                    $this->addFileToZip($path . '/' . $filename, $zip);
+                if (is_dir($path.'/'.$filename)) {
+                    $this->addFileToZip($path.'/'.$filename, $zip);
                 } else {
-                    $zip->addFile($path . '/' . $filename);
+                    $zip->addFile($path.'/'.$filename);
                 }
             }
         }

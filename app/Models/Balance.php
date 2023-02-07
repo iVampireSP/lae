@@ -4,11 +4,11 @@ namespace App\Models;
 
 use App\Events\Users;
 use App\Notifications\User\UserCharged;
+use function auth;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo as BelongsToAlias;
 use Illuminate\Notifications\Notifiable;
-use function auth;
 
 class Balance extends Model
 {
@@ -36,7 +36,7 @@ class Balance extends Model
             // $balance->remaining_amount = $balance->amount;
             $balance->remaining_amount = 0;
 
-            $balance->order_id = date('YmdHis') . $balance->id . rand(1000, 9999);
+            $balance->order_id = date('YmdHis').$balance->id.rand(1000, 9999);
         });
 
         static::created(function (self $balance) {
@@ -67,7 +67,7 @@ class Balance extends Model
 
     public function canPay(): bool
     {
-        return !$this->isPaid() && !$this->isOverdue();
+        return ! $this->isPaid() && ! $this->isOverdue();
     }
 
     public function isPaid(): bool
@@ -77,6 +77,6 @@ class Balance extends Model
 
     public function isOverdue(): bool
     {
-        return $this->created_at->diffInDays(now()) > 1 && !$this->isPaid();
+        return $this->created_at->diffInDays(now()) > 1 && ! $this->isPaid();
     }
 }

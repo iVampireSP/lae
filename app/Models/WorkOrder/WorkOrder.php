@@ -55,12 +55,12 @@ class WorkOrder extends Model
                 $model->user_id = auth()->id();
 
                 if ($model->host_id) {
-                    if (!$model->user_id == $model->host->user_id) {
+                    if (! $model->user_id == $model->host->user_id) {
                         throw new CommonException('user_id not match host user_id');
                     }
                 }
             } else {
-                if (!$model->user_id) {
+                if (! $model->user_id) {
                     throw new CommonException('user_id is required');
                 }
             }
@@ -138,7 +138,7 @@ class WorkOrder extends Model
 
     public function markAsRead(): bool
     {
-        if (!$this->isWaitingForResponse()) {
+        if (! $this->isWaitingForResponse()) {
             return false;
         }
 

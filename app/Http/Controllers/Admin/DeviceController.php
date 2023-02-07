@@ -51,7 +51,7 @@ class DeviceController extends Controller
             $module_name = explode('.', $username)[0];
 
             $this->dispatch(new EMQXKickClientJob(null, $module_name, false));
-            $this->dispatch(new EMQXKickClientJob(null, $module_name . '.', true));
+            $this->dispatch(new EMQXKickClientJob(null, $module_name.'.', true));
         }
 
         return back()->with('success', '正在让它们下线。');

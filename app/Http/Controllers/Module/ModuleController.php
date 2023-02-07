@@ -31,7 +31,7 @@ class ModuleController extends Controller
             foreach ($all_files as $key => $file) {
                 $files[$key] = [
                     'name' => $file->getClientOriginalName(),
-                    'content' => fopen($file->getRealPath(), 'r')
+                    'content' => fopen($file->getRealPath(), 'r'),
                 ];
             }
 

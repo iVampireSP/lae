@@ -38,7 +38,7 @@ class PushHostJob implements ShouldQueue
 
                 $response = $host->module->http()->post('hosts', $host->toArray());
 
-                if (!$response->successful()) {
+                if (! $response->successful()) {
                     $host->status = 'error';
                 }
 

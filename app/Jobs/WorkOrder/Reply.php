@@ -47,7 +47,7 @@ class Reply implements ShouldQueue
         $reply = $this->reply->toArray();
 
         if ($this->type == 'post') {
-            $response = $this->reply->workOrder->module->http()->post('work-orders/' . $this->reply->workOrder->id . '/replies', $reply);
+            $response = $this->reply->workOrder->module->http()->post('work-orders/'.$this->reply->workOrder->id.'/replies', $reply);
 
             if ($response->successful()) {
                 $this->reply->update([
@@ -58,7 +58,7 @@ class Reply implements ShouldQueue
                     'is_pending' => true,
                 ]);
             }
-        } else if ($this->type == 'patch') {
+        } elseif ($this->type == 'patch') {
             // 不更新 is_pending
             if ($this->reply->workOrder->isPlatform()) {
                 $this->reply->update([
@@ -68,9 +68,9 @@ class Reply implements ShouldQueue
                 return;
             }
 
-            $this->reply->workOrder->module->http()->patch('work-orders/' . $this->reply->workOrder->id . '/replies/' . $this->reply->id, $reply);
-        } else if ($this->type == 'delete') {
-            $response = $this->reply->workOrder->module->http()->delete('work-orders/' . $this->reply->workOrder->id . '/replies/' . $this->reply->id);
+            $this->reply->workOrder->module->http()->patch('work-orders/'.$this->reply->workOrder->id.'/replies/'.$this->reply->id, $reply);
+        } elseif ($this->type == 'delete') {
+            $response = $this->reply->workOrder->module->http()->delete('work-orders/'.$this->reply->workOrder->id.'/replies/'.$this->reply->id);
 
             if ($response->successful()) {
                 $this->reply->delete();

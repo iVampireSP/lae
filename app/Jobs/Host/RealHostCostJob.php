@@ -20,8 +20,8 @@ class RealHostCostJob implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @param Host   $host
-     * @param string $price
+     * @param  Host  $host
+     * @param  string  $price
      */
     public function __construct(Host $host, string $price)
     {

@@ -84,7 +84,7 @@ class TodayIsUserBirthday extends Notification implements ShouldQueue
         $email->line('生日快乐🎂')
             ->line('在生日当天，我们还为您提供了专属用户组，您可以前往仪表盘查看。')
             ->action('前往仪表盘', $url)
-            ->line('感谢您继续使用 ' . config('app.display_name') . '。');
+            ->line('感谢您继续使用 '.config('app.display_name').'。');
 
         return $email;
     }

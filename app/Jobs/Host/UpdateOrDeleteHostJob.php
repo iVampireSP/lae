@@ -36,14 +36,14 @@ class UpdateOrDeleteHostJob implements ShouldQueue
     {
         $host = $this->host;
 
-        $response = $host->module->baseRequest('get', 'hosts/' . $host->id);
+        $response = $host->module->baseRequest('get', 'hosts/'.$host->id);
 
         if ($response['status'] === 200) {
-            Log::debug($host->module->name . ' ' . $host->name . ' ' . $host->id . ' 更新成功。', $response['json']);
+            Log::debug($host->module->name.' '.$host->name.' '.$host->id.' 更新成功。', $response['json']);
             $host->update(Arr::except($response['json'], ['id', 'user_id', 'module_id', 'created_at', 'updated_at']));
-        } else if ($response['status'] === 404) {
+        } elseif ($response['status'] === 404) {
             if ($host->status !== 'unavailable') {
-                Log::warning($host->module->name . ' ' . $host->name . ' ' . $host->id . ' 不存在，标记为不可用。');
+                Log::warning($host->module->name.' '.$host->name.' '.$host->id.' 不存在，标记为不可用。');
                 $host->status = 'unavailable';
                 $host->save();
             }

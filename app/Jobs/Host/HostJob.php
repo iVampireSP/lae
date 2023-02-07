@@ -42,7 +42,7 @@ class HostJob implements ShouldQueue
      */
     public function handle(): void
     {
-        if (!isset($this->host)) {
+        if (! isset($this->host)) {
             return;
         }
 
@@ -66,7 +66,7 @@ class HostJob implements ShouldQueue
 
         switch ($this->type) {
             case 'patch':
-                $response = $host->module->http()->patch('hosts/' . $host->id, $host->toArray());
+                $response = $host->module->http()->patch('hosts/'.$host->id, $host->toArray());
 
                 break;
             case 'post':
@@ -74,7 +74,7 @@ class HostJob implements ShouldQueue
 
                 break;
             case 'delete':
-                $response = $host->module->baseRequest('delete', 'hosts/' . $host->id);
+                $response = $host->module->baseRequest('delete', 'hosts/'.$host->id);
 
                 // if successful
                 if ($response['status'] === 404) {
@@ -85,7 +85,7 @@ class HostJob implements ShouldQueue
         }
 
         if ($this->type !== 'delete') {
-            if (!$response->successful()) {
+            if (! $response->successful()) {
                 $host->status = 'error';
             }
 

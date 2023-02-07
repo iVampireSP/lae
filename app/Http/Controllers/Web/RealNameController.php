@@ -25,7 +25,7 @@ class RealNameController extends Controller
         $birthday = $realNameSupport->getBirthday($request->input('id_card'));
         // 检查年龄是否在区间内 settings.supports.real_name.min_age ~ settings.supports.real_name.max_age
         if (Carbon::now()->diffInYears($birthday) < config('settings.supports.real_name.min_age') || Carbon::now()->diffInYears($birthday) > config('settings.supports.real_name.max_age')) {
-            $message = '至少需要 ' . config('settings.supports.real_name.min_age') . ' 岁，最大 ' . config('settings.supports.real_name.max_age') . ' 岁。';
+            $message = '至少需要 '.config('settings.supports.real_name.min_age').' 岁，最大 '.config('settings.supports.real_name.max_age').' 岁。';
 
             return back()->with('error', $message);
         }
@@ -47,14 +47,14 @@ class RealNameController extends Controller
         }
 
         // 标记用户正在实名，缓存 600s
-        if (Cache::has('real_name:user:' . $user->id)) {
+        if (Cache::has('real_name:user:'.$user->id)) {
             // 获取缓存
-            $output = Cache::get('real_name:user:' . $user->id);
+            $output = Cache::get('real_name:user:'.$user->id);
 
             return back()->with('error', '因为您有一个正在进行的实名认证，请等待 10 分钟后重试。')->with('output', $output);
         }
 
-        Cache::set('real_name:user:' . $user->id, $output, 600);
+        Cache::set('real_name:user:'.$user->id, $output, 600);
 
         return redirect($output);
     }

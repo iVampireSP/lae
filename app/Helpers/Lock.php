@@ -13,7 +13,7 @@ trait Lock
         if (config('app.env') == 'local') {
             return $callback();
         }
-        $lock = Cache::lock('lock_' . $name, 5);
+        $lock = Cache::lock('lock_'.$name, 5);
         try {
             $lock->block(5);
 

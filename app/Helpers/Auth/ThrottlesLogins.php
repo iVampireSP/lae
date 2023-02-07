@@ -14,8 +14,7 @@ trait ThrottlesLogins
     /**
      * Determine if the user has too many failed login attempts.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return bool
      */
     protected function hasTooManyLoginAttempts(Request $request): bool
@@ -38,13 +37,12 @@ trait ThrottlesLogins
     /**
      * Get the throttle key for the given request.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return string
      */
     protected function throttleKey(Request $request): string
     {
-        return Str::transliterate(Str::lower($request->input($this->username())) . '|' . $request->ip());
+        return Str::transliterate(Str::lower($request->input($this->username())).'|'.$request->ip());
     }
 
     /**
@@ -60,8 +58,7 @@ trait ThrottlesLogins
     /**
      * Increment the login attempts for the user.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return void
      */
     protected function incrementLoginAttempts(Request $request): void
@@ -84,8 +81,7 @@ trait ThrottlesLogins
     /**
      * Redirect the user after determining they are locked out.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return ResponseAlias
      *
      * @throws ValidationException
@@ -107,8 +103,7 @@ trait ThrottlesLogins
     /**
      * Clear the login locks for the given user credentials.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return void
      */
     protected function clearLoginAttempts(Request $request): void
@@ -119,8 +114,7 @@ trait ThrottlesLogins
     /**
      * Fire an event when a lockout occurs.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return void
      */
     protected function fireLockoutEvent(Request $request): void

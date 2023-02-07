@@ -47,10 +47,10 @@ class UserAddBalance extends Command
         // find user
         $user = (new User)->findOrFail($user_id);
 
-        $this->info($user->name . ', 当前余额: ' . $user->balance . ' 元');
+        $this->info($user->name.', 当前余额: '.$user->balance.' 元');
 
-        $this->info('充值后余额: ' . ($user->balance + $amount) . ' 元');
-        if (!$this->confirm('确认充值 ' . $amount . ' 元?')) {
+        $this->info('充值后余额: '.($user->balance + $amount).' 元');
+        if (! $this->confirm('确认充值 '.$amount.' 元?')) {
             $this->info('已取消。');
 
             return 0;
@@ -58,14 +58,14 @@ class UserAddBalance extends Command
 
         $transaction = new Transaction();
 
-        $description = '控制台充值 ' . $amount . ' 元';
+        $description = '控制台充值 '.$amount.' 元';
 
         $transaction->addAmount($user->id, 'console', $amount, $description, true);
 
         $this->info('充值成功。');
 
         $user->refresh();
-        $this->info($user->name . ', 当前余额: ' . $user->balance);
+        $this->info($user->name.', 当前余额: '.$user->balance);
 
         return 0;
     }

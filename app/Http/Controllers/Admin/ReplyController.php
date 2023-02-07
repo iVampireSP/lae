@@ -14,9 +14,8 @@ class ReplyController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request   $request
-     * @param WorkOrder $work_order
-     *
+     * @param  Request  $request
+     * @param  WorkOrder  $work_order
      * @return RedirectResponse
      */
     public function store(Request $request, WorkOrder $work_order): RedirectResponse
@@ -41,9 +40,8 @@ class ReplyController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param WorkOrder $work_order
-     * @param Reply     $reply
-     *
+     * @param  WorkOrder  $work_order
+     * @param  Reply  $reply
      * @return View
      */
     public function edit(WorkOrder $work_order, Reply $reply): View
@@ -54,10 +52,9 @@ class ReplyController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request   $request
-     * @param WorkOrder $work_order
-     * @param Reply     $reply
-     *
+     * @param  Request  $request
+     * @param  WorkOrder  $work_order
+     * @param  Reply  $reply
      * @return RedirectResponse
      */
     public function update(Request $request, WorkOrder $work_order, Reply $reply): RedirectResponse
@@ -76,9 +73,8 @@ class ReplyController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param WorkOrder $work_order
-     * @param Reply     $reply
-     *
+     * @param  WorkOrder  $work_order
+     * @param  Reply  $reply
      * @return RedirectResponse
      */
     public function destroy(WorkOrder $work_order, Reply $reply): RedirectResponse

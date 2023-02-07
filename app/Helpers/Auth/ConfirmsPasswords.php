@@ -24,8 +24,7 @@ trait ConfirmsPasswords
     /**
      * Confirm the given user's password.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return RedirectResponse|JsonResponse
      */
     public function confirm(Request $request): JsonResponse|RedirectResponse
@@ -64,8 +63,7 @@ trait ConfirmsPasswords
     /**
      * Reset the password confirmation timeout.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return void
      */
     protected function resetPasswordConfirmationTimeout(Request $request): void

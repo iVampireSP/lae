@@ -31,7 +31,7 @@ class CheckAndChargeBalanceJob extends Job implements ShouldQueue
     {
         (new Balance)->where('paid_at', null)->chunk(100, function ($balances) {
             foreach ($balances as $balance) {
-                if (!$this->checkAndCharge($balance, true)) {
+                if (! $this->checkAndCharge($balance, true)) {
                     if (now()->diffInDays($balance->created_at) > 1) {
                         $balance->delete();
                     }

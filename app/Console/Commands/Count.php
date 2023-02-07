@@ -86,17 +86,17 @@ class Count extends Command
 
         $this->info('完成。');
 
-        $this->warn('用户数量: ' . $users);
-        $this->warn('主机数量: ' . $hosts);
-        $this->warn('正在部署的主机数量: ' . $pending_hosts);
-        $this->warn('已停止的主机数量: ' . $stopped_hosts);
-        $this->warn('部署失败的主机数量: ' . $error_hosts);
-        $this->warn('正常的主机数量: ' . $active_hosts);
-        $this->warn('暂停的主机数量: ' . $suspended_hosts);
-        $this->warn('服务器数量: ' . $servers);
-        $this->warn('工单数量: ' . $workOrders);
-        $this->warn('工单回复数量: ' . $replies);
-        $this->warn('今年的交易记录: ' . $transactions . ' 条');
+        $this->warn('用户数量: '.$users);
+        $this->warn('主机数量: '.$hosts);
+        $this->warn('正在部署的主机数量: '.$pending_hosts);
+        $this->warn('已停止的主机数量: '.$stopped_hosts);
+        $this->warn('部署失败的主机数量: '.$error_hosts);
+        $this->warn('正常的主机数量: '.$active_hosts);
+        $this->warn('暂停的主机数量: '.$suspended_hosts);
+        $this->warn('服务器数量: '.$servers);
+        $this->warn('工单数量: '.$workOrders);
+        $this->warn('工单回复数量: '.$replies);
+        $this->warn('今年的交易记录: '.$transactions.' 条');
 
         return 0;
     }

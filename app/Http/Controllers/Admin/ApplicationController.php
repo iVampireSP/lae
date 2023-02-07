@@ -25,8 +25,7 @@ class ApplicationController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return View
      */
     public function store(Request $request): View
@@ -59,8 +58,7 @@ class ApplicationController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param Application $application
-     *
+     * @param  Application  $application
      * @return RedirectResponse
      */
     public function show(Application $application): RedirectResponse
@@ -73,8 +71,7 @@ class ApplicationController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param Application $application
-     *
+     * @param  Application  $application
      * @return View
      */
     public function edit(Application $application): View
@@ -87,9 +84,8 @@ class ApplicationController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request     $request
-     * @param Application $application
-     *
+     * @param  Request  $request
+     * @param  Application  $application
      * @return RedirectResponse
      */
     public function update(Request $request, Application $application): RedirectResponse
@@ -99,7 +95,7 @@ class ApplicationController extends Controller
         $this->validate($request, [
             'name' => 'required',
             'description' => 'required',
-            'api_token' => 'required|unique:applications,api_token,' . $application->id,
+            'api_token' => 'required|unique:applications,api_token,'.$application->id,
         ]);
 
         $application->update($request->all());
@@ -110,8 +106,7 @@ class ApplicationController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param Application $application
-     *
+     * @param  Application  $application
      * @return RedirectResponse
      */
     public function destroy(Application $application): RedirectResponse

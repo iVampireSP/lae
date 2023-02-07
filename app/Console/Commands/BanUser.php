@@ -46,7 +46,7 @@ class BanUser extends Command
 
         $user = (new User)->find($user_id);
 
-        $this->info('封禁: ' . $user->name);
+        $this->info('封禁: '.$user->name);
 
         $this->confirm('确定要继续吗？如果继续，将会暂停所有的主机，并且吊销所有 Token。');
 

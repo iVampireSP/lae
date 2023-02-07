@@ -49,16 +49,16 @@ class Reply extends Model
             if (auth('admin')->check()) {
                 $model->role = 'admin';
                 $model->workOrder->status = 'replied';
-            } else if (auth('sanctum')->check()) {
+            } elseif (auth('sanctum')->check()) {
                 $model->user_id = auth('sanctum')->id();
                 $model->role = 'user';
                 $model->workOrder->status = 'user_replied';
-            } else if (auth('module')->check()) {
+            } elseif (auth('module')->check()) {
                 $model->user_id = null;
                 $model->role = 'module';
                 $model->workOrder->status = 'replied';
 
-                // broadcast(new Users($model->user_id, 'work-order.replied', $model->workOrder));
+            // broadcast(new Users($model->user_id, 'work-order.replied', $model->workOrder));
             } else {
                 $model->role = 'guest';
             }

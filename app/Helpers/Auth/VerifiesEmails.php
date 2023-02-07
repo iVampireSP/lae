@@ -16,8 +16,7 @@ trait VerifiesEmails
     /**
      * Show the email verification notice.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return RedirectResponse|View
      */
     public function show(Request $request): View|RedirectResponse
@@ -30,19 +29,18 @@ trait VerifiesEmails
     /**
      * Mark the authenticated user's email address as verified.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return JsonResponse|RedirectResponse
      *
      * @throws AuthorizationException
      */
     public function verify(Request $request): JsonResponse|RedirectResponse
     {
-        if (!hash_equals((string)$request->route('id'), (string)$request->user()->getKey())) {
+        if (! hash_equals((string) $request->route('id'), (string) $request->user()->getKey())) {
             throw new AuthorizationException;
         }
 
-        if (!hash_equals((string)$request->route('hash'), sha1($request->user()->getEmailForVerification()))) {
+        if (! hash_equals((string) $request->route('hash'), sha1($request->user()->getEmailForVerification()))) {
             throw new AuthorizationException;
         }
 
@@ -68,8 +66,7 @@ trait VerifiesEmails
     /**
      * Resend the email verification notification.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return JsonResponse|RedirectResponse
      */
     public function resend(Request $request): JsonResponse|RedirectResponse
@@ -90,8 +87,7 @@ trait VerifiesEmails
     /**
      * The user has been verified.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return void
      */
     protected function verified(Request $request): void

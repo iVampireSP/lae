@@ -24,7 +24,7 @@ class MqttAuthController extends Controller
 
         $module = (new Module)->where('id', $module_id)->first();
 
-        if (!$module) {
+        if (! $module) {
             return $this->ignore();
         }
 
@@ -33,7 +33,7 @@ class MqttAuthController extends Controller
         }
 
         // 如果没有设置 device_id，那么就是模块自己的连接
-        if (!$device_id) {
+        if (! $device_id) {
             // 让 api_token 可见
             $module->makeVisible('api_token');
 
@@ -118,7 +118,7 @@ class MqttAuthController extends Controller
 
         $module = (new Module)->where('id', $module_id)->first();
 
-        if (!$module) {
+        if (! $module) {
             // 不属于我们管理，跳过。
             return $this->ignore();
         }
@@ -129,7 +129,7 @@ class MqttAuthController extends Controller
                 // 但是，在拒绝之前，应该检查一下，是否有允许的模块
                 $allow = (new ModuleAllow)->where('module_id', $topics[0])->where('allowed_module_id', $module_id)->exists();
 
-                if (!$allow) {
+                if (! $allow) {
                     return $this->deny();
                 }
             }

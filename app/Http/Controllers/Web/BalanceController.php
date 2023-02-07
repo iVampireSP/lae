@@ -72,7 +72,7 @@ class BalanceController extends Controller
 
         $balance->load('user');
 
-        $subject = config('app.display_name') . ' 充值';
+        $subject = config('app.display_name').' 充值';
 
         $order = [
             'out_trade_no' => $balance->order_id,
@@ -90,10 +90,10 @@ class BalanceController extends Controller
 
             $pay = Pay::alipay()->web($order);
 
-            return view('balances.alipay', ['html' => (string)$pay->getBody()]);
+            return view('balances.alipay', ['html' => (string) $pay->getBody()]);
         }
 
-        if (!isset($qr_code)) {
+        if (! isset($qr_code)) {
             return redirect()->route('index')->with('error', '支付方式错误。');
         }
 
@@ -127,7 +127,7 @@ class BalanceController extends Controller
 
         $response = Http::post(config('pay.xunhu.gateway'), $data);
 
-        if (!$response->successful()) {
+        if (! $response->successful()) {
             return redirect()->route('index')->with('error', '支付网关错误。');
         }
 
@@ -135,7 +135,7 @@ class BalanceController extends Controller
 
         $hash = $this->xunhu_hash($response);
 
-        if (!isset($response['hash']) || $response['hash'] !== $hash) {
+        if (! isset($response['hash']) || $response['hash'] !== $hash) {
             return redirect()->route('index')->with('error', '无法校验支付网关返回数据。');
         }
 
@@ -169,7 +169,7 @@ class BalanceController extends Controller
             }
         }
 
-        return md5($arg . config('pay.xunhu.app_secret'));
+        return md5($arg.config('pay.xunhu.app_secret'));
     }
 
     /**
@@ -182,7 +182,7 @@ class BalanceController extends Controller
 
         if ($payment === 'alipay') {
             $out_trade_no = $request->input('out_trade_no');
-        } else if ($payment === 'wechat') {
+        } elseif ($payment === 'wechat') {
             $out_trade_no = $request->input('trade_order_id');
         } else {
             abort(400, '支付方式错误');
@@ -190,7 +190,7 @@ class BalanceController extends Controller
 
         // 检测订单是否存在
         $balance = (new Balance)->where('order_id', $out_trade_no)->with('user')->first();
-        if (!$balance) {
+        if (! $balance) {
             abort(404, '找不到订单。');
         }
 
@@ -205,7 +205,7 @@ class BalanceController extends Controller
 
         // 处理验证
         if ($payment === 'wechat') {
-            if (!($request->filled('hash') || $request->filled('trade_order_id'))) {
+            if (! ($request->filled('hash') || $request->filled('trade_order_id'))) {
                 return $this->error('参数错误。');
             }
 
@@ -240,8 +240,7 @@ class BalanceController extends Controller
     /**
      * 获取交易记录
      *
-     * @param mixed $request
-     *
+     * @param  mixed  $request
      * @return View
      */
     public function transactions(

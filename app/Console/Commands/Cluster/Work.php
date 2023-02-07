@@ -32,7 +32,7 @@ class Work extends Command
     public function handle(): int
     {
         // 检测目录下是否有 rr
-        if (!file_exists(base_path('rr'))) {
+        if (! file_exists(base_path('rr'))) {
             $this->warn('未找到 rr 文件，将自动下载。');
 
             // 获取操作系统是 darwin 还是 linux
@@ -70,7 +70,7 @@ class Work extends Command
         // 关闭 Octane
         Artisan::call('octane:stop');
 
-        if (!config('settings.node.ip')) {
+        if (! config('settings.node.ip')) {
             $this->error('请先配置节点 IP。');
 
             return CommandAlias::FAILURE;
@@ -94,14 +94,14 @@ class Work extends Command
             $this->error('无法创建子进程。');
 
             return CommandAlias::FAILURE;
-        } else if ($pid === 0) {
+        } elseif ($pid === 0) {
             // 再打开一个，负责 octane
             $pid = pcntl_fork();
             if ($pid === -1) {
                 $this->error('无法创建子进程。');
 
                 return CommandAlias::FAILURE;
-            } else if ($pid === 0) {
+            } elseif ($pid === 0) {
                 // 子进程
                 $this->info('正在启动 Web。');
 

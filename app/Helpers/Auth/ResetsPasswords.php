@@ -28,8 +28,7 @@ trait ResetsPasswords
      *
      * If no token is present, display the link request form.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return Factory|View
      */
     public function showResetForm(Request $request): Factory|View
@@ -44,8 +43,7 @@ trait ResetsPasswords
     /**
      * Reset the given user's password.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return RedirectResponse|JsonResponse
      */
     public function reset(Request $request): JsonResponse|RedirectResponse
@@ -62,8 +60,8 @@ trait ResetsPasswords
         // database. Otherwise, we will parse the error and return the response.
         $response = $this->broker()->reset(
             $this->credentials($request), function ($user, $password) {
-            $this->resetPassword($user, $password);
-        }
+                $this->resetPassword($user, $password);
+            }
         );
 
         // If the password was successfully reset, we will redirect the user back to
@@ -111,8 +109,7 @@ trait ResetsPasswords
     /**
      * Get the password reset credentials from the request.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return array
      */
     protected function credentials(Request $request): array
@@ -125,9 +122,8 @@ trait ResetsPasswords
     /**
      * Reset the given user's password.
      *
-     * @param CanResetPassword|User $user
-     * @param string                $password
-     *
+     * @param  CanResetPassword|User  $user
+     * @param  string  $password
      * @return void
      */
     protected function resetPassword(CanResetPassword|User $user, string $password): void
@@ -146,9 +142,8 @@ trait ResetsPasswords
     /**
      * Set the user's password.
      *
-     * @param CanResetPassword $user
-     * @param string           $password
-     *
+     * @param  CanResetPassword  $user
+     * @param  string  $password
      * @return void
      */
     protected function setUserPassword(CanResetPassword $user, string $password): void
@@ -172,9 +167,8 @@ trait ResetsPasswords
     /**
      * Get the response for a successful password reset.
      *
-     * @param Request $request
-     * @param string  $response
-     *
+     * @param  Request  $request
+     * @param  string  $response
      * @return RedirectResponse|JsonResponse
      */
     protected function sendResetResponse(Request $request, string $response): JsonResponse|RedirectResponse
@@ -190,9 +184,8 @@ trait ResetsPasswords
     /**
      * Get the response for a failed password reset.
      *
-     * @param Request $request
-     * @param string  $response
-     *
+     * @param  Request  $request
+     * @param  string  $response
      * @return RedirectResponse
      */
     protected function sendResetFailedResponse(Request $request, string $response): RedirectResponse

@@ -59,7 +59,7 @@ class WorkOrderController extends Controller
         ]);
 
         // 访客不能关闭
-        if ($request->input('status') === 'closed' && !auth('sanctum')->check()) {
+        if ($request->input('status') === 'closed' && ! auth('sanctum')->check()) {
             return $this->forbidden('访客不能修改工单状态。');
         }
 

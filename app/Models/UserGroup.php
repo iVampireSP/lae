@@ -32,10 +32,9 @@ class UserGroup extends Model
     /**
      * 设置临时用户组
      *
-     * @param User      $user
-     * @param UserGroup $group
-     * @param Carbon    $expired_at
-     *
+     * @param  User  $user
+     * @param  UserGroup  $group
+     * @param  Carbon  $expired_at
      * @return User
      */
     public function setTempGroup(User $user, self $group, Carbon $expired_at): User

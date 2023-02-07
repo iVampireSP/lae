@@ -4,11 +4,11 @@ namespace App\Models;
 
 use App\Events\Users;
 use App\Exceptions\CommonException;
+use function auth;
+use function broadcast;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Ramsey\Uuid\Uuid;
-use function auth;
-use function broadcast;
 
 class Task extends Model
 {
@@ -42,7 +42,7 @@ class Task extends Model
             }
 
             // host_id 和 user_id 至少存在一个
-            if (!$model->host_id && !$model->user_id) {
+            if (! $model->host_id && ! $model->user_id) {
                 throw new CommonException('host_id 和 user_id 至少存在一个');
             }
 

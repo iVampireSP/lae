@@ -5,13 +5,13 @@ namespace App\Http\Controllers\Module;
 use App\Http\Controllers\Controller;
 use App\Models\Host;
 use App\Models\User;
+use function auth;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
-use function auth;
 
 // use App\Models\User;
 
@@ -28,8 +28,7 @@ class HostController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return Response|JsonResponse
      *
      * @throws ValidationException
@@ -73,8 +72,7 @@ class HostController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param Host $host
-     *
+     * @param  Host  $host
      * @return JsonResponse
      */
     public function show(Host $host): JsonResponse
@@ -88,9 +86,8 @@ class HostController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param Host    $host
-     *
+     * @param  Request  $request
+     * @param  Host  $host
      * @return JsonResponse
      *
      * @throws ValidationException
@@ -124,13 +121,12 @@ class HostController extends Controller
      * Remove the specified resource from storage.
      *
      * @param    $host
-     *
      * @return JsonResponse
      */
     public function destroy($host): JsonResponse
     {
         // if host not instance of HostJob
-        if (!$host instanceof Host) {
+        if (! $host instanceof Host) {
             $host = (new Host)->findOrFail($host);
         }
 

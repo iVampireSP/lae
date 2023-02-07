@@ -12,9 +12,8 @@ class JsonResponse
     /**
      * Handle an incoming request.
      *
-     * @param Request                                       $request
+     * @param  Request  $request
      * @param Closure(Request): (Response|RedirectResponse) $next
-     *
      * @return Response|RedirectResponse|\Illuminate\Http\JsonResponse
      */
     public function handle(Request $request, Closure $next): Response|\Illuminate\Http\JsonResponse|RedirectResponse
