@@ -9,7 +9,7 @@ use Illuminate\Http\JsonResponse;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(): JsonResponse
     {
         $users = (new User)->paginate(10);
 
