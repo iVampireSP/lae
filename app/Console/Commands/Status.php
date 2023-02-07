@@ -45,6 +45,7 @@ class Status extends Command
         $this->info('PHP 版本: '.PHP_VERSION);
 
         // get mysql version
+        /** @noinspection UnknownColumnInspection */
         $mysql_version = DB::select('select version() as version')[0]->version;
 
         $this->warn('MySQL 版本: '.$mysql_version);
