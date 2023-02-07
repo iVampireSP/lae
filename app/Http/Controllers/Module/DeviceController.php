@@ -43,7 +43,7 @@ class DeviceController extends Controller
         if ($client_id) {
             try {
                 $client = $emqx->client($client_id);
-            } catch (EmqxSupportException $e) {
+            } catch (EmqxSupportException) {
                 return $this->failed('client not found');
             }
 
