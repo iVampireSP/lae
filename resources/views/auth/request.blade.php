@@ -9,12 +9,12 @@
             @if (isset($data['module']) && !is_null($data['module']))
                 )
                 <span>模块：{{ $data['module']['name'] }}</span>
-            @endif
-            @if (isset($data['applications']) && !is_null($data['application']))
+            @elseif (isset($data['applications']) && !is_null($data['application']))
                 <span>应用程序：{{ $data['application']['name'] }}</span>
-            @endif
-            @if (isset($data['from_user']) && !is_null($data['from_user']))
+            @elseif (isset($data['from_user']) && !is_null($data['from_user']))
                 <span>来自用户：{{ $data['from_user']['name'] }}</span>
+            @else
+                <span>一个第三方的应用程序</span>
             @endif
         </code>
         想要获取你的用户信息。
