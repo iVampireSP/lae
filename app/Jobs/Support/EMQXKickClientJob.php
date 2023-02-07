@@ -43,7 +43,7 @@ class EMQXKickClientJob implements ShouldQueue
         $emqx = new EmqxSupport();
 
         if ($this->client_id) {
-            $emqx->api()->delete('/clients/'.$this->client_id);
+            $emqx->api()->delete('/clients/' . $this->client_id);
         }
 
         if ($this->username) {

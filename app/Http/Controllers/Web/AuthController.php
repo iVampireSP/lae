@@ -6,13 +6,13 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Notifications\User\UserNotification;
-use function back;
-use function config;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
+use function back;
+use function config;
 use function redirect;
 use function session;
 use function view;
@@ -32,13 +32,13 @@ class AuthController extends Controller
                 $dashboardHost = parse_url(config('settings.dashboard.base_url'), PHP_URL_HOST);
 
                 if ($callbackHost === $dashboardHost) {
-                    if (! Auth::guard('web')->user()->isRealNamed()) {
+                    if (!Auth::guard('web')->user()->isRealNamed()) {
                         return redirect()->route('real_name.create')->with('status', '重定向已被打断，需要先实人认证。');
                     }
 
                     $token = $request->user()->createToken('Dashboard')->plainTextToken;
 
-                    return redirect($callback.'?token='.$token);
+                    return redirect($callback . '?token=' . $token);
                 }
 
                 return redirect()->route('confirm_redirect');
@@ -111,7 +111,7 @@ class AuthController extends Controller
 
     public function showAuthRequest($token): View|RedirectResponse
     {
-        $data = Cache::get('auth_request:'.$token);
+        $data = Cache::get('auth_request:' . $token);
 
         if (empty($data)) {
             return redirect()->route('index')->with('error', '登录请求的 Token 不存在或已过期。');
@@ -135,7 +135,7 @@ class AuthController extends Controller
             'token' => 'required|string|max:128',
         ]);
 
-        $data = Cache::get('auth_request:'.$request->input('token'));
+        $data = Cache::get('auth_request:' . $request->input('token'));
 
         if (empty($data)) {
             return back()->with('error', '登录请求的 Token 不存在或已过期。');
@@ -147,7 +147,7 @@ class AuthController extends Controller
 
         $data['user'] = $request->user('web');
 
-        Cache::put('auth_request:'.$request->input('token'), $data, 60);
+        Cache::put('auth_request:' . $request->input('token'), $data, 60);
 
         return redirect()->route('index')->with('success', '登录请求已确认。');
     }

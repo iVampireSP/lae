@@ -20,7 +20,7 @@ class ModuleController extends Controller
 
     public function servers(Module $module): JsonResponse
     {
-        $servers = Cache::get('module:'.$module->id.':servers', []);
+        $servers = Cache::get('module:' . $module->id . ':servers', []);
 
         return $this->success($servers);
     }

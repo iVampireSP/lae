@@ -14,15 +14,16 @@ class WebChannel extends Notification
     /**
      * Send the given notification.
      *
-     * @param  mixed  $notifiable
-     * @param  Notification  $notification
+     * @param mixed        $notifiable
+     * @param Notification $notification
+     *
      * @return void
      */
     public function send(mixed $notifiable, Notification $notification): void
     {
         $data = $notification->toArray($notifiable);
 
-        if (! $data) {
+        if (!$data) {
             return;
         }
 

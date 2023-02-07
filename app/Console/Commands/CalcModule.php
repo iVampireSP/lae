@@ -39,11 +39,11 @@ class CalcModule extends Command
     public function handle(): int
     {
         $this->warn('开始计算集成模块收益。');
-        $this->warn('当前时间: '.now());
+        $this->warn('当前时间: ' . now());
 
         (new Module)->chunk(100, function ($modules) {
             foreach ($modules as $module) {
-                $this->warn('模块: '.$module->name);
+                $this->warn('模块: ' . $module->name);
                 $years = $module->calculate();
 
                 foreach ($years as $year => $months) {
@@ -63,7 +63,7 @@ class CalcModule extends Command
         });
 
         $this->warn('计算模块收益完成。');
-        $this->warn('完成时间: '.now());
+        $this->warn('完成时间: ' . now());
 
         return 1;
     }

@@ -47,17 +47,17 @@ class WorkOrder implements ShouldQueue
 
         if ($this->type == 'post') {
             $response = $this->workOrder->module->http()->post('work-orders', $this->workOrder->toArray());
-        } elseif ($this->type == 'put') {
-            $response = $this->workOrder->module->http()->put('work-orders/'.$this->workOrder->id, $this->workOrder->toArray());
+        } else if ($this->type == 'put') {
+            $response = $this->workOrder->module->http()->put('work-orders/' . $this->workOrder->id, $this->workOrder->toArray());
         } else {
-            $response = $this->workOrder->module->http()->delete('work-orders/'.$this->workOrder->id);
+            $response = $this->workOrder->module->http()->delete('work-orders/' . $this->workOrder->id);
 
             if ($response->successful()) {
                 $this->workOrder->delete();
             }
         }
 
-        if (! $response->successful()) {
+        if (!$response->successful()) {
             Log::debug('WorkOrder push failed', [
                 'type' => $this->type,
                 'response' => $response->json(),

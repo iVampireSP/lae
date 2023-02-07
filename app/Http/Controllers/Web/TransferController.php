@@ -26,7 +26,7 @@ class TransferController extends Controller
         ]);
 
         $to = (new User)->where('email', $request->input('to'))->first();
-        if (! $to) {
+        if (!$to) {
             return back()->withErrors(['to' => '找不到用户。']);
         }
 

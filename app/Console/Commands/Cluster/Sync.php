@@ -44,7 +44,7 @@ class Sync extends Command
                 $confirm = $this->ask('主节点同步将会恢复上一次数据，确定吗？', true);
             }
 
-            if (! $confirm) {
+            if (!$confirm) {
                 $this->warn('已取消。');
 
                 return CommandAlias::SUCCESS;

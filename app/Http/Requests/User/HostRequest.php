@@ -16,7 +16,7 @@ class HostRequest extends FormRequest
     {
         $host = $this->route('host');
 
-        if (! ($host instanceof Host)) {
+        if (!($host instanceof Host)) {
             $host = (new Host)->where('id', $host)->first();
         }
 

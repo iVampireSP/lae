@@ -47,11 +47,11 @@ class ReduceBalance extends Command
 
         $user = (new User)->find($user_id);
 
-        $this->warn('扣除金额: '.$amount.' 元');
+        $this->warn('扣除金额: ' . $amount . ' 元');
 
-        $this->warn('用户当前余额：'.$user->balance.' 元');
+        $this->warn('用户当前余额：' . $user->balance . ' 元');
 
-        $this->warn('剩余余额：'.$user->balance - $amount.' 元');
+        $this->warn('剩余余额：' . $user->balance - $amount . ' 元');
 
         $confirm = $this->confirm('确认扣除？');
 

@@ -28,7 +28,8 @@ trait AuthenticatesUsers
     /**
      * Handle a login request to the application.
      *
-     * @param  Request  $request
+     * @param Request $request
+     *
      * @return Response
      *
      * @throws ValidationException
@@ -66,7 +67,8 @@ trait AuthenticatesUsers
     /**
      * Validate the user login request.
      *
-     * @param  Request  $request
+     * @param Request $request
+     *
      * @return void
      *
      * @throws ValidationException
@@ -80,9 +82,20 @@ trait AuthenticatesUsers
     }
 
     /**
+     * Get the login username to be used by the controller.
+     *
+     * @return string
+     */
+    public function username(): string
+    {
+        return 'email';
+    }
+
+    /**
      * Attempt to log the user into the application.
      *
-     * @param  Request  $request
+     * @param Request $request
+     *
      * @return bool
      */
     protected function attemptLogin(Request $request): bool
@@ -93,9 +106,20 @@ trait AuthenticatesUsers
     }
 
     /**
+     * Get the guard to be used during authentication.
+     *
+     * @return StatefulGuard
+     */
+    protected function guard(): StatefulGuard
+    {
+        return Auth::guard();
+    }
+
+    /**
      * Get the needed authorization credentials from the request.
      *
-     * @param  Request  $request
+     * @param Request $request
+     *
      * @return array
      */
     protected function credentials(Request $request): array
@@ -106,7 +130,8 @@ trait AuthenticatesUsers
     /**
      * Send the response after the user was authenticated.
      *
-     * @param  Request  $request
+     * @param Request $request
+     *
      * @return JsonResponse|RedirectResponse
      */
     protected function sendLoginResponse(Request $request): JsonResponse|RedirectResponse
@@ -125,18 +150,6 @@ trait AuthenticatesUsers
     }
 
     /**
-     * The user has been authenticated.
-     *
-     * @param  Request  $request
-     * @param  mixed  $user
-     * @return void
-     */
-    protected function authenticated(Request $request, mixed $user): void
-    {
-        //
-    }
-
-    /**
      * Get the failed login response instance.
      *
      *
@@ -152,19 +165,10 @@ trait AuthenticatesUsers
     }
 
     /**
-     * Get the login username to be used by the controller.
-     *
-     * @return string
-     */
-    public function username(): string
-    {
-        return 'email';
-    }
-
-    /**
      * Log the user out of the application.
      *
-     * @param  Request  $request
+     * @param Request $request
+     *
      * @return RedirectResponse|JsonResponse
      */
     public function logout(Request $request): JsonResponse|RedirectResponse
@@ -185,23 +189,27 @@ trait AuthenticatesUsers
     }
 
     /**
-     * The user has logged out of the application.
+     * The user has been authenticated.
      *
-     * @param  Request  $request
+     * @param Request $request
+     * @param mixed   $user
+     *
      * @return void
      */
-    protected function loggedOut(Request $request): void
+    protected function authenticated(Request $request, mixed $user): void
     {
         //
     }
 
     /**
-     * Get the guard to be used during authentication.
+     * The user has logged out of the application.
      *
-     * @return StatefulGuard
+     * @param Request $request
+     *
+     * @return void
      */
-    protected function guard(): StatefulGuard
+    protected function loggedOut(Request $request): void
     {
-        return Auth::guard();
+        //
     }
 }

@@ -37,7 +37,7 @@ class SendModuleEarningsJob extends Job
     {
         $data = $module->calculate();
 
-        if (! $data) {
+        if (!$data) {
             return;
         }
 
@@ -68,7 +68,7 @@ EOF;
             }
         }
 
-        $resp = Http::post('https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key='.$wecom_key, [
+        $resp = Http::post('https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=' . $wecom_key, [
             'msgtype' => 'markdown',
             'markdown' => [
                 'content' => $text,

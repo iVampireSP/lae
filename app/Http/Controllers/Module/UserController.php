@@ -24,15 +24,15 @@ class UserController extends Controller
 
         // 搜索 name, email, balance
         if ($request->has('name')) {
-            $users->where('name', 'like', '%'.$request->input('name').'%');
+            $users->where('name', 'like', '%' . $request->input('name') . '%');
         }
 
         if ($request->has('email')) {
-            $users->where('email', 'like', '%'.$request->input('email').'%');
+            $users->where('email', 'like', '%' . $request->input('email') . '%');
         }
 
         if ($request->has('balance')) {
-            $users->where('balance', 'like', '%'.$request->input('balance').'%');
+            $users->where('balance', 'like', '%' . $request->input('balance') . '%');
         }
 
         $users = $users->simplePaginate(100);

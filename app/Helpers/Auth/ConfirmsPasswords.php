@@ -24,7 +24,8 @@ trait ConfirmsPasswords
     /**
      * Confirm the given user's password.
      *
-     * @param  Request  $request
+     * @param Request $request
+     *
      * @return RedirectResponse|JsonResponse
      */
     public function confirm(Request $request): JsonResponse|RedirectResponse
@@ -34,19 +35,8 @@ trait ConfirmsPasswords
         $this->resetPasswordConfirmationTimeout($request);
 
         return $request->wantsJson()
-                    ? new JsonResponse([], 204)
-                    : redirect()->intended($this->redirectPath());
-    }
-
-    /**
-     * Reset the password confirmation timeout.
-     *
-     * @param  Request  $request
-     * @return void
-     */
-    protected function resetPasswordConfirmationTimeout(Request $request): void
-    {
-        $request->session()->put('auth.password_confirmed_at', time());
+            ? new JsonResponse([], 204)
+            : redirect()->intended($this->redirectPath());
     }
 
     /**
@@ -69,5 +59,17 @@ trait ConfirmsPasswords
     protected function validationErrorMessages(): array
     {
         return [];
+    }
+
+    /**
+     * Reset the password confirmation timeout.
+     *
+     * @param Request $request
+     *
+     * @return void
+     */
+    protected function resetPasswordConfirmationTimeout(Request $request): void
+    {
+        $request->session()->put('auth.password_confirmed_at', time());
     }
 }

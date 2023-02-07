@@ -13,10 +13,10 @@ class BaseRequest extends HttpRequest
 
     public function json($key = null, $default = null)
     {
-        if (! isset($this->json)) {
+        if (!isset($this->json)) {
             $content = $this->getContent();
 
-            $parameters = Str::length($content) > static::JSON_MAX_LENGTH ? [] : (array) json_decode($content, true);
+            $parameters = Str::length($content) > static::JSON_MAX_LENGTH ? [] : (array)json_decode($content, true);
 
             $this->json = new ParameterBag($parameters);
         }

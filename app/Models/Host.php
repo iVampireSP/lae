@@ -102,13 +102,13 @@ class Host extends Model
         // });
 
         static::deleting(function ($model) {
-            Cache::forget('user_tasks_'.$model->user_id);
+            Cache::forget('user_tasks_' . $model->user_id);
         });
 
         static::deleted(function ($model) {
             broadcast(new Users($model->user_id, 'hosts.deleted', $model));
-            Cache::forget('user_tasks_'.$model->user_id);
-            Cache::forget('user_hosts_'.$model->user_id);
+            Cache::forget('user_tasks_' . $model->user_id);
+            Cache::forget('user_hosts_' . $model->user_id);
         });
     }
 
@@ -184,7 +184,7 @@ class Host extends Model
 
         $real_price = $amount ?? $this->price;
 
-        if (! $amount) {
+        if (!$amount) {
             if ($this->managed_price) {
                 $real_price = $this->managed_price;
             }
@@ -195,7 +195,7 @@ class Host extends Model
             if ($user_group->discount !== 100 && $user_group->discount !== null) {
                 $real_price = bcmul($real_price, bcdiv($user_group->discount, '100', 4), 4);
 
-                $append_description = ' (折扣 '.$user_group->discount.'%)';
+                $append_description = ' (折扣 ' . $user_group->discount . '%)';
             }
         }
 
@@ -223,7 +223,7 @@ class Host extends Model
 
         $month = now()->month;
 
-        $month_cache_key = 'user_'.$this->user_id.'_month_'.$month.'_hosts_balances';
+        $month_cache_key = 'user_' . $this->user_id . '_month_' . $month . '_hosts_balances';
         $hosts_balances = Cache::get($month_cache_key, []);
 
         // 统计 Host 消耗的 Balance
@@ -277,7 +277,7 @@ class Host extends Model
         $current_month = now()->month;
         $current_year = now()->year;
 
-        $cache_key = 'module_earning_'.$this->module_id;
+        $cache_key = 'module_earning_' . $this->module_id;
 
         // 应支付的提成
         $commission = config('settings.billing.commission');
@@ -292,7 +292,7 @@ class Host extends Model
 
         $earnings = Cache::get($cache_key, []);
 
-        if (! isset($earnings[$current_year])) {
+        if (!isset($earnings[$current_year])) {
             $earnings[$current_year] = [];
         }
 

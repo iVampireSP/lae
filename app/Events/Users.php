@@ -72,7 +72,7 @@ class Users extends Event implements ShouldBroadcastNow
 
     public function broadcastOn(): PrivateChannel
     {
-        return new PrivateChannel('users.'.$this->user->id);
+        return new PrivateChannel('users.' . $this->user->id);
     }
 
     public function broadcastAs(): string

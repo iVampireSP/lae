@@ -44,7 +44,7 @@ class UnbanUser extends Command
 
         $user = (new User)->find($user_id);
 
-        $this->info('解除封禁: '.$user->name);
+        $this->info('解除封禁: ' . $user->name);
 
         $user->banned_at = null;
         $user->save();

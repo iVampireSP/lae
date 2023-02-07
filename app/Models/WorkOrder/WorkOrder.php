@@ -55,12 +55,12 @@ class WorkOrder extends Model
                 $model->user_id = auth()->id();
 
                 if ($model->host_id) {
-                    if (! $model->user_id == $model->host->user_id) {
+                    if (!$model->user_id == $model->host->user_id) {
                         throw new CommonException('user_id not match host user_id');
                     }
                 }
             } else {
-                if (! $model->user_id) {
+                if (!$model->user_id) {
                     throw new CommonException('user_id is required');
                 }
             }
@@ -136,19 +136,9 @@ class WorkOrder extends Model
         return $this->status === 'closed';
     }
 
-    public function isWaitingForResponse(): bool
-    {
-        return $this->status === 'replied' || $this->status === 'user_replied';
-    }
-
-    public function isPlatform(): bool
-    {
-        return $this->module_id === null && $this->host_id === null;
-    }
-
     public function markAsRead(): bool
     {
-        if (! $this->isWaitingForResponse()) {
+        if (!$this->isWaitingForResponse()) {
             return false;
         }
 
@@ -161,6 +151,11 @@ class WorkOrder extends Model
         $this->save();
 
         return true;
+    }
+
+    public function isWaitingForResponse(): bool
+    {
+        return $this->status === 'replied' || $this->status === 'user_replied';
     }
 
     /**
@@ -179,6 +174,11 @@ class WorkOrder extends Model
         }
 
         return true;
+    }
+
+    public function isPlatform(): bool
+    {
+        return $this->module_id === null && $this->host_id === null;
     }
 
     public function routeNotificationForMail(): array
