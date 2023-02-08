@@ -23,7 +23,7 @@ class ClusterSupport
         return config('settings.node.type') === 'slave';
     }
 
-    public static function publish($event, $data = [], $register = true): void
+    public static function publish($event, $data = [], $register = false): void
     {
         /** @noinspection PhpUndefinedMethodInspection */
         Redis::publish('cluster_ready', json_encode([

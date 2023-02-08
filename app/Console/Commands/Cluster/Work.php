@@ -158,7 +158,7 @@ class Work extends Command
         while (1) {
             ClusterSupport::publish('system_usage', [
                 'cpu' => $cpu,
-            ]);
+            ], true);
 
             sleep(1);
         }
