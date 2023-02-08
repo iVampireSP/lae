@@ -32,7 +32,7 @@ class Work extends Command
     public function handle(): int
     {
         // 检测目录下是否有 rr
-        if (! file_exists(base_path('rr'))) {
+        if (!file_exists(base_path('rr'))) {
             $this->warn('未找到 rr 文件，将自动下载。');
 
             // 获取操作系统是 darwin 还是 linux
@@ -70,16 +70,27 @@ class Work extends Command
         // 关闭 Octane
         Artisan::call('octane:stop');
 
-        if (! config('settings.node.ip')) {
+        // 刷新配置缓存
+        $this->info('正在刷新配置缓存。');
+        Artisan::call('config:cache');
+        Artisan::call('route:cache');
+
+        $node_ip = config('settings.node.ip');
+
+        if (!$node_ip) {
             $this->error('请先配置节点 IP。');
 
             return CommandAlias::FAILURE;
         }
 
-        // 刷新配置缓存
-        $this->info('正在刷新配置缓存。');
-        Artisan::call('config:cache');
-        Artisan::call('route:cache');
+        // 获取端口
+        $node_ips = explode(':', $node_ip);
+        $node_host = $node_ips[0];
+        if (count($node_ips) === 1) {
+            $node_port = 8000;
+        } else {
+            $node_port = $node_ips[1];
+        }
 
         // redis 创建一个 hash
         $this->info('正在注册节点。');
@@ -94,18 +105,18 @@ class Work extends Command
             $this->error('无法创建子进程。');
 
             return CommandAlias::FAILURE;
-        } elseif ($pid === 0) {
+        } else if ($pid === 0) {
             // 再打开一个，负责 octane
             $pid = pcntl_fork();
             if ($pid === -1) {
                 $this->error('无法创建子进程。');
 
                 return CommandAlias::FAILURE;
-            } elseif ($pid === 0) {
+            } else if ($pid === 0) {
                 // 子进程
                 $this->info('正在启动 Web。');
 
-                $command = 'php artisan octane:start --host=0.0.0.0 --rpc-port=6001 --port=8000';
+                $command = "php artisan octane:start --host=$node_host --port=$node_port";
                 $this->pipeCommand($command);
             } else {
                 $this->report();
