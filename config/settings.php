@@ -25,7 +25,7 @@ return [
         'rpc_port' => env('NODE_RPC_PORT', 6001),
     ],
     'roadrunner' => [
-        'version' => env('ROADRUNNER_VERSION', '2.12.1'),
+        'version' => env('ROADRUNNER_VERSION', '2.12.2'),
     ],
     'supports' => [
         'real_name' => [
