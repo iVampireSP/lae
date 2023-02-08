@@ -40,18 +40,17 @@ class Log extends Command
     {
         $status = $this->switch($event, $message['data']);
 
-        if (! $status) {
+        if (!$status) {
             return;
         }
 
-        $message = "[{$message['node']['type']}] {$message['node']['id']}:$event: ".$status;
+        $message = "[{$message['node']['type']}] {$message['node']['id']}:$event: " . $status;
 
         $this->info($message);
     }
 
     public function switch($event, $message = []): string|null
     {
-        // var_dump($event, $message);
         $events = [
             'node.ok' => '此节点初始化成功，并且已经加入集群。',
             'node.online' => '此节点已经上线。',
@@ -62,19 +61,19 @@ class Log extends Command
             'config.synced' => '我已下载配置文件。',
             'edge.deployed' => '已成功根据集群节点生成配置文件并应用。',
             'edge.launched' => '边缘节点成功启动。',
-            'edge.error' => $message['message'] ?? '未知错误',
+            'edge.error' => fn($message) => $message['message'] ?? '未知错误',
             'cluster.restart.web' => '正在重启 web 服务。',
             'cluster.restart.all' => '正在重启 整个 服务。',
             'cluster.restarted.web' => 'Web 重启好了。',
             'cluster.restarted.all' => '整个 重启好了。',
             'cluster.deployed' => '集群配置文件已经部署。',
-            'cluster.deployed.error' => $message['message'] ?? '未知错误',
+            'cluster.deployed.error' => fn($message) => $message['message'] ?? '未知错误',
             'cluster.deployed.ok' => '集群配置文件部署成功。',
-            'http.incoming' => fn ($message) => $this->handleIncomingRequest($message),
-            'http.outgoing' => fn ($message) => $this->handleOutgoingRequest($message),
+            'http.incoming' => fn($message) => $this->handleIncomingRequest($message),
+            'http.outgoing' => fn($message) => $this->handleOutgoingRequest($message),
         ];
 
-        $resp = $events[$event];
+        $resp = $events[$event] ?? null;
 
         // if resp is callable
         if (is_callable($resp)) {

@@ -77,7 +77,7 @@ class ClusterSupport
         ini_set('default_socket_timeout', -1);
 
         Redis::subscribe('cluster_ready', function ($message) use ($events, $callback, $ignore_self) {
-            echo $message;
+            // echo $message;
             $message = json_decode($message, true);
 
             if ($ignore_self && $message['node']['id'] === config('settings.node.id')) {
