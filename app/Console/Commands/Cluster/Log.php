@@ -51,6 +51,7 @@ class Log extends Command
 
     public function switch($event, $message = []): string|null
     {
+        // var_dump($event, $message);
         $events = [
             'node.ok' => '此节点初始化成功，并且已经加入集群。',
             'node.online' => '此节点已经上线。',
@@ -66,8 +67,50 @@ class Log extends Command
             'cluster.restart.all' => '正在重启 整个 服务。',
             'cluster.restarted.web' => 'Web 重启好了。',
             'cluster.restarted.all' => '整个 重启好了。',
+            'cluster.deployed' => '集群配置文件已经部署。',
+            'cluster.deployed.error' => $message['message'] ?? '未知错误',
+            'cluster.deployed.ok' => '集群配置文件部署成功。',
+            'http.incoming' => fn ($message) => $this->handleIncomingRequest($message),
+            'http.outgoing' => fn ($message) => $this->handleOutgoingRequest($message),
         ];
 
-        return $events[$event] ?? null;
+        $resp = $events[$event];
+
+        // if resp is callable
+        if (is_callable($resp)) {
+            return $resp($message);
+        }
+
+        return $resp ?? null;
+    }
+
+    private function handleIncomingRequest(array $message): string
+    {
+        $msg = $this->appendUser($message);
+
+        $msg .= "{$message['method']} {$message['path']}";
+
+        return $msg;
+    }
+
+    private function handleOutgoingRequest(array $message): string
+    {
+        $msg = $this->appendUser($message);
+
+        $msg .= "{$message['method']} {$message['path']} {$message['status']} {$message['time']}ms";
+
+        return $msg;
+    }
+
+    private function appendUser(array $message): string
+    {
+        $msg = '';
+        if ($message['user']) {
+            $msg .= "{$message['user']['name']}#{$message['user']['id']} ";
+        } else {
+            $msg .= 'Guest ';
+        }
+
+        return $msg;
     }
 }

@@ -10,6 +10,7 @@ use App\Http\Middleware\JsonResponse;
 use App\Http\Middleware\PreventRequestsDuringMaintenance;
 use App\Http\Middleware\RealNamed;
 use App\Http\Middleware\RedirectIfAuthenticated;
+use App\Http\Middleware\ReportRequestToCluster;
 use App\Http\Middleware\TrimStrings;
 use App\Http\Middleware\TrustProxies;
 use App\Http\Middleware\ValidateSignature;
@@ -65,6 +66,7 @@ class Kernel extends HttpKernel
             ShareErrorsFromSession::class,
             VerifyCsrfToken::class,
             SubstituteBindings::class,
+            ReportRequestToCluster::class,
         ],
 
         'api' => [
@@ -72,6 +74,7 @@ class Kernel extends HttpKernel
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
             SubstituteBindings::class,
+            ReportRequestToCluster::class,
         ],
 
         'module' => [
