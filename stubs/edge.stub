@@ -1,0 +1,334 @@
+<?php
+
+
+// 节点 ID
+$node_id = '{{NODE_ID}}';
+
+// Nginx 单个站点的配置文件路径
+$nginx_conf_path = '/path/to/api.laecloud.com.conf';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/** 自动生成的配置文件，如有变动，按照需求编辑。 **/
+$redis_info = [
+    'host' => '{{REDIS_HOST}}',
+    'port' => '{{REDIS_PORT}}',
+    'password' => '{{REDIS_PASSWORD}}',
+    'prefix' => '{{REDIS_PREFIX}}',
+
+];
+
+
+/**  好了，不要再编辑了。配置到此为止了。 **/
+$nginx_conf = '';
+$nginx_file_md5 = '';
+
+$prefix = $redis_info['prefix'];
+
+// 检查是否存在配置文件
+if (! file_exists($nginx_conf_path)) {
+    echo 'nginx.conf not found';
+    exit;
+} else {
+    $nginx_conf = file_get_contents($nginx_conf_path);
+    $nginx_file_md5 = md5_file($nginx_conf_path);
+}
+
+// 检查redis_info是否正确
+foreach ($redis_info as $key => $value) {
+    if (empty($value)) {
+        echo "redis_info[$key] is empty";
+        exit;
+    }
+}
+
+$redis = new Redis();
+
+try {
+    $redis->connect($redis_info['host'], $redis_info['port']);
+    $redis->auth($redis_info['password']);
+
+    // set db 0
+    $redis->select(0);
+} catch (RedisException $e) {
+    echo 'Connection to Redis failed: '.$e->getMessage();
+}
+
+try {
+    if ($redis->ping()) {
+        output('redis is ok');
+    }
+} catch (RedisException $e) {
+    output('redis is error');
+}
+
+// 检验环境
+// 检测 Nginx 是否存在 which nginx
+$nginx_path = trim(shell_exec('which nginx'));
+if (empty($nginx_path)) {
+    echo 'nginx not found';
+
+    redis_publish('edge.error', [
+        'message' => '此节点上并没有安装 Nginx ，但是 Edge 被启动了，现在已经退出。',
+    ]);
+
+    exit;
+}
+
+redis_publish('edge.launched');
+
+$last_run_at = time() - 100;
+
+$ip = '';
+
+// 获取本机 IP ifconfig.me
+$ip = trim(shell_exec('curl -s ifconfig.me'));
+
+$run_count = 0;
+
+// 逻辑部分
+while (true) {
+    if ($run_count >= 10000) {
+        $run_count = 0;
+
+        // 重新获取 IP
+        $ip = trim(shell_exec('curl -s ifconfig.me'));
+    }
+
+    redis_hset('nodes', $node_id, [
+        'type' => 'edge',
+        'id' => 'edge-'.$node_id,
+        'ip' => $ip,
+        // utc +8 timestamp
+        'last_heartbeat' => time(),
+    ]);
+
+    // 上次运行时间需要满 60s，才继续，否则 continue
+    if (time() - $last_run_at < 60) {
+        sleep(1);
+
+        continue;
+    }
+
+    // 重新载入 nginx.conf
+    if (! file_exists($nginx_conf_path)) {
+        echo 'nginx.conf not found';
+
+        redis_publish('edge.error', [
+            'message' => 'Nginx 配置文件在启动后被删除，Edge 进程退出。',
+        ]);
+
+        exit;
+    } else {
+        $nginx_conf = file_get_contents($nginx_conf_path);
+        $nginx_file_md5 = md5_file($nginx_conf_path);
+    }
+
+    // 检查 laecloud_database_cluster:nodes 是否存在
+    try {
+        if (! $redis->exists($prefix.'cluster:nodes')) {
+            output('cluster:nodes not found');
+            exit;
+        }
+    } catch (RedisException $e) {
+        output('redis is error');
+        exit;
+    }
+
+    $nodes = redis_hgetAll('nodes', []);
+    if (! $nodes) {
+        output('nodes is empty');
+
+        continue;
+    }
+
+    foreach ($nodes as $node) {
+        // if node last_heartbeat(utc+8 timestamp) is over 10s, skip
+        if (time() - $node['last_heartbeat'] > 10) {
+            // 删除节点
+            redis_hdel('nodes', $node['id']);
+        }
+    }
+
+    $conf = '';
+
+    foreach ($nodes as $node) {
+        // only allow node type master, slave
+        if (! in_array($node['type'], ['master', 'slave'])) {
+            continue;
+        }
+
+        output('node_type: '.$node['type']);
+        output('node_id: '.$node['id']);
+        output('================================================================');
+
+        $temp_conf = "#node {$node['type']}:{$node['id']}\n";
+        $temp_conf .= "server {$node['ip']}";
+
+        if (isset($node['weight'])) {
+            $temp_conf .= " weight={$node['weight']} ";
+        }
+
+        if ($node['type'] == 'master') {
+            if (count($nodes) <= 2) {
+                $temp_conf .= ' backup';
+            }
+        }
+
+        $temp_conf .= ";\n";
+
+        echo $temp_conf.PHP_EOL;
+
+        output('================================================================');
+
+        $conf .= $temp_conf.PHP_EOL;
+    }
+
+    output('!!!!!!!!!!!!!!!!!');
+    echo $conf;
+    output('!!!!!!!!!!!!!!!!!');
+
+    $add_header = <<<EOF
+add_header 'Cluster-Ready-Node-Id' 'edge-{$node_id}';
+add_header 'Powered-by' 'Cluster Ready!';
+EOF;
+
+    // 放入配置文件，以 ##########CLUSTERREADY######### 开始，以 ##########END_CLUSTERREADY######### 结束
+    $nginx_conf = preg_replace('/##########CLUSTERREADY#########.*##########END_CLUSTERREADY#########/s', '##########CLUSTERREADY#########'.PHP_EOL.$conf.'##########END_CLUSTERREADY#########', $nginx_conf);
+    $nginx_conf = preg_replace('/##########CLUSTERREADY_PROXY#########.*##########END_CLUSTERREADY_PROXY#########/s', '##########CLUSTERREADY_PROXY#########'.PHP_EOL.$add_header.PHP_EOL.'##########END_CLUSTERREADY_PROXY#########', $nginx_conf);
+
+    if (md5($nginx_conf) != $nginx_file_md5) {
+        file_put_contents($nginx_conf_path, $nginx_conf);
+        output('nginx.conf is changed, reload nginx');
+
+        // reload nginx
+        exec('nginx -s reload');
+
+        output('nginx is reloaded.');
+
+        // 收尾
+        redis_publish('edge.deployed');
+    }
+
+    $last_run_at = time();
+
+    $run_count++;
+}
+function output($context): void
+{
+    $time_string = date('Y-m-d H:i:s');
+    echo $time_string.': '.$context.PHP_EOL;
+}
+
+function redis_get($key, $default = null): mixed
+{
+    global $redis, $prefix;
+
+    try {
+        $value = $redis->get($prefix.'cluster:'.$key);
+    } catch (RedisException $e) {
+        exit('redis get error: '.$e->getMessage());
+    }
+
+    if (empty($value)) {
+        return $default;
+    }
+
+    return $value;
+}
+
+function redis_hget($key, $hash_key, $default = null): mixed
+{
+    global $redis, $prefix;
+
+    try {
+        $value = $redis->hget($prefix.'cluster:'.$key, $hash_key);
+    } catch (RedisException $e) {
+        exit('redis get error: '.$e->getMessage());
+    }
+
+    if (empty($value)) {
+        return $default;
+    }
+
+    return $value;
+}
+
+function redis_hgetAll($key): Redis|array
+{
+    global $redis, $prefix;
+
+    try {
+        $value = $redis->hGetAll($prefix.'cluster:'.$key);
+    } catch (RedisException $e) {
+        exit('redis get error: '.$e->getMessage());
+    }
+
+    // json_decode all
+    foreach ($value as $k => $v) {
+        $value[$k] = json_decode($v, true);
+    }
+
+    return $value;
+}
+
+function redis_hset($key, $hash_key, $value)
+{
+    global $redis, $prefix;
+
+    try {
+        $redis->hset($prefix.'cluster:'.$key, $hash_key, json_encode($value));
+    } catch (RedisException $e) {
+        exit('redis get error: '.$e->getMessage());
+    }
+}
+
+function redis_hdel($key, $hash_key): void
+{
+    global $redis, $prefix;
+
+    try {
+        $redis->hdel($prefix.'cluster:'.$key, $hash_key);
+    } catch (RedisException $e) {
+        exit('redis get error: '.$e->getMessage());
+    }
+}
+
+function redis_publish($event, $message = []): void
+{
+    global $redis, $prefix, $node_id;
+
+    $data = [
+        'event' => $event,
+        'node' => [
+            'type' => 'edge',
+            'id' => $node_id,
+        ],
+        'data' => $message,
+    ];
+
+    $data = json_encode($data);
+
+    try {
+        $redis->publish($prefix.'cluster_ready', $data);
+    } catch (RedisException $e) {
+        exit('redis publish error: '.$e->getMessage());
+    }
+}
