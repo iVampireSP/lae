@@ -44,7 +44,10 @@ class AuthController extends Controller
 
                 return redirect()->route('confirm_redirect');
             } else {
-                return redirect()->route('login');
+                // url.intended 存放当前页面 URL
+                session(['url.intended' => $request->fullUrl()]);
+
+                return redirect()->route('login')->with('status', '要继续，请先登录账号。');
             }
         }
 
