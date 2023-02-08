@@ -16,9 +16,9 @@ class ReportRequestToCluster
      *
      * @param  Request  $request
      * @param Closure(Request): (Response|RedirectResponse) $next
-     * @return Response|RedirectResponse
+     * @return mixed
      */
-    public function handle(Request $request, Closure $next): Response|RedirectResponse
+    public function handle(Request $request, Closure $next): mixed
     {
         $random_id = Str::random(16);
 
