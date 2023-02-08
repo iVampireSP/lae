@@ -35,7 +35,8 @@
         "spatie/laravel-tags": "^4.3",
         "spiral/roadrunner": "^2.8.2",
         "symfony/psr-http-message-bridge": "^2.1",
-        "yansongda/laravel-pay": "~3.2.0"
+        "yansongda/laravel-pay": "~3.2.0",
+      "ext-redis": "*"
     },
     "require-dev": {
         "beyondcode/laravel-query-detector": "^1.6",
