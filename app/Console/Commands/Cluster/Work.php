@@ -116,7 +116,9 @@ class Work extends Command
                 // 子进程
                 $this->info('正在启动 Web。');
 
-                $command = "php artisan octane:start --host=$node_host --port=$node_port";
+                $rpc_port = config('settings.node.rpc_port');
+
+                $command = "php artisan octane:start --host=$node_host --rpc-port=$rpc_port --port=$node_port";
                 $this->pipeCommand($command);
             } else {
                 $this->report();

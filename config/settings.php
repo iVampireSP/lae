@@ -22,6 +22,7 @@ return [
         'type' => env('NODE_TYPE', 'slave'),
         'id' => env('NODE_ID'),
         'ip' => env('NODE_IP'),
+        'rpc_port' => env('NODE_RPC_PORT', 6001),
     ],
     'roadrunner' => [
         'version' => env('ROADRUNNER_VERSION', '2.12.1'),
