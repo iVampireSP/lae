@@ -49,7 +49,7 @@ class ReportRequestToCluster
             'status' => $response->status(),
             'path' => $path,
             // 'headers' => $response->headers->all(),
-            'content' => $response->getContent(),
+            // 'content' => $response->getContent(),
             'user' => $request->user(),
             'time' => round(($end - $start) * 1000),
         ]);
