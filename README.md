@@ -8,7 +8,7 @@
 ```bash
 docker run -itd --name=lae_schedule --init --restart=always --net=host -v /opt/lae:/opt/lae ccr.ccs.tencentyun.com/laecloud/cafe:latte art schedule:work
 
-docker run -itd --name=lae_workers --init --restart=always --net=host -v /opt/lae:/opt/lae ccr.ccs.tencentyun.com/laecloud/cafe:latte art queue:work --queue=default,host-cost
+docker run -itd --name=lae_worker --init --restart=always --net=host -v /opt/lae:/opt/lae ccr.ccs.tencentyun.com/laecloud/cafe:latte art queue:work --queue=default,host-cost
 ```
 
 ### Web 节点运行
