@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands\Cluster;
 
-use DragonCode\Support\Facades\Helpers\Str;
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Command\Command as CommandAlias;
 
 class PublishEdge extends Command
