@@ -14,7 +14,7 @@ class AuthRequestController extends Controller
     {
         $request->validate([
             'description' => 'required|string|max:255',
-            'require_token' => 'nullable|boolean'
+            'require_token' => 'nullable|boolean',
         ]);
 
         $token = Str::random(128);
@@ -24,7 +24,7 @@ class AuthRequestController extends Controller
                 'description' => $request->input('description'),
                 'token' => $token,
                 'require_token' => $request->input('require_token', false),
-            ]
+            ],
         ];
 
         if ($request->user('module')) {
@@ -41,7 +41,7 @@ class AuthRequestController extends Controller
             ]);
         }
 
-        Cache::put('auth_request:' . $token, $data, 120);
+        Cache::put('auth_request:'.$token, $data, 120);
 
         $data['url'] = route('auth_request.show', $token);
 
@@ -50,13 +50,13 @@ class AuthRequestController extends Controller
 
     public function show($token): JsonResponse
     {
-        $data = Cache::get('auth_request:' . $token);
+        $data = Cache::get('auth_request:'.$token);
 
         if (empty($data)) {
             return $this->error('Token 不存在或已过期。');
         }
 
-        if (!isset($data['user'])) {
+        if (! isset($data['user'])) {
             $data['user'] = null;
         }
 
