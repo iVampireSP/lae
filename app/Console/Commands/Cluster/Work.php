@@ -15,7 +15,7 @@ class Work extends Command
      *
      * @var string
      */
-    protected $signature = 'works';
+    protected $signature = 'works {weight=1}';
 
     /**
      * The console command description.
@@ -23,6 +23,8 @@ class Work extends Command
      * @var string
      */
     protected $description = '启动此应用程序。';
+
+    private string $weight = "1";
 
     /**
      * Execute the console command.
@@ -32,7 +34,7 @@ class Work extends Command
     public function handle(): int
     {
         // 检测目录下是否有 rr
-        if (! file_exists(base_path('rr'))) {
+        if (!file_exists(base_path('rr'))) {
             $this->warn('未找到 rr 文件，将自动下载。');
 
             // 获取操作系统是 darwin 还是 linux
@@ -77,7 +79,7 @@ class Work extends Command
 
         $node_ip = config('settings.node.ip');
 
-        if (! $node_ip) {
+        if (!$node_ip) {
             $this->error('请先配置节点 IP。');
 
             return CommandAlias::FAILURE;
@@ -92,9 +94,13 @@ class Work extends Command
             $node_port = $node_ips[1];
         }
 
+        $this->weight = $this->argument('weight');
+
         // redis 创建一个 hash
         $this->info('正在注册节点。');
-        ClusterSupport::registerThisNode();
+        ClusterSupport::registerThisNode(true, [
+            'weight' => $this->weight,
+        ]);
 
         $this->info('初始化完成。');
 
@@ -105,16 +111,17 @@ class Work extends Command
             $this->error('无法创建子进程。');
 
             return CommandAlias::FAILURE;
-        } elseif ($pid === 0) {
+        } else if ($pid === 0) {
             // 再打开一个，负责 octane
             $pid = pcntl_fork();
             if ($pid === -1) {
                 $this->error('无法创建子进程。');
 
                 return CommandAlias::FAILURE;
-            } elseif ($pid === 0) {
+            } else if ($pid === 0) {
                 // 子进程
                 $this->info('正在启动 Web。');
+                $this->info('以权重 ' . $this->argument('weight') . ' 启动。');
 
                 $rpc_port = config('settings.node.rpc_port');
 
@@ -189,7 +196,10 @@ class Work extends Command
     {
         $this->info('正在监听任务。');
 
-        ClusterSupport::publish('node.online');
+        ClusterSupport::publish('node.online', [
+            'weight' => $this->weight,
+        ]);
+
         ClusterSupport::listen('*', function ($event, $message) {
             $this->dispatchEvent($event, $message);
         }, false);
