@@ -85,6 +85,12 @@ class ClusterSupport
         Redis::hset(self::$prefix.$key, $value, json_encode($data));
     }
 
+    public static function hdel($key, $data = []): void
+    {
+        /** @noinspection PhpUndefinedMethodInspection */
+        Redis::hdel(self::$prefix.$key, $data);
+    }
+
     /**
      * @param  string|array  $events      事件名称
      * @param    $callback    callable 回调函数，接收一个参数，为事件数据。
