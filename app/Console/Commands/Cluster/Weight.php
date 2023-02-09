@@ -32,7 +32,7 @@ class Weight extends Command
         $weight = $this->argument('weight');
 
         $this->info("当前节点的权重为：{$weight}。");
-        if ($weight == "0") {
+        if ($weight == '0') {
             $this->warn('请求将不再调度到此节点。');
         } else {
             $this->info('将开始接受请求。');
