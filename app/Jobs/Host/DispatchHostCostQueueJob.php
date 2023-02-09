@@ -21,7 +21,6 @@ class DispatchHostCostQueueJob implements ShouldQueue
      */
     public function __construct($minute)
     {
-        //
         $this->minute = $minute;
     }
 
