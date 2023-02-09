@@ -36,12 +36,6 @@ class CleanOffline extends Command
             if ($now - $node['last_heartbeat'] > 30) {
                 $this->info("节点 {$node['id']} 已离线，将被清理。");
                 ClusterSupport::removeNode($node['id']);
-
-                if ($node['type'] == 'edge') {
-                    // 移除前 5 个字符，即 "edge-"。
-                    $id = substr($node['id'], 5);
-                    ClusterSupport::removeNode($id);
-                }
             }
         }
 
