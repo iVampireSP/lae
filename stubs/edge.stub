@@ -114,7 +114,7 @@ while (true) {
 
     redis_hset('nodes', $node_id, [
         'type' => 'edge',
-        'id' => 'edge-' . $node_id,
+        'id' => $node_id,
         'ip' => $ip,
         // utc +8 timestamp
         'last_heartbeat' => time(),
@@ -212,7 +212,7 @@ while (true) {
     output('!!!!!!!!!!!!!!!!!');
 
     $add_header = <<<EOF
-add_header 'Cluster-Ready-Node-Id' 'edge-{$node_id}';
+add_header 'Cluster-Ready-Node-Id' '{$node_id}';
 add_header 'Powered-by' 'Cluster Ready!';
 EOF;
 
