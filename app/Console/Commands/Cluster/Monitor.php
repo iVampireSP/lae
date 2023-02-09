@@ -48,17 +48,23 @@ class Monitor extends Command
         return CommandAlias::SUCCESS;
     }
 
-    private function format(string $event, array $message = [])
+    public function format(string $event, array $message = [], $stdout = true): ?string
     {
         $status = $this->switch($event, $message['data']);
 
         if (! $status) {
-            return;
+            return null;
         }
 
         $message = "[{$message['node']['type']}] {$message['node']['id']}:$event: ".$status;
 
-        $this->info($message);
+        if ($stdout) {
+            $this->info($message);
+
+            return null;
+        } else {
+            return $message;
+        }
     }
 
     public function switch($event, $message = []): string|null

@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\DeviceController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\HostController;
 use App\Http\Controllers\Admin\ModuleController;
+use App\Http\Controllers\Admin\NodeController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\ReplyController;
 use App\Http\Controllers\Admin\UserController;
@@ -41,6 +42,13 @@ Route::resource('user-groups', UserGroupController::class);
 Route::get('devices', [DeviceController::class, 'index'])->name('devices.index');
 Route::delete('devices', [DeviceController::class, 'destroy'])->name('devices.destroy');
 
+Route::get('cluster/nodes', [NodeController::class, 'index'])->name('cluster.nodes');
+Route::patch('cluster/nodes/{node}', [NodeController::class, 'update'])->name('cluster.nodes.update');
+Route::view('cluster/events', 'admin.cluster.events')->name('cluster.events');
+Route::post('cluster/events', [NodeController::class, 'event'])->name('cluster.events.send');
+Route::view('cluster/monitor', 'admin.cluster.monitor')->name('cluster.monitor');
+Route::get('cluster/stream', [NodeController::class, 'stream'])->name('cluster.stream');
+
 Route::resource('notifications', NotificationController::class)->only(['create', 'store']);
 
 Route::view('commands', 'admin.commands')->name('commands');
@@ -51,4 +59,5 @@ Route::withoutMiddleware(['auth:admin', 'admin.validateReferer'])->group(functio
     Route::get('/login', [AuthController::class, 'index'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
 });
+
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');

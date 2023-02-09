@@ -66,6 +66,11 @@ class ClusterSupport
     {
         $node_id = config('settings.node.id');
 
+        self::update($node_id, $data);
+    }
+
+    public static function update($node_id, $data = []): void
+    {
         $node = self::hget('nodes', $node_id, '[]');
         $node = json_decode($node, true);
 

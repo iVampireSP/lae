@@ -87,7 +87,6 @@
                                 <li>
                                     <a class="dropdown-item" href="{{ route('admin.devices.index') }}">物联设备</a>
                                 </li>
-
                                 <li>
                                     <a class="dropdown-item" href="{{ route('admin.applications.index') }}">应用程序</a>
                                 </li>
@@ -113,6 +112,31 @@
                                 </li>
                             </ul>
                         </li>
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownCluster" role="button"
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                集群
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdownCluster">
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('admin.cluster.nodes') }}">
+                                        节点
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('admin.cluster.events') }}">
+                                        广播
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('admin.cluster.monitor') }}">
+                                        监视器
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
                     </ul>
                 @endauth
 
