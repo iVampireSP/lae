@@ -74,6 +74,11 @@ class ClusterSupport
         ClusterSupport::hset('nodes', $node_id, $node);
     }
 
+    public static function removeNode($node_id): void
+    {
+        self::hdel('nodes', $node_id);
+    }
+
     public static function hset($key, $value, $data = []): void
     {
         /** @noinspection PhpUndefinedMethodInspection */
