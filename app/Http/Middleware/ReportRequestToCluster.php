@@ -43,10 +43,16 @@ class ReportRequestToCluster
 
         $end = microtime(true);
 
+        $status = 0;
+        // 检测有没有 status() 方法。
+        if (method_exists($response, 'status')) {
+            $status = $response->status();
+        }
+
         ClusterSupport::publish('http.outgoing', [
             'id' => $random_id,
             'method' => $method,
-            'status' => $response->status(),
+            'status' => $status,
             'path' => $path,
             // 'headers' => $response->headers->all(),
             // 'content' => $response->getContent(),

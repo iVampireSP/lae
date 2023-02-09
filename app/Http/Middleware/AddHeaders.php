@@ -18,7 +18,11 @@ class AddHeaders
     public function handle(Request $request, Closure $next): mixed
     {
         $response = $next($request);
-        $response->header('Node-Id', ClusterSupport::currentNode()['id']);
+
+        // SSE, 检测有没有 header() 方法。
+        if (method_exists($response, 'header')) {
+            $response->header('Node-Id', ClusterSupport::currentNode()['id']);
+        }
 
         return $response;
     }
