@@ -42,33 +42,50 @@ class ClusterSupport
         }
     }
 
-    public static function registerThisNode($report = true): void
+    public static function registerThisNode($report = true, $data = []): void
     {
         $node_id = config('settings.node.id');
-
-        ClusterSupport::hset('nodes', $node_id, [
+        
+        $node = [
             'type' => config('settings.node.type'),
             'id' => $node_id,
             'ip' => config('settings.node.ip'),
-            // utc +8 timestamp
             'last_heartbeat' => time(),
-        ]);
+        ];
+
+        $node = array_merge($node, $data);
+
+        self::updateThisNode($node);
 
         if ($report) {
             ClusterSupport::publish('node.ok');
         }
     }
 
+    public static function updateThisNode($data = []): void
+    {
+        $node_id = config('settings.node.id');
+
+        $node = self::hget('nodes', $node_id, "[]");
+        $node = json_decode($node, true);
+
+        $node = array_merge($node, $data);
+
+        ClusterSupport::hset('nodes', $node_id, $node);
+    }
+
+
     public static function hset($key, $value, $data = []): void
     {
         /** @noinspection PhpUndefinedMethodInspection */
-        Redis::hset(self::$prefix.$key, $value, json_encode($data));
+        Redis::hset(self::$prefix . $key, $value, json_encode($data));
     }
 
     /**
-     * @param  string|array  $events      事件名称
-     * @param    $callback    callable 回调函数，接收一个参数，为事件数据。
-     * @param    $ignore_self bool 是否忽略此节点的消息。
+     * @param string|array $events      事件名称
+     * @param              $callback    callable 回调函数，接收一个参数，为事件数据。
+     * @param              $ignore_self bool 是否忽略此节点的消息。
+     *
      * @return void
      */
     public static function listen(string|array $events, callable $callback, bool $ignore_self = true): void
@@ -99,13 +116,13 @@ class ClusterSupport
     public static function get($key, $default = null): string|array|null
     {
         /** @noinspection PhpUndefinedMethodInspection */
-        return Redis::get(self::$prefix.$key, $default);
+        return Redis::get(self::$prefix . $key, $default);
     }
 
     public static function forget($key): void
     {
         /** @noinspection PhpUndefinedMethodInspection */
-        Redis::forget(self::$prefix.$key);
+        Redis::forget(self::$prefix . $key);
     }
 
     // forever
@@ -117,13 +134,13 @@ class ClusterSupport
     public static function set($key, $value, $ttl = null): void
     {
         /** @noinspection PhpUndefinedMethodInspection */
-        Redis::set(self::$prefix.$key, $value, $ttl);
+        Redis::set(self::$prefix . $key, $value, $ttl);
     }
 
     public static function hget($key, $hashKey, $default = []): string|array|null
     {
         /** @noinspection PhpUndefinedMethodInspection */
-        $value = Redis::hget(self::$prefix.$key, $hashKey);
+        $value = Redis::hget(self::$prefix . $key, $hashKey);
 
         return $value ?: $default;
     }
@@ -150,7 +167,7 @@ class ClusterSupport
     public static function hgetAll($hashKey, $default = []): array
     {
         /** @noinspection PhpUndefinedMethodInspection */
-        $value = Redis::hgetall(self::$prefix.$hashKey);
+        $value = Redis::hgetall(self::$prefix . $hashKey);
 
         return $value ?: $default;
     }
