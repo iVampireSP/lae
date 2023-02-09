@@ -85,10 +85,10 @@ class ClusterSupport
         Redis::hset(self::$prefix.$key, $value, json_encode($data));
     }
 
-    public static function hdel($key, $data = []): void
+    public static function hdel($key, $hash_key): void
     {
         /** @noinspection PhpUndefinedMethodInspection */
-        Redis::hdel(self::$prefix.$key, $data);
+        Redis::hdel(self::$prefix.$key, $hash_key);
     }
 
     /**
