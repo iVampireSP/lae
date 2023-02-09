@@ -40,6 +40,7 @@
     },
     "require-dev": {
         "beyondcode/laravel-query-detector": "^1.6",
+        "deployer/deployer": "^7.1",
         "fakerphp/faker": "^1.9.1",
         "jetbrains/phpstorm-attributes": "^1.0",
         "laravel-lang/attributes": "^2.1",

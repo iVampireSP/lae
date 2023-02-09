@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "19a1f14b2bbf08e0615ed948d4f6ddd2",
+    "content-hash": "89324a5dcaa5fd4f44f5abf73f9899a8",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -9451,6 +9451,55 @@
                 "source": "https://github.com/beyondcode/laravel-query-detector/tree/1.6.0"
             },
             "time": "2022-02-12T16:23:40+00:00"
+        },
+        {
+            "name": "deployer/deployer",
+            "version": "v7.1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/deployphp/deployer.git",
+                "reference": "c4a80010830d793dc09f55c9d1e211250c3cc335"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/deployphp/deployer/zipball/c4a80010830d793dc09f55c9d1e211250c3cc335",
+                "reference": "c4a80010830d793dc09f55c9d1e211250c3cc335",
+                "shasum": "",
+                "mirrors": [
+                    {
+                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
+                        "preferred": true
+                    }
+                ]
+            },
+            "bin": [
+                "dep"
+            ],
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Anton Medvedev",
+                    "email": "anton@medv.io"
+                }
+            ],
+            "description": "Deployment Tool",
+            "homepage": "https://deployer.org",
+            "support": {
+                "docs": "https://deployer.org/docs",
+                "issues": "https://github.com/deployphp/deployer/issues",
+                "source": "https://github.com/deployphp/deployer"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/sponsors/antonmedv",
+                    "type": "github"
+                }
+            ],
+            "time": "2023-02-05T20:09:03+00:00"
         },
         {
             "name": "doctrine/instantiator",
