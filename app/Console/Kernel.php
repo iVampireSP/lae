@@ -21,13 +21,14 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      *
-     * @param  Schedule  $schedule
+     * @param Schedule $schedule
+     *
      * @return void
      */
     protected function schedule(Schedule $schedule): void
     {
         // 清理过期的 Token
-        $schedule->command('sanctum:prune-expired --hours=24')->daily();
+        $schedule->command('sanctum:prune-expired --hours=24')->daily()->runInBackground();
 
         // 扣费
         $schedule->job(new DispatchHostCostQueueJob(now()->minute))->everyMinute()->withoutOverlapping()->onOneServer();
@@ -41,10 +42,10 @@ class Kernel extends ConsoleKernel
         $schedule->job(new AutoCloseWorkOrderJob())->everyMinute()->onOneServer();
 
         // 清理任务
-        $schedule->job(new ClearTasksJob())->weekly();
+        $schedule->job(new ClearTasksJob())->weekly()->onOneServer();
 
         // 删除暂停或部署时间超过 3 天以上的主机
-        $schedule->job(new DeleteHostJob())->hourly();
+        $schedule->job(new DeleteHostJob())->hourly()->onOneServer();
 
         // 检查主机是否存在于模块
         $schedule->job(new ScanAllHostsJob())->everyThirtyMinutes()->withoutOverlapping()->onOneServer();
@@ -53,13 +54,13 @@ class Kernel extends ConsoleKernel
         $schedule->job(new CheckAndChargeBalanceJob())->everyFiveMinutes()->onOneServer()->withoutOverlapping();
 
         // 发送模块收益
-        $schedule->job(new SendModuleEarningsJob())->dailyAt('20:00');
+        $schedule->job(new SendModuleEarningsJob())->dailyAt('20:00')->onOneServer();
 
         // 回滚临时用户组
         $schedule->job(new RollbackUserTempGroupJob())->everyMinute()->onOneServer();
 
         // 设置生日用户组
-        $schedule->job(new SetBirthdayGroupJob())->dailyAt('00:00');
+        $schedule->job(new SetBirthdayGroupJob())->dailyAt('00:00')->onOneServer();
     }
 
     /**
@@ -69,7 +70,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands(): void
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }
