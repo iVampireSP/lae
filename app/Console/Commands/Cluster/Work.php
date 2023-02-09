@@ -24,7 +24,7 @@ class Work extends Command
      */
     protected $description = '启动此应用程序。';
 
-    private string $weight = "1";
+    private string $weight = '1';
 
     /**
      * Execute the console command.
@@ -34,7 +34,7 @@ class Work extends Command
     public function handle(): int
     {
         // 检测目录下是否有 rr
-        if (!file_exists(base_path('rr'))) {
+        if (! file_exists(base_path('rr'))) {
             $this->warn('未找到 rr 文件，将自动下载。');
 
             // 获取操作系统是 darwin 还是 linux
@@ -79,7 +79,7 @@ class Work extends Command
 
         $node_ip = config('settings.node.ip');
 
-        if (!$node_ip) {
+        if (! $node_ip) {
             $this->error('请先配置节点 IP。');
 
             return CommandAlias::FAILURE;
@@ -111,17 +111,17 @@ class Work extends Command
             $this->error('无法创建子进程。');
 
             return CommandAlias::FAILURE;
-        } else if ($pid === 0) {
+        } elseif ($pid === 0) {
             // 再打开一个，负责 octane
             $pid = pcntl_fork();
             if ($pid === -1) {
                 $this->error('无法创建子进程。');
 
                 return CommandAlias::FAILURE;
-            } else if ($pid === 0) {
+            } elseif ($pid === 0) {
                 // 子进程
                 $this->info('正在启动 Web。');
-                $this->info('以权重 ' . $this->argument('weight') . ' 启动。');
+                $this->info('以权重 '.$this->argument('weight').' 启动。');
 
                 $rpc_port = config('settings.node.rpc_port');
 
