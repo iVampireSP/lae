@@ -183,7 +183,9 @@ while (true) {
         $temp_conf .= "server {$node['ip']}";
 
         if (isset($node['weight'])) {
-            if ($node['weight'] !== "0") {
+            if ($node['weight'] === "0") {
+                continue;
+            } else {
                 $temp_conf .= " weight={$node['weight']} ";
             }
         } else {
