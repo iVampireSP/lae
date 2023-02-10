@@ -131,7 +131,7 @@ class HostController extends Controller
             'description' => 'nullable|string:max:255',
         ]);
 
-        $host->cost($request->input('amount'), false);
+        $host->cost($request->input('amount'), false, $request->input('description'));
 
         return $this->noContent();
     }
