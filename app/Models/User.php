@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Str;
@@ -110,11 +111,11 @@ class User extends Authenticatable implements MustVerifyEmail
                     $user->real_name_verified_at = now();
 
                     // 更新生日
-                    try {
-                        $user->birthday_at = $user->getBirthdayFromIdCard();
-                    } catch (InvalidFormatException) {
-                        $user->birthday_at = null;
-                    }
+                    // try {
+                    //     $user->birthday_at = $user->getBirthdayFromIdCard();
+                    // } catch (InvalidFormatException) {
+                    //     $user->birthday_at = null;
+                    // }
                 }
             }
         });
@@ -130,16 +131,18 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Host::class);
     }
 
-    private function getBirthdayFromIdCard(): string
+    public function getBirthdayFromIdCard(string|null $id_card = null): Carbon
     {
-        $idCard = $this->id_card;
+        if (empty($id_card)) {
+            $id_card = $this->id_card;
+        }
 
-        $bir = substr($idCard, 6, 8);
+        $bir = substr($id_card, 6, 8);
         $year = (int) substr($bir, 0, 4);
         $month = (int) substr($bir, 4, 2);
         $day = (int) substr($bir, 6, 2);
 
-        return $year.'-'.$month.'-'.$day;
+        return Carbon::parse($year.'-'.$month.'-'.$day);
     }
 
     public function hasBalance(string $amount = '0.01'): bool

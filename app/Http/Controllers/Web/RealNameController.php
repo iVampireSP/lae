@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Exceptions\CommonException;
 use App\Http\Controllers\Controller;
 use App\Support\RealNameSupport;
+use Carbon\Exceptions\InvalidFormatException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -22,7 +23,12 @@ class RealNameController extends Controller
 
         $realNameSupport = new RealNameSupport();
 
-        $birthday = $realNameSupport->getBirthday($request->input('id_card'));
+        try {
+            $birthday = $realNameSupport->getBirthday($request->input('id_card'));
+        } catch (InvalidFormatException) {
+            return back()->with('error', '身份证号码格式错误。');
+        }
+
         // 检查年龄是否在区间内 settings.supports.real_name.min_age ~ settings.supports.real_name.max_age
         if (Carbon::now()->diffInYears($birthday) < config('settings.supports.real_name.min_age') || Carbon::now()->diffInYears($birthday) > config('settings.supports.real_name.max_age')) {
             $message = '至少需要 '.config('settings.supports.real_name.min_age').' 岁，最大 '.config('settings.supports.real_name.max_age').' 岁。';

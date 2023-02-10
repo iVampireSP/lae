@@ -15,12 +15,32 @@ class RealNameController extends Controller
 {
     public function verify(Request $request): JsonResponse
     {
+        Log::debug('实名认证回调', $request->all());
+
+        return $this->validateOrSave($request)
+            ? $this->success()
+            : $this->failed();
+    }
+
+    public function process(Request $request): View
+    {
+        Log::debug('实名认证回调', $request->all());
+
+        return $this->validateOrSave($request)
+            ? view('real_name.success')
+            : view('real_name.failed');
+    }
+
+    public function validateOrSave(Request $request): bool
+    {
+        Log::debug('实名认证回调', $request->all());
+
         $result = (new RealNameSupport())->verify($request->all());
 
         if (! $result) {
             Log::warning('实名认证失败', $request->all());
 
-            return $this->error('实名认证失败。');
+            return false;
         }
 
         $user = (new User)->find($result['user_id']);
@@ -32,11 +52,6 @@ class RealNameController extends Controller
 
         $user->notify(new UserNotification('再次欢迎您！', '再次欢迎您！您的实人认证已通过。', true));
 
-        return $this->success('实名认证成功。');
-    }
-
-    public function process(): View
-    {
-        return view('real_name.process');
+        return true;
     }
 }

@@ -3,7 +3,9 @@
 namespace App\Support;
 
 use App\Exceptions\CommonException;
+use App\Models\User;
 use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
@@ -77,6 +79,8 @@ class RealNameSupport
             'idName' => $real_name['name'],
             'pageTitle' => config('app.display_name').' 实名认证',
             'notifyUrl' => route('public.real-name.notify'),
+            // 'notifyUrl' => 'http://99dsazj8qp.sharedwithexpose.com/public/real_name/notify',
+
             'procedureType' => 'video',
             'txtBgColor' => '#cccccc',
 
@@ -86,6 +90,8 @@ class RealNameSupport
             'retIdImg' => 'false',
             'returnImg' => 'false',
             'returnUrl' => route('public.real-name.process'),
+            // 'returnUrl' => 'http://99dsazj8qp.sharedwithexpose.com/public/real_name/process',
+
         ];
 
         $resp = $this->http->asForm()->post('/edis_ctid_id_name_video_ocr_h5', $data)->json();
@@ -106,8 +112,6 @@ class RealNameSupport
     public function verify(array $request): array|bool
     {
         $data = json_decode($request['data'], true);
-
-        Log::debug('实名认证回调', $request);
 
         $verify = $this->verifyIfSuccess($request['data'], $request['sign']);
 
@@ -149,12 +153,8 @@ EOF;
         return $flag === 1;
     }
 
-    public function getBirthday(string $id_card): string
+    public function getBirthday(string $id_card): Carbon
     {
-        $year = substr($id_card, 6, 4);
-        $month = substr($id_card, 10, 2);
-        $day = substr($id_card, 12, 2);
-
-        return $year.'-'.$month.'-'.$day;
+        return (new User())->getBirthdayFromIdCard($id_card);
     }
 }
