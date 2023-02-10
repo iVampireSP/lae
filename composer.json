@@ -22,7 +22,6 @@
         "genealabs/laravel-model-caching": "^0.12.5",
         "guzzlehttp/guzzle": "^7.2",
         "jenssegers/mongodb": "^3.9",
-        "joanhey/adapterman": "^0.5.5",
         "laravel/framework": "^9.19",
         "laravel/octane": "^1.3",
         "laravel/sanctum": "^3.0",
@@ -36,7 +35,8 @@
         "spiral/roadrunner": "^2.8.2",
         "symfony/psr-http-message-bridge": "^2.1",
         "yansongda/laravel-pay": "~3.2.0",
-      "ext-redis": "*"
+        "ext-redis": "*",
+        "ext-json": "*"
     },
     "require-dev": {
         "beyondcode/laravel-query-detector": "^1.6",
