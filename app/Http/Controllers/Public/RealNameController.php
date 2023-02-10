@@ -26,9 +26,11 @@ class RealNameController extends Controller
     {
         Log::debug('实名认证回调', $request->all());
 
-        return $this->validateOrSave($request)
-            ? view('real_name.success')
-            : view('real_name.failed');
+        return view('real_name.process');
+
+        // return $this->validateOrSave($request)
+        //     ? view('real_name.success')
+        //     : view('real_name.failed');
     }
 
     public function validateOrSave(Request $request): bool
