@@ -37,8 +37,7 @@ class TransferController extends Controller
 
         $amount = $request->input('amount');
 
-        // 使用 bc 判断金额是否足够
-        if (bccomp($amount, $user->balance, 2) > 0) {
+        if ($user->hasBalance($amount) === false) {
             return back()->withErrors(['amount' => '余额不足。']);
         }
 
