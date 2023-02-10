@@ -94,21 +94,10 @@ class HostController extends Controller
      */
     public function update(Request $request, Host $host): JsonResponse
     {
-        //
         $this->validate($request, [
             'status' => 'sometimes|in:running,stopped,error,suspended,pending',
             'managed_price' => 'sometimes|numeric|nullable',
-
-            // 如果是立即扣费
-            'cost_once' => 'sometimes|numeric|nullable',
         ]);
-
-        // if it has cost_once
-        if ($request->has('cost_once')) {
-            $host->cost($request->cost_once ?? 0, false);
-
-            return $this->updated();
-        }
 
         $update = $request->except(['module_id', 'user_id']);
 
@@ -133,5 +122,17 @@ class HostController extends Controller
         $host?->delete();
 
         return $this->deleted();
+    }
+
+    public function cost(Request $request, Host $host): JsonResponse
+    {
+        $this->validate($request, [
+            'amount' => 'required|numeric|min:0.01',
+            'description' => 'nullable|string:max:255',
+        ]);
+
+        $host->cost($request->input('amount'), false);
+
+        return $this->noContent();
     }
 }

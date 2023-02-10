@@ -169,7 +169,7 @@ class Host extends Model
         return true;
     }
 
-    public function cost(string $amount = null, $auto = true): bool
+    public function cost(string $amount = null, $auto = true, $description = null): bool
     {
         $this->load('user');
         $user = $this->user;
@@ -209,7 +209,7 @@ class Host extends Model
         }
 
         if ($real_price == 0) {
-            echo '价格为 0，不扣费';
+            echo '价格为 0，不扣费'.PHP_EOL;
 
             return true;
         }
@@ -237,7 +237,9 @@ class Host extends Model
 
         Cache::put($month_cache_key, $hosts_balances, 604800);
 
-        $description = '模块发起的扣费。';
+        if (! $description) {
+            $description = '模块发起的扣费。';
+        }
 
         if ($auto) {
             $description = '自动扣费。';
