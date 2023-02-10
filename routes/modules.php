@@ -15,6 +15,7 @@ Route::get('modules', [ModuleController::class, 'index']);
 Route::get('/', [ModuleController::class, 'index']);
 
 Route::apiResource('hosts', HostController::class);
+Route::post('hosts/{host}/cost', [HostController::class, 'cost']);
 
 Route::apiResource('tasks', TaskController::class);
 
