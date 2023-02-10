@@ -44,7 +44,7 @@ class RealNameController extends Controller
             return false;
         }
 
-        Cache::lock('user_realname', 60)->get(function ()use ($result) {
+        Cache::lock('user_realname', 60)->get(function () use ($result) {
             $user = (new User)->find($result['user_id']);
 
             if ($user->real_name_verified_at) {
