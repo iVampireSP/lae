@@ -8,6 +8,7 @@ use App\Notifications\User\UserNotification;
 use App\Support\RealNameSupport;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\View\View;
 
@@ -26,11 +27,9 @@ class RealNameController extends Controller
     {
         Log::debug('实名认证回调', $request->all());
 
-        return view('real_name.process');
-
-        // return $this->validateOrSave($request)
-        //     ? view('real_name.success')
-        //     : view('real_name.failed');
+        return $this->validateOrSave($request)
+            ? view('real_name.success')
+            : view('real_name.failed');
     }
 
     public function validateOrSave(Request $request): bool
@@ -45,14 +44,23 @@ class RealNameController extends Controller
             return false;
         }
 
-        $user = (new User)->find($result['user_id']);
-        $user->real_name = $result['name'];
-        $user->id_card = $result['id_card'];
-        $user->save();
+        Cache::lock('user_realname', 60)->get(function ()use ($result) {
+            $user = (new User)->find($result['user_id']);
 
-        $user->reduce((string) config('settings.supports.real_name.price'), '实名认证费用。');
+            if ($user->real_name_verified_at) {
+                return false;
+            }
 
-        $user->notify(new UserNotification('再次欢迎您！', '再次欢迎您！您的实人认证已通过。'));
+            $user->real_name = $result['name'];
+            $user->id_card = $result['id_card'];
+            $user->save();
+
+            $user->reduce((string) config('settings.supports.real_name.price'), '实名认证费用。');
+
+            $user->notify(new UserNotification('再次欢迎您！', '再次欢迎您！您的实人认证已通过。'));
+
+            return true;
+        });
 
         return true;
     }
