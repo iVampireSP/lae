@@ -127,7 +127,8 @@ class RealNameSupport
 
         $return = Cache::get('real_name:'.$data['bizNo'], false);
 
-        Cache::forget('real_name:'.$data['bizNo']);
+        // 将 TTL 设置为 10s
+        Cache::put('real_name:'.$data['bizNo'], $return, 10);
 
         return $return;
     }
