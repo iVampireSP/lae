@@ -24,20 +24,37 @@ class UserController extends Controller
 
         // 搜索 name, email, balance
         if ($request->has('name')) {
-            $users->where('name', 'like', '%'.$request->input('name').'%');
+            $users->where('name', 'like', '%' . $request->input('name') . '%');
         }
 
         if ($request->has('email')) {
-            $users->where('email', 'like', '%'.$request->input('email').'%');
+            $users->where('email', 'like', '%' . $request->input('email') . '%');
         }
 
         if ($request->has('balance')) {
-            $users->where('balance', 'like', '%'.$request->input('balance').'%');
+            $users->where('balance', 'like', '%' . $request->input('balance') . '%');
         }
 
         $users = $users->simplePaginate(100);
 
         return $this->success($users);
+    }
+
+    public function store(Request $request): JsonResponse
+    {
+        $this->validate($request, [
+            'name' => 'required|string',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|string|min:6',
+        ]);
+
+        $user = User::create([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'password' => bcrypt($request->input('password')),
+        ]);
+
+        return $this->created($user);
     }
 
     public function show(User $user): JsonResponse
