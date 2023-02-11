@@ -20,7 +20,7 @@ class Users extends Event implements ShouldBroadcastNow
 
     public array|Model $data;
 
-    public null|Module $module = null;
+    public ?Module $module = null;
 
     public string $event = 'notification';
 
@@ -78,5 +78,10 @@ class Users extends Event implements ShouldBroadcastNow
     public function broadcastAs(): string
     {
         return 'messages';
+    }
+
+    public function broadcastQueue(): string
+    {
+        return 'notifications';
     }
 }
