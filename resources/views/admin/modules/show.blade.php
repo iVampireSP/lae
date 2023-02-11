@@ -4,7 +4,7 @@
 
 @section('content')
     <h3>{{ $module->name }}</h3>
-    <p>状态: {{ $module->status }}, 余额: {{ $module->balance }} 元。</p>
+    <p>状态: <x-module-status :status="$module->status"/>, 余额: {{ $module->balance }} 元。</p>
 
     <div class="mt-3">
         <a href="{{ route('admin.modules.edit', $module) }}">编辑</a>
