@@ -127,7 +127,7 @@ class HostController extends Controller
     public function cost(Request $request, Host $host): JsonResponse
     {
         $this->validate($request, [
-            'amount' => 'required|numeric|min:0.01',
+            'amount' => 'required|numeric|min:0.0001',
             'description' => 'nullable|string:max:255',
         ]);
 
