@@ -81,7 +81,7 @@ class Kernel extends HttpKernel
         'module' => [
             JsonRequest::class,
             SubstituteBindings::class,
-            MakeSureModuleStatusIsUp::class
+            MakeSureModuleStatusIsUp::class,
         ],
     ];
 
