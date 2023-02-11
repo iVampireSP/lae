@@ -7,7 +7,7 @@ use Illuminate\View\Component;
 
 class HostStatus extends Component
 {
-    public string|null $status = null;
+    public ?string $status = null;
 
     /**
      * Create a new component instance.
@@ -16,8 +16,6 @@ class HostStatus extends Component
      */
     public function __construct($status)
     {
-        //
-
         $this->status = $status;
     }
 

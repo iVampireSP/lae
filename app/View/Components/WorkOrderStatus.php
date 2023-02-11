@@ -7,7 +7,7 @@ use Illuminate\View\Component;
 
 class WorkOrderStatus extends Component
 {
-    public string|null $status = null;
+    public ?string $status = null;
 
     /**
      * Create a new component instance.

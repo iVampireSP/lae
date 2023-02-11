@@ -7,7 +7,7 @@ use Illuminate\View\Component;
 
 class Payment extends Component
 {
-    public string|null $payment = '';
+    public ?string $payment = null;
 
     /**
      * Create a new component instance.
@@ -16,7 +16,6 @@ class Payment extends Component
      */
     public function __construct(string|null $payment)
     {
-        //
         $this->payment = $payment;
     }
 
