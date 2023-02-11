@@ -48,4 +48,11 @@ class WebNotification extends Notification
     {
         return [WebChannel::class];
     }
+
+    public function viaQueues(): array
+    {
+        return [
+            WebChannel::class => 'notifications',
+        ];
+    }
 }

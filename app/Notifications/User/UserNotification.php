@@ -72,4 +72,12 @@ class UserNotification extends Notification implements ShouldQueue
             'event' => 'notifications',
         ];
     }
+
+    public function viaQueues(): array
+    {
+        return [
+            WebChannel::class => 'notifications',
+            'mail' => 'notifications',
+        ];
+    }
 }
