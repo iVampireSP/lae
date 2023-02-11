@@ -192,9 +192,11 @@ while (true) {
 
         if ($node['type'] == 'master') {
             if (count($nodes) <= 2) {
-                $temp_conf .= ' backup';
+                $temp_conf .= ' backup ';
             }
         }
+
+        $temp_conf .= ' max_fails=1 fail_timeout=10s ';
 
         $temp_conf .= ";\n";
 
