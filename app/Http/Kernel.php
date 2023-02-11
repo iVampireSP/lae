@@ -6,7 +6,7 @@ use App\Http\Middleware\AddHeaders;
 use App\Http\Middleware\Admin\ValidateReferer;
 use App\Http\Middleware\Authenticate;
 use App\Http\Middleware\EncryptCookies;
-use App\Http\Middleware\JsonResponse;
+use App\Http\Middleware\JsonRequest;
 use App\Http\Middleware\PreventRequestsDuringMaintenance;
 use App\Http\Middleware\RealNamed;
 use App\Http\Middleware\RedirectIfAuthenticated;
@@ -70,7 +70,7 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-            JsonResponse::class,
+            JsonRequest::class,
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
             SubstituteBindings::class,
@@ -78,7 +78,7 @@ class Kernel extends HttpKernel
         ],
 
         'module' => [
-            JsonResponse::class,
+            JsonRequest::class,
             SubstituteBindings::class,
         ],
     ];
