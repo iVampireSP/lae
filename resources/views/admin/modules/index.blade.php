@@ -28,7 +28,7 @@
                         {{ $module->name }}
                     </td>
                     <td>
-                        {{ $module->status }}
+                        <x-module-status :status="$module->status"/>
                     </td>
                     <td>
                         {{ $module->balance }} 元
