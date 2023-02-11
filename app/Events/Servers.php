@@ -20,4 +20,9 @@ class Servers extends Event implements ShouldBroadcast
     {
         return new Channel('servers');
     }
+
+    public function broadcastQueue(): string
+    {
+        return 'notifications';
+    }
 }

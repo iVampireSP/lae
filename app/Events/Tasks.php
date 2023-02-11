@@ -13,16 +13,6 @@ class Tasks
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
-     * Create a new event instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
      * Get the channels the event should broadcast on.
      *
      * @return Channel|PrivateChannel
@@ -30,5 +20,10 @@ class Tasks
     public function broadcastOn(): Channel|PrivateChannel
     {
         return new PrivateChannel('channel-name');
+    }
+
+    public function broadcastQueue(): string
+    {
+        return 'notifications';
     }
 }
