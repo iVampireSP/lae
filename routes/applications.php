@@ -17,5 +17,6 @@ Route::prefix('mqtt')->as('mqtt.')->group(function () {
 Route::get('modules', [ModuleController::class, 'index'])->name('modules.index');
 Route::get('modules/{module}', [ModuleController::class, 'show'])->name('modules.show');
 
-Route::resource('users', UserController::class)->only(['index', 'show']);
+Route::resource('users', UserController::class)->only(['index', 'show', 'store']);
+
 Route::get('token/{token}', [UserController::class, 'auth']);
