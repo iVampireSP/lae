@@ -35,7 +35,7 @@ class SendRenewNotificationJob implements ShouldQueue
     {
         if (! $this->host) {
             // 获取 Host，距离今天刚好 7 天的 Host
-            Host::where('next_due_at', '>', now()->addDays(7)->startOfDay())
+            (new Host)->where('next_due_at', '>', now()->addDays(7)->startOfDay())
                 ->where('next_due_at', '<', now()->addDays(7)->endOfDay())
                 ->chunk(100, function ($hosts) {
                     foreach ($hosts as $host) {

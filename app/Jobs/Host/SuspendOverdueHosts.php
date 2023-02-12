@@ -33,7 +33,7 @@ class SuspendOverdueHosts implements ShouldQueue
     public function handle(): void
     {
         if (!$this->host) {
-            Host::where('next_due_at', '<', now())
+            (new Host)->where('next_due_at', '<', now())
                 ->where('status', '!=', 'suspended')
                 ->chunk(100, function ($hosts) {
                     foreach ($hosts as $host) {

@@ -16,7 +16,7 @@ class HostController extends Controller
      */
     public function index(): View
     {
-        $hosts = Host::thisUser()->with(['user', 'module'])->paginate(20);
+        $hosts = (new Host)->thisUser()->with(['user', 'module'])->paginate(20);
 
         return view('hosts.index', compact('hosts'));
     }
