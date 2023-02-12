@@ -20,7 +20,7 @@ class ReportRequestToCluster
      */
     public function handle(Request $request, Closure $next): mixed
     {
-        $random_id = Str::random(16);
+        $random_id = Str::random();
 
         $method = $request->method();
         $path = $request->path();
