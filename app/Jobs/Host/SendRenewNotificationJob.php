@@ -33,7 +33,7 @@ class SendRenewNotificationJob implements ShouldQueue
      */
     public function handle(): void
     {
-        if (!$this->host) {
+        if (! $this->host) {
             // 获取 Host，距离今天刚好 7 天的 Host
             Host::where('next_due_at', '>', now()->addDays(7)->startOfDay())
                 ->where('next_due_at', '<', now()->addDays(7)->endOfDay())
@@ -44,6 +44,6 @@ class SendRenewNotificationJob implements ShouldQueue
                 });
         }
 
-        $this->host?->user->notify(new UserNotification("续费提醒", "您的 {$this->host->name} 将在 7 天后到期，请及时续费。", true));
+        $this->host?->user->notify(new UserNotification('续费提醒', "您的 {$this->host->name} 将在 7 天后到期，请及时续费。", true));
     }
 }
