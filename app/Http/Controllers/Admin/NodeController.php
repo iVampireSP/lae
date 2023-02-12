@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Support\ClusterSupport;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -45,7 +46,7 @@ class NodeController extends Controller
         return $this->success('Updated');
     }
 
-    public function event(Request $request): \Illuminate\Http\RedirectResponse
+    public function event(Request $request): RedirectResponse
     {
         $request->validate([
             'restart' => 'nullable|string|max:10|in:web,queue',

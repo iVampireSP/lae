@@ -79,15 +79,23 @@ class ClusterSupport
         ClusterSupport::hset('nodes', $node_id, $node);
     }
 
-    public static function removeNode($node_id): void
+    public static function hget($key, $hashKey, $default = []): string|array|null
     {
-        self::hdel('nodes', $node_id);
+        /** @noinspection PhpUndefinedMethodInspection */
+        $value = Redis::hget(self::$prefix.$key, $hashKey);
+
+        return $value ?: $default;
     }
 
     public static function hset($key, $value, $data = []): void
     {
         /** @noinspection PhpUndefinedMethodInspection */
         Redis::hset(self::$prefix.$key, $value, json_encode($data));
+    }
+
+    public static function removeNode($node_id): void
+    {
+        self::hdel('nodes', $node_id);
     }
 
     public static function hdel($key, $hash_key): void
@@ -133,13 +141,14 @@ class ClusterSupport
         return Redis::get(self::$prefix.$key, $default);
     }
 
+    // forever
+
     public static function forget($key): void
     {
         /** @noinspection PhpUndefinedMethodInspection */
         Redis::forget(self::$prefix.$key);
     }
 
-    // forever
     public static function forever($key, $value): void
     {
         self::set($key, $value, -1);
@@ -149,14 +158,6 @@ class ClusterSupport
     {
         /** @noinspection PhpUndefinedMethodInspection */
         Redis::set(self::$prefix.$key, $value, $ttl);
-    }
-
-    public static function hget($key, $hashKey, $default = []): string|array|null
-    {
-        /** @noinspection PhpUndefinedMethodInspection */
-        $value = Redis::hget(self::$prefix.$key, $hashKey);
-
-        return $value ?: $default;
     }
 
     public static function nodes($hide_ip = false, $type = 'all'): array

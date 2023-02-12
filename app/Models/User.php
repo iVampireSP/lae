@@ -163,17 +163,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->balance;
     }
 
-    public function getCostPrice(string $price): string
-    {
-        $this->load('user_group');
-
-        if (! $this->user_group) {
-            return $price;
-        }
-
-        return $this->user_group->getCostPrice($price);
-    }
-
     /**
      * 扣除费用
      *
@@ -267,6 +256,17 @@ class User extends Authenticatable implements MustVerifyEmail
         });
 
         return $this->balance;
+    }
+
+    public function getCostPrice(string $price): string
+    {
+        $this->load('user_group');
+
+        if (! $this->user_group) {
+            return $price;
+        }
+
+        return $this->user_group->getCostPrice($price);
     }
 
     /**

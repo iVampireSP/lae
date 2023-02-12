@@ -112,6 +112,18 @@ class Monitor extends Command
         return $msg;
     }
 
+    private function appendUser(array $message): string
+    {
+        $msg = '';
+        if ($message['user']) {
+            $msg .= "{$message['user']['name']}#{$message['user']['id']} ";
+        } else {
+            $msg .= 'Guest ';
+        }
+
+        return $msg;
+    }
+
     private function handleOutgoingRequest(array $message): string
     {
         $msg = $this->appendUser($message);
@@ -128,18 +140,6 @@ class Monitor extends Command
             $msg .= '我不参与调度了。';
         } else {
             $msg .= '我的权重是：'.$message['weight'].'。';
-        }
-
-        return $msg;
-    }
-
-    private function appendUser(array $message): string
-    {
-        $msg = '';
-        if ($message['user']) {
-            $msg .= "{$message['user']['name']}#{$message['user']['id']} ";
-        } else {
-            $msg .= 'Guest ';
         }
 
         return $msg;

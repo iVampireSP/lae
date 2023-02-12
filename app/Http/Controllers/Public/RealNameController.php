@@ -23,15 +23,6 @@ class RealNameController extends Controller
             : $this->failed();
     }
 
-    public function process(Request $request): View
-    {
-        Log::debug('实名认证回调', $request->all());
-
-        return $this->validateOrSave($request)
-            ? view('real_name.success')
-            : view('real_name.failed');
-    }
-
     public function validateOrSave(Request $request): bool
     {
         Log::debug('实名认证回调', $request->all());
@@ -63,5 +54,14 @@ class RealNameController extends Controller
         });
 
         return true;
+    }
+
+    public function process(Request $request): View
+    {
+        Log::debug('实名认证回调', $request->all());
+
+        return $this->validateOrSave($request)
+            ? view('real_name.success')
+            : view('real_name.failed');
     }
 }

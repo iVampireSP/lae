@@ -32,7 +32,7 @@ class SuspendOverdueHosts implements ShouldQueue
      */
     public function handle(): void
     {
-        if (!$this->host) {
+        if (! $this->host) {
             (new Host)->where('next_due_at', '<', now())
                 ->where('status', '!=', 'suspended')
                 ->chunk(100, function ($hosts) {

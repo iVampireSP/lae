@@ -26,17 +26,16 @@ class HostController extends Controller
         $price = $host->getRenewPrice();
 
         if ($price > auth()->user()->balance) {
-            return back()->with('error', '余额不足，续费需要：' . $price . ' 元，您还需要充值：' . ($price - auth()->user()->balance) . ' 元');
+            return back()->with('error', '余额不足，续费需要：'.$price.' 元，您还需要充值：'.($price - auth()->user()->balance).' 元');
         }
 
-        if (!$host->isCycle()) {
+        if (! $host->isCycle()) {
             return back()->with('error', '该主机不是周期性付费，无法续费。');
         }
 
         if ($host->renew()) {
-            return back()->with('success', '续费成功，新的到期时间为：' . $host->next_due_at . '。');
+            return back()->with('success', '续费成功，新的到期时间为：'.$host->next_due_at.'。');
         }
-
 
         return back()->with('error', '续费失败，请检查是否有足够的余额。');
     }
@@ -44,8 +43,7 @@ class HostController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param Host $host
-     *
+     * @param  Host  $host
      * @return RedirectResponse
      */
     public function destroy(Host $host): RedirectResponse
