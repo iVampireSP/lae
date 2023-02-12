@@ -79,18 +79,12 @@ class WorkOrder extends Notification implements ShouldQueue
     {
         $workOrder->load(['module', 'user']);
 
-        $module = null;
+        $wecom_key = config('settings.wecom.robot_hook.default');
+
         if ($workOrder->module) {
             $module = $workOrder->module;
 
-            // 取消隐藏字段
-            $module->makeVisible(['wecom_key']);
-        }
-
-        if ($module?->wecom_key == null) {
-            $wecom_key = config('settings.wecom.robot_hook.default');
-        } else {
-            $wecom_key = $module->wecom_key;
+            $wecom_key = $module->makeVisible(['wecom_key'])->wecom_key ?? $wecom_key;
         }
 
         return [
