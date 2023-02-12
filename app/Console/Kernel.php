@@ -21,45 +21,46 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      *
-     * @param  Schedule  $schedule
+     * @param Schedule $schedule
+     *
      * @return void
      */
     protected function schedule(Schedule $schedule): void
     {
         // 清理过期的 Token
-        $schedule->command('sanctum:prune-expired --hours=24')->daily()->runInBackground();
+        $schedule->command('sanctum:prune-expired --hours=24')->daily()->runInBackground()->onOneServer()->name("清理过期的 Token。");
 
         // 扣费
-        $schedule->job(new DispatchHostCostQueueJob(now()->minute))->everyMinute()->withoutOverlapping()->onOneServer();
+        $schedule->job(new DispatchHostCostQueueJob(now()->minute))->everyMinute()->withoutOverlapping()->onOneServer()->name("部署扣费任务");
 
         // 获取模块暴露的信息（服务器等,检查模块状态）
-        $schedule->job(new DispatchFetchModuleJob())->withoutOverlapping()->everyMinute();
+        $schedule->job(new DispatchFetchModuleJob())->withoutOverlapping()->everyMinute()->name("获取模块暴露的信息（服务器等,检查模块状态）");
 
         // 推送工单
-        $schedule->job(new PushWorkOrderJob())->everyMinute()->onOneServer();
+        $schedule->job(new PushWorkOrderJob())->everyMinute()->onOneServer()->name("推送工单");
         // 自动关闭工单
-        $schedule->job(new AutoCloseWorkOrderJob())->everyMinute()->onOneServer();
+        $schedule->job(new AutoCloseWorkOrderJob())->everyMinute()->onOneServer()->name("自动关闭工单");
 
         // 清理任务
-        $schedule->job(new ClearTasksJob())->weekly()->onOneServer();
+        $schedule->job(new ClearTasksJob())->weekly()->onOneServer()->name("清理大于 1 天的任务");
 
         // 删除暂停或部署时间超过 3 天以上的主机
-        $schedule->job(new DeleteHostJob())->hourly()->onOneServer();
+        $schedule->job(new DeleteHostJob())->hourly()->onOneServer()->name("删除暂停或部署时间超过 3 天以上的主机");
 
         // 检查主机是否存在于模块
-        $schedule->job(new ScanAllHostsJob())->everyThirtyMinutes()->withoutOverlapping()->onOneServer();
+        $schedule->job(new ScanAllHostsJob())->everyThirtyMinutes()->withoutOverlapping()->onOneServer()->name("检查主机是否存在于模块");
 
         // 检查未充值的订单，并充值
-        $schedule->job(new CheckAndChargeBalanceJob())->everyFiveMinutes()->onOneServer()->withoutOverlapping();
+        $schedule->job(new CheckAndChargeBalanceJob())->everyFiveMinutes()->onOneServer()->withoutOverlapping()->name("检查未充值的订单，并充值");
 
         // 发送模块收益
-        $schedule->job(new SendModuleEarningsJob())->dailyAt('20:00')->onOneServer();
+        $schedule->job(new SendModuleEarningsJob())->dailyAt('20:00')->onOneServer()->name("发送模块收益");
 
         // 回滚临时用户组
-        $schedule->job(new RollbackUserTempGroupJob())->everyMinute()->onOneServer();
+        $schedule->job(new RollbackUserTempGroupJob())->everyMinute()->onOneServer()->name("回滚临时用户组");
 
         // 设置生日用户组
-        $schedule->job(new SetBirthdayGroupJob())->dailyAt('00:00')->onOneServer();
+        $schedule->job(new SetBirthdayGroupJob())->dailyAt('00:00')->onOneServer()->name("设置生日用户组");
     }
 
     /**
@@ -69,7 +70,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands(): void
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }
