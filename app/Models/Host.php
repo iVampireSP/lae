@@ -145,9 +145,13 @@ class Host extends Model
 
     public function renew(): bool
     {
+        if (!$this->isCycle()) {
+            return false;
+        }
+
         $price = $this->getRenewPrice();
 
-        $description = '续费 '.$this->name.' 周期: '.$this->billing_cycle;
+        $description = '续费 ' . $this->name . ' 周期: ' . $this->billing_cycle;
 
         try {
             $this->user->reduce($price, $description, true, [
@@ -180,7 +184,7 @@ class Host extends Model
     public function safeDelete(): bool
     {
         // 如果创建时间大于大于 1 小时
-        if (! $this->isCycle() && $this->created_at->diffInHours(now()) > 1) {
+        if (!$this->isCycle() && $this->created_at->diffInHours(now()) > 1) {
             // 如果当前时间比扣费时间小，则说明没有扣费。执行扣费。
             if (now()->minute < $this->minute_at) {
                 $this->cost();
@@ -207,7 +211,7 @@ class Host extends Model
 
         $real_price = $amount ?? $this->price;
 
-        if (! $amount) {
+        if (!$amount) {
             if ($this->managed_price) {
                 $real_price = $this->managed_price;
             }
@@ -218,7 +222,7 @@ class Host extends Model
             if ($user_group->discount !== 100 && $user_group->discount !== null) {
                 $real_price = $user_group->getCostPrice($real_price);
 
-                $append_description = ' (折扣 '.$user_group->discount.'%)';
+                $append_description = ' (折扣 ' . $user_group->discount . '%)';
             }
         }
 
@@ -232,7 +236,7 @@ class Host extends Model
         }
 
         if ($real_price == 0) {
-            echo '价格为 0，不扣费'.PHP_EOL;
+            echo '价格为 0，不扣费' . PHP_EOL;
 
             return true;
         }
@@ -246,7 +250,7 @@ class Host extends Model
 
         $month = now()->month;
 
-        $month_cache_key = 'user_'.$this->user_id.'_month_'.$month.'_hosts_balances';
+        $month_cache_key = 'user_' . $this->user_id . '_month_' . $month . '_hosts_balances';
         $hosts_balances = Cache::get($month_cache_key, []);
 
         // 统计 Host 消耗的 Balance
@@ -260,7 +264,7 @@ class Host extends Model
 
         Cache::put($month_cache_key, $hosts_balances, 604800);
 
-        if (! $description) {
+        if (!$description) {
             $description = '模块发起的扣费。';
         }
 
@@ -300,7 +304,7 @@ class Host extends Model
         $current_month = now()->month;
         $current_year = now()->year;
 
-        $cache_key = 'module_earning_'.$this->module_id;
+        $cache_key = 'module_earning_' . $this->module_id;
 
         // 应支付的提成
         $commission = config('settings.billing.commission');
@@ -315,7 +319,7 @@ class Host extends Model
 
         $earnings = Cache::get($cache_key, []);
 
-        if (! isset($earnings[$current_year])) {
+        if (!isset($earnings[$current_year])) {
             $earnings[$current_year] = [];
         }
 
