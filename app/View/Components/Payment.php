@@ -2,7 +2,6 @@
 
 namespace App\View\Components;
 
-use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
 class Payment extends Component
@@ -22,9 +21,9 @@ class Payment extends Component
     /**
      * Get the view / contents that represent the component.
      *
-     * @return View
+     * @return string
      */
-    public function render(): View
+    public function render(): string
     {
         $this->payment = match ($this->payment) {
             'alipay' => '支付宝',
@@ -39,6 +38,6 @@ class Payment extends Component
             default => $this->payment,
         };
 
-        return view('components.payment', ['payment' => $this->payment]);
+        return $this->payment;
     }
 }
