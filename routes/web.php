@@ -8,6 +8,7 @@ use App\Http\Controllers\Web\Auth\ResetPasswordController;
 use App\Http\Controllers\Web\Auth\VerificationController;
 use App\Http\Controllers\Web\AuthController;
 use App\Http\Controllers\Web\BalanceController;
+use App\Http\Controllers\Web\HostController;
 use App\Http\Controllers\Web\RealNameController;
 use App\Http\Controllers\Web\TransferController;
 use Illuminate\Support\Facades\Route;
@@ -56,6 +57,11 @@ Route::middleware(['auth:web', 'banned', 'verified'])->group(
         Route::patch('update', [AuthController::class, 'update'])->name('users.update');
         Route::post('sudo/exit', [AuthController::class, 'exitSudo'])->name('sudo.exit');
         /* End 账户区域 */
+
+        /* Start 主机 */
+        Route::resource('hosts', HostController::class)->only(['index', 'destroy']);
+        Route::post('hosts/{host}/renew', [HostController::class, 'renew'])->name('hosts.renew');
+        /* End 主机 */
 
         /* Start 财务 */
         Route::get('transactions', [BalanceController::class, 'transactions'])->name('transactions');

@@ -40,10 +40,13 @@
                 @auth('web')
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('index') }}">密钥管理</a>
+                            <a class="nav-link" href="{{ route('index') }}">授权</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('balances.index') }}">余额与充值</a>
+                            <a class="nav-link" href="{{ route('balances.index') }}">资金</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('hosts.index') }}">主机</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('transfer') }}">转账</a>
