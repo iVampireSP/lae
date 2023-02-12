@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Exceptions\User\BalanceNotEnoughException;
-use Carbon\Exceptions\InvalidFormatException;
 use GeneaLabs\LaravelModelCaching\CachedBuilder;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -21,7 +20,6 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Crypt;
-use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -76,55 +74,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'banned_at',
         'birthday_at',
     ];
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function (self $user) {
-            $user->email_md5 = md5($user->email);
-            $user->uuid = Str::uuid();
-        });
-
-        static::updating(function (self $user) {
-            if ($user->isDirty('banned_at')) {
-                if ($user->banned_at) {
-                    $user->tokens()->delete();
-                    $user->hosts()->update(['status' => 'suspended', 'suspended_at' => now()]);
-                } else {
-                    $user->hosts()->update(['status' => 'stopped']);
-                }
-            }
-
-            if ($user->isDirty('email')) {
-                $user->email_md5 = md5($user->email);
-            }
-
-            if ($user->isDirty('id_card')) {
-                $user->id_card = Crypt::encryptString($user->id_card);
-            }
-
-            if ($user->isDirty('id_card') || $user->isDirty('real_name')) {
-                if (empty($user->id_card) || empty($user->real_name)) {
-                    $user->real_name_verified_at = null;
-                } else {
-                    $user->real_name_verified_at = now();
-
-                    // 更新生日
-                    // try {
-                    //     $user->birthday_at = $user->getBirthdayFromIdCard();
-                    // } catch (InvalidFormatException) {
-                    //     $user->birthday_at = null;
-                    // }
-                }
-            }
-        });
-
-        static::deleting(function (self $user) {
-            $user->tokens()->delete();
-            $user->hosts()->update(['status' => 'suspended', 'suspended_at' => now()]);
-        });
-    }
 
     public function hosts(): HasMany
     {

@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Events\Users;
 use App\Jobs\Host\HostJob;
 use App\Jobs\Host\UpdateOrDeleteHostJob;
-use App\Notifications\WebNotification;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -35,82 +34,6 @@ class Host extends Model
         'price' => 'decimal:2',
         'managed_price' => 'decimal:2',
     ];
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            $model->hour_at = now()->hour;
-            $model->minute_at = now()->minute;
-
-            if ($model->price !== null) {
-                $model->price = bcdiv($model->price, 1, 2);
-            }
-
-            if ($model->managed_price !== null) {
-                $model->managed_price = bcdiv($model->managed_price, 1, 2);
-            }
-        });
-
-        static::created(function (self $model) {
-            $model->load('module');
-
-            // model price 使用 bcmul 保留两位小数
-            $model->price = bcmul($model->price, 1, 2);
-
-            $model->user->notify(new WebNotification($model, 'hosts.created'));
-        });
-
-        static::updating(function (self $model) {
-            if ($model->isDirty('status')) {
-                if ($model->status == 'suspended') {
-                    $model->suspended_at = now();
-                } else {
-                    $model->suspended_at = null;
-                }
-
-                if ($model->status == 'locked') {
-                    $model->locked_at = now();
-                } else {
-                    $model->locked_at = null;
-                }
-
-                if ($model->status == 'unavailable') {
-                    $model->unavailable_at = now();
-                } else {
-                    $model->unavailable_at = null;
-                }
-            }
-
-            // 调度任务
-            if ($model->status !== 'unavailable') {
-                dispatch(new HostJob($model, 'patch'));
-            }
-
-            broadcast(new Users($model->user_id, 'hosts.updating', $model));
-        });
-
-        // when Updated
-        static::updated(function ($model) {
-            broadcast(new Users($model->user_id, 'hosts.updated', $model));
-        });
-
-        //
-        // static::deleting(function ($model) {
-        //     broadcast(new Users($model->user_id, 'hosts.deleting', $model));
-        // });
-
-        static::deleting(function ($model) {
-            Cache::forget('user_tasks_'.$model->user_id);
-        });
-
-        static::deleted(function ($model) {
-            broadcast(new Users($model->user_id, 'hosts.deleted', $model));
-            Cache::forget('user_tasks_'.$model->user_id);
-            Cache::forget('user_hosts_'.$model->user_id);
-        });
-    }
 
     /** @noinspection PhpUndefinedMethodInspection */
     public function getUserHosts($user_id = null): array|Collection

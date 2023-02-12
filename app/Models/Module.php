@@ -14,7 +14,6 @@ use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Str;
 use JetBrains\PhpStorm\ArrayShape;
 
 class Module extends Authenticatable
@@ -45,33 +44,6 @@ class Module extends Authenticatable
         'id' => 'string',
         'balance' => 'decimal:4',
     ];
-
-    protected static function boot()
-    {
-        parent::boot();
-        static::creating(function (self $model) {
-            if (! app()->environment('local')) {
-                $model->api_token = Str::random(60);
-            }
-
-            // 如果设置了 url 并且结尾有 / 则去掉
-            if ($model->url) {
-                $model->url = rtrim($model->url, '/');
-            }
-        });
-        static::updating(function (self $model) {
-            // 如果结尾有 / 则去掉
-            $model->url = rtrim($model->url, '/');
-        });
-    }
-
-    // public function moduleHostFunctions($host_id, $func, $requests): array
-    // {
-    //     $http = Http::module($this->api_token, $this->url);
-    //     $response = $http->post("hosts/{$host_id}/functions/" . $func, $requests);
-    //
-    //     return $this->getResponse($response);
-    // }
 
     // post, get, patch, delete 等请求
     public function remote($func, $requests): array
