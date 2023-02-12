@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fae0384821c63c5940022bd17e0f9117",
+    "content-hash": "e081583346c9eb14529a8c3c048a9faa",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -64,16 +64,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.258.4",
+            "version": "3.258.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "c20d674f502ed96ed0de63e9da087eb5f0e95590"
+                "reference": "09808d51cdb3cf01df1564dda4236da61ed9c804"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/c20d674f502ed96ed0de63e9da087eb5f0e95590",
-                "reference": "c20d674f502ed96ed0de63e9da087eb5f0e95590",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/09808d51cdb3cf01df1564dda4236da61ed9c804",
+                "reference": "09808d51cdb3cf01df1564dda4236da61ed9c804",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -158,9 +158,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.258.4"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.258.7"
             },
-            "time": "2023-02-06T19:28:40+00:00"
+            "time": "2023-02-09T19:23:14+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",
@@ -2030,16 +2030,16 @@
         },
         {
             "name": "jenssegers/mongodb",
-            "version": "3.9.3",
+            "version": "v3.9.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jenssegers/laravel-mongodb.git",
-                "reference": "098347c1b8cbc5d7e2076a111e2bbfc66c65a628"
+                "reference": "0b03010682e5041ea80177a3db2d6509da92a9a5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jenssegers/laravel-mongodb/zipball/098347c1b8cbc5d7e2076a111e2bbfc66c65a628",
-                "reference": "098347c1b8cbc5d7e2076a111e2bbfc66c65a628",
+                "url": "https://api.github.com/repos/jenssegers/laravel-mongodb/zipball/0b03010682e5041ea80177a3db2d6509da92a9a5",
+                "reference": "0b03010682e5041ea80177a3db2d6509da92a9a5",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -2102,7 +2102,7 @@
             ],
             "support": {
                 "issues": "https://github.com/jenssegers/laravel-mongodb/issues",
-                "source": "https://github.com/jenssegers/laravel-mongodb/tree/3.9.3"
+                "source": "https://github.com/jenssegers/laravel-mongodb/tree/v3.9.4"
             },
             "funding": [
                 {
@@ -2114,7 +2114,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-01-16T20:14:17+00:00"
+            "time": "2023-02-10T13:18:35+00:00"
         },
         {
             "name": "laminas/laminas-diactoros",
@@ -4094,16 +4094,16 @@
         },
         {
             "name": "php-mqtt/client",
-            "version": "v1.7.1",
+            "version": "v1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-mqtt/client.git",
-                "reference": "dc40a6d282e057dfe6bd9440b5f65c2e7c9939be"
+                "reference": "99967b4d4f10388c34e82b1881eb8f833ced322c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-mqtt/client/zipball/dc40a6d282e057dfe6bd9440b5f65c2e7c9939be",
-                "reference": "dc40a6d282e057dfe6bd9440b5f65c2e7c9939be",
+                "url": "https://api.github.com/repos/php-mqtt/client/zipball/99967b4d4f10388c34e82b1881eb8f833ced322c",
+                "reference": "99967b4d4f10388c34e82b1881eb8f833ced322c",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -4151,9 +4151,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-mqtt/client/issues",
-                "source": "https://github.com/php-mqtt/client/tree/v1.7.1"
+                "source": "https://github.com/php-mqtt/client/tree/v1.8.0"
             },
-            "time": "2023-01-13T05:40:57+00:00"
+            "time": "2023-02-10T19:37:29+00:00"
         },
         {
             "name": "php-mqtt/laravel-client",
@@ -10060,16 +10060,16 @@
         },
         {
             "name": "laravel-lang/lang",
-            "version": "12.15.1",
+            "version": "12.16.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Laravel-Lang/lang.git",
-                "reference": "2cc6fe773f81bc88705c272337feb7fd3f725769"
+                "reference": "0536e0617b3ed07d4fab04b28960d611a3709eb2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Laravel-Lang/lang/zipball/2cc6fe773f81bc88705c272337feb7fd3f725769",
-                "reference": "2cc6fe773f81bc88705c272337feb7fd3f725769",
+                "url": "https://api.github.com/repos/Laravel-Lang/lang/zipball/0536e0617b3ed07d4fab04b28960d611a3709eb2",
+                "reference": "0536e0617b3ed07d4fab04b28960d611a3709eb2",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -10137,20 +10137,20 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2023-02-08T08:32:24+00:00"
+            "time": "2023-02-11T09:51:27+00:00"
         },
         {
             "name": "laravel-lang/publisher",
-            "version": "v14.5.0",
+            "version": "v14.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Laravel-Lang/publisher.git",
-                "reference": "2c1a74fe5f8f76a2d2b7802076a7c35a3f89fcf4"
+                "reference": "56bc9e7e2d2593ac95d5518a25085c34f8113b11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Laravel-Lang/publisher/zipball/2c1a74fe5f8f76a2d2b7802076a7c35a3f89fcf4",
-                "reference": "2c1a74fe5f8f76a2d2b7802076a7c35a3f89fcf4",
+                "url": "https://api.github.com/repos/Laravel-Lang/publisher/zipball/56bc9e7e2d2593ac95d5518a25085c34f8113b11",
+                "reference": "56bc9e7e2d2593ac95d5518a25085c34f8113b11",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -10165,8 +10165,8 @@
                 "dragon-code/pretty-array": "^4.0",
                 "dragon-code/support": "^6.3",
                 "ext-json": "*",
-                "illuminate/console": "^8.79 || ^9.18",
-                "illuminate/support": "^8.79 || ^9.18",
+                "illuminate/console": "^8.79 || ^9.18 || ^10.0",
+                "illuminate/support": "^8.79 || ^9.18 || ^10.0",
                 "league/commonmark": "^2.3",
                 "league/config": "^1.2",
                 "php": "^8.1"
@@ -10178,7 +10178,7 @@
             },
             "require-dev": {
                 "laravel-lang/json-fallback-hotfix": "^1.0",
-                "orchestra/testbench": "^6.0 || ^7.0",
+                "orchestra/testbench": "^6.0 || ^7.0 || ^8.0",
                 "phpstan/phpstan": "^1.8",
                 "phpunit/phpunit": "^9.4",
                 "symfony/var-dumper": "^5.0 || ^6.0"
@@ -10251,7 +10251,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2023-01-10T19:26:44+00:00"
+            "time": "2023-02-10T08:21:43+00:00"
         },
         {
             "name": "laravel/pint",
@@ -12883,7 +12883,8 @@
         "ext-pdo": "*",
         "ext-posix": "*",
         "ext-zip": "^1.19",
-        "ext-redis": "*"
+        "ext-redis": "*",
+        "ext-json": "*"
     },
     "platform-dev": [],
     "plugin-api-version": "2.3.0"
