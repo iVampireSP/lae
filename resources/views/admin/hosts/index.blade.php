@@ -3,6 +3,8 @@
 @section('title', '主机')
 
 @section('content')
+    <h3>主机管理</h3>
+    <p>计费项目。</p>
 
     <div class="overflow-auto">
         <table class="table table-hover">
