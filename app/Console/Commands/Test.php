@@ -8,6 +8,8 @@ use Symfony\Component\Console\Command\Command as CommandAlias;
 
 class Test extends Command
 {
+    // 测试用的
+
     /**
      * The name and signature of the console command.
      *
@@ -102,15 +104,13 @@ class Test extends Command
                 // 判断是否下载完毕
                 if ($downloaded_size >= $total_size) {
                     break;
-
-                    echo 'download complete';
                 }
 
                 // download progress
                 echo 'downloaded: '.$downloaded_size.' of '.$total_size.' bytes'.PHP_EOL;
             } else {
                 echo 'server not support range download'.PHP_EOL;
-                exit;
+                // exit;
 
                 // stream download
                 $fp = fopen('download.bin', 'w');
