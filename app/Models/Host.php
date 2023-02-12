@@ -161,7 +161,7 @@ class Host extends Model
             'annually' => bcmul($this->getPrice(), 12),
             'biennially' => bcmul($this->getPrice(), 24),
             'triennially' => bcmul($this->getPrice(), 36),
-            default => 0,
+            default => '0',
         };
     }
 
