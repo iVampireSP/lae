@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\Users;
 use App\Exceptions\User\BalanceNotEnoughException;
 use GeneaLabs\LaravelModelCaching\CachedBuilder;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
@@ -87,11 +88,11 @@ class User extends Authenticatable implements MustVerifyEmail
         }
 
         $bir = substr($id_card, 6, 8);
-        $year = (int)substr($bir, 0, 4);
-        $month = (int)substr($bir, 4, 2);
-        $day = (int)substr($bir, 6, 2);
+        $year = (int) substr($bir, 0, 4);
+        $month = (int) substr($bir, 4, 2);
+        $day = (int) substr($bir, 6, 2);
 
-        return Carbon::parse($year . '-' . $month . '-' . $day);
+        return Carbon::parse($year.'-'.$month.'-'.$day);
     }
 
     public function hasBalance(string $amount = '0.01'): bool
@@ -166,22 +167,20 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $this->load('user_group');
 
-        if (!$this->user_group) {
+        if (! $this->user_group) {
             return $price;
         }
 
         return $this->user_group->getCostPrice($price);
     }
 
-
     /**
      * 扣除费用
      *
-     * @param string|null $amount
-     * @param string      $description
-     * @param bool        $fail
-     * @param array       $options
-     *
+     * @param  string|null  $amount
+     * @param  string  $description
+     * @param  bool  $fail
+     * @param  array  $options
      * @return string
      */
     public function reduce(string|null $amount = '0', string $description = '消费', bool $fail = false, array $options = []): string
@@ -190,7 +189,7 @@ class User extends Authenticatable implements MustVerifyEmail
             return $this->balance;
         }
 
-        Cache::lock('user_balance_' . $this->id, 10)->block(10, function () use ($amount, $fail, $description, $options) {
+        Cache::lock('user_balance_'.$this->id, 10)->block(10, function () use ($amount, $fail, $description, $options) {
             $this->refresh();
 
             if ($this->balance < $amount) {
@@ -215,6 +214,8 @@ class User extends Authenticatable implements MustVerifyEmail
             }
 
             (new Transaction)->create($data);
+
+            broadcast(new Users($this, 'balances.amount.reduced', $this));
         });
 
         return $this->balance;
@@ -223,11 +224,10 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * 增加余额
      *
-     * @param string|null $amount
-     * @param string      $payment
-     * @param string      $description
-     * @param array       $options
-     *
+     * @param  string|null  $amount
+     * @param  string  $payment
+     * @param  string  $description
+     * @param  array  $options
      * @return string
      */
     public function charge(string|null $amount = '0', string $payment = 'console', string $description = '充值', array $options = []): string
@@ -236,7 +236,7 @@ class User extends Authenticatable implements MustVerifyEmail
             return $this->balance;
         }
 
-        Cache::lock('user_balance_' . $this->id, 10)->block(10, function () use ($amount, $description, $payment, $options) {
+        Cache::lock('user_balance_'.$this->id, 10)->block(10, function () use ($amount, $description, $payment, $options) {
             $this->refresh();
             $this->balance = bcadd($this->balance, $amount, 4);
             $this->save();

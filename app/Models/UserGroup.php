@@ -65,7 +65,7 @@ class UserGroup extends Model
     {
         if ($this->exempt) {
             return '0';
-        } else if ($this->discount !== 100 && $this->discount !== null) {
+        } elseif ($this->discount !== 100 && $this->discount !== null) {
             $price = bcmul($price, bcdiv($this->discount, '100', 4), 4);
         }
 
