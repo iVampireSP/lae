@@ -18,7 +18,7 @@ class NodeController extends Controller
      *
      * @return View
      */
-    public function index()
+    public function index(): View
     {
         $nodes = ClusterSupport::nodes();
 
@@ -32,7 +32,7 @@ class NodeController extends Controller
      * @param  string  $node
      * @return JsonResponse
      */
-    public function update(Request $request, string $node)
+    public function update(Request $request, string $node): JsonResponse
     {
         $request->validate([
             'weight' => 'sometimes|integer|min:0|max:100',
@@ -45,7 +45,7 @@ class NodeController extends Controller
         return $this->success('Updated');
     }
 
-    public function event(Request $request)
+    public function event(Request $request): \Illuminate\Http\RedirectResponse
     {
         $request->validate([
             'restart' => 'nullable|string|max:10|in:web,queue',
@@ -62,7 +62,7 @@ class NodeController extends Controller
         return back()->with('success', '已经向集群广播命令。');
     }
 
-    public function stream()
+    public function stream(): StreamedResponse
     {
         $response = new StreamedResponse(function () {
             ClusterSupport::publish('monitor.started');

@@ -21,7 +21,7 @@ class HostController extends Controller
         return view('hosts.index', compact('hosts'));
     }
 
-    public function renew(Host $host)
+    public function renew(Host $host): RedirectResponse
     {
         $price = $host->getRenewPrice();
 

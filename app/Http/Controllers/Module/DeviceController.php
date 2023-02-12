@@ -23,7 +23,7 @@ class DeviceController extends Controller
         } catch (EmqxSupportException $e) {
             Log::error('emqx connect failed.', [$e]);
 
-            return $this->error('unable connectto emqx');
+            return $this->error('unable connect to emqx');
         }
 
         return $this->success($clients);
