@@ -151,7 +151,7 @@ class Host extends Model
 
         $price = $this->getRenewPrice();
 
-        $description = '续费 ' . $this->name . ' 周期: ' . $this->billing_cycle;
+        $description = '续费 ' . $this->name . ' 到 ' . $this->next_due_at . ' 价格：' . $price . ' 元。';
 
         try {
             $this->user->reduce($price, $description, true, [
