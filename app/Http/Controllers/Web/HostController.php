@@ -50,8 +50,12 @@ class HostController extends Controller
      */
     public function destroy(Host $host): RedirectResponse
     {
+        if ($host->status === 'unavailable') {
+            return back()->with('error', '为了安全起见，此主机只能由我们自动删除。');
+        }
+
         $host->safeDelete();
 
-        return redirect()->route('hosts . index')->with('success', '已添加到删除队列。');
+        return redirect()->route('hosts.index')->with('success', '已添加到删除队列。');
     }
 }
