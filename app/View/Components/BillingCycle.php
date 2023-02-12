@@ -25,6 +25,6 @@ class BillingCycle extends Component
      */
     public function render(): string
     {
-        return trans('hosts.' . $this->cycle);
+        return trans('hosts.'.$this->cycle);
     }
 }

@@ -27,7 +27,6 @@ class DispatchFetchModuleJob implements ShouldQueue
         $this->module = $module;
     }
 
-
     /**
      * Execute the job.
      *
@@ -35,11 +34,10 @@ class DispatchFetchModuleJob implements ShouldQueue
      */
     public function handle(): void
     {
-        if (!$this->module) {
+        if (! $this->module) {
             (new Module)->whereNotNull('url')->chunk(100, function ($modules) {
                 foreach ($modules as $module) {
                     dispatch(new self($module));
-
                 }
             });
         }
@@ -52,7 +50,7 @@ class DispatchFetchModuleJob implements ShouldQueue
             try {
                 $response = $module->http()->get('remote');
             } catch (Exception $e) {
-                Log::debug('无法连接到模块 - down: ' . $e->getMessage());
+                Log::debug('无法连接到模块 - down: '.$e->getMessage());
 
                 // 如果模块状态不为 down，则更新为 down
                 if ($module->status !== 'down') {
@@ -67,7 +65,7 @@ class DispatchFetchModuleJob implements ShouldQueue
                 // 如果模块状态不为 up，则更新为 up
                 if ($module->status !== 'up') {
                     $module->status = 'up';
-                    Log::debug('模块状态更新为 up: ' . $module->name);
+                    Log::debug('模块状态更新为 up: '.$module->name);
                 }
 
                 $json = $response->json();
@@ -99,16 +97,16 @@ class DispatchFetchModuleJob implements ShouldQueue
                     $module->status = 'down';
                 }
 
-                Log::debug('模块状态更新为 ' . $module->status . ': ' . $module->name);
+                Log::debug('模块状态更新为 '.$module->status.': '.$module->name);
             }
 
             $module->save();
 
             // if local
             if (config('app.env') === 'local') {
-                Cache::forever('module:' . $module->id . ':servers', $servers);
+                Cache::forever('module:'.$module->id.':servers', $servers);
             } else {
-                Cache::put('module:' . $module->id . ':servers', $servers, now()->addMinutes(10));
+                Cache::put('module:'.$module->id.':servers', $servers, now()->addMinutes(10));
             }
         }
     }

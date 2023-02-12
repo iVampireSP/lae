@@ -61,7 +61,7 @@ class HostController extends Controller
         }
 
         // 如果时间大于 5 分钟，不满 1 小时
-        if (now()->diffInMinutes($host->updated_at) > 5 && now()->diffInMinutes($host->updated_at) < 60) {
+        if (! $host->isCycle() && now()->diffInMinutes($host->updated_at) > 5 && now()->diffInMinutes($host->updated_at) < 60) {
             $host->cost();
         }
 

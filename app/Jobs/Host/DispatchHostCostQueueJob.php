@@ -13,6 +13,7 @@ class DispatchHostCostQueueJob implements ShouldQueue
     use InteractsWithQueue, Queueable, SerializesModels;
 
     protected int $minute;
+
     protected ?Host $host;
 
     /**
@@ -35,7 +36,7 @@ class DispatchHostCostQueueJob implements ShouldQueue
      */
     public function handle(): void
     {
-        if (!$this->host) {
+        if (! $this->host) {
             $host = new Host();
 
             if (app()->environment() != 'local') {
