@@ -138,6 +138,10 @@ class Host extends Model
 
         $this->next_due_at = $this->getNewDueDate();
 
+        if ($this->isSuspended()) {
+            $this->run();
+        }
+
         $this->save();
 
         return true;
@@ -365,6 +369,15 @@ class Host extends Model
     {
         $this->update([
             'status' => 'suspended',
+        ]);
+
+        return true;
+    }
+
+    public function run(): bool
+    {
+        $this->update([
+            'status' => 'running',
         ]);
 
         return true;
