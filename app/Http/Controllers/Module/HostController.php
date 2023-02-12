@@ -37,7 +37,8 @@ class HostController extends Controller
     {
         // 存储计费项目
         $this->validate($request, [
-            'status' => 'required|in:running,stopped,error,suspended,pending',
+            'status' => 'required|in:draft,running,stopped,error,suspended,pending',
+            'billing_cycle' => 'nullable|in:monthly,quarterly,semi-annually,annually,biennially,triennially',
             'price' => 'required|numeric',
             'user_id' => 'required|integer|exists:users,id',
         ]);
@@ -55,11 +56,12 @@ class HostController extends Controller
 
         $data = [
             'name' => $name,
-            'status' => $request->input('status'),
-            'price' => $request->input('price'),
-            'managed_price' => $request->input('managed_price'),
             'user_id' => $user->id,
             'module_id' => auth('module')->id(),
+            'price' => $request->input('price'),
+            'managed_price' => $request->input('managed_price'),
+            'billing_cycle' => $request->input('billing_cycle'),
+            'status' => $request->input('status'),
         ];
 
         $host = (new Host)->create($data);

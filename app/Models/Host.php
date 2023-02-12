@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Events\Users;
+use App\Exceptions\User\BalanceNotEnoughException;
 use App\Jobs\Host\HostJob;
 use App\Jobs\Host\UpdateOrDeleteHostJob;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
@@ -22,17 +22,20 @@ class Host extends Model
         'module_id',
         'user_id',
         'price',
+        'managed_price',
         'configuration',
         'status',
-        'managed_price',
+        'billing_cycle',
+        'next_due_at',
         'suspended_at',
     ];
 
     protected $casts = [
-        // 'configuration' => 'array',
-        'suspended_at' => 'datetime',
         'price' => 'decimal:2',
         'managed_price' => 'decimal:2',
+        'configuration' => 'array',
+        'next_due_at' => 'datetime',
+        'suspended_at' => 'datetime',
     ];
 
     /** @noinspection PhpUndefinedMethodInspection */
@@ -68,6 +71,21 @@ class Host extends Model
         return $query->whereIn('status', ['running', 'stopped']);
     }
 
+    public function scopeDraft($query)
+    {
+        return $query->where('status', 'draft');
+    }
+
+    public function scopeExpiring($query)
+    {
+        return $query->where('status', 'running')->where('next_due_at', '<=', now()->addDays(7));
+    }
+
+    public function scopeSuspended($query)
+    {
+        return $query->where('status', 'suspended');
+    }
+
     public function scopeThisUser($query, $module = null)
     {
         if ($module) {
@@ -75,6 +93,88 @@ class Host extends Model
         } else {
             return $query->where('user_id', auth()->id());
         }
+    }
+
+    public function isDraft(): bool
+    {
+        return $this->status === 'draft';
+    }
+
+    public function isRunning(): bool
+    {
+        return $this->status === 'running';
+    }
+
+    public function isStopped(): bool
+    {
+        return $this->status === 'stopped';
+    }
+
+    public function isSuspended(): bool
+    {
+        return $this->status === 'suspended';
+    }
+
+    public function getNewDueDate(): string
+    {
+        $this->next_due_at = $this->next_due_at ?? now();
+
+        return match ($this->billing_cycle) {
+            'monthly' => $this->next_due_at->addMonth(),
+            'quarterly' => $this->next_due_at->addMonths(3),
+            'semi-annually' => $this->next_due_at->addMonths(6),
+            'annually' => $this->next_due_at->addYear(),
+            'biennially' => $this->next_due_at->addYears(2),
+            'triennially' => $this->next_due_at->addYears(3),
+            default => null,
+        };
+    }
+
+    public function getRenewPrice(): string
+    {
+        return match ($this->billing_cycle) {
+            'monthly' => $this->getPrice(),
+            'quarterly' => bcmul($this->getPrice(), 3),
+            'semi-annually' => bcmul($this->getPrice(), 6),
+            'annually' => bcmul($this->getPrice(), 12),
+            'biennially' => bcmul($this->getPrice(), 24),
+            'triennially' => bcmul($this->getPrice(), 36),
+            default => 0,
+        };
+    }
+
+    public function renew(): bool
+    {
+        $price = $this->getRenewPrice();
+
+        $description = '续费 '.$this->name.' 周期: '.$this->billing_cycle;
+
+        try {
+            $this->user->reduce($price, $description, true, [
+                'host_id' => $this->id,
+                'module_id' => $this->module_id,
+            ]);
+        } catch (BalanceNotEnoughException) {
+            return false;
+        }
+
+        $this->addLog($price);
+
+        $this->next_due_at = $this->getNewDueDate();
+
+        $this->save();
+
+        return true;
+    }
+
+    public function isOverdue(): bool
+    {
+        return now()->gt($this->next_due_at);
+    }
+
+    public function isCycle(): bool
+    {
+        return $this->billing_cycle !== null;
     }
 
     public function safeDelete(): bool
@@ -116,7 +216,7 @@ class Host extends Model
         $append_description = '';
         if ($user_group) {
             if ($user_group->discount !== 100 && $user_group->discount !== null) {
-                $real_price = bcmul($real_price, bcdiv($user_group->discount, '100', 4), 4);
+                $real_price = $user_group->getCostPrice($real_price);
 
                 $append_description = ' (折扣 '.$user_group->discount.'%)';
             }
@@ -180,8 +280,6 @@ class Host extends Model
         $left = $user->reduce($real_price, $description, false, $data);
 
         $this->addLog($real_price);
-
-        broadcast(new Users($this->user, 'balances.amount.reduced', $this->user));
 
         if ($left < 0) {
             $this->update([
