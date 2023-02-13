@@ -125,6 +125,7 @@ class Host extends Model
                 'host_id' => $this->id,
                 'module_id' => $this->module_id,
             ]);
+            $this->module->charge($price, 'balance', '用户'.$description);
         } catch (BalanceNotEnoughException) {
             return false;
         }
