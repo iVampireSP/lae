@@ -425,14 +425,14 @@ class Host extends Model
                 return false;
             }
 
-            if (! $this->isCycle() && $user->hasBalance('0.5')) {
+            if (! $this->isCycle() && ! $user->hasBalance('0.5')) {
                 return false;
             }
         }
 
         if ($status === 'running') {
             return $this->run();
-        } elseif ($status === 'suspended' && ! $this->isCycle()) {
+        } elseif (($status === 'suspended' || $status === 'suspend') && ! $this->isCycle()) {
             return $this->suspend();
         } elseif ($status === 'stopped') {
             return $this->stop();
