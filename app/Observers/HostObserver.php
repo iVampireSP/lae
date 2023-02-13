@@ -21,10 +21,6 @@ class HostObserver
         if ($host->managed_price !== null) {
             $host->managed_price = bcdiv($host->managed_price, 1, 2);
         }
-
-        if ($host->billing_cycle !== null) {
-            $host->next_due_at = $host->getNewDueDate();
-        }
     }
 
     /**
@@ -41,6 +37,12 @@ class HostObserver
         $host->price = bcmul($host->price, 1, 2);
 
         $host->user->notify(new WebNotification($host, 'hosts.created'));
+
+        if ($host->isCycle()) {
+            $host->renew();
+        }
+
+        $host->save();
     }
 
     /**
