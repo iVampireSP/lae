@@ -55,8 +55,6 @@ class UserGroupController extends Controller
      */
     public function create(): View
     {
-        //
-
         return view('admin.user-groups.create');
     }
 
@@ -81,8 +79,6 @@ class UserGroupController extends Controller
      */
     public function edit(UserGroup $user_group): View
     {
-        //
-
         return view('admin.user-groups.edit', compact('user_group'));
     }
 
@@ -95,7 +91,6 @@ class UserGroupController extends Controller
      */
     public function update(Request $request, UserGroup $user_group): RedirectResponse
     {
-        //
         $request->validate($this->rules());
 
         $user_group->update($request->all());
