@@ -82,6 +82,7 @@ class NodeController extends Controller
                 flush();
             }, false);
         });
+
         $response->headers->set('Content-Type', 'text/event-stream');
         $response->headers->set('X-Accel-Buffering', 'no');
         $response->headers->set('Cache-Control', 'no-cache');
