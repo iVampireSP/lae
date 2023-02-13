@@ -3,7 +3,7 @@
 @section('title', '交易记录')
 
 @section('content')
-    <h2>交易记录</h2>
+    <h3>交易记录</h3>
 
     <a href="?type=income">收入</a>
     <a href="?type=payout">支出</a>
