@@ -110,11 +110,6 @@ class Host extends Model
         return $this->status === 'stopped';
     }
 
-    public function isPending(): bool
-    {
-        return $this->status === 'pending';
-    }
-
     public function isUnavailable(): bool
     {
         return $this->status === 'unavailable';
@@ -260,11 +255,6 @@ class Host extends Model
         return true;
     }
 
-    public function isOverdue(): bool
-    {
-        return now()->gt($this->next_due_at);
-    }
-
     public function safeDelete(): bool
     {
         // 如果创建时间大于大于 1 小时
@@ -378,11 +368,35 @@ class Host extends Model
         return true;
     }
 
-    public function updateOrDelete(): bool
+    public function changeStatus(string $status): bool
     {
-        dispatch(new UpdateOrDeleteHostJob($this));
+        $is_user = auth()->guard('api')->check() || auth()->guard('web')->check();
 
-        return true;
+        if ($is_user) {
+            if ($this->isPending() || $this->isOverdue() || $this->status === 'locked' || $this->status === 'unavailable') {
+                return false;
+            }
+        }
+
+        if ($status === 'running') {
+            return $this->run();
+        } elseif ($status === 'suspended') {
+            return $this->suspend();
+        } elseif ($status === 'stopped') {
+            return $this->stop();
+        }
+
+        return false;
+    }
+
+    public function isPending(): bool
+    {
+        return $this->status === 'pending';
+    }
+
+    public function isOverdue(): bool
+    {
+        return now()->gt($this->next_due_at);
     }
 
     public function suspend(): bool
@@ -390,6 +404,22 @@ class Host extends Model
         $this->update([
             'status' => 'suspended',
         ]);
+
+        return true;
+    }
+
+    public function stop(): bool
+    {
+        $this->update([
+            'status' => 'stopped',
+        ]);
+
+        return true;
+    }
+
+    public function updateOrDelete(): bool
+    {
+        dispatch(new UpdateOrDeleteHostJob($this));
 
         return true;
     }
