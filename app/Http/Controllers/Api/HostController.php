@@ -23,7 +23,6 @@ class HostController extends Controller
         return $this->success($hosts);
     }
 
-    //
     public function update(HostRequest $request, Host $host): JsonResponse
     {
         $request->validate([
