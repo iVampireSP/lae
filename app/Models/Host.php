@@ -110,6 +110,16 @@ class Host extends Model
         return $this->status === 'stopped';
     }
 
+    public function isPending(): bool
+    {
+        return $this->status === 'pending';
+    }
+
+    public function isUnavailable(): bool
+    {
+        return $this->status === 'unavailable';
+    }
+
     public function renew(): bool
     {
         if (! $this->isCycle()) {
