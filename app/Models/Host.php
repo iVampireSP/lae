@@ -302,7 +302,7 @@ class Host extends Model
             ]);
         }
 
-        // 如果创建时间大于大于 1 小时
+        // 如果创建时间大于 1 小时
         if (! $this->isCycle() && $this->created_at->diffInHours(now()) > 1) {
             // 如果当前时间比扣费时间小，则说明没有扣费。执行扣费。
             if (now()->minute < $this->minute_at) {
