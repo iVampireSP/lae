@@ -48,14 +48,14 @@ class Module extends Authenticatable
     // post, get, patch, delete 等请求
     public function remote($func, $requests): array
     {
-        $response = $this->http()->post('functions/' . $func, $requests);
+        $response = $this->http()->post('functions/'.$func, $requests);
 
         return $this->getResponse($response);
     }
 
     public function http($files = []): PendingRequest
     {
-        $http = Http::module($this->api_token, $this->url . '/remote');
+        $http = Http::module($this->api_token, $this->url.'/remote');
 
         if ($files) {
             $http->asMultipart();
@@ -68,7 +68,7 @@ class Module extends Authenticatable
 
         if ($this->ip_port) {
             // 如果设置了 ip_port 则使用 ip_port
-            $http->baseUrl($this->ip_port . '/remote');
+            $http->baseUrl($this->ip_port.'/remote');
 
             // 添加 Host 头
             $http->withHeaders([
@@ -107,11 +107,10 @@ class Module extends Authenticatable
     }
 
     /**
-     * @param       $method
-     * @param       $path
-     * @param       $requests
-     * @param array $files
-     *
+     * @param    $method
+     * @param    $path
+     * @param    $requests
+     * @param  array  $files
      * @return array
      */
     public function request($method, $path, $requests, array $files = []): array
@@ -119,7 +118,7 @@ class Module extends Authenticatable
         try {
             return $this->baseRequest($method, "functions/$path", $requests, $files);
         } /** @noinspection PhpRedundantCatchClauseInspection */ catch (ConnectException|ConnectionException $e) {
-            Log::error('在执行 call ' . $method . ' ' . $path . ' 时发生错误: ' . $e->getMessage());
+            Log::error('在执行 call '.$method.' '.$path.' 时发生错误: '.$e->getMessage());
 
             return [
                 'body' => null,
@@ -195,7 +194,7 @@ class Module extends Authenticatable
     #[ArrayShape(['transactions' => 'array'])]
     public function calculate(): array
     {
-        $cache_key = 'module_earning_' . $this->id;
+        $cache_key = 'module_earning_'.$this->id;
 
         return Cache::get($cache_key, []);
     }
@@ -203,11 +202,10 @@ class Module extends Authenticatable
     /**
      * 扣除费用
      *
-     * @param string|null $amount
-     * @param string|null $description
-     * @param bool        $fail
-     * @param array       $options
-     *
+     * @param  string|null  $amount
+     * @param  string|null  $description
+     * @param  bool  $fail
+     * @param  array  $options
      * @return string
      */
     public function reduce(string|null $amount = '0', string|null $description = '消费', bool $fail = false, array $options = []): string
@@ -216,7 +214,7 @@ class Module extends Authenticatable
             return $this->balance;
         }
 
-        Cache::lock('module_balance_' . $this->id, 10)->block(10, function () use ($amount, $fail, $description, $options) {
+        Cache::lock('module_balance_'.$this->id, 10)->block(10, function () use ($amount, $fail, $description, $options) {
             $this->refresh();
 
             if ($this->balance < $amount) {
@@ -251,11 +249,10 @@ class Module extends Authenticatable
     /**
      * 增加余额
      *
-     * @param string|null $amount
-     * @param string      $payment
-     * @param string|null $description
-     * @param array       $options
-     *
+     * @param  string|null  $amount
+     * @param  string  $payment
+     * @param  string|null  $description
+     * @param  array  $options
      * @return string
      */
     public function charge(string|null $amount = '0', string $payment = 'console', string|null $description = '充值', array $options = []): string
@@ -264,7 +261,7 @@ class Module extends Authenticatable
             return $this->balance;
         }
 
-        Cache::lock('module_balance_' . $this->id, 10)->block(10, function () use ($amount, $description, $payment, $options) {
+        Cache::lock('module_balance_'.$this->id, 10)->block(10, function () use ($amount, $description, $payment, $options) {
             $this->refresh();
 
             $this->balance = bcadd($this->balance, $amount, 4);

@@ -17,8 +17,7 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return JsonResponse
      */
     public function index(Request $request): JsonResponse
@@ -31,8 +30,7 @@ class TaskController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param Request $request
-     *
+     * @param  Request  $request
      * @return JsonResponse
      *
      * @throws ValidationException
@@ -53,9 +51,8 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param Request $request
-     * @param Task    $task
-     *
+     * @param  Request  $request
+     * @param  Task  $task
      * @return JsonResponse
      *
      * @throws ValidationException
