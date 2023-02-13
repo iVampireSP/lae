@@ -116,7 +116,7 @@ class Host extends Model
         return $this->status === 'unavailable';
     }
 
-    public function renew(): bool
+    public function renew($first): bool
     {
         if (! $this->isCycle()) {
             return false;
@@ -124,7 +124,7 @@ class Host extends Model
 
         $price = $this->getRenewPrice();
 
-        $description = '续费 '.$this->name.'，价格：'.$price.' 元。';
+        $description = ($first ? '新购' : '续费').' '.$this->name.'，价格：'.$price.' 元。';
 
         try {
             $this->user->reduce($price, $description, true, [
