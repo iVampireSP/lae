@@ -3,6 +3,7 @@
 return [
     'billing' => [
         'commission' => '0.1',
+        'cycle_delete_times_every_month' => 2,
     ],
     'wecom' => [
         'robot_hook' => [
