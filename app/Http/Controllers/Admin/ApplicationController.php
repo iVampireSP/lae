@@ -25,14 +25,13 @@ class ApplicationController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request  $request
+     * @param Request $request
+     *
      * @return View
      */
     public function store(Request $request): View
     {
-        //
-
-        $this->validate($request, [
+        $request->validate([
             'name' => 'required',
             'description' => 'required',
             'api_token' => 'required|unique:applications,api_token',
@@ -50,52 +49,47 @@ class ApplicationController extends Controller
      */
     public function create(): View
     {
-        //
-
         return view('admin.applications.create');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  Application  $application
+     * @param Application $application
+     *
      * @return RedirectResponse
      */
     public function show(Application $application): RedirectResponse
     {
-        //
-
         return redirect()->route('admin.applications.edit', $application);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  Application  $application
+     * @param Application $application
+     *
      * @return View
      */
     public function edit(Application $application): View
     {
-        //
-
         return view('admin.applications.edit', compact('application'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request  $request
-     * @param  Application  $application
+     * @param Request     $request
+     * @param Application $application
+     *
      * @return RedirectResponse
      */
     public function update(Request $request, Application $application): RedirectResponse
     {
-        //
-
-        $this->validate($request, [
+        $request->validate([
             'name' => 'required',
             'description' => 'required',
-            'api_token' => 'required|unique:applications,api_token,'.$application->id,
+            'api_token' => 'required|unique:applications,api_token,' . $application->id,
         ]);
 
         $application->update($request->all());
@@ -106,13 +100,12 @@ class ApplicationController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  Application  $application
+     * @param Application $application
+     *
      * @return RedirectResponse
      */
     public function destroy(Application $application): RedirectResponse
     {
-        //
-
         $application->delete();
 
         return redirect()->route('admin.applications.index')->with('success', '应用程序已删除。');
