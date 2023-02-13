@@ -59,7 +59,7 @@ Route::middleware(['auth:web', 'banned', 'verified'])->group(
         /* End 账户区域 */
 
         /* Start 主机 */
-        Route::resource('hosts', HostController::class)->only(['index', 'destroy']);
+        Route::resource('hosts', HostController::class)->only(['index', 'update', 'destroy']);
         Route::post('hosts/{host}/renew', [HostController::class, 'renew'])->name('hosts.renew');
         /* End 主机 */
 
