@@ -29,15 +29,9 @@ class HostController extends Controller
             'status' => 'required|in:running,stopped,suspended',
         ]);
 
-        $user = $request->user();
+        $status = $host->changeStatus($request->input('status'));
 
-        if ($user->hasBalance('0.5')) {
-            return $this->error('余额不足，无法开启计费项目。请确保您的余额至少为 0.5 元，您当前有 '.$user->balance.' 元。');
-        }
-
-        $host->changeStatus($request->input('status'));
-
-        return $this->updated($host);
+        return $status ? $this->updated($host) : $this->failed('修改失败，请检查是否有足够的余额。');
     }
 
     public function destroy(HostRequest $request, Host $host): JsonResponse

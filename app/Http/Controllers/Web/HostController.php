@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\Host;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
 
 class HostController extends Controller
@@ -17,8 +19,20 @@ class HostController extends Controller
     public function index(): View
     {
         $hosts = (new Host)->thisUser()->with(['user', 'module'])->paginate(20);
+        $times = config('settings.billing.cycle_delete_times_every_month') - Cache::get('host_delete_times:'.auth('web')->id(), 0);
 
-        return view('hosts.index', compact('hosts'));
+        return view('hosts.index', compact('hosts', 'times'));
+    }
+
+    public function update(Request $request, Host $host): RedirectResponse
+    {
+        $request->validate([
+            'status' => 'required|in:running,stopped,suspended',
+        ]);
+
+        $status = $host->changeStatus($request->input('status'));
+
+        return $status ? back()->with('success', '修改成功。') : back()->with('error', '修改失败。');
     }
 
     public function renew(Host $host): RedirectResponse
@@ -48,12 +62,16 @@ class HostController extends Controller
      */
     public function destroy(Host $host): RedirectResponse
     {
-        if ($host->status === 'unavailable') {
+        if ($host->isUnavailable()) {
             return back()->with('error', '为了安全起见，此主机只能由我们自动删除。');
         }
 
-        $host->safeDelete();
+        $status = $host->safeDelete();
 
-        return redirect()->route('hosts.index')->with('success', '已添加到删除队列。');
+        if ($status) {
+            return redirect()->route('hosts.index')->with('success', '已添加到删除队列。');
+        } else {
+            return back()->with('error', '删除失败。');
+        }
     }
 }
