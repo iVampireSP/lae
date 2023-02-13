@@ -49,13 +49,13 @@ class HostJob implements ShouldQueue
         $host = $this->host;
 
         // 忽略 unavailable 状态的 host
-        if ($this->pass_unavailable && $host->status === 'unavailable') {
+        if ($this->pass_unavailable && $host->isUnavailable()) {
             return;
         }
 
         $host->load(['module']);
 
-        if ($host->module->status !== 'up') {
+        if (!$host->module->isUp()) {
             Log::warning('模块不可用，跳过主机更新。', [
                 'host' => $host->name,
                 'module' => $host->module->name,

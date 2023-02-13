@@ -51,7 +51,7 @@ class HostController extends Controller
     {
         unset($request);
 
-        if ($host->status == 'pending') {
+        if ($host->isPending()) {
             // 如果上次更新时间大于 5min
             if ($host->updated_at->diffInMinutes(now()) > 5) {
                 $host->delete();
