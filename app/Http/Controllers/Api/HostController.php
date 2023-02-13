@@ -26,22 +26,16 @@ class HostController extends Controller
     public function update(HostRequest $request, Host $host): JsonResponse
     {
         $request->validate([
-            'status' => 'required|in:running,stopped',
+            'status' => 'required|in:running,stopped,suspended',
         ]);
-
-        if ($host->status === 'locked' || $host->status === 'unavailable') {
-            return $this->error('当前主机状态不允许操作');
-        }
 
         $user = $request->user();
 
-        if ($user->balance < 0.5) {
+        if ($user->hasBalance('0.5')) {
             return $this->error('余额不足，无法开启计费项目。请确保您的余额至少为 0.5 元，您当前有 '.$user->balance.' 元。');
         }
 
-        $host->update([
-            'status' => $request->input('status'),
-        ]);
+        $host->changeStatus($request->input('status'));
 
         return $this->updated($host);
     }
