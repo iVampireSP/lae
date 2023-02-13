@@ -116,7 +116,7 @@ class Host extends Model
         return $this->status === 'unavailable';
     }
 
-    public function renew($first): bool
+    public function renew($first = false): bool
     {
         if (! $this->isCycle()) {
             return false;
@@ -285,7 +285,7 @@ class Host extends Model
             $days = $this->next_due_at->diffInDays(now());
 
             // 算出 1 天的价格
-            $price = bcdiv($this->last_paid, $this->next_due_at->daysInMonth, 4);
+            $price = bcdiv($this->getPrice(), 31, 4);
 
             // 算出退还的金额
             $amount = bcmul($price, $days, 4);
