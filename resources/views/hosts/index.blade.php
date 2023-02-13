@@ -6,7 +6,7 @@
     <h3>主机管理</h3>
     <p>更快捷的管理计费项目。更高级的管理请前往 "仪表盘"。</p>
 
-    <div class="overflow-auto">
+    <div>
         <table class="table table-hover">
             <thead>
             <th>ID</th>
@@ -54,26 +54,67 @@
                         </span>
                     </td>
                     <td>
-                        <form action="{{ route('hosts.destroy', $host) }}" method="post" class="d-inline">
-                            @csrf
-                            @method('DELETE')
-
-                            <button type="submit" class="btn btn-sm btn-danger"
-                                    onclick="return confirm('删除后，数据将无法找回，也不可回滚更改。')">删除
+                        <div class="dropdown">
+                            <button class="btn btn-sm btn-secondary dropdown-toggle" type="button"
+                                    data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                操作
                             </button>
-                        </form>
+                            <ul class="dropdown-menu">
 
-                        @if($host->billing_cycle)
-                            <form action="{{ route('hosts.renew', $host) }}" method="post" class="d-inline">
-                                @csrf
+                                @if($host->billing_cycle)
+                                    <a class="dropdown-item" href="#"
+                                       onclick="return confirm('确定续费此主机？') ? document.getElementById('renew-{{$host->id}}').submit() : false;">
+                                        续费此主机
+                                    </a>
 
-                                <button type="submit" class="btn btn-sm btn-primary"
-                                        onclick="return confirm('将续费此主机。')">续费
-                                </button>
-                            </form>
-                        @endif
+                                    <form action="{{ route('hosts.renew', $host) }}" id="renew-{{$host->id}}"
+                                          method="post" class="d-none">
+                                        @csrf
+                                    </form>
+                                @endif
 
+                                @if(!$host->isRunning())
+                                    <a class="dropdown-item" href="#"
+                                       onclick="return confirm('确定执行此操作？') ? document.getElementById('start-{{$host->id}}').submit() : false;">
+                                        启动此主机
+                                    </a>
 
+                                    <form action="{{ route('hosts.update', $host) }}" id="start-{{$host->id}}"
+                                          method="post" class="d-none">
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="hidden" name="status" value="running">
+                                    </form>
+                                @endif
+
+                                @if(!$host->isSuspended() && !$host->isCycle())
+                                    <a class="dropdown-item" href="#"
+                                       onclick="return confirm('确定执行此操作？') ? document.getElementById('start-{{$host->id}}').submit() : false;">
+                                        暂停此主机
+                                    </a>
+
+                                    <form action="{{ route('hosts.update', $host) }}" id="start-{{$host->id}}"
+                                          method="post" class="d-none">
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="hidden" name="status" value="suspended">
+                                    </form>
+                                @endif
+
+                                <a class="dropdown-item" href="#"
+                                   onclick="return confirm('删除操作将不可恢复，确定吗？') ? document.getElementById('delete-{{$host->id}}').submit() : false;">
+                                    删除
+                                </a>
+
+                                <form action="{{ route('hosts.destroy', $host) }}" id="delete-{{$host->id}}"
+                                      method="post" class="d-none">
+                                    @csrf
+                                    @method('DELETE')
+                                </form>
+
+                            </ul>
+                        </div>
                     </td>
                 </tr>
             @endforeach
@@ -83,5 +124,8 @@
 
     {{-- 分页 --}}
     {{ $hosts->links() }}
+
+    <br/>
+    <p>还剩下周期性计费删除次数: {{ $times }}</p>
 
 @endsection
