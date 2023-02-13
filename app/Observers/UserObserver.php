@@ -29,15 +29,13 @@ class UserObserver
             $user->email_md5 = md5($user->email);
         }
 
-        if ($user->isDirty('id_card')) {
-            $user->id_card = Crypt::encryptString($user->id_card);
-        }
-
         if ($user->isDirty('id_card') || $user->isDirty('real_name')) {
             if (empty($user->id_card) || empty($user->real_name)) {
                 $user->real_name_verified_at = null;
             } else {
                 $user->real_name_verified_at = now();
+                $user->id_card = Crypt::encryptString($user->id_card);
+
             }
         }
     }
