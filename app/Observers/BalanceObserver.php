@@ -12,7 +12,7 @@ class BalanceObserver
     {
         $balance->remaining_amount = 0;
 
-        $balance->order_id = date('YmdHis').'-'.$balance->id.'-'.$balance->user_id.'-'.rand(1000, 9999);
+        $balance->order_id = date('YmdHis').'-'.$balance->user_id.'-'.rand(1000, 9999);
     }
 
     public function created(Balance $balance): void
