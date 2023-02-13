@@ -17,7 +17,8 @@ class TaskController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @param  Request  $request
+     * @param Request $request
+     *
      * @return JsonResponse
      */
     public function index(Request $request): JsonResponse
@@ -30,15 +31,15 @@ class TaskController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request  $request
+     * @param Request $request
+     *
      * @return JsonResponse
      *
      * @throws ValidationException
      */
     public function store(Request $request): JsonResponse
     {
-        //
-        $this->validate($request, [
+        $request->validate([
             'title' => 'required|max:255',
             'progress' => 'nullable|integer|max:100',
             'status' => 'required|in:pending,processing,need_operation,done,success,failed,error,canceled',
@@ -52,16 +53,16 @@ class TaskController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request  $request
-     * @param  Task  $task
+     * @param Request $request
+     * @param Task    $task
+     *
      * @return JsonResponse
      *
      * @throws ValidationException
      */
     public function update(Request $request, Task $task): JsonResponse
     {
-        //
-        $this->validate($request, [
+        $request->validate([
             'progress' => 'sometimes|integer|max:100',
             'status' => 'sometimes|in:pending,processing,need_operation,done,success,failed,error,canceled',
         ]);

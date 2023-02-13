@@ -14,7 +14,7 @@ class UserController extends Controller
 {
     public function index(Request $request): JsonResponse
     {
-        $this->validate($request, [
+        $request->validate([
             'user_id' => 'sometimes|integer',
             'email' => 'sometimes|email',
             'name' => 'sometimes|string',
@@ -24,15 +24,15 @@ class UserController extends Controller
 
         // 搜索 name, email, balance
         if ($request->has('name')) {
-            $users->where('name', 'like', '%'.$request->input('name').'%');
+            $users->where('name', 'like', '%' . $request->input('name') . '%');
         }
 
         if ($request->has('email')) {
-            $users->where('email', 'like', '%'.$request->input('email').'%');
+            $users->where('email', 'like', '%' . $request->input('email') . '%');
         }
 
         if ($request->has('balance')) {
-            $users->where('balance', 'like', '%'.$request->input('balance').'%');
+            $users->where('balance', 'like', '%' . $request->input('balance') . '%');
         }
 
         $users = $users->simplePaginate(100);
@@ -42,7 +42,7 @@ class UserController extends Controller
 
     public function store(Request $request): JsonResponse
     {
-        $this->validate($request, [
+        $request->validate([
             'name' => 'required|string',
             'email' => 'required|email|unique:users',
             'password' => 'required|string|min:6',
@@ -71,7 +71,7 @@ class UserController extends Controller
 
     public function update(Request $request, User $user): JsonResponse
     {
-        $this->validate($request, [
+        $request->validate([
             'balance' => 'required|numeric|min:-10000|max:10000',
             'description' => 'required|string',
         ]);
@@ -84,8 +84,7 @@ class UserController extends Controller
             // 使用 bc，取 balance 绝对值
             $balance = bcsub(0, $balance, 4);
 
-            // 如果用户余额不足，抛出异常，使用 bc 函数判断
-            if (bccomp($user->balance, $balance, 2) === -1) {
+            if ($user->hasBalance($balance) === false) {
                 return $this->error('用户余额不足。');
             }
 
@@ -94,8 +93,7 @@ class UserController extends Controller
                 'user_id' => $user->id,
             ]);
         } else {
-            // 如果模块余额不足，抛出异常，使用 bc 函数判断
-            if (bccomp($module->balance, $balance, 2) === -1) {
+            if ($module->hasBalance($balance) === false) {
                 return $this->error('模块余额不足。');
             }
 

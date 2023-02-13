@@ -27,7 +27,7 @@ class WorkOrderController extends Controller
      */
     public function update(WorkOrderRequest $request, WorkOrder $workOrder): JsonResponse
     {
-        $this->validate($request, [
+        $request->validate([
             'status' => 'nullable|sometimes|string|in:open,closed,on_hold,in_progress,read',
         ]);
 
