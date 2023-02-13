@@ -33,6 +33,7 @@ class Host extends Model
     protected $casts = [
         'price' => 'decimal:2',
         'managed_price' => 'decimal:2',
+        'last_paid' => 'decimal:2',
         'configuration' => 'array',
         'next_due_at' => 'datetime',
         'suspended_at' => 'datetime',
@@ -123,14 +124,18 @@ class Host extends Model
 
         $price = $this->getRenewPrice();
 
-        $description = '续费 '.$this->name.' 到 '.$this->next_due_at.' 价格：'.$price.' 元。';
+        $description = '续费 '.$this->name.'，价格：'.$price.' 元。';
 
         try {
             $this->user->reduce($price, $description, true, [
-                'host_id' => $this->id,
                 'module_id' => $this->module_id,
+                'host_id' => $this->id,
+                'user_id' => $this->user_id,
             ]);
-            $this->module->charge($price, 'balance', '用户'.$description);
+            $this->module->charge($price, 'balance', '用户'.$description, [
+                'module_id' => $this->module_id,
+                'host_id' => $this->id,
+            ]);
         } catch (BalanceNotEnoughException) {
             return false;
         }
@@ -138,6 +143,7 @@ class Host extends Model
         $this->addLog($price);
 
         $this->next_due_at = $this->getNewDueDate();
+        $this->last_paid = $price;
 
         if ($this->isSuspended()) {
             $this->run();
@@ -257,6 +263,45 @@ class Host extends Model
 
     public function safeDelete(): bool
     {
+        $is_user = auth()->guard('sanctum')->check() || auth()->guard('web')->check();
+
+        if ($this->isCycle() && $is_user) {
+            // 周期性的，每个月只能删除固定次数
+            $times = Cache::remember('host_delete_times:'.$this->user_id, 60 * 24 * 30, function () {
+                return 0;
+            });
+
+            if ($times >= config('settings.billing.cycle_delete_times_every_month')) {
+                return false;
+            }
+
+            Cache::increment('host_delete_times:'.$this->user_id);
+
+            // 根据 next_due_at 来计算退还的金额
+            if ($this->next_due_at === null) {
+                $this->next_due_at = now();
+            }
+
+            $days = $this->next_due_at->diffInDays(now());
+
+            // 算出 1 天的价格
+            $price = bcdiv($this->last_paid, $this->next_due_at->daysInMonth, 4);
+
+            // 算出退还的金额
+            $amount = bcmul($price, $days, 4);
+
+            $this->user->charge($amount, 'balance', '删除主机退款。', [
+                'module_id' => $this->module_id,
+                'host_id' => $this->id,
+                'user_id' => $this->user_id,
+            ]);
+
+            $this->module->reduce($amount, '删除主机退款。', false, [
+                'module_id' => $this->module_id,
+                'host_id' => $this->id,
+            ]);
+        }
+
         // 如果创建时间大于大于 1 小时
         if (! $this->isCycle() && $this->created_at->diffInHours(now()) > 1) {
             // 如果当前时间比扣费时间小，则说明没有扣费。执行扣费。
@@ -270,8 +315,9 @@ class Host extends Model
         return true;
     }
 
-    public function cost(string $amount = null, $auto = true, $description = null): bool
-    {
+    public function cost(
+        string $amount = null, $auto = true, $description = null
+    ): bool {
         $this->load('user');
         $user = $this->user;
         $user->load('user_group');
@@ -360,27 +406,33 @@ class Host extends Model
         $this->addLog($real_price);
 
         if ($left < 0) {
-            $this->update([
-                'status' => 'suspended',
-            ]);
+            $this->changeStatus('suspended');
+
+            $this->last_paid = $real_price;
+            $this->save();
         }
 
         return true;
     }
 
-    public function changeStatus(string $status): bool
-    {
-        $is_user = auth()->guard('api')->check() || auth()->guard('web')->check();
+    public function changeStatus(
+        string $status
+    ): bool {
+        $user = auth()->guard('sanctum')->user() ?? auth()->guard('web')->user();
 
-        if ($is_user) {
+        if ($user) {
             if ($this->isPending() || $this->isOverdue() || $this->status === 'locked' || $this->status === 'unavailable') {
+                return false;
+            }
+
+            if (! $this->isCycle() && $user->hasBalance('0.5')) {
                 return false;
             }
         }
 
         if ($status === 'running') {
             return $this->run();
-        } elseif ($status === 'suspended') {
+        } elseif ($status === 'suspended' && ! $this->isCycle()) {
             return $this->suspend();
         } elseif ($status === 'stopped') {
             return $this->stop();
