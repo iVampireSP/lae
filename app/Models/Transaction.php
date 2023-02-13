@@ -77,8 +77,6 @@ class Transaction extends Model
         });
     }
 
-    // on create
-
     public function scopeThisUser($query)
     {
         return $query->where('user_id', auth()->id());
