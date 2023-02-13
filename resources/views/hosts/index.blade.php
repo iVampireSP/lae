@@ -31,7 +31,7 @@
                         {{ $host->name }}
                     </td>
 
-                    <td>
+                    <td class="small">
                         @if ($host->managed_price !== null)
                             <span class="text-danger">{{ $host->managed_price }} 元</span>
                         @else
@@ -41,6 +41,10 @@
                         @if($host->billing_cycle)
                             <x-billing-cycle :cycle="$host->billing_cycle"/>
                             到期时间：{{ $host->next_due_at }}
+                            <br />
+                            续费价格: {{ $host->getRenewPrice() }} 元
+                            <br />
+                            续费后到期时间: {{ $host->getNewDueDate() }}
                         @endif
                     </td>
                     <td>
