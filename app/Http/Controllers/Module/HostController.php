@@ -67,6 +67,11 @@ class HostController extends Controller
 
         $host = (new Host)->create($data);
 
+        if (!$user->hasBalance($host->getRenewPrice())) {
+            $host->delete();
+            return $this->error('此用户余额不足，无法开计费项目。');
+        }
+
         $host['host_id'] = $host->id;
 
         return $this->created($host);
