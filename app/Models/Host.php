@@ -281,25 +281,6 @@ class Host extends Model
             if ($this->next_due_at === null) {
                 $this->next_due_at = now();
             }
-
-            $days = $this->next_due_at->diffInDays(now());
-
-            // 算出 1 天的价格
-            $price = bcdiv($this->getPrice(), 31, 4);
-
-            // 算出退还的金额
-            $amount = bcmul($price, $days, 4);
-
-            $this->user->charge($amount, 'balance', '删除主机退款。', [
-                'module_id' => $this->module_id,
-                'host_id' => $this->id,
-                'user_id' => $this->user_id,
-            ]);
-
-            $this->module->reduce($amount, '删除主机退款。', false, [
-                'module_id' => $this->module_id,
-                'host_id' => $this->id,
-            ]);
         }
 
         // 如果创建时间大于 1 小时

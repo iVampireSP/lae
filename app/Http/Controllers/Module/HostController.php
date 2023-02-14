@@ -5,13 +5,13 @@ namespace App\Http\Controllers\Module;
 use App\Http\Controllers\Controller;
 use App\Models\Host;
 use App\Models\User;
-use function auth;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use function auth;
 
 // use App\Models\User;
 
@@ -28,7 +28,8 @@ class HostController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request  $request
+     * @param Request $request
+     *
      * @return Response|JsonResponse
      *
      * @throws ValidationException
@@ -74,7 +75,8 @@ class HostController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  Host  $host
+     * @param Host $host
+     *
      * @return JsonResponse
      */
     public function show(Host $host): JsonResponse
@@ -88,8 +90,9 @@ class HostController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request  $request
-     * @param  Host  $host
+     * @param Request $request
+     * @param Host    $host
+     *
      * @return JsonResponse
      *
      * @throws ValidationException
@@ -112,13 +115,35 @@ class HostController extends Controller
      * Remove the specified resource from storage.
      *
      * @param    $host
+     *
      * @return JsonResponse
      */
     public function destroy($host): JsonResponse
     {
         // if host not instance of HostJob
-        if (! $host instanceof Host) {
+        if (!$host instanceof Host) {
             $host = (new Host)->findOrFail($host);
+        }
+
+        if ($host?->isCycle()) {
+            $days = $host->next_due_at->diffInDays(now());
+
+            // 算出 1 天的价格
+            $price = bcdiv($host->getPrice(), 31, 4);
+
+            // 算出退还的金额
+            $amount = bcmul($price, $days, 4);
+
+            $host->user->charge($amount, 'balance', '删除主机退款。', [
+                'module_id' => $this->module_id,
+                'host_id' => $this->id,
+                'user_id' => $this->user_id,
+            ]);
+
+            $host->module->reduce($amount, '删除主机退款。', false, [
+                'module_id' => $this->module_id,
+                'host_id' => $this->id,
+            ]);
         }
 
         $host?->delete();
