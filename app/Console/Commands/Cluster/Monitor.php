@@ -56,7 +56,8 @@ class Monitor extends Command
             return null;
         }
 
-        $message = "[{$message['node']['type']}] {$message['node']['id']}:$event: ".$status;
+        $now = now()->toDateTimeString();
+        $message = "$now [{$message['node']['id']}]<$event>  \t".$status . "\t";
 
         if ($stdout) {
             $this->info($message);
@@ -107,7 +108,7 @@ class Monitor extends Command
     {
         $msg = $this->appendUser($message);
 
-        $msg .= "{$message['method']} {$message['path']}";
+        $msg .= "{$message['method']} \t {$message['path']}";
 
         return $msg;
     }
@@ -116,9 +117,9 @@ class Monitor extends Command
     {
         $msg = '';
         if ($message['user']) {
-            $msg .= "{$message['user']['name']}#{$message['user']['id']} ";
+            $msg .= "{$message['user']['name']}#{$message['user']['id']} \t";
         } else {
-            $msg .= 'Guest ';
+            $msg .= "Guest \t";
         }
 
         return $msg;
@@ -128,7 +129,7 @@ class Monitor extends Command
     {
         $msg = $this->appendUser($message);
 
-        $msg .= "{$message['method']} {$message['path']} {$message['status']} {$message['time']}ms";
+        $msg .= "{$message['method']} \t {$message['path']} \t {$message['status']} {$message['time']}ms";
 
         return $msg;
     }
