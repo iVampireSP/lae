@@ -57,7 +57,7 @@ class Monitor extends Command
         }
 
         $now = now()->toDateTimeString();
-        $message = "$now [{$message['node']['id']}]<$event>  \t".$status . "\t";
+        $message = "$now [{$message['node']['id']}] \t <$event>  \t".$status . "\t";
 
         if ($stdout) {
             $this->info($message);
