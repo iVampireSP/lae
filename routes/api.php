@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\BalanceController;
 use App\Http\Controllers\Api\ForumController;
 use App\Http\Controllers\Api\HostController;
 use App\Http\Controllers\Api\IndexController;
+use App\Http\Controllers\Api\MaintenanceController;
 use App\Http\Controllers\Api\ModuleController;
 use App\Http\Controllers\Api\ReplyController;
 use App\Http\Controllers\Api\TaskController;
@@ -19,6 +20,8 @@ Route::get('users', [UserController::class, 'index']);
 
 Route::get('user', [UserController::class, 'index']);
 Route::patch('user', [UserController::class, 'update']);
+
+Route::get('maintenances', MaintenanceController::class);
 
 Route::resource('balances', BalanceController::class);
 
