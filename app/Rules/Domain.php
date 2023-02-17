@@ -15,8 +15,7 @@ class Domain implements Rule
      */
     public function passes($attribute, $value): bool
     {
-        // 验证域名是否合法
-        return preg_match('/^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/', $value);
+        return filter_var($value, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME) !== false;
     }
 
     /**
