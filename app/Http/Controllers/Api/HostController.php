@@ -4,10 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\HostRequest;
-use App\Jobs\Host\HostJob;
 use App\Models\Host;
 use function auth;
-use function dispatch;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Cache;
 use function now;
