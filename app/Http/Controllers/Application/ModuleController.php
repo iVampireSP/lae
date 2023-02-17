@@ -10,7 +10,7 @@ class ModuleController extends Controller
 {
     public function index(): JsonResponse
     {
-        $modules = (new Module)->all()->makeVisible(['api_token', 'url']);
+        $modules = (new Module)->all()->makeVisible(['api_token', 'url', 'ip_port']);
 
         return $this->success($modules);
     }

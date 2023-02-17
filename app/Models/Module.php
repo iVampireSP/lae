@@ -38,6 +38,7 @@ class Module extends Authenticatable
         'wecom_key',
         'balance',
         'url',
+        'ip_port',
     ];
 
     protected $casts = [
