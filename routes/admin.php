@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DeviceController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\HostController;
+use App\Http\Controllers\Admin\MaintenanceController;
 use App\Http\Controllers\Admin\ModuleController;
 use App\Http\Controllers\Admin\NodeController;
 use App\Http\Controllers\Admin\NotificationController;
@@ -38,6 +39,8 @@ Route::resource('work-orders', WorkOrderController::class)->only(['index', 'show
 Route::resource('work-orders.replies', ReplyController::class)->only(['store', 'edit', 'update', 'destroy']);
 
 Route::resource('user-groups', UserGroupController::class);
+
+Route::resource('maintenances', MaintenanceController::class);
 
 Route::get('devices', [DeviceController::class, 'index'])->name('devices.index');
 Route::delete('devices', [DeviceController::class, 'destroy'])->name('devices.destroy');

@@ -75,6 +75,9 @@
                                 <li>
                                     <a class="dropdown-item" href="{{ route('admin.notifications.create') }}">通知</a>
                                 </li>
+                                  <li>
+                                    <a class="dropdown-item" href="{{ route('admin.maintenances.index') }}">维护</a>
+                                </li>
                             </ul>
                         </li>
 
