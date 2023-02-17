@@ -53,7 +53,7 @@ class MaintenanceController extends Controller
 
         (new Maintenance())->create($request->all());
 
-        return redirect()->route('admin.maintenances.index')->with('success', '维护信息已创建');
+        return redirect()->route('admin.maintenances.index')->with('success', '维护信息已创建。');
     }
 
     /**
@@ -88,7 +88,7 @@ class MaintenanceController extends Controller
 
         $maintenance->update($request->all());
 
-        return redirect()->route('admin.maintenances.index')->with('success', '维护信息已更新');
+        return redirect()->route('admin.maintenances.index')->with('success', '维护信息已更新。');
     }
 
     /**
@@ -101,6 +101,6 @@ class MaintenanceController extends Controller
     {
         $maintenance->delete();
 
-        return redirect()->route('admin.maintenances.index')->with('success', '维护信息已删除');
+        return redirect()->route('admin.maintenances.index')->with('success', '维护信息已删除。');
     }
 }
