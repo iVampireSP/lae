@@ -44,4 +44,13 @@
         <button type="submit" class="btn btn-primary mt-3">更新</button>
     </form>
 
+    <hr />
+    <h4>删除计划</h4>
+
+    <form method="POST" action="{{ route('admin.maintenances.destroy', $maintenance) }}">
+        @csrf
+        @method('DELETE')
+
+        <button type="submit" class="btn btn-danger mt-3">删除</button>
+    </form>
 @endsection
