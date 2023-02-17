@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e081583346c9eb14529a8c3c048a9faa",
+    "content-hash": "1df8958cb81336b7326304a0032213bd",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -64,16 +64,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.258.7",
+            "version": "3.258.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "09808d51cdb3cf01df1564dda4236da61ed9c804"
+                "reference": "43ee875456822ee7772cfc51da57bfa558ccb30c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/09808d51cdb3cf01df1564dda4236da61ed9c804",
-                "reference": "09808d51cdb3cf01df1564dda4236da61ed9c804",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/43ee875456822ee7772cfc51da57bfa558ccb30c",
+                "reference": "43ee875456822ee7772cfc51da57bfa558ccb30c",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -158,9 +158,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.258.7"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.258.12"
             },
-            "time": "2023-02-09T19:23:14+00:00"
+            "time": "2023-02-16T19:21:12+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",
@@ -1249,91 +1249,6 @@
             "time": "2019-12-30T22:54:17+00:00"
         },
         {
-            "name": "fruitcake/laravel-cors",
-            "version": "v3.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/fruitcake/laravel-cors.git",
-                "reference": "7c036ec08972d8d5d9db637e772af6887828faf5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/fruitcake/laravel-cors/zipball/7c036ec08972d8d5d9db637e772af6887828faf5",
-                "reference": "7c036ec08972d8d5d9db637e772af6887828faf5",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
-            },
-            "require": {
-                "fruitcake/php-cors": "^1.2",
-                "illuminate/contracts": "^6|^7|^8|^9",
-                "illuminate/support": "^6|^7|^8|^9",
-                "php": "^7.4|^8.0"
-            },
-            "require-dev": {
-                "laravel/framework": "^6|^7.24|^8",
-                "orchestra/testbench-dusk": "^4|^5|^6|^7",
-                "phpunit/phpunit": "^9",
-                "squizlabs/php_codesniffer": "^3.5"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.0-dev"
-                },
-                "laravel": {
-                    "providers": [
-                        "Fruitcake\\Cors\\CorsServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Fruitcake\\Cors\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fruitcake",
-                    "homepage": "https://fruitcake.nl"
-                },
-                {
-                    "name": "Barry vd. Heuvel",
-                    "email": "barryvdh@gmail.com"
-                }
-            ],
-            "description": "Adds CORS (Cross-Origin Resource Sharing) headers support in your Laravel application",
-            "keywords": [
-                "api",
-                "cors",
-                "crossdomain",
-                "laravel"
-            ],
-            "support": {
-                "issues": "https://github.com/fruitcake/laravel-cors/issues",
-                "source": "https://github.com/fruitcake/laravel-cors/tree/v3.0.0"
-            },
-            "funding": [
-                {
-                    "url": "https://fruitcake.nl",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/barryvdh",
-                    "type": "github"
-                }
-            ],
-            "time": "2022-02-23T14:53:22+00:00"
-        },
-        {
             "name": "fruitcake/php-cors",
             "version": "v1.2.0",
             "source": {
@@ -2030,16 +1945,16 @@
         },
         {
             "name": "jenssegers/mongodb",
-            "version": "v3.9.4",
+            "version": "v3.9.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jenssegers/laravel-mongodb.git",
-                "reference": "0b03010682e5041ea80177a3db2d6509da92a9a5"
+                "reference": "6ce35ace85a5946f943d7f493f93aebb9a6d129d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jenssegers/laravel-mongodb/zipball/0b03010682e5041ea80177a3db2d6509da92a9a5",
-                "reference": "0b03010682e5041ea80177a3db2d6509da92a9a5",
+                "url": "https://api.github.com/repos/jenssegers/laravel-mongodb/zipball/6ce35ace85a5946f943d7f493f93aebb9a6d129d",
+                "reference": "6ce35ace85a5946f943d7f493f93aebb9a6d129d",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -2102,7 +2017,7 @@
             ],
             "support": {
                 "issues": "https://github.com/jenssegers/laravel-mongodb/issues",
-                "source": "https://github.com/jenssegers/laravel-mongodb/tree/v3.9.4"
+                "source": "https://github.com/jenssegers/laravel-mongodb/tree/v3.9.5"
             },
             "funding": [
                 {
@@ -2114,7 +2029,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-02-10T13:18:35+00:00"
+            "time": "2023-02-16T12:20:36+00:00"
         },
         {
             "name": "laminas/laminas-diactoros",
@@ -2706,16 +2621,16 @@
         },
         {
             "name": "league/commonmark",
-            "version": "2.3.7",
+            "version": "2.3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/commonmark.git",
-                "reference": "a36bd2be4f5387c0f3a8792a0d76b7d68865abbf"
+                "reference": "c493585c130544c4e91d2e0e131e6d35cb0cbc47"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/a36bd2be4f5387c0f3a8792a0d76b7d68865abbf",
-                "reference": "a36bd2be4f5387c0f3a8792a0d76b7d68865abbf",
+                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/c493585c130544c4e91d2e0e131e6d35cb0cbc47",
+                "reference": "c493585c130544c4e91d2e0e131e6d35cb0cbc47",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -2749,7 +2664,7 @@
                 "symfony/finder": "^5.3 | ^6.0",
                 "symfony/yaml": "^2.3 | ^3.0 | ^4.0 | ^5.0 | ^6.0",
                 "unleashedtech/php-coding-standard": "^3.1.1",
-                "vimeo/psalm": "^4.24.0"
+                "vimeo/psalm": "^4.24.0 || ^5.0.0"
             },
             "suggest": {
                 "symfony/yaml": "v2.3+ required if using the Front Matter extension"
@@ -2814,7 +2729,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-11-03T17:29:46+00:00"
+            "time": "2022-12-10T16:02:17+00:00"
         },
         {
             "name": "league/config",
@@ -5654,16 +5569,16 @@
         },
         {
             "name": "spiral/roadrunner",
-            "version": "v2.12.2",
+            "version": "v2.12.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/roadrunner-server/roadrunner.git",
-                "reference": "c794a7ab2ae828af8068776b9dfcdcce5299d855"
+                "reference": "18f526ad9eef19b57bdf1ad4b0252683f514c718"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/roadrunner-server/roadrunner/zipball/c794a7ab2ae828af8068776b9dfcdcce5299d855",
-                "reference": "c794a7ab2ae828af8068776b9dfcdcce5299d855",
+                "url": "https://api.github.com/repos/roadrunner-server/roadrunner/zipball/18f526ad9eef19b57bdf1ad4b0252683f514c718",
+                "reference": "18f526ad9eef19b57bdf1ad4b0252683f514c718",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -5688,16 +5603,30 @@
                     "email": "wolfy.jd@gmail.com"
                 },
                 {
+                    "name": "Valery Piashchynski",
+                    "homepage": "https://github.com/rustatian"
+                },
+                {
                     "name": "RoadRunner Community",
                     "homepage": "https://github.com/roadrunner-server/roadrunner/graphs/contributors"
                 }
             ],
             "description": "RoadRunner: High-performance PHP application server and process manager written in Go and powered with plugins",
+            "homepage": "https://roadrunner.dev/",
             "support": {
+                "chat": "https://discord.gg/V6EK4he",
+                "docs": "https://roadrunner.dev/docs",
+                "forum": "https://forum.roadrunner.dev/",
                 "issues": "https://github.com/roadrunner-server/roadrunner/issues",
-                "source": "https://github.com/roadrunner-server/roadrunner/tree/v2.12.2"
+                "source": "https://github.com/roadrunner-server/roadrunner/tree/v2.12.3"
             },
-            "time": "2023-01-12T11:55:21+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/sponsors/roadrunner-server",
+                    "type": "github"
+                }
+            ],
+            "time": "2023-02-16T13:00:26+00:00"
         },
         {
             "name": "spiral/roadrunner-cli",
@@ -9052,16 +8981,16 @@
         },
         {
             "name": "yansongda/pay",
-            "version": "v3.2.12",
+            "version": "v3.2.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/yansongda/pay.git",
-                "reference": "4c1893d44fd6244205cfcc31ffb1d37fdb6f1b6b"
+                "reference": "765085bdd173894c0d2ace60a878ecf7602a8392"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/yansongda/pay/zipball/4c1893d44fd6244205cfcc31ffb1d37fdb6f1b6b",
-                "reference": "4c1893d44fd6244205cfcc31ffb1d37fdb6f1b6b",
+                "url": "https://api.github.com/repos/yansongda/pay/zipball/765085bdd173894c0d2ace60a878ecf7602a8392",
+                "reference": "765085bdd173894c0d2ace60a878ecf7602a8392",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -9131,7 +9060,7 @@
                 "issues": "https://github.com/yansongda/pay/issues",
                 "source": "https://github.com/yansongda/pay"
             },
-            "time": "2023-01-07T13:38:52+00:00"
+            "time": "2023-02-13T13:35:26+00:00"
         },
         {
             "name": "yansongda/supports",
@@ -9204,16 +9133,16 @@
     "packages-dev": [
         {
             "name": "archtechx/enums",
-            "version": "v0.3.1",
+            "version": "v0.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/archtechx/enums.git",
-                "reference": "373a86a16e7233a56dd942d422af2cc59a2becb3"
+                "reference": "475f45e682b0771253707f9403b704759a08da5f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/archtechx/enums/zipball/373a86a16e7233a56dd942d422af2cc59a2becb3",
-                "reference": "373a86a16e7233a56dd942d422af2cc59a2becb3",
+                "url": "https://api.github.com/repos/archtechx/enums/zipball/475f45e682b0771253707f9403b704759a08da5f",
+                "reference": "475f45e682b0771253707f9403b704759a08da5f",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -9226,10 +9155,10 @@
                 "php": "^8.1"
             },
             "require-dev": {
-                "nunomaduro/larastan": "^1.0|^2.0",
-                "orchestra/testbench": "^6.9|^7.0",
-                "pestphp/pest": "^1.2",
-                "pestphp/pest-plugin-laravel": "^1.0"
+                "nunomaduro/larastan": "^1.0|^2.4",
+                "orchestra/testbench": "^6.9|^7.0|^8.0",
+                "pestphp/pest": "^1.2|^2.0",
+                "pestphp/pest-plugin-laravel": "^1.0|^2.0"
             },
             "type": "library",
             "autoload": {
@@ -9250,22 +9179,22 @@
             "description": "Helpers for making PHP enums more lovable.",
             "support": {
                 "issues": "https://github.com/archtechx/enums/issues",
-                "source": "https://github.com/archtechx/enums/tree/v0.3.1"
+                "source": "https://github.com/archtechx/enums/tree/v0.3.2"
             },
-            "time": "2022-08-24T22:27:44+00:00"
+            "time": "2023-02-15T13:05:41+00:00"
         },
         {
             "name": "beyondcode/laravel-query-detector",
-            "version": "1.6.0",
+            "version": "1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/beyondcode/laravel-query-detector.git",
-                "reference": "8261d80c71c97e994c1021fe5c3bd2a1c27106fc"
+                "reference": "40c7e168fcf7eeb80d8e96f7922e05ab194269c8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/beyondcode/laravel-query-detector/zipball/8261d80c71c97e994c1021fe5c3bd2a1c27106fc",
-                "reference": "8261d80c71c97e994c1021fe5c3bd2a1c27106fc",
+                "url": "https://api.github.com/repos/beyondcode/laravel-query-detector/zipball/40c7e168fcf7eeb80d8e96f7922e05ab194269c8",
+                "reference": "40c7e168fcf7eeb80d8e96f7922e05ab194269c8",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -9275,12 +9204,12 @@
                 ]
             },
             "require": {
-                "illuminate/support": "^5.5 || ^6.0 || ^7.0 || ^8.0 || ^9.0",
+                "illuminate/support": "^5.5 || ^6.0 || ^7.0 || ^8.0 || ^9.0|^10.0",
                 "php": "^7.1 || ^8.0"
             },
             "require-dev": {
                 "laravel/legacy-factories": "^1.0",
-                "orchestra/testbench": "^3.0 || ^4.0 || ^5.0 || ^6.0",
+                "orchestra/testbench": "^3.0 || ^4.0 || ^5.0 || ^6.0|^8.0",
                 "phpunit/phpunit": "^7.0 || ^8.0 || ^9.0"
             },
             "type": "library",
@@ -9316,9 +9245,9 @@
             ],
             "support": {
                 "issues": "https://github.com/beyondcode/laravel-query-detector/issues",
-                "source": "https://github.com/beyondcode/laravel-query-detector/tree/1.6.0"
+                "source": "https://github.com/beyondcode/laravel-query-detector/tree/1.7.0"
             },
-            "time": "2022-02-12T16:23:40+00:00"
+            "time": "2023-02-15T10:37:22+00:00"
         },
         {
             "name": "deployer/deployer",
@@ -9975,16 +9904,16 @@
         },
         {
             "name": "laravel-lang/attributes",
-            "version": "v2.1.2",
+            "version": "v2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Laravel-Lang/attributes.git",
-                "reference": "2b11c7ece66cb26cdf59746460593451484af89a"
+                "reference": "dc89aeb1a4e3dcb801f467d4345791e127cb5797"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Laravel-Lang/attributes/zipball/2b11c7ece66cb26cdf59746460593451484af89a",
-                "reference": "2b11c7ece66cb26cdf59746460593451484af89a",
+                "url": "https://api.github.com/repos/Laravel-Lang/attributes/zipball/dc89aeb1a4e3dcb801f467d4345791e127cb5797",
+                "reference": "dc89aeb1a4e3dcb801f467d4345791e127cb5797",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -9994,8 +9923,7 @@
                 ]
             },
             "require": {
-                "ext-json": "*",
-                "illuminate/support": "^6.0 || ^7.0 || ^8.0 || ^9.0"
+                "ext-json": "*"
             },
             "conflict": {
                 "laravel-lang/publisher": "<14.0.0"
@@ -10048,7 +9976,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Laravel-Lang/attributes/issues",
-                "source": "https://github.com/Laravel-Lang/attributes/tree/v2.1.2"
+                "source": "https://github.com/Laravel-Lang/attributes/tree/v2.2.0"
             },
             "funding": [
                 {
@@ -10056,20 +9984,20 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2023-02-05T09:34:20+00:00"
+            "time": "2023-02-14T17:28:03+00:00"
         },
         {
             "name": "laravel-lang/lang",
-            "version": "12.16.0",
+            "version": "12.17.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Laravel-Lang/lang.git",
-                "reference": "0536e0617b3ed07d4fab04b28960d611a3709eb2"
+                "reference": "fc84652189915bcc9b8f44104ad1344da5d70e9f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Laravel-Lang/lang/zipball/0536e0617b3ed07d4fab04b28960d611a3709eb2",
-                "reference": "0536e0617b3ed07d4fab04b28960d611a3709eb2",
+                "url": "https://api.github.com/repos/Laravel-Lang/lang/zipball/fc84652189915bcc9b8f44104ad1344da5d70e9f",
+                "reference": "fc84652189915bcc9b8f44104ad1344da5d70e9f",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -10137,7 +10065,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2023-02-11T09:51:27+00:00"
+            "time": "2023-02-14T22:05:52+00:00"
         },
         {
             "name": "laravel-lang/publisher",
@@ -10327,16 +10255,16 @@
         },
         {
             "name": "laravel/sail",
-            "version": "v1.20.1",
+            "version": "v1.20.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/sail.git",
-                "reference": "4b85dbfa3dceeaf7227e3029707562fd60297e86"
+                "reference": "5ae072b182b1efbec927409e8a3ce3b1078cc42c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/sail/zipball/4b85dbfa3dceeaf7227e3029707562fd60297e86",
-                "reference": "4b85dbfa3dceeaf7227e3029707562fd60297e86",
+                "url": "https://api.github.com/repos/laravel/sail/zipball/5ae072b182b1efbec927409e8a3ce3b1078cc42c",
+                "reference": "5ae072b182b1efbec927409e8a3ce3b1078cc42c",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -10390,20 +10318,20 @@
                 "issues": "https://github.com/laravel/sail/issues",
                 "source": "https://github.com/laravel/sail"
             },
-            "time": "2023-02-08T02:08:37+00:00"
+            "time": "2023-02-08T20:22:21+00:00"
         },
         {
             "name": "laravel/telescope",
-            "version": "v4.13.1",
+            "version": "v4.13.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/telescope.git",
-                "reference": "f8afaccfb5b636aa20735e0a390ab312a6f57c65"
+                "reference": "34a259cf19a73cc3b9b31f49c3c85595afcfbb70"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/telescope/zipball/f8afaccfb5b636aa20735e0a390ab312a6f57c65",
-                "reference": "f8afaccfb5b636aa20735e0a390ab312a6f57c65",
+                "url": "https://api.github.com/repos/laravel/telescope/zipball/34a259cf19a73cc3b9b31f49c3c85595afcfbb70",
+                "reference": "34a259cf19a73cc3b9b31f49c3c85595afcfbb70",
                 "shasum": "",
                 "mirrors": [
                     {
@@ -10463,9 +10391,9 @@
             ],
             "support": {
                 "issues": "https://github.com/laravel/telescope/issues",
-                "source": "https://github.com/laravel/telescope/tree/v4.13.1"
+                "source": "https://github.com/laravel/telescope/tree/v4.13.2"
             },
-            "time": "2023-02-06T14:37:41+00:00"
+            "time": "2023-02-16T15:32:51+00:00"
         },
         {
             "name": "mockery/mockery",

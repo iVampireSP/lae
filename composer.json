@@ -18,7 +18,6 @@
         "ext-zip": "^1.19",
         "doctrine/dbal": "^3.4",
         "erusev/parsedown": "^1.7",
-        "fruitcake/laravel-cors": "^3.0",
         "genealabs/laravel-model-caching": "^0.12.5",
         "guzzlehttp/guzzle": "^7.2",
         "jenssegers/mongodb": "^3.9",
