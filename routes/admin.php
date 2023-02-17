@@ -40,7 +40,7 @@ Route::resource('work-orders.replies', ReplyController::class)->only(['store', '
 
 Route::resource('user-groups', UserGroupController::class);
 
-Route::resource('maintenances', MaintenanceController::class);
+Route::resource('maintenances', MaintenanceController::class)->except('show');
 
 Route::get('devices', [DeviceController::class, 'index'])->name('devices.index');
 Route::delete('devices', [DeviceController::class, 'destroy'])->name('devices.destroy');
