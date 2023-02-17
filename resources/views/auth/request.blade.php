@@ -13,10 +13,11 @@
             @elseif (isset($data['from_user']) && !is_null($data['from_user']))
                 <span>来自用户：{{ $data['from_user']['name'] }}</span>
             @else
-                <span>一个第三方的应用程序</span>
+                <span>一个应用程序</span>
             @endif
+
         </code>
-        想要获取你的用户信息。
+        的验证请求
     </h3>
 
     <p>{{ $data['meta']['description'] }}</p>
