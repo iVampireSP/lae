@@ -8,16 +8,25 @@
 
         @if(session('token'))
 
-            <h3>带你去目标站点...</h3>
+            <div style="height: 80vh; display: flex" class="justify-content-center align-items-center">
+                <div>
+                    <i class="bi bi-back" style="font-size: 10rem"></i>
+                    <br/>
+                    <p class="text-center fs-3">
+                        正在返回
+                    </p>
+                </div>
+            </div>
 
             @php
                 session()->forget('callback');
+                session()->forget('referer.domain');
             @endphp
 
             <script>
                 setTimeout(function () {
                     window.location.href = "{{ $callback . '?token=' . session('token')}}";
-                }, 1000);
+                }, 100);
             </script>
         @else
 
@@ -26,11 +35,15 @@
 
             <p>您点击"好"后，您将前往这个地址: <code>{{ $callback }}</code>。</p>
 
-
             <form action="{{ route('token.new') }}" name="newToken" method="POST">
                 @csrf
                 <input type="hidden" name="name" placeholder="Token 名字"
                        value="自动登录 - {{ date('Y-m-d H:i:s') }}"/>
+
+                @if($referer_host)
+                    <input type="hidden" name="domain" value="{{ $referer_host }}"/>
+                @endif
+
                 <button type="submit" class="btn btn-primary">授权</button>
 
                 <a href="/" class="btn btn-danger">不</a>

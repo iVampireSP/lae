@@ -38,14 +38,12 @@ class AuthController extends Controller
                         return redirect()->route('real_name.create')->with('status', '重定向已被打断，需要先实人认证。');
                     }
 
-                    $requestHost = parse_url($request->header('referer'), PHP_URL_HOST);
-
-                    $token = $request->user()->createToken('Dashboard', [
-                        'domain-access:'.$requestHost,
-                    ])->plainTextToken;
+                    $token = $request->user()->createToken('Dashboard')->plainTextToken;
 
                     return redirect($callback.'?token='.$token);
                 }
+
+                session(['referer.domain' => parse_url($request->header('referer'), PHP_URL_HOST)]);
 
                 return redirect()->route('confirm_redirect');
             } else {
@@ -63,7 +61,9 @@ class AuthController extends Controller
     {
         $callback = $request->callback ?? session('callback');
 
-        return view('confirm_redirect', compact('callback'));
+        $referer_host = session('referer.domain');
+
+        return view('confirm_redirect', compact('callback', 'referer_host'));
     }
 
     public function update(Request $request): RedirectResponse
@@ -91,11 +91,6 @@ class AuthController extends Controller
         $abilities = [];
 
         if ($request->has('domain')) {
-            // 检测是不是一个合格的域名
-            if (! preg_match('/^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/', $request->input('domain'))) {
-                return back()->with('error', '域名格式不正确。');
-            }
-
             $abilities = ['domain-access:'.$request->input('domain')];
         }
 
