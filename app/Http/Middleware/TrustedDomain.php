@@ -12,16 +12,15 @@ class TrustedDomain
     /**
      * Handle an incoming request.
      *
-     * @param Request                                       $request
+     * @param  Request  $request
      * @param Closure(Request): (Response|RedirectResponse) $next
-     *
      * @return mixed
      */
     public function handle(Request $request, Closure $next): mixed
     {
         $user = $request->user('sanctum');
 
-        if (!$user) {
+        if (! $user) {
             return $next($request);
         }
 
@@ -37,7 +36,7 @@ class TrustedDomain
                 return $next($request);
             }
 
-            return $user->tokenCan('domain-access:' . $requestHost) ? $next($request) : response()->json([
+            return $user->tokenCan('domain-access:'.$requestHost) ? $next($request) : response()->json([
                 'message' => 'Token 无权访问此域名。',
             ], 401);
         }
