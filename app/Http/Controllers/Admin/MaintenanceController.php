@@ -24,22 +24,10 @@ class MaintenanceController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return View
-     */
-    public function create(): View
-    {
-        $modules = (new Module)->all();
-
-        return view('admin.maintenances.create', compact('modules'));
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param  Request  $request
+     * @return RedirectResponse
      */
     public function store(Request $request): RedirectResponse
     {
@@ -54,6 +42,18 @@ class MaintenanceController extends Controller
         (new Maintenance())->create($request->all());
 
         return redirect()->route('admin.maintenances.index')->with('success', '维护信息已创建。');
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return View
+     */
+    public function create(): View
+    {
+        $modules = (new Module)->all();
+
+        return view('admin.maintenances.create', compact('modules'));
     }
 
     /**
@@ -72,9 +72,9 @@ class MaintenanceController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  Request  $request
      * @param  Maintenance  $maintenance
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
      */
     public function update(Request $request, Maintenance $maintenance): RedirectResponse
     {
@@ -95,7 +95,7 @@ class MaintenanceController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  Maintenance  $maintenance
-     * @return \Illuminate\Http\Response
+     * @return RedirectResponse
      */
     public function destroy(Maintenance $maintenance): RedirectResponse
     {
