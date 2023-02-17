@@ -30,6 +30,12 @@ class Maintenance extends Model
         'module',
     ];
 
+    // 根据 start_at 排序
+    public function scopeOrderByStartAt($query)
+    {
+        return $query->orderBy('start_at', 'desc');
+    }
+
     public function module()
     {
         return $this->belongsTo(Module::class);

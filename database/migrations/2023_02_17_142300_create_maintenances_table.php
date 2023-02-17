@@ -27,9 +27,9 @@ return new class extends Migration
             $table->foreign('module_id')->references('id')->on('modules')->onDelete('set null');
 
             // 开始于
-            $table->dateTime('start_at')->nullable();
+            $table->dateTime('start_at')->nullable()->index();
 
-            $table->dateTime('end_at')->nullable();
+            $table->dateTime('end_at')->nullable()->index();
         });
     }
 

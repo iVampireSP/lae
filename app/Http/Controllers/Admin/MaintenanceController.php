@@ -18,7 +18,7 @@ class MaintenanceController extends Controller
      */
     public function index(): View
     {
-        $maintenances = (new Maintenance)->all();
+        $maintenances = (new Maintenance)->orderByStartAt()->get();
 
         return view('admin.maintenances.index', compact('maintenances'));
     }

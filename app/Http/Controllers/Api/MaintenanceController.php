@@ -10,7 +10,7 @@ class MaintenanceController extends Controller
 {
     public function __invoke(): JsonResponse
     {
-        $maintenances = (new Maintenance)->all();
+        $maintenances = (new Maintenance)->orderByStartAt()->get();
 
         return $this->success($maintenances);
     }
