@@ -45,10 +45,17 @@
 
     <form action="{{ route('token.new') }}" name="newToken" method="POST">
         @csrf
+
         <div class="form-floating mb-2">
             <input type="text" class="form-control" placeholder="Token 名称"
                    aria-label="密钥名称" name="name" required maxlength="25">
             <label>Token 名称</label>
+        </div>
+
+        <div class="form-floating mb-2">
+            <input type="text" class="form-control" placeholder="授权的域名"
+                   aria-label="授权的域名" name="domain" maxlength="255">
+            <label>授权的域名</label>
         </div>
 
         <button type="submit" class="btn btn-primary visually-hidden">

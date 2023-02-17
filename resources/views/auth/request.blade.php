@@ -7,7 +7,6 @@
     <h3>
         <code>
             @if (isset($data['module']) && !is_null($data['module']))
-                )
                 <span>模块：{{ $data['module']['name'] }}</span>
             @elseif (isset($data['applications']) && !is_null($data['application']))
                 <span>应用程序：{{ $data['application']['name'] }}</span>
@@ -23,18 +22,26 @@
     <p>{{ $data['meta']['description'] }}</p>
 
     <br/>
-    <p>
-        在您同意后，您的 <b>ID</b>, <b>UUID</b>, <b>昵称</b>, <b>邮件信息 和 实人认证成功的时间(不包含个人信息)</b>, <b>余额</b>,
-        <b>用户组 ID</b> 将会被发送给它们。
-        @if ($data['meta']['require_token'])
-            <br />
-            你的 <b>Token</b> 将会新建一个，并发送给它们。
-        @endif
-    </p>
 
+    在您同意后，您的 <b>ID</b>, <b>UUID</b>, <b>昵称</b>, <b>邮件信息 和 实人认证成功的时间(不包含个人信息)</b>,
+    <b>余额</b>,
+    <b>用户组 ID</b> 将会被发送给它们。
+    @if ($data['meta']['require_token'])
+        <br/>
+        你的 <b>Token</b> 将会新建一个，并发送给它们。
+    @endif
+
+    @if (isset($data['meta']['abilities']))
+        <div>
+            权限列表:
+            @foreach($data['meta']['abilities'] as $ability)
+                <b>{{ $ability }}</b>
+            @endforeach
+        </div>
+    @endif
 
     @auth('web')
-        <form method="POST" action="{{ route('auth_request.store') }}">
+        <form method="POST" action="{{ route('auth_request.store') }}" class="mt-3">
             @csrf
             <input type="hidden" name="token" value="{{ $data['meta']['token'] }}">
             <button type="submit" class="btn btn-primary">同意</button>

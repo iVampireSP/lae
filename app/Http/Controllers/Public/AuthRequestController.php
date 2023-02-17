@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
+use App\Rules\Domain;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -15,6 +16,7 @@ class AuthRequestController extends Controller
         $request->validate([
             'description' => 'required|string|max:255',
             'require_token' => 'nullable|boolean',
+            'abilities' => 'nullable|array|max:255',
         ]);
 
         $token = Str::random(128);
@@ -24,6 +26,7 @@ class AuthRequestController extends Controller
                 'description' => $request->input('description'),
                 'token' => $token,
                 'require_token' => $request->input('require_token', false),
+                'abilities' => $request->input('abilities'),
             ],
         ];
 

@@ -1,11 +1,5 @@
 <?php
 
-$cors_origin = explode(',', env('CORS_ORIGINS'));
-
-if (env('APP_ENV') === 'local') {
-    $cors_origin = ['*'];
-}
-
 return [
 
     /*
@@ -25,7 +19,7 @@ return [
 
     'allowed_methods' => ['*'],
 
-    'allowed_origins' => $cors_origin,
+    'allowed_origins' => ['*'],
 
     'allowed_origins_patterns' => [],
 

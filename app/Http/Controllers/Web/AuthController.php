@@ -6,14 +6,15 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Notifications\User\UserNotification;
-use function back;
-use function config;
+use App\Rules\Domain;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\View\View;
+use function back;
+use function config;
 use function redirect;
 use function session;
 use function view;
@@ -33,13 +34,17 @@ class AuthController extends Controller
                 $dashboardHost = parse_url(config('settings.dashboard.base_url'), PHP_URL_HOST);
 
                 if ($callbackHost === $dashboardHost) {
-                    if (! $request->user('web')->isRealNamed()) {
+                    if (!$request->user('web')->isRealNamed()) {
                         return redirect()->route('real_name.create')->with('status', '重定向已被打断，需要先实人认证。');
                     }
 
-                    $token = $request->user()->createToken('Dashboard')->plainTextToken;
+                    $requestHost = parse_url($request->header('referer'), PHP_URL_HOST);
 
-                    return redirect($callback.'?token='.$token);
+                    $token = $request->user()->createToken('Dashboard', [
+                        'domain-access:' . $requestHost,
+                    ])->plainTextToken;
+
+                    return redirect($callback . '?token=' . $token);
                 }
 
                 return redirect()->route('confirm_redirect');
@@ -80,9 +85,24 @@ class AuthController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'domain' => ['nullable', 'string', 'max:255', new Domain],
         ]);
 
-        $token = $request->user()->createToken($request->input('name'));
+        $abilities = [];
+
+        if ($request->has('domain')) {
+            // 检测是不是一个合格的域名
+            if (!preg_match('/^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/', $request->input('domain'))) {
+                return back()->with('error', '域名格式不正确。');
+            }
+
+            $abilities = ['domain-access:' . $request->input('domain')];
+        }
+
+        $token = $request->user()->createToken(
+            $request->input('name'),
+            $abilities
+        );
 
         return back()->with('token', $token->plainTextToken);
     }
@@ -115,7 +135,7 @@ class AuthController extends Controller
 
     public function showAuthRequest($token): View|RedirectResponse
     {
-        $data = Cache::get('auth_request:'.$token);
+        $data = Cache::get('auth_request:' . $token);
 
         if (empty($data)) {
             return redirect()->route('index')->with('error', '登录请求的 Token 不存在或已过期。');
@@ -139,7 +159,7 @@ class AuthController extends Controller
             'token' => 'required|string|max:128',
         ]);
 
-        $data = Cache::get('auth_request:'.$request->input('token'));
+        $data = Cache::get('auth_request:' . $request->input('token'));
 
         if (empty($data)) {
             return back()->with('error', '登录请求的 Token 不存在或已过期。');
@@ -157,11 +177,13 @@ class AuthController extends Controller
             'real_name_verified_at',
         ]);
 
+        $abilities = $data['meta']['abilities'] ?? ['*'];
+
         if (isset($data['meta']['require_token']) && $data['meta']['require_token']) {
-            $data['token'] = $user->createToken($data['meta']['description'] ?? Carbon::now()->toDateString())->plainTextToken;
+            $data['token'] = $user->createToken($data['meta']['description'] ?? Carbon::now()->toDateString(), $abilities)->plainTextToken;
         }
 
-        Cache::put('auth_request:'.$request->input('token'), $data, 60);
+        Cache::put('auth_request:' . $request->input('token'), $data, 60);
 
         return redirect()->route('index')->with('success', '登录请求已确认。');
     }
