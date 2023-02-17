@@ -28,12 +28,12 @@ class AuthController extends Controller
 
             session(['callback' => $callback]);
 
-            if (Auth::guard('web')->check()) {
+            if ($request->user('web')) {
                 $callbackHost = parse_url($callback, PHP_URL_HOST);
                 $dashboardHost = parse_url(config('settings.dashboard.base_url'), PHP_URL_HOST);
 
                 if ($callbackHost === $dashboardHost) {
-                    if (! Auth::guard('web')->user()->isRealNamed()) {
+                    if (! $request->user('web')->isRealNamed()) {
                         return redirect()->route('real_name.create')->with('status', '重定向已被打断，需要先实人认证。');
                     }
 
@@ -51,7 +51,7 @@ class AuthController extends Controller
             }
         }
 
-        return view('index');
+        return $request->user('web') ? view('index') : view('welcome');
     }
 
     public function confirm_redirect(Request $request): View
