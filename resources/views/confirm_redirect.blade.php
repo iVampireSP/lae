@@ -20,7 +20,7 @@
 
             @php
                 session()->forget('callback');
-                session()->forget('referer.domain');
+                // session()->forget('referer.domain');
             @endphp
 
             <script>
@@ -40,9 +40,9 @@
                 <input type="hidden" name="name" placeholder="Token 名字"
                        value="自动登录 - {{ date('Y-m-d H:i:s') }}"/>
 
-                @if($referer_host)
-                    <input type="hidden" name="domain" value="{{ $referer_host }}"/>
-                @endif
+{{--                @if($referer_host)--}}
+{{--                    <input type="hidden" name="domain" value="{{ $referer_host }}"/>--}}
+{{--                @endif--}}
 
                 <button type="submit" class="btn btn-primary">授权</button>
 
