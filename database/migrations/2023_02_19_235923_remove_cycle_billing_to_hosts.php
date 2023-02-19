@@ -16,6 +16,7 @@ return new class extends Migration
         Schema::table('hosts', function (Blueprint $table) {
             $table->dropColumn('next_due_at');
             $table->dropColumn('billing_cycle');
+            $table->dropColumn('last_paid');
         });
     }
 
