@@ -20,7 +20,7 @@ class All extends Command
      *
      * @var string
      */
-    protected $description = '显示出所有 管理员。';
+    protected $description = '显示出所有管理员。';
 
     /**
      * Execute the console command.
@@ -31,9 +31,10 @@ class All extends Command
     {
         $admins = Admin::all();
 
-        $this->table(['ID', '邮箱'], $admins->map(function ($admin) {
+        $this->table(['ID', '名称', '邮箱'], $admins->map(function ($admin) {
             return [
                 'id' => $admin->id,
+                'name' => $admin->name,
                 'email' => $admin->email,
             ];
         })->toArray());

@@ -20,7 +20,7 @@ class Create extends Command
      *
      * @var string
      */
-    protected $description = '创建一个管理员账号';
+    protected $description = '创建一个管理员账号。';
 
     /**
      * Execute the console command.
@@ -29,6 +29,9 @@ class Create extends Command
      */
     public function handle(): int
     {
+        // 名称
+        $name = $this->ask('请输入名称');
+
         // 邮箱
         $email = $this->ask('请输入邮箱');
 
@@ -46,12 +49,13 @@ class Create extends Command
 
         // 创建管理员
         $admin = (new Admin)->create([
+            'name' => $name,
             'email' => $email,
             'password' => bcrypt($password),
         ]);
 
         // 输出信息
-        $this->info('管理员创建成功，ID为：'.$admin->id);
+        $this->info('管理员创建成功，ID 为: '.$admin->id.'。');
 
         return CommandAlias::SUCCESS;
     }

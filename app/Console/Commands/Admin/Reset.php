@@ -30,7 +30,7 @@ class Reset extends Command
     public function handle(): int
     {
         // 获取管理员ID
-        $id = $this->ask('请输入管理员ID');
+        $id = $this->ask('请输入管理员 ID');
 
         // 获取管理员
         $admin = (new Admin)->find($id);
