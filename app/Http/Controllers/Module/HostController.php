@@ -66,12 +66,6 @@ class HostController extends Controller
 
         $host = (new Host)->create($data);
 
-        if (! $user->hasBalance($host->getRenewPrice())) {
-            $host->delete();
-
-            return $this->error('此用户余额不足，无法开计费项目。');
-        }
-
         $host['host_id'] = $host->id;
 
         return $this->created($host);
@@ -125,27 +119,6 @@ class HostController extends Controller
         // if host not instance of HostJob
         if (! $host instanceof Host) {
             $host = (new Host)->findOrFail($host);
-        }
-
-        if ($host?->isCycle()) {
-            $days = $host->next_due_at->diffInDays(now());
-
-            // 算出 1 天的价格
-            $price = bcdiv($host->getPrice(), 31, 4);
-
-            // 算出退还的金额
-            $amount = bcmul($price, $days, 4);
-
-            $host->user->charge($amount, 'balance', '删除主机退款。', [
-                'module_id' => $this->module_id,
-                'host_id' => $this->id,
-                'user_id' => $this->user_id,
-            ]);
-
-            $host->module->reduce($amount, '删除主机退款。', false, [
-                'module_id' => $this->module_id,
-                'host_id' => $this->id,
-            ]);
         }
 
         $host?->delete();

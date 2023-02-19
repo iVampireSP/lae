@@ -43,7 +43,7 @@ class DispatchHostCostQueueJob implements ShouldQueue
                 $host = $host->where('minute_at', $this->minute);
             }
 
-            $host->whereIn('status', ['running', 'stopped'])->whereNull('billing_cycle')->with('user')->chunk(500, function ($hosts) {
+            $host->whereIn('status', ['running', 'stopped'])->with('user')->chunk(500, function ($hosts) {
                 foreach ($hosts as $host) {
                     dispatch(new self($this->minute, $host));
                 }

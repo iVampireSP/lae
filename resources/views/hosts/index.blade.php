@@ -38,14 +38,6 @@
                             {{ $host->price }} 元
                         @endif
                         <br/>
-                        @if($host->billing_cycle)
-                            <x-billing-cycle :cycle="$host->billing_cycle"/>
-                            到期时间：{{ $host->next_due_at }}
-                            <br />
-                            续费价格: {{ $host->getRenewPrice() }} 元
-                            <br />
-                            续费后到期时间: {{ $host->getNewDueDate() }}
-                        @endif
                     </td>
                     <td>
                         <x-host-status :status="$host->status"/>
@@ -65,19 +57,6 @@
                                 操作
                             </button>
                             <ul class="dropdown-menu">
-
-                                @if($host->billing_cycle)
-                                    <a class="dropdown-item" href="#"
-                                       onclick="return confirm('确定续费此主机？') ? document.getElementById('renew-{{$host->id}}').submit() : false;">
-                                        续费此主机
-                                    </a>
-
-                                    <form action="{{ route('hosts.renew', $host) }}" id="renew-{{$host->id}}"
-                                          method="post" class="d-none">
-                                        @csrf
-                                    </form>
-                                @endif
-
                                 @if(!$host->isRunning())
                                     <a class="dropdown-item" href="#"
                                        onclick="return confirm('确定执行此操作？') ? document.getElementById('start-{{$host->id}}').submit() : false;">
@@ -92,7 +71,7 @@
                                     </form>
                                 @endif
 
-                                @if(!$host->isSuspended() && !$host->isCycle())
+                                @if(!$host->isSuspended())
                                     <a class="dropdown-item" href="#"
                                        onclick="return confirm('确定执行此操作？') ? document.getElementById('start-{{$host->id}}').submit() : false;">
                                         暂停此主机
@@ -128,9 +107,4 @@
 
     {{-- 分页 --}}
     {{ $hosts->links() }}
-
-    <br/>
-    <p>还剩下周期性计费删除次数: {{ $times }}。当次数用完后，您的周期性计费主机只能在到期后删除。</p>
-    <p>当您的主机处于 "暂停" 状态时，计费会被终止。但是请注意，3 天后主机将会被删除，请合理使用。</p>
-
 @endsection

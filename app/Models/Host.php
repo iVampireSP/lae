@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Exceptions\User\BalanceNotEnoughException;
 use App\Jobs\Host\HostJob;
 use App\Jobs\Host\UpdateOrDeleteHostJob;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
@@ -47,25 +46,20 @@ class Host extends Model
         })->get();
     }
 
-    public function user(): BelongsToAlias
-    {
-        return $this->belongsTo(User::class);
-    }
-
     public function module(): BelongsToAlias
     {
         return $this->belongsTo(Module::class);
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->whereIn('status', ['running', 'stopped']);
     }
 
     // public function workOrders(): HasManyAlias
     // {
     //     return $this->hasMany(WorkOrder::class);
     // }
-
-    public function scopeActive($query)
-    {
-        return $query->whereIn('status', ['running', 'stopped']);
-    }
 
     public function scopeDraft($query)
     {
@@ -91,11 +85,6 @@ class Host extends Model
         }
     }
 
-    public function scopeExpiringDays($query, $days)
-    {
-        return $query->where('status', 'running')->where('next_due_at', '<=', now()->addDays($days));
-    }
-
     public function isDraft(): bool
     {
         return $this->status === 'draft';
@@ -116,135 +105,9 @@ class Host extends Model
         return $this->status === 'unavailable';
     }
 
-    public function renew($first = false): bool
-    {
-        if (! $this->isCycle()) {
-            return false;
-        }
-
-        $price = $this->getRenewPrice();
-
-        $description = ($first ? '新购' : '续费').' '.$this->name.'，价格：'.$price.' 元。';
-
-        try {
-            $this->user->reduce($price, $description, true, [
-                'module_id' => $this->module_id,
-                'host_id' => $this->id,
-                'user_id' => $this->user_id,
-            ]);
-            $this->module->charge($price, 'balance', '用户'.$description, [
-                'module_id' => $this->module_id,
-                'host_id' => $this->id,
-            ]);
-        } catch (BalanceNotEnoughException) {
-            return false;
-        }
-
-        $this->addLog($price);
-
-        $this->next_due_at = $this->getNewDueDate();
-        $this->last_paid = $price;
-
-        if ($this->isSuspended()) {
-            $this->run();
-        }
-
-        $this->save();
-
-        return true;
-    }
-
-    public function isCycle(): bool
-    {
-        return $this->billing_cycle !== null;
-    }
-
-    public function getRenewPrice(): string
-    {
-        return match ($this->billing_cycle) {
-            'monthly' => $this->getPrice(),
-            'quarterly' => bcmul($this->getPrice(), 3),
-            'semi-annually' => bcmul($this->getPrice(), 6),
-            'annually' => bcmul($this->getPrice(), 12),
-            'biennially' => bcmul($this->getPrice(), 24),
-            'triennially' => bcmul($this->getPrice(), 36),
-            default => '0',
-        };
-    }
-
     public function getPrice(): float
     {
         return $this->managed_price ?? $this->price;
-    }
-
-    public function addLog(string $amount = '0'): bool
-    {
-        if ($amount === '0') {
-            return false;
-        }
-
-        /** 统计收益开始 */
-        $current_month = now()->month;
-        $current_year = now()->year;
-
-        $cache_key = 'module_earning_'.$this->module_id;
-
-        // 应支付的提成
-        $commission = config('settings.billing.commission');
-        $should_amount = bcmul($amount, $commission, 4);
-
-        // 应得的余额
-        $should_balance = bcsub($amount, $should_amount, 4);
-        // 如果太小，则重置为 0.0001
-        if ($should_balance < 0.0001) {
-            $should_balance = 0.0001;
-        }
-
-        $earnings = Cache::get($cache_key, []);
-
-        if (! isset($earnings[$current_year])) {
-            $earnings[$current_year] = [];
-        }
-
-        if (isset($earnings[$current_year][$current_month])) {
-            $earnings[$current_year][$current_month]['balance'] = bcadd($earnings[$current_year][$current_month]['balance'], $amount, 4);
-            $earnings[$current_year][$current_month]['should_balance'] = bcadd($earnings[$current_year][$current_month]['should_balance'], $should_balance, 4);
-        } else {
-            $earnings[$current_year][$current_month] = [
-                'balance' => $amount,
-                // 应得（交了手续费）
-                'should_balance' => $should_balance,
-            ];
-        }
-
-        // 删除 前 3 年的数据
-        if (count($earnings) > 3) {
-            $earnings = array_slice($earnings, -3, 3, true);
-        }
-
-        $this->module->charge($amount, 'balance', null);
-
-        // 保存 1 年
-        Cache::forever($cache_key, $earnings);
-
-        /** 统计收益结束 */
-
-        return true;
-    }
-
-    public function getNewDueDate(): string
-    {
-        $this->next_due_at = $this->next_due_at ?? now();
-
-        return match ($this->billing_cycle) {
-            'monthly' => $this->next_due_at->addMonth(),
-            'quarterly' => $this->next_due_at->addMonths(3),
-            'semi-annually' => $this->next_due_at->addMonths(6),
-            'annually' => $this->next_due_at->addYear(),
-            'biennially' => $this->next_due_at->addYears(2),
-            'triennially' => $this->next_due_at->addYears(3),
-            default => null,
-        };
     }
 
     public function isSuspended(): bool
@@ -252,39 +115,10 @@ class Host extends Model
         return $this->status === 'suspended';
     }
 
-    public function run(): bool
-    {
-        $this->update([
-            'status' => 'running',
-        ]);
-
-        return true;
-    }
-
     public function safeDelete(): bool
     {
-        $is_user = auth()->guard('sanctum')->check() || auth()->guard('web')->check();
-
-        if ($this->isCycle() && $is_user) {
-            // 周期性的，每个月只能删除固定次数
-            $times = Cache::remember('host_delete_times:'.$this->user_id, 60 * 24 * 30, function () {
-                return 0;
-            });
-
-            if ($times >= config('settings.billing.cycle_delete_times_every_month')) {
-                return false;
-            }
-
-            Cache::increment('host_delete_times:'.$this->user_id);
-
-            // 根据 next_due_at 来计算退还的金额
-            if ($this->next_due_at === null) {
-                $this->next_due_at = now();
-            }
-        }
-
         // 如果创建时间大于 1 小时
-        if (! $this->isCycle() && $this->created_at->diffInHours(now()) > 1) {
+        if ($this->created_at->diffInHours(now()) > 1) {
             // 如果当前时间比扣费时间小，则说明没有扣费。执行扣费。
             if (now()->minute < $this->minute_at) {
                 $this->cost();
@@ -396,6 +230,61 @@ class Host extends Model
         return true;
     }
 
+    public function addLog(string $amount = '0'): bool
+    {
+        if ($amount === '0') {
+            return false;
+        }
+
+        /** 统计收益开始 */
+        $current_month = now()->month;
+        $current_year = now()->year;
+
+        $cache_key = 'module_earning_'.$this->module_id;
+
+        // 应支付的提成
+        $commission = config('settings.billing.commission');
+        $should_amount = bcmul($amount, $commission, 4);
+
+        // 应得的余额
+        $should_balance = bcsub($amount, $should_amount, 4);
+        // 如果太小，则重置为 0.0001
+        if ($should_balance < 0.0001) {
+            $should_balance = 0.0001;
+        }
+
+        $earnings = Cache::get($cache_key, []);
+
+        if (! isset($earnings[$current_year])) {
+            $earnings[$current_year] = [];
+        }
+
+        if (isset($earnings[$current_year][$current_month])) {
+            $earnings[$current_year][$current_month]['balance'] = bcadd($earnings[$current_year][$current_month]['balance'], $amount, 4);
+            $earnings[$current_year][$current_month]['should_balance'] = bcadd($earnings[$current_year][$current_month]['should_balance'], $should_balance, 4);
+        } else {
+            $earnings[$current_year][$current_month] = [
+                'balance' => $amount,
+                // 应得（交了手续费）
+                'should_balance' => $should_balance,
+            ];
+        }
+
+        // 删除 前 3 年的数据
+        if (count($earnings) > 3) {
+            $earnings = array_slice($earnings, -3, 3, true);
+        }
+
+        $this->module->charge($amount, 'balance', null);
+
+        // 保存 1 年
+        Cache::forever($cache_key, $earnings);
+
+        /** 统计收益结束 */
+
+        return true;
+    }
+
     public function changeStatus(
         string $status
     ): bool {
@@ -406,20 +295,25 @@ class Host extends Model
                 return false;
             }
 
-            if (! $this->isCycle() && ! $user->hasBalance('0.5')) {
+            if (! $user->hasBalance('0.5')) {
                 return false;
             }
         }
 
         if ($status === 'running') {
             return $this->run();
-        } elseif (($status === 'suspended' || $status === 'suspend') && ! $this->isCycle()) {
+        } elseif (($status === 'suspended' || $status === 'suspend')) {
             return $this->suspend();
         } elseif ($status === 'stopped') {
             return $this->stop();
         }
 
         return false;
+    }
+
+    public function user(): BelongsToAlias
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function isPending(): bool
@@ -430,6 +324,15 @@ class Host extends Model
     public function isOverdue(): bool
     {
         return now()->gt($this->next_due_at);
+    }
+
+    public function run(): bool
+    {
+        $this->update([
+            'status' => 'running',
+        ]);
+
+        return true;
     }
 
     public function suspend(): bool

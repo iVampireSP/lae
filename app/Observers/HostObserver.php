@@ -38,10 +38,6 @@ class HostObserver
 
         $host->user->notify(new WebNotification($host, 'hosts.created'));
 
-        if ($host->isCycle()) {
-            $host->renew(true);
-        }
-
         $host->save();
     }
 

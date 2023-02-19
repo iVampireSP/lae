@@ -5,7 +5,6 @@ namespace App\Console;
 use App\Jobs\Host\DeleteHostJob;
 use App\Jobs\Host\DispatchHostCostQueueJob;
 use App\Jobs\Host\ScanAllHostsJob;
-use App\Jobs\Host\SuspendOverdueHosts;
 use App\Jobs\Module\DispatchFetchModuleJob;
 use App\Jobs\Module\SendModuleEarningsJob;
 use App\Jobs\User\CheckAndChargeBalanceJob;
@@ -61,9 +60,6 @@ class Kernel extends ConsoleKernel
 
         // 设置生日用户组
         $schedule->job(new SetBirthdayGroupJob())->dailyAt('00:00')->onOneServer()->name('设置生日用户组');
-
-        // 暂停到期的循环计费主机
-        $schedule->job(new SuspendOverdueHosts())->dailyAt('00:00')->onOneServer()->name('暂停到期的循环计费主机');
     }
 
     /**
