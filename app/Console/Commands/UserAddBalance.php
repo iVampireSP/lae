@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Command\Command as CommandAlias;
 
 class UserAddBalance extends Command
 {
@@ -20,7 +21,7 @@ class UserAddBalance extends Command
      *
      * @var string
      */
-    protected $description = '为用户充值，用法: 用户ID, 金额。';
+    protected $description = '为用户充值。';
 
     /**
      * Create a new command instance.
@@ -39,8 +40,6 @@ class UserAddBalance extends Command
      */
     public function handle(): int
     {
-        //
-
         $user_id = $this->argument('user_id');
         $amount = $this->argument('amount');
 
@@ -56,17 +55,16 @@ class UserAddBalance extends Command
             return 0;
         }
 
-        $transaction = new Transaction();
-
         $description = '控制台充值 '.$amount.' 元';
 
-        $transaction->addAmount($user->id, 'console', $amount, $description, true);
+        $user->charge($amount, 'console', $description);
 
         $this->info('充值成功。');
 
         $user->refresh();
+
         $this->info($user->name.', 当前余额: '.$user->balance);
 
-        return 0;
+        return CommandAlias::SUCCESS;
     }
 }

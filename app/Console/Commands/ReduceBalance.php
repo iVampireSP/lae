@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Console\Command;
+use Symfony\Component\Console\Command\Command as CommandAlias;
 
 class ReduceBalance extends Command
 {
@@ -20,7 +21,7 @@ class ReduceBalance extends Command
      *
      * @var string
      */
-    protected $description = '减少用户的余额（发生退款时使用）';
+    protected $description = '减少用户的余额。';
 
     /**
      * Create a new command instance.
@@ -35,12 +36,10 @@ class ReduceBalance extends Command
     /**
      * Execute the console command.
      *
-     * @return void
+     * @return int
      */
-    public function handle(): void
+    public function handle(): int
     {
-        //
-
         $user_id = $this->argument('user_id');
 
         $amount = $this->argument('amount');
@@ -55,13 +54,14 @@ class ReduceBalance extends Command
 
         $confirm = $this->confirm('确认扣除？');
 
-        $transaction = new Transaction();
         if ($confirm) {
-            $transaction->reduceAmount($user_id, $amount, '控制台扣除。');
+            $user->reduce($amount, '控制台扣除。');
 
             $this->info('扣除成功。');
         } else {
             $this->info('取消扣除。');
         }
+
+        return CommandAlias::SUCCESS;
     }
 }
