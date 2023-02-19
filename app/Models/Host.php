@@ -24,17 +24,13 @@ class Host extends Model
         'managed_price',
         'configuration',
         'status',
-        'billing_cycle',
-        'next_due_at',
         'suspended_at',
     ];
 
     protected $casts = [
         'price' => 'decimal:2',
         'managed_price' => 'decimal:2',
-        'last_paid' => 'decimal:2',
         'configuration' => 'array',
-        'next_due_at' => 'datetime',
         'suspended_at' => 'datetime',
     ];
 
