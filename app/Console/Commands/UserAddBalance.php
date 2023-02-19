@@ -2,7 +2,6 @@
 
 namespace App\Console\Commands;
 
-use App\Models\Transaction;
 use App\Models\User;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Command\Command as CommandAlias;
