@@ -9,6 +9,7 @@ use App\Jobs\Module\DispatchFetchModuleJob;
 use App\Jobs\Module\SendModuleEarningsJob;
 use App\Jobs\User\CheckAndChargeBalanceJob;
 use App\Jobs\User\ClearTasksJob;
+use App\Jobs\User\DeleteUnverifiedUserJob;
 use App\Jobs\User\RollbackUserTempGroupJob;
 use App\Jobs\User\SetBirthdayGroupJob;
 use App\Jobs\WorkOrder\AutoCloseWorkOrderJob;
@@ -60,6 +61,9 @@ class Kernel extends ConsoleKernel
 
         // 设置生日用户组
         $schedule->job(new SetBirthdayGroupJob())->dailyAt('00:00')->onOneServer()->name('设置生日用户组');
+
+        // 删除注册超过 3 天未验证邮箱的用户
+        $schedule->job(new DeleteUnverifiedUserJob())->daily()->onOneServer()->name('删除注册超过 3 天未验证邮箱的用户');
     }
 
     /**
