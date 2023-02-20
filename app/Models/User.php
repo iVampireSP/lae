@@ -166,19 +166,20 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * 扣除费用
      *
-     * @param  string|null  $amount
-     * @param  string  $description
-     * @param  bool  $fail
-     * @param  array  $options
-     * @return string
+     * @param string|null $amount
+     * @param string      $description
+     * @param bool        $fail
+     * @param array       $options
+     *
+     * @return Transaction
      */
-    public function reduce(string|null $amount = '0', string $description = '消费', bool $fail = false, array $options = []): string
+    public function reduce(string|null $amount = '0', string $description = '消费', bool $fail = false, array $options = []): Transaction
     {
         if ($amount === null || $amount === '') {
             return $this->balance;
         }
 
-        Cache::lock('user_balance_'.$this->id, 10)->block(10, function () use ($amount, $fail, $description, $options) {
+        return Cache::lock('user_balance_'.$this->id, 10)->block(10, function () use ($amount, $fail, $description, $options) {
             $this->refresh();
 
             if ($this->balance < $amount) {
@@ -202,30 +203,29 @@ class User extends Authenticatable implements MustVerifyEmail
                 $data = array_merge($data, $options);
             }
 
-            (new Transaction)->create($data);
-
             broadcast(new Users($this, 'balances.amount.reduced', $this));
-        });
 
-        return $this->balance;
+            return (new Transaction)->create($data);
+        });
     }
 
     /**
      * 增加余额
      *
-     * @param  string|null  $amount
-     * @param  string  $payment
-     * @param  string  $description
-     * @param  array  $options
-     * @return string
+     * @param string|null $amount
+     * @param string      $payment
+     * @param string      $description
+     * @param array       $options
+     *
+     * @return Transaction
      */
-    public function charge(string|null $amount = '0', string $payment = 'console', string $description = '充值', array $options = []): string
+    public function charge(string|null $amount = '0', string $payment = 'console', string $description = '充值', array $options = []): Transaction
     {
         if ($amount === null || $amount === '') {
             return $this->balance;
         }
 
-        Cache::lock('user_balance_'.$this->id, 10)->block(10, function () use ($amount, $description, $payment, $options) {
+        return Cache::lock('user_balance_'.$this->id, 10)->block(10, function () use ($amount, $description, $payment, $options) {
             $this->refresh();
             $this->balance = bcadd($this->balance, $amount, 4);
             $this->save();
@@ -242,8 +242,6 @@ class User extends Authenticatable implements MustVerifyEmail
                 $data = array_merge($data, $options);
             }
 
-            (new Transaction)->create($data);
-
             if (isset($options['add_balances_log']) && $options['add_balances_log'] === true) {
                 (new Balance)->create([
                     'user_id' => $this->id,
@@ -253,9 +251,9 @@ class User extends Authenticatable implements MustVerifyEmail
                     'paid_at' => now(),
                 ]);
             }
-        });
 
-        return $this->balance;
+            return (new Transaction)->create($data);
+        });
     }
 
     public function getCostPrice(string $price): string
