@@ -88,7 +88,9 @@ class UserController extends Controller
                 return $this->error('用户余额不足。');
             }
 
-            $trans = $user->reduce($balance, $request->description, true);
+            $trans = $user->reduce($balance, $request->description, true, [
+                'module_id' => $module->id
+            ]);
             $module->charge($balance, 'balance', $request->description, [
                 'user_id' => $user->id,
             ]);
