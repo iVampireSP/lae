@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Models\Maintenance;
-use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
 
 class MaintenanceController extends Controller

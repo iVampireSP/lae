@@ -24,15 +24,15 @@ class UserController extends Controller
 
         // 搜索 name, email, balance
         if ($request->has('name')) {
-            $users->where('name', 'like', '%' . $request->input('name') . '%');
+            $users->where('name', 'like', '%'.$request->input('name').'%');
         }
 
         if ($request->has('email')) {
-            $users->where('email', 'like', '%' . $request->input('email') . '%');
+            $users->where('email', 'like', '%'.$request->input('email').'%');
         }
 
         if ($request->has('balance')) {
-            $users->where('balance', 'like', '%' . $request->input('balance') . '%');
+            $users->where('balance', 'like', '%'.$request->input('balance').'%');
         }
 
         $users = $users->simplePaginate(100);
@@ -89,7 +89,7 @@ class UserController extends Controller
             }
 
             $trans = $user->reduce($balance, $request->description, true, [
-                'module_id' => $module->id
+                'module_id' => $module->id,
             ]);
             $module->charge($balance, 'balance', $request->description, [
                 'user_id' => $user->id,
@@ -104,7 +104,7 @@ class UserController extends Controller
                 'payment' => 'module_balance',
             ]);
             $trans = $user->charge($balance, 'module_balance', $request->description, [
-                'module_id' => $module->id
+                'module_id' => $module->id,
             ]);
         }
 

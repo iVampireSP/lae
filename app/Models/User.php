@@ -166,11 +166,10 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * 扣除费用
      *
-     * @param string|null $amount
-     * @param string      $description
-     * @param bool        $fail
-     * @param array       $options
-     *
+     * @param  string|null  $amount
+     * @param  string  $description
+     * @param  bool  $fail
+     * @param  array  $options
      * @return Transaction
      */
     public function reduce(string|null $amount = '0', string $description = '消费', bool $fail = false, array $options = []): Transaction
@@ -212,11 +211,10 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * 增加余额
      *
-     * @param string|null $amount
-     * @param string      $payment
-     * @param string      $description
-     * @param array       $options
-     *
+     * @param  string|null  $amount
+     * @param  string  $payment
+     * @param  string  $description
+     * @param  array  $options
      * @return Transaction
      */
     public function charge(string|null $amount = '0', string $payment = 'console', string $description = '充值', array $options = []): Transaction

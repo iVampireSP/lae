@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Jenssegers\Mongodb\Eloquent\Model;
-use Symfony\Component\Uid\Ulid;
 
 class Transaction extends Model
 {
