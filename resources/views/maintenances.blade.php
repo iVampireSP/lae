@@ -23,8 +23,7 @@
                         </td>
 
                         <td>
-                            <textarea class="form-control border-0" cols="3" readonly
-                                      aria-label="维护内容">{{ $m->content }}</textarea>
+                            {!! $m->content !!}
                         </td>
 
                         <td>
