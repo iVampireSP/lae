@@ -9,6 +9,7 @@ use App\Http\Controllers\Web\Auth\VerificationController;
 use App\Http\Controllers\Web\AuthController;
 use App\Http\Controllers\Web\BalanceController;
 use App\Http\Controllers\Web\HostController;
+use App\Http\Controllers\Web\MaintenanceController;
 use App\Http\Controllers\Web\RealNameController;
 use App\Http\Controllers\Web\TransferController;
 use Illuminate\Support\Facades\Route;
@@ -89,6 +90,11 @@ Route::middleware(['auth:web', 'banned', 'verified'])->group(
     }
 );
 
+// 联系我们
 Route::view('contact', 'contact')->name('contact');
 
+// 支付回调
 Route::match(['get', 'post'], '/balances/notify/{payment}', [BalanceController::class, 'notify'])->name('balances.notify');
+
+// 维护
+Route::get('maintenance', MaintenanceController::class)->name('maintenances');

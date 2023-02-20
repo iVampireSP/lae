@@ -37,8 +37,9 @@
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <!-- Left Side Of Navbar -->
-                @auth('web')
-                    <ul class="navbar-nav me-auto">
+                <ul class="navbar-nav me-auto">
+                    @auth('web')
+
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('index') }}">授权</a>
                         </li>
@@ -52,10 +53,14 @@
                             <a class="nav-link" href="{{ route('transfer') }}">转账</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('transactions') }}">交易记录</a>
+                            <a class="nav-link" href="{{ route('transactions') }}">记录</a>
                         </li>
-                    </ul>
-                @endauth
+                    @endauth
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('maintenances') }}">维护</a>
+                    </li>
+                </ul>
 
                 <!-- Right Side Of Navbar -->
                 <ul class="navbar-nav ms-auto">
