@@ -126,4 +126,30 @@ class UserController extends Controller
             ]
         )) : $this->notFound();
     }
+
+    public function attempt(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string',
+            'require_token' => 'nullable|boolean',
+            'abilities' => 'nullable|array',
+        ]);
+
+        // 验证
+        $user = User::where('email', $request->input('email'))->first();
+        if ($user === null) {
+            return $this->error('用户不存在。');
+        }
+
+        if (password_verify($request->input('password'), $user->password) === false) {
+            return $this->error('密码错误。');
+        }
+
+        if ($request->input('require_token')) {
+            $user['token'] = $user->createToken('模块创建', $request->input('abilities', ['*']))->plainTextToken;
+        }
+
+        return $this->success($user);
+    }
 }

@@ -23,6 +23,7 @@ Route::apiResource('work-orders', WorkOrderController::class);
 Route::apiResource('work-orders.replies', ReplyController::class);
 
 // 用户信息
+Route::post('users/attempt', [UserController::class, 'attempt']);
 Route::resource('users', UserController::class)->only(['index', 'show', 'update', 'store']);
 
 Route::get('token/{token}', [UserController::class, 'auth']);
