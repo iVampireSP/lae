@@ -19,7 +19,8 @@ class MakeSureModuleStatusIsUp
      */
     public function handle(Request $request, Closure $next): Response|RedirectResponse|JsonResponse
     {
-        if ($request->user('module')?->status !== 'up') {
+        $user = $request->user('module');
+        if ($user && $user->status !== 'up') {
             return response()->json([
                 'message' => '无法连接到模块。',
             ], 503);
