@@ -108,6 +108,8 @@ class UserController extends Controller
             ]);
         }
 
+        $trans['commission'] = config('settings.billing.commission');
+
         return $this->success($trans);
     }
 
