@@ -119,10 +119,10 @@ class UserController extends Controller
 
         return $token ? $this->success(Arr::only(
             $token->tokenable
-                ->makeVisible('real_name')
+                ->makeVisible(['real_name', 'email_verified_at', 'real_name_verified_at'])
                 ->toArray(),
             [
-                'id', 'name', 'email', 'real_name',
+                'id', 'name', 'email', 'real_name', 'email_verified_at', 'real_name_verified_at',
             ]
         )) : $this->notFound();
     }
