@@ -103,7 +103,10 @@ class WorkOrder extends Model
             $this->status = 'user_read';
         }
 
-        $this->save();
+        // if status is dirty, save it
+        if ($this->isDirty('status')) {
+            $this->save();
+        }
 
         return true;
     }
