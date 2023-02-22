@@ -8,7 +8,9 @@ use Illuminate\View\View;
 class MarkdownEditor extends Component
 {
     public string $name;
+
     public ?string $placeholder;
+
     public ?string $value;
 
     /**
@@ -25,8 +27,6 @@ class MarkdownEditor extends Component
 
     /**
      * Get the view / contents that represent the component.
-     *
-     * @return View
      */
     public function render(): View
     {
