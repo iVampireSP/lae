@@ -142,9 +142,13 @@ class WorkOrder extends Model
             return false;
         }
 
-        if (auth('admin')->check()) {
+        if (auth('admin')->check() && $this->status !== 'replied') {
             $this->status = 'read';
-        } else {
+        } elseif (
+            (auth('api')->check() || auth('sanctum')->check())
+            &&
+            $this->status !== 'user_replied'
+        ) {
             $this->status = 'user_read';
         }
 
