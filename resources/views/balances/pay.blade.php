@@ -9,7 +9,7 @@
 
     <div id="pay">
         <p>您将要给 {{ $balance->user->name }} 充值 {{ $balance->amount }} 元。
-            @if ($balance->user == auth()->user())
+            @if ($balance->user_id == auth('web')->id())
                 这是您自己的账号。
             @else
                 但是请看仔细，<span class="text-danger">这不是您自己的账号。</span>
