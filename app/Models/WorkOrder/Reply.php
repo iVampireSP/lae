@@ -29,9 +29,8 @@ class Reply extends Model
         'ip',
     ];
 
-    protected static function boot()
+    protected static function booted()
     {
-        parent::boot();
         static::creating(function (self $model) {
             $model->is_pending = false;
 
