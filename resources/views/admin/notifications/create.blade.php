@@ -3,6 +3,8 @@
 @section('title', '通知')
 
 @section('content')
+    <link rel="stylesheet" href="{{ asset('vendor/editor.md/css/editormd.min.css') }}"/>
+
     <h3>通知</h3>
 
 
@@ -37,7 +39,9 @@
                     <label class="form-check-label" for="receive_marketing_email">
                         接收营销邮件的用户
                     </label>
-                    <input class="form-check-input" type="checkbox" name="receive_marketing_email" id="receive_marketing_email" value="1" @if(Request::get('receive_marketing_email') == 1) checked @endif>
+                    <input class="form-check-input" type="checkbox" name="receive_marketing_email"
+                           id="receive_marketing_email" value="1"
+                           @if(Request::get('receive_marketing_email') == 1) checked @endif>
                 </div>
             </div>
 
@@ -114,26 +118,56 @@
             <input type="hidden" name="module_id" value="{{ Request::get('module_id') }}">
             <input type="hidden" name="user_id" value="{{ Request::get('user_id') }}">
 
+            <div class="form-group">
+                <label for="title">标题</label>
+                <input type="text" name="title" id="title" class="form-control" placeholder="要通知的标题" value="{{ old('title') }}">
+            </div>
+
+            <div id="content" class="mt-3">
+                <textarea name="content" style="display:none;" aria-label="通知内容">{{ old('content') }}</textarea>
+            </div>
+
+
             <div class="form-check mt-1">
                 <label class="form-check-label" for="send_mail">
                     邮件通知
                 </label>
-                <input class="form-check-input" type="checkbox" name="send_mail" id="send_mail" value="1"  @if(Request::get('send_mail') == 1) checked @endif>
+                <input class="form-check-input" type="checkbox" name="send_mail" id="send_mail" value="1"
+                       @if(Request::get('send_mail') == 1) checked @endif>
             </div>
 
-            <div class="form-group">
-                <label for="title">标题</label>
-                <input type="text" name="title" id="title" class="form-control" value="{{ old('title') }}">
-            </div>
-
-            <div class="form-group mt-4">
-                <label for="content">通知内容 支持 Markdown</label>
-                <textarea name="content" id="content" class="form-control" rows="10">{{ old('content') }}</textarea>
-            </div>
-
-            <button type="submit" class="btn btn-primary mt-3">发送</button>
-            <span class="text-muted d-block">通知一旦发送，将无法撤销！</span>
+            <button type="submit" class="btn btn-primary mt-2">发送</button>
+            <span class="text-muted d-block mt-2">通知一旦发送，将无法撤销！</span>
         </form>
+
+
+        <script src="{{ asset('vendor/editor.md/lib/zepto.min.js') }}"></script>
+        <script src="{{ asset('vendor/editor.md/lib/marked.min.js') }}"></script>
+        <script src="{{ asset('vendor/editor.md/lib/prettify.min.js') }}"></script>
+        <script src="{{ asset('vendor/editor.md/lib/underscore.min.js') }}"></script>
+        <script src="{{ asset('vendor/editor.md/lib/flowchart.min.js') }}"></script>
+        <script src="{{ asset('vendor/editor.md/lib/jquery.flowchart.min.js')}}"></script>
+        <script src="{{ asset('vendor/editor.md/editormd.min.js') }}"></script>
+        <script>
+            let editor;
+
+            editor = editormd("content", {
+                width: "100%",
+                height: 740,
+                path: '{{ asset('vendor/editor.md/lib') }}/',
+                theme: "dark",
+                previewTheme: "dark",
+                editorTheme: "pastel-on-dark",
+                markdown: "{{ old('content') }}",
+                codeFold: true,
+                saveHTMLToTextarea: true,    // 保存 HTML 到 Textarea
+                searchReplace: true,
+                htmlDecode: "style,script,iframe|on*",            // 开启 HTML 标签解析，为了安全性，默认不开启
+                imageUpload: false,
+                imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+                imageUploadURL: "./php/upload.php",
+            });
+        </script>
 
     @else
         <h5 class="mt-4">没有符合条件的用户。</h5>
