@@ -151,18 +151,24 @@
         <script>
             let editor;
 
+            let darkTheme = false;
+
+            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                darkTheme = true;
+            }
+
             editor = editormd("content", {
                 width: "100%",
                 height: 740,
                 path: '{{ asset('vendor/editor.md/lib') }}/',
-                theme: "dark",
-                previewTheme: "dark",
-                editorTheme: "pastel-on-dark",
+                theme: darkTheme ? 'dark' : 'default',
+                previewTheme: darkTheme ? 'dark' : 'default',
+                editorTheme: darkTheme ? 'pastel-on-dark' : 'default',
                 markdown: "{{ old('content') }}",
                 codeFold: true,
-                saveHTMLToTextarea: true,    // 保存 HTML 到 Textarea
+                saveHTMLToTextarea: false,
                 searchReplace: true,
-                htmlDecode: "style,script,iframe|on*",            // 开启 HTML 标签解析，为了安全性，默认不开启
+                htmlDecode: "style,script,iframe|on*",
                 imageUpload: false,
                 imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
                 imageUploadURL: "./php/upload.php",
