@@ -32,6 +32,15 @@
                 </select>
             </div>
 
+            <div class="form-group">
+                <div class="form-check">
+                    <label class="form-check-label" for="receive_marketing_email">
+                        接收营销邮件的用户
+                    </label>
+                    <input class="form-check-input" type="checkbox" name="receive_marketing_email" id="receive_marketing_email" value="1" @if(Request::get('receive_marketing_email') == 1) checked @endif>
+                </div>
+            </div>
+
             <p>这两个搜搜条件只能二选一。</p>
 
             <button type="submit" class="btn btn-primary mt-1">筛选并确定条件</button>
@@ -96,40 +105,37 @@
             </table>
         </div>
 
-        {{-- 分页 --}}
         {{ $users->links() }}
 
+        <form method="POST" action="{{ route('admin.notifications.store')}}">
+            @csrf
+
+            <input type="hidden" name="user" value="{{ Request::get('user') }}">
+            <input type="hidden" name="module_id" value="{{ Request::get('module_id') }}">
+            <input type="hidden" name="user_id" value="{{ Request::get('user_id') }}">
+
+            <div class="form-check mt-1">
+                <label class="form-check-label" for="send_mail">
+                    邮件通知
+                </label>
+                <input class="form-check-input" type="checkbox" name="send_mail" id="send_mail" value="1"  @if(Request::get('send_mail') == 1) checked @endif>
+            </div>
+
+            <div class="form-group">
+                <label for="title">标题</label>
+                <input type="text" name="title" id="title" class="form-control" value="{{ old('title') }}">
+            </div>
+
+            <div class="form-group mt-4">
+                <label for="content">通知内容 支持 Markdown</label>
+                <textarea name="content" id="content" class="form-control" rows="10">{{ old('content') }}</textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-3">发送</button>
+            <span class="text-muted d-block">通知一旦发送，将无法撤销！</span>
+        </form>
+
+    @else
+        <h5 class="mt-4">没有符合条件的用户。</h5>
     @endif
-
-
-    <form method="POST" action="{{ route('admin.notifications.store')}}">
-        @csrf
-
-        <input type="hidden" name="user" value="{{ Request::get('user') }}">
-        <input type="hidden" name="module_id" value="{{ Request::get('module_id') }}">
-        <input type="hidden" name="user_id" value="{{ Request::get('user_id') }}">
-
-        {{--  checkbox send_mail   --}}
-        <div class="form-group">
-            <label for="send_mail">邮件通知</label>
-            <input type="checkbox" name="send_mail" id="send_mail" value="1"
-                   @if(Request::get('send_mail') == 1) checked @endif>
-        </div>
-
-
-        <div class="form-group">
-            <label for="title">标题</label>
-            <input type="text" name="title" id="title" class="form-control" value="{{ old('title') }}">
-        </div>
-
-        {{--   通知内容   --}}
-        <div class="form-group mt-4">
-            <label for="content">通知内容 支持 Markdown</label>
-            <textarea name="content" id="content" class="form-control" rows="10">{{ old('content') }}</textarea>
-        </div>
-
-        <button type="submit" class="btn btn-primary mt-3">发送</button>
-        <span class="text-muted d-block">通知一旦发送，将无法撤销！</span>
-    </form>
-
 @endsection

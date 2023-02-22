@@ -90,6 +90,12 @@
                     @if ($user->real_name_verified_at)
                         <p>实人认证时间: {{ $user->real_name_verified_at }}</p>
                     @endif
+                    <p>
+                        营销邮件订阅: <a
+                            onclick="update_receive_marketing_email()" style="cursor: pointer"
+                            class="text-decoration-underline"></a>
+                        <span id="receive_marketing_email_append_text"></span>
+                    </p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary"
@@ -99,5 +105,38 @@
             </div>
         </div>
     </div>
+
+    <script>
+
+        let receive_marketing_email = {{ $user->receive_marketing_email ? 'true' : 'false' }};
+        let receive_marketing_email_append_text = document.querySelector('#receive_marketing_email_append_text');
+
+        function update_receive_marketing_email_text() {
+            let ele = document.querySelector('a[onclick="update_receive_marketing_email()"]');
+
+            if (receive_marketing_email) {
+                ele.innerText = '是';
+                receive_marketing_email_append_text.innerText = '，如果有打扰到您，请取消订阅。';
+            } else {
+                receive_marketing_email_append_text.innerText = '。创业不易，感谢理解。';
+                ele.innerText = '否';
+            }
+        }
+
+        function update_receive_marketing_email() {
+            axios.patch("{{route('users.update')}}", {
+                receive_marketing_email: !receive_marketing_email
+            }).then(response => {
+                receive_marketing_email = response.data['receive_marketing_email']
+
+                update_receive_marketing_email_text(receive_marketing_email)
+            }).finally(() => {
+                update_receive_marketing_email_text()
+            })
+        }
+
+        update_receive_marketing_email_text()
+
+    </script>
 
 @endsection

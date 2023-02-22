@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Web;
 
-// use App\Helpers\ApiResponse;
-
 use App\Http\Controllers\Controller;
 use App\Notifications\User\UserNotification;
 use function back;
 use function config;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -65,17 +64,20 @@ class AuthController extends Controller
         return view('confirm_redirect', compact('callback', 'referer_host'));
     }
 
-    public function update(Request $request): RedirectResponse
+    public function update(Request $request): RedirectResponse|JsonResponse
     {
         $request->validate([
-            'name' => 'required|string|max:255',
+            'name' => 'nullable|sometimes|string|max:255',
+            'receive_marketing_email' => 'nullable|sometimes|boolean',
         ]);
 
         $user = $request->user('web');
 
-        $user->update([
-            'name' => $request->input('name'),
-        ]);
+        $user->update($request->only('name', 'receive_marketing_email'));
+
+        if ($request->ajax()) {
+            return $this->success($user->only('name', 'receive_marketing_email'));
+        }
 
         return back()->with('success', '更新成功。');
     }

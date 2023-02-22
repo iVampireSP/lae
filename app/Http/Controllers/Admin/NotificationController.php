@@ -58,6 +58,11 @@ class NotificationController extends Controller
             });
         }
 
+        // 是否是营销邮件
+        if (! empty($request['receive_marketing_email'])) {
+            $users = $users->where('receive_marketing_email', true);
+        }
+
         return $users;
     }
 
