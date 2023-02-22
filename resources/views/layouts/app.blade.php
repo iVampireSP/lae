@@ -55,6 +55,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('transactions') }}">记录</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('affiliates.index') }}">推介</a>
+                        </li>
                     @endauth
 
                     <li class="nav-item">

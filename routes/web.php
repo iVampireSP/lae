@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Web\AffiliateController;
 use App\Http\Controllers\Web\Auth\ConfirmPasswordController;
 use App\Http\Controllers\Web\Auth\ForgotPasswordController;
 use App\Http\Controllers\Web\Auth\LoginController;
@@ -83,6 +84,10 @@ Route::middleware(['auth:web', 'banned', 'verified'])->group(
         Route::post('real_name', [RealNameController::class, 'store'])->name('real_name.store');
         /* End 实名认证 */
 
+        /* Start 推介 */
+        Route::resource('affiliates', AffiliateController::class)->only(['index', 'create', 'store', 'destroy']);
+        /* End 推介 */
+
         /* Start 匿名登录 */
         Route::get('auth_request/{auth_request}', [AuthController::class, 'showAuthRequest'])->withoutMiddleware(['auth:web', 'verified'])->name('auth_request.show');
         Route::post('auth_request', [AuthController::class, 'storeAuthRequest'])->name('auth_request.store');
@@ -98,3 +103,5 @@ Route::match(['get', 'post'], '/balances/notify/{payment}', [BalanceController::
 
 // 维护
 Route::get('maintenance', MaintenanceController::class)->name('maintenances');
+
+Route::middleware('guest')->get('affiliates/{affiliate:uuid}', [AffiliateController::class, 'show'])->name('affiliates.show');

@@ -24,10 +24,17 @@ class BalanceObserver
     {
         if ($balance->isDirty('paid_at')) {
             if ($balance->paid_at) {
+                $balance->load('user');
+                $balance->load('user.affiliateUser');
+
                 $balance->notify(new UserCharged());
                 broadcast(new Users($balance->user, 'balance.updated', $balance));
 
                 $balance->user->charge($balance->amount, $balance->payment, $balance->order_id);
+
+                if ($balance->user->affiliate_id) {
+                    $balance->user->affiliateUser->addRevenue($balance->amount);
+                }
             }
         }
     }

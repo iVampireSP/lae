@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Events\Users;
 use App\Exceptions\User\BalanceNotEnoughException;
+use App\Models\Affiliate\Affiliates;
+use App\Models\Affiliate\AffiliateUser;
 use GeneaLabs\LaravelModelCaching\CachedBuilder;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -14,6 +16,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Prunable;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -48,6 +53,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'password',
         'receive_marketing_email',
+        'affiliate_id',
     ];
 
     /**
@@ -80,6 +86,27 @@ class User extends Authenticatable implements MustVerifyEmail
     public function hosts(): HasMany
     {
         return $this->hasMany(Host::class);
+    }
+
+    public function affiliate(): HasOne
+    {
+        return $this->hasOne(Affiliates::class);
+    }
+
+    public function affiliateUsers(): HasManyThrough
+    {
+        return $this->hasManyThrough(AffiliateUser::class, Affiliates::class, 'user_id', 'affiliate_id');
+    }
+
+    public function affiliateUser(): BelongsTo
+    {
+        return $this->belongsTo(AffiliateUser::class, 'affiliate_id');
+    }
+
+    // 通过 affiliate_id 获取到 affiliates 中的 user_id
+    public function promoter(): HasOneThrough
+    {
+        return $this->hasOneThrough(User::class, Affiliates::class, 'id', 'id', 'affiliate_id', 'user_id');
     }
 
     public function getBirthdayFromIdCard(string|null $id_card = null): Carbon
