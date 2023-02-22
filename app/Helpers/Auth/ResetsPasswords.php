@@ -27,9 +27,6 @@ trait ResetsPasswords
      * Display the password reset view for the given token.
      *
      * If no token is present, display the link request form.
-     *
-     * @param  Request  $request
-     * @return Factory|View
      */
     public function showResetForm(Request $request): Factory|View
     {
@@ -42,9 +39,6 @@ trait ResetsPasswords
 
     /**
      * Reset the given user's password.
-     *
-     * @param  Request  $request
-     * @return RedirectResponse|JsonResponse
      */
     public function reset(Request $request): JsonResponse|RedirectResponse
     {
@@ -74,8 +68,6 @@ trait ResetsPasswords
 
     /**
      * Get the password reset validation rules.
-     *
-     * @return array
      */
     protected function rules(): array
     {
@@ -88,8 +80,6 @@ trait ResetsPasswords
 
     /**
      * Get the password reset validation error messages.
-     *
-     * @return array
      */
     protected function validationErrorMessages(): array
     {
@@ -98,8 +88,6 @@ trait ResetsPasswords
 
     /**
      * Get the broker to be used during password reset.
-     *
-     * @return PasswordBroker
      */
     public function broker(): PasswordBroker
     {
@@ -108,9 +96,6 @@ trait ResetsPasswords
 
     /**
      * Get the password reset credentials from the request.
-     *
-     * @param  Request  $request
-     * @return array
      */
     protected function credentials(Request $request): array
     {
@@ -121,10 +106,6 @@ trait ResetsPasswords
 
     /**
      * Reset the given user's password.
-     *
-     * @param  CanResetPassword|User  $user
-     * @param  string  $password
-     * @return void
      */
     protected function resetPassword(CanResetPassword|User $user, string $password): void
     {
@@ -141,10 +122,6 @@ trait ResetsPasswords
 
     /**
      * Set the user's password.
-     *
-     * @param  CanResetPassword  $user
-     * @param  string  $password
-     * @return void
      */
     protected function setUserPassword(CanResetPassword $user, string $password): void
     {
@@ -156,8 +133,6 @@ trait ResetsPasswords
 
     /**
      * Get the guard to be used during password reset.
-     *
-     * @return StatefulGuard
      */
     protected function guard(): StatefulGuard
     {
@@ -166,10 +141,6 @@ trait ResetsPasswords
 
     /**
      * Get the response for a successful password reset.
-     *
-     * @param  Request  $request
-     * @param  string  $response
-     * @return RedirectResponse|JsonResponse
      */
     protected function sendResetResponse(Request $request, string $response): JsonResponse|RedirectResponse
     {
@@ -183,10 +154,6 @@ trait ResetsPasswords
 
     /**
      * Get the response for a failed password reset.
-     *
-     * @param  Request  $request
-     * @param  string  $response
-     * @return RedirectResponse
      */
     protected function sendResetFailedResponse(Request $request, string $response): RedirectResponse
     {

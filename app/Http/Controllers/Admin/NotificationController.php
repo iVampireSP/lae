@@ -16,9 +16,6 @@ class NotificationController extends Controller
 {
     /**
      * Show the form for creating a new resource.
-     *
-     * @param  Request  $request
-     * @return View
      */
     public function create(Request $request): View
     {
@@ -66,9 +63,6 @@ class NotificationController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  Request  $request
-     * @return RedirectResponse
      */
     public function store(Request $request): RedirectResponse
     {

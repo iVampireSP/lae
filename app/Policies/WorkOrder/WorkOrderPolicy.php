@@ -14,10 +14,6 @@ class WorkOrderPolicy
 
     /**
      * Determine whether the user can view the model.
-     *
-     * @param  User|Module  $user
-     * @param  WorkOrder  $workOrder
-     * @return Response|bool
      */
     public function view(User|Module $user, WorkOrder $workOrder): Response|bool
     {
@@ -30,10 +26,6 @@ class WorkOrderPolicy
 
     /**
      * Determine whether the user can update the model.
-     *
-     * @param  User|Module  $user
-     * @param  WorkOrder  $workOrder
-     * @return Response|bool
      */
     public function update(User|Module $user, WorkOrder $workOrder): Response|bool
     {
@@ -46,10 +38,6 @@ class WorkOrderPolicy
 
     /**
      * Determine whether the user can delete the model.
-     *
-     * @param  User|Module  $user
-     * @param  WorkOrder  $workOrder
-     * @return Response|bool
      */
     public function delete(User|Module $user, WorkOrder $workOrder): Response|bool
     {

@@ -11,9 +11,6 @@ class ReplyPolicy
 
     /**
      * Determine whether the user can view any models.
-     *
-     *
-     * @return Response|bool
      */
     public function viewAny(): Response|bool
     {
@@ -24,9 +21,6 @@ class ReplyPolicy
 
     /**
      * Determine whether the user can create models.
-     *
-     *
-     * @return Response|bool
      */
     public function create(): Response|bool
     {
@@ -35,9 +29,6 @@ class ReplyPolicy
 
     /**
      * Determine whether the user can update the model.
-     *
-     *
-     * @return Response|bool
      */
     public function update(): Response|bool
     {
@@ -46,9 +37,6 @@ class ReplyPolicy
 
     /**
      * Determine whether the user can delete the model.
-     *
-     *
-     * @return Response|bool
      */
     public function delete(): Response|bool
     {

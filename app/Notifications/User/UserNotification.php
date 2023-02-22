@@ -32,8 +32,6 @@ class UserNotification extends Notification implements ShouldQueue
 
     /**
      * Get the notification's delivery channels.
-     *
-     * @return array
      */
     public function via(): array
     {
@@ -48,8 +46,6 @@ class UserNotification extends Notification implements ShouldQueue
 
     /**
      * Get the mail representation of the notification.
-     *
-     * @return MailMessage
      */
     public function toMail(): MailMessage
     {
@@ -61,8 +57,6 @@ class UserNotification extends Notification implements ShouldQueue
 
     /**
      * Get the array representation of the notification.
-     *
-     * @return array
      */
     public function toArray(): array
     {

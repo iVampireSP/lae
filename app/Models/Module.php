@@ -107,13 +107,6 @@ class Module extends Authenticatable
         ];
     }
 
-    /**
-     * @param    $method
-     * @param    $path
-     * @param    $requests
-     * @param  array  $files
-     * @return array
-     */
     public function request($method, $path, $requests, array $files = []): array
     {
         try {
@@ -202,12 +195,6 @@ class Module extends Authenticatable
 
     /**
      * 扣除费用
-     *
-     * @param  string|null  $amount
-     * @param  string|null  $description
-     * @param  bool  $fail
-     * @param  array  $options
-     * @return string
      */
     public function reduce(string|null $amount = '0', string|null $description = '消费', bool $fail = false, array $options = []): string
     {
@@ -249,12 +236,6 @@ class Module extends Authenticatable
 
     /**
      * 增加余额
-     *
-     * @param  string|null  $amount
-     * @param  string  $payment
-     * @param  string|null  $description
-     * @param  array  $options
-     * @return string
      */
     public function charge(string|null $amount = '0', string $payment = 'console', string|null $description = '充值', array $options = []): string
     {

@@ -28,10 +28,6 @@ class WorkOrder extends Notification implements ShouldQueue
 
     /**
      * Get the notification's delivery channels.
-     *
-     *
-     * @param  WorkOrderModel  $workOrder
-     * @return array
      */
     public function via(WorkOrderModel $workOrder): array
     {
@@ -46,10 +42,6 @@ class WorkOrder extends Notification implements ShouldQueue
 
     /**
      * Get the mail representation of the notification.
-     *
-     *
-     * @param  WorkOrderModel  $workOrder
-     * @return MailMessage
      */
     public function toMail(WorkOrderModel $workOrder): MailMessage
     {
@@ -61,10 +53,6 @@ class WorkOrder extends Notification implements ShouldQueue
 
     /**
      * Get the array representation of the notification.
-     *
-     *
-     * @param  WorkOrderModel  $workOrder
-     * @return array
      */
     public function toArray(WorkOrderModel $workOrder): array
     {

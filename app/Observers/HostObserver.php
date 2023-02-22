@@ -25,9 +25,6 @@ class HostObserver
 
     /**
      * Handle the Host "created" event.
-     *
-     * @param  Host  $host
-     * @return void
      */
     public function created(Host $host): void
     {
@@ -43,9 +40,6 @@ class HostObserver
 
     /**
      * Handle the Host "updated" event.
-     *
-     * @param  Host  $host
-     * @return void
      */
     public function updating(Host $host): void
     {
@@ -84,9 +78,6 @@ class HostObserver
 
     /**
      * Handle the Host "deleted" event.
-     *
-     * @param  Host  $host
-     * @return void
      */
     public function deleted(Host $host): void
     {

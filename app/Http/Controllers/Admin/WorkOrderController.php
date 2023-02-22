@@ -14,10 +14,6 @@ class WorkOrderController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @param  Request  $request
-     * @param  WorkOrder  $workOrder
-     * @return View
      */
     public function index(Request $request, WorkOrder $workOrder): View
     {
@@ -34,9 +30,6 @@ class WorkOrderController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @param  WorkOrder  $workOrder
-     * @return View
      */
     public function show(WorkOrder $workOrder): View
     {
@@ -49,9 +42,6 @@ class WorkOrderController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  WorkOrder  $workOrder
-     * @return View
      */
     public function edit(WorkOrder $workOrder): View
     {
@@ -60,10 +50,6 @@ class WorkOrderController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  Request  $request
-     * @param  WorkOrder  $workOrder
-     * @return RedirectResponse
      */
     public function update(Request $request, WorkOrder $workOrder): RedirectResponse
     {
@@ -82,9 +68,6 @@ class WorkOrderController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  WorkOrder  $workOrder
-     * @return RedirectResponse
      */
     public function destroy(WorkOrder $workOrder): RedirectResponse
     {

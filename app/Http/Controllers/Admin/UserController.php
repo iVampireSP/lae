@@ -56,9 +56,6 @@ class UserController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @param  User  $user
-     * @return RedirectResponse
      */
     public function show(User $user): RedirectResponse
     {
@@ -69,9 +66,6 @@ class UserController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  User  $user
-     * @return View
      */
     public function edit(User $user): View
     {
@@ -85,10 +79,6 @@ class UserController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  Request  $request
-     * @param  User  $user
-     * @return RedirectResponse
      */
     public function update(Request $request, User $user): RedirectResponse
     {
@@ -153,9 +143,6 @@ class UserController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  User  $user
-     * @return RedirectResponse
      */
     public function destroy(User $user): RedirectResponse
     {

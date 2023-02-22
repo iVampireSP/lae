@@ -12,10 +12,6 @@ class HostController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     *
-     * @param  Request  $request
-     * @return View
      */
     public function index(Request $request): View
     {
@@ -37,9 +33,6 @@ class HostController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  Host  $host
-     * @return View
      */
     public function edit(Host $host): View
     {
@@ -48,10 +41,6 @@ class HostController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  Request  $request
-     * @param  Host  $host
-     * @return RedirectResponse
      */
     public function update(Request $request, Host $host): RedirectResponse
     {
@@ -69,9 +58,6 @@ class HostController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  Host  $host
-     * @return RedirectResponse
      */
     public function destroy(Host $host): RedirectResponse
     {

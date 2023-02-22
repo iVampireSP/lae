@@ -13,8 +13,6 @@ class MaintenanceController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -25,9 +23,6 @@ class MaintenanceController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  Request  $request
-     * @return RedirectResponse
      */
     public function store(Request $request): RedirectResponse
     {
@@ -46,8 +41,6 @@ class MaintenanceController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return View
      */
     public function create(): View
     {
@@ -58,9 +51,6 @@ class MaintenanceController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  Maintenance  $maintenance
-     * @return View
      */
     public function edit(Maintenance $maintenance): View
     {
@@ -71,10 +61,6 @@ class MaintenanceController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  Request  $request
-     * @param  Maintenance  $maintenance
-     * @return RedirectResponse
      */
     public function update(Request $request, Maintenance $maintenance): RedirectResponse
     {
@@ -93,9 +79,6 @@ class MaintenanceController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  Maintenance  $maintenance
-     * @return RedirectResponse
      */
     public function destroy(Maintenance $maintenance): RedirectResponse
     {

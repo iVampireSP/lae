@@ -16,8 +16,6 @@ class NodeController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -28,10 +26,6 @@ class NodeController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  Request  $request
-     * @param  string  $node
-     * @return JsonResponse
      */
     public function update(Request $request, string $node): JsonResponse
     {

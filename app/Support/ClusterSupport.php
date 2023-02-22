@@ -108,7 +108,6 @@ class ClusterSupport
      * @param  string|array  $events      事件名称
      * @param    $callback    callable 回调函数，接收一个参数，为事件数据。
      * @param    $ignore_self bool 是否忽略此节点的消息。
-     * @return void
      */
     public static function listen(string|array $events, callable $callback, bool $ignore_self = true): void
     {

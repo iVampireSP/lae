@@ -15,9 +15,6 @@ class PersonalAccessToken extends SanctumPersonalAccessToken
      * We only want to actually save when there is something other than
      * the last_used_at column that has changed. It prevents extra DB writes
      * since we aren't going to use that column for anything.
-     *
-     * @param  array  $options
-     * @return bool
      */
     public function save(array $options = []): bool
     {

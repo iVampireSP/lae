@@ -9,9 +9,6 @@ use Illuminate\View\View;
 
 class AuthController extends Controller
 {
-    /**
-     * @return View|RedirectResponse
-     */
     public function index(): View|RedirectResponse
     {
         if (! auth('admin')->check()) {
@@ -21,10 +18,6 @@ class AuthController extends Controller
         }
     }
 
-    /**
-     * @param  Request  $request
-     * @return RedirectResponse
-     */
     public function login(Request $request): RedirectResponse
     {
         if (auth('admin')->attempt($request->only('email', 'password'), $request->has('remember'))) {
@@ -34,9 +27,6 @@ class AuthController extends Controller
         }
     }
 
-    /**
-     * @return RedirectResponse
-     */
     public function logout(): RedirectResponse
     {
         auth('admin')->logout();

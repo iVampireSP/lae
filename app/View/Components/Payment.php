@@ -20,8 +20,6 @@ class Payment extends Component
 
     /**
      * Get the view / contents that represent the component.
-     *
-     * @return string
      */
     public function render(): string
     {

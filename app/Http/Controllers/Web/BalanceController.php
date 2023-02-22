@@ -241,7 +241,6 @@ class BalanceController extends Controller
      * 获取交易记录
      *
      * @param  mixed  $request
-     * @return View
      */
     public function transactions(
         Request $request

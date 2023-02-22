@@ -11,8 +11,6 @@ class BalanceController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return JsonResponse
      */
     public function index(): JsonResponse
     {
@@ -23,9 +21,6 @@ class BalanceController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  Request  $request
-     * @return JsonResponse
      */
     public function store(Request $request): JsonResponse
     {
@@ -48,9 +43,6 @@ class BalanceController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @param  Balance  $balance
-     * @return JsonResponse
      */
     public function show(Balance $balance): JsonResponse
     {

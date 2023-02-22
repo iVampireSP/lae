@@ -16,8 +16,6 @@ trait RegistersUsers
 
     /**
      * Show the application registration form.
-     *
-     * @return View
      */
     public function showRegistrationForm(): View
     {
@@ -26,9 +24,6 @@ trait RegistersUsers
 
     /**
      * Handle a registration request for the application.
-     *
-     * @param  Request  $request
-     * @return RedirectResponse|JsonResponse
      */
     public function register(Request $request): JsonResponse|RedirectResponse
     {
@@ -49,8 +44,6 @@ trait RegistersUsers
 
     /**
      * Get the guard to be used during registration.
-     *
-     * @return StatefulGuard
      */
     protected function guard(): StatefulGuard
     {
@@ -59,10 +52,6 @@ trait RegistersUsers
 
     /**
      * The user has been registered.
-     *
-     * @param  Request  $request
-     * @param  mixed  $user
-     * @return void
      */
     protected function registered(Request $request, mixed $user): void
     {

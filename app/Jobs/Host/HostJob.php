@@ -36,7 +36,6 @@ class HostJob implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @return void
      *
      * @noinspection PhpUndefinedVariableInspection
      */

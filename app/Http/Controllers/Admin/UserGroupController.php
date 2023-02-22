@@ -13,8 +13,6 @@ class UserGroupController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -25,9 +23,6 @@ class UserGroupController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  Request  $request
-     * @return RedirectResponse
      */
     public function store(Request $request): RedirectResponse
     {
@@ -50,8 +45,6 @@ class UserGroupController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return View
      */
     public function create(): View
     {
@@ -60,9 +53,6 @@ class UserGroupController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @param  UserGroup  $user_group
-     * @return View
      */
     public function show(UserGroup $user_group): View
     {
@@ -73,9 +63,6 @@ class UserGroupController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  UserGroup  $user_group
-     * @return View
      */
     public function edit(UserGroup $user_group): View
     {
@@ -84,10 +71,6 @@ class UserGroupController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  Request  $request
-     * @param  UserGroup  $user_group
-     * @return RedirectResponse
      */
     public function update(Request $request, UserGroup $user_group): RedirectResponse
     {
@@ -100,9 +83,6 @@ class UserGroupController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  UserGroup  $user_group
-     * @return RedirectResponse
      */
     public function destroy(UserGroup $user_group): RedirectResponse
     {

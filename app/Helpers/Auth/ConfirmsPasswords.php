@@ -13,8 +13,6 @@ trait ConfirmsPasswords
 
     /**
      * Display the password confirmation view.
-     *
-     * @return View
      */
     public function showConfirmForm(): View
     {
@@ -23,9 +21,6 @@ trait ConfirmsPasswords
 
     /**
      * Confirm the given user's password.
-     *
-     * @param  Request  $request
-     * @return RedirectResponse|JsonResponse
      */
     public function confirm(Request $request): JsonResponse|RedirectResponse
     {
@@ -40,8 +35,6 @@ trait ConfirmsPasswords
 
     /**
      * Get the password confirmation validation rules.
-     *
-     * @return array
      */
     protected function rules(): array
     {
@@ -52,8 +45,6 @@ trait ConfirmsPasswords
 
     /**
      * Get the password confirmation validation error messages.
-     *
-     * @return array
      */
     protected function validationErrorMessages(): array
     {
@@ -62,9 +53,6 @@ trait ConfirmsPasswords
 
     /**
      * Reset the password confirmation timeout.
-     *
-     * @param  Request  $request
-     * @return void
      */
     protected function resetPasswordConfirmationTimeout(Request $request): void
     {

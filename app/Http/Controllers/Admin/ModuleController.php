@@ -15,9 +15,6 @@ class ModuleController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @param  Module  $module
-     * @return View
      */
     public function index(Module $module): View
     {
@@ -28,8 +25,6 @@ class ModuleController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return View
      */
     public function create(): View
     {
@@ -38,9 +33,6 @@ class ModuleController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  Request  $request
-     * @return RedirectResponse
      */
     public function store(Request $request): RedirectResponse
     {
@@ -78,9 +70,6 @@ class ModuleController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @param  Module  $module
-     * @return View
      */
     public function show(Module $module): View
     {
@@ -93,9 +82,6 @@ class ModuleController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  Module  $module
-     * @return View
      */
     public function edit(Module $module): View
     {
@@ -106,10 +92,6 @@ class ModuleController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  Request  $request
-     * @param  Module  $module
-     * @return RedirectResponse
      */
     public function update(Request $request, Module $module): RedirectResponse
     {
@@ -160,9 +142,6 @@ class ModuleController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  Module  $module
-     * @return RedirectResponse
      */
     public function destroy(Module $module): RedirectResponse
     {

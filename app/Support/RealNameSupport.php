@@ -36,10 +36,6 @@ class RealNameSupport
     /**
      * 创建实名认证请求
      *
-     * @param $user_id
-     * @param $name
-     * @param $id_card
-     * @return string
      *
      * @throws CommonException
      */
@@ -60,8 +56,6 @@ class RealNameSupport
 
     /** 向 实名认证服务 发送请求
      *
-     * @param  string  $id
-     * @return string
      *
      * @throws CommonException
      */
@@ -105,9 +99,6 @@ class RealNameSupport
 
     /**
      * 验证实名认证请求
-     *
-     * @param  array  $request
-     * @return array|bool
      */
     public function verify(array $request): array|bool
     {

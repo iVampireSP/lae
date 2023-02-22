@@ -24,9 +24,6 @@ class TodayIsUserBirthday extends Notification implements ShouldQueue
 
     /**
      * Get the notification's delivery channels.
-     *
-     *
-     * @return array
      */
     public function via(): array
     {
@@ -35,9 +32,6 @@ class TodayIsUserBirthday extends Notification implements ShouldQueue
 
     /**
      * Get the mail representation of the notification.
-     *
-     *
-     * @return MailMessage
      */
     public function toMail(): MailMessage
     {
@@ -91,9 +85,6 @@ class TodayIsUserBirthday extends Notification implements ShouldQueue
 
     /**
      * Get the array representation of the notification.
-     *
-     *
-     * @return array
      */
     public function toArray(): array
     {

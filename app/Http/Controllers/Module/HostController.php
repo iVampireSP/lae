@@ -28,8 +28,6 @@ class HostController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  Request  $request
-     * @return Response|JsonResponse
      *
      * @throws ValidationException
      */
@@ -71,9 +69,6 @@ class HostController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @param  Host  $host
-     * @return JsonResponse
      */
     public function show(Host $host): JsonResponse
     {
@@ -86,9 +81,6 @@ class HostController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  Request  $request
-     * @param  Host  $host
-     * @return JsonResponse
      *
      * @throws ValidationException
      */
@@ -108,9 +100,6 @@ class HostController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param    $host
-     * @return JsonResponse
      */
     public function destroy($host): JsonResponse
     {

@@ -15,9 +15,6 @@ trait VerifiesEmails
 
     /**
      * Show the email verification notice.
-     *
-     * @param  Request  $request
-     * @return RedirectResponse|View
      */
     public function show(Request $request): View|RedirectResponse
     {
@@ -29,8 +26,6 @@ trait VerifiesEmails
     /**
      * Mark the authenticated user's email address as verified.
      *
-     * @param  Request  $request
-     * @return JsonResponse|RedirectResponse
      *
      * @throws AuthorizationException
      */
@@ -65,9 +60,6 @@ trait VerifiesEmails
 
     /**
      * Resend the email verification notification.
-     *
-     * @param  Request  $request
-     * @return JsonResponse|RedirectResponse
      */
     public function resend(Request $request): JsonResponse|RedirectResponse
     {
@@ -86,9 +78,6 @@ trait VerifiesEmails
 
     /**
      * The user has been verified.
-     *
-     * @param  Request  $request
-     * @return void
      */
     protected function verified(Request $request): void
     {

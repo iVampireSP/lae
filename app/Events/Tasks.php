@@ -14,8 +14,6 @@ class Tasks
 
     /**
      * Get the channels the event should broadcast on.
-     *
-     * @return Channel|PrivateChannel
      */
     public function broadcastOn(): Channel|PrivateChannel
     {

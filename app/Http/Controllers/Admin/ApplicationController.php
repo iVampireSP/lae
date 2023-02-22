@@ -12,8 +12,6 @@ class ApplicationController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -24,9 +22,6 @@ class ApplicationController extends Controller
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  Request  $request
-     * @return View
      */
     public function store(Request $request): View
     {
@@ -43,8 +38,6 @@ class ApplicationController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return View
      */
     public function create(): View
     {
@@ -53,9 +46,6 @@ class ApplicationController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @param  Application  $application
-     * @return RedirectResponse
      */
     public function show(Application $application): RedirectResponse
     {
@@ -64,9 +54,6 @@ class ApplicationController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  Application  $application
-     * @return View
      */
     public function edit(Application $application): View
     {
@@ -75,10 +62,6 @@ class ApplicationController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  Request  $request
-     * @param  Application  $application
-     * @return RedirectResponse
      */
     public function update(Request $request, Application $application): RedirectResponse
     {
@@ -95,9 +78,6 @@ class ApplicationController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  Application  $application
-     * @return RedirectResponse
      */
     public function destroy(Application $application): RedirectResponse
     {

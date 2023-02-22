@@ -23,8 +23,6 @@ class AuthServiceProvider extends ServiceProvider
 
     /**
      * 注册任何应用程序 身份验证 / 授权服务。
-     *
-     * @return void
      */
     public function boot(): void
     {

@@ -12,8 +12,6 @@ class HostController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return View
      */
     public function index(): View
     {
@@ -35,9 +33,6 @@ class HostController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     *
-     * @param  Host  $host
-     * @return RedirectResponse
      */
     public function destroy(Host $host): RedirectResponse
     {
