@@ -37,6 +37,11 @@ class WorkOrder extends Model
         'notify' => 'boolean',
     ];
 
+    protected array $orderBy = [
+        'closed' => 'desc',
+        'created_at' => 'desc',
+    ];
+
     public function scopeThisModule($query)
     {
         return $query->where('module_id', auth('module')->id());
