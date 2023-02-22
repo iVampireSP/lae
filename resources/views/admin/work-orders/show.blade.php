@@ -6,9 +6,9 @@
     <h3>{{ $workOrder->title }}</h3>
     <p>
         UUID: {{ $workOrder->uuid }}
-        <br />
+        <br/>
         创建时间: {{ $workOrder->created_at }}, {{ $workOrder->created_at->diffForHumans() }}。
-        <br />
+        <br/>
         最后更新时间: {{ $workOrder->updated_at }}。
     </p>
     <a href="{{ route('admin.work-orders.edit', $workOrder) }}">编辑此工单</a>
@@ -87,14 +87,13 @@
     <h4 class="mt-3">您的回复</h4>
     <form method="POST" action="{{ route('admin.work-orders.replies.store', $workOrder->id) }}">
         @csrf
-        {{-- label --}}
-        <div class="form-group">
-            <label for="content">内容</label>
-            <textarea class="form-control" id="content" name="content" rows="10"
-                      placeholder="作为 {{ config('app.display_name') }} 的 {{ Auth::guard('admin')->user()->name }} 回复。"></textarea>
-        </div>
+
+
+        <x-markdown-editor name="content" placeholder="作为 {{ config('app.display_name') }} 的 {{ Auth::guard('admin')->user()->name }} 回复。" />
 
         <button type="submit" class="btn btn-primary mt-3 mb-3">提交</button>
+
     </form>
+
 
 @endsection

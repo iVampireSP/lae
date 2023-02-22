@@ -1,18 +1,16 @@
 @extends('layouts.admin')
 
-@section('title', '回复: ' . $reply->workOrder->title)
+@section('title', '修改 ' . $reply->workOrder->title . ' 的回复')
 
 @section('content')
+    <h3>修改 {{ $reply->workOrder->title }} 的回复</h3>
+
     @if (!$reply->is_pending)
         <form method="post" action="{{ route('admin.work-orders.replies.update', [$work_order, $reply]) }}">
             @csrf
             @method('PATCH')
 
-            {{--    编辑   --}}
-            <div class="form-group">
-                <label for="content">内容</label>
-                <textarea name="content" id="content" class="form-control" rows="10">{{ $reply->content }}</textarea>
-            </div>
+            <x-markdown-editor name="content" :placeholder="$reply->content" :value="$reply->content"/>
 
             <button type="submit" class="btn btn-primary mt-3">修改</button>
 

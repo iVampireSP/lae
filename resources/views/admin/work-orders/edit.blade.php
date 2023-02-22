@@ -11,10 +11,6 @@
     <x-work-order-status :status="$workOrder->status"></x-work-order-status>
     <a href="{{ route('admin.work-orders.show', $workOrder) }}">查看工单</a>
 
-
-
-
-
     @if ($workOrder->status !== 'pending')
         <form method="post" action="{{ route('admin.work-orders.update', $workOrder) }}">
             @csrf

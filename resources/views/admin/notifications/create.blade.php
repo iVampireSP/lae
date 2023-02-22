@@ -3,10 +3,7 @@
 @section('title', '通知')
 
 @section('content')
-    <link rel="stylesheet" href="{{ asset('vendor/editor.md/css/editormd.min.css') }}"/>
-
     <h3>通知</h3>
-
 
     @if (Request::isNotFilled('user_id'))
         <h5>首先，我们得先筛选出要通知哪些用户。</h5>
@@ -123,10 +120,7 @@
                 <input type="text" name="title" id="title" class="form-control" placeholder="要通知的标题" value="{{ old('title') }}">
             </div>
 
-            <div id="content" class="mt-3">
-                <textarea name="content" style="display:none;" aria-label="通知内容">{{ old('content') }}</textarea>
-            </div>
-
+            <x-markdown-editor name="content" :value="old('content')"/>
 
             <div class="form-check mt-1">
                 <label class="form-check-label" for="send_mail">
@@ -139,42 +133,6 @@
             <button type="submit" class="btn btn-primary mt-2">发送</button>
             <span class="text-muted d-block mt-2">通知一旦发送，将无法撤销！</span>
         </form>
-
-
-        <script src="{{ asset('vendor/editor.md/lib/zepto.min.js') }}"></script>
-        <script src="{{ asset('vendor/editor.md/lib/marked.min.js') }}"></script>
-        <script src="{{ asset('vendor/editor.md/lib/prettify.min.js') }}"></script>
-        <script src="{{ asset('vendor/editor.md/lib/underscore.min.js') }}"></script>
-        <script src="{{ asset('vendor/editor.md/lib/flowchart.min.js') }}"></script>
-        <script src="{{ asset('vendor/editor.md/lib/jquery.flowchart.min.js')}}"></script>
-        <script src="{{ asset('vendor/editor.md/editormd.min.js') }}"></script>
-        <script>
-            let editor;
-
-            let darkTheme = false;
-
-            if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-                darkTheme = true;
-            }
-
-            editor = editormd("content", {
-                width: "100%",
-                height: 740,
-                path: '{{ asset('vendor/editor.md/lib') }}/',
-                theme: darkTheme ? 'dark' : 'default',
-                previewTheme: darkTheme ? 'dark' : 'default',
-                editorTheme: darkTheme ? 'pastel-on-dark' : 'default',
-                markdown: "{{ old('content') }}",
-                codeFold: true,
-                saveHTMLToTextarea: false,
-                searchReplace: true,
-                htmlDecode: "style,script,iframe|on*",
-                imageUpload: false,
-                imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
-                imageUploadURL: "./php/upload.php",
-            });
-        </script>
-
     @else
         <h5 class="mt-4">没有符合条件的用户。</h5>
     @endif
