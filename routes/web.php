@@ -56,7 +56,7 @@ Route::middleware(['auth:web', 'banned', 'verified'])->group(
 
         Route::delete('deleteAll', [AuthController::class, 'deleteAll'])->name('token.delete_all');
 
-        Route::patch('update', [AuthController::class, 'update'])->name('users.update');
+        Route::withoutMiddleware('verified')->patch('user', [AuthController::class, 'update'])->name('users.update');
         Route::post('sudo/exit', [AuthController::class, 'exitSudo'])->name('sudo.exit');
         /* End 账户区域 */
 
@@ -86,6 +86,7 @@ Route::middleware(['auth:web', 'banned', 'verified'])->group(
 
         /* Start 推介 */
         Route::resource('affiliates', AffiliateController::class)->only(['index', 'create', 'store', 'destroy']);
+        Route::middleware('guest')->withoutMiddleware(['verified', 'auth:web'])->get('affiliates/{affiliate:uuid}', [AffiliateController::class, 'show'])->name('affiliates.show');
         /* End 推介 */
 
         /* Start 匿名登录 */
@@ -103,5 +104,3 @@ Route::match(['get', 'post'], '/balances/notify/{payment}', [BalanceController::
 
 // 维护
 Route::get('maintenance', MaintenanceController::class)->name('maintenances');
-
-Route::middleware('guest')->get('affiliates/{affiliate:uuid}', [AffiliateController::class, 'show'])->name('affiliates.show');

@@ -91,10 +91,12 @@
                         <p>实人认证时间: {{ $user->real_name_verified_at }}</p>
                     @endif
                     <p>
-                        营销邮件订阅: <a
-                            onclick="update_receive_marketing_email()" style="cursor: pointer"
-                            class="text-decoration-underline"></a>
-                        <span id="receive_marketing_email_append_text"></span>
+                        营销邮件订阅: <span class="user-select-none">
+                            <a
+                                onclick="update_receive_marketing_email()" style="cursor: pointer"
+                                class="text-decoration-underline"></a>
+                            <span id="receive_marketing_email_append_text"></span>
+                        </span>
                     </p>
                 </div>
                 <div class="modal-footer">
@@ -116,7 +118,7 @@
 
             if (receive_marketing_email) {
                 ele.innerText = '是';
-                receive_marketing_email_append_text.innerText = '，如果有打扰到您，请取消订阅。';
+                receive_marketing_email_append_text.innerText = '';
             } else {
                 receive_marketing_email_append_text.innerText = '。创业不易，感谢理解。';
                 ele.innerText = '否';
