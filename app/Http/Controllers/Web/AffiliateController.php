@@ -65,10 +65,13 @@ class AffiliateController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Affiliates $affiliate): RedirectResponse
+    public function show($affiliate): RedirectResponse
     {
-        if (auth('web')->guest()) {
-            // save the affiliate id in the session
+        $redirect = redirect()->route('index');
+
+        $affiliate = Affiliates::where('uuid', $affiliate)->first();
+
+        if (auth('web')->guest() && $affiliate) {
             session()->put('affiliate_id', $affiliate->id);
 
             $cache_key = 'affiliate_ip:'.$affiliate->id.':'.request()->ip();
@@ -77,9 +80,11 @@ class AffiliateController extends Controller
                 $affiliate->increment('visits');
                 Cache::put($cache_key, true, now()->addHour());
             }
+        } else {
+            $redirect->with('error', '此推介链接已失效。');
         }
 
-        return redirect()->route('index');
+        return $redirect;
     }
 
     /**
