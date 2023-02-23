@@ -90,20 +90,22 @@ class UserController extends Controller
 
             $trans = $user->reduce($balance, $request->description, true, [
                 'module_id' => $module->id,
+                'payment' => 'balance',
             ]);
-            $module->charge($balance, 'balance', $request->description, [
+            $module->charge($balance, 'module_balance', $request->description, [
                 'user_id' => $user->id,
             ]);
         } else {
+            $balance = bcsub($balance, 0, 4);
+
             if ($module->hasBalance($balance) === false) {
                 return $this->error('模块余额不足。');
             }
 
             $module->reduce($balance, $request->description, true, [
                 'user_id' => $user->id,
-                'payment' => 'module_balance',
             ]);
-            $trans = $user->charge($balance, 'module_balance', $request->description, [
+            $trans = $user->charge($balance, 'balance', $request->description, [
                 'module_id' => $module->id,
             ]);
         }
