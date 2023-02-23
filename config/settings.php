@@ -4,7 +4,7 @@ return [
     'billing' => [
         'commission' => '0.1',
         // 推介佣金比例
-        'commission_referral' => '0.05',
+        'commission_referral' => '0.8',
     ],
     'wecom' => [
         'robot_hook' => [

@@ -16,9 +16,9 @@ class AffiliateController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): View|RedirectResponse
+    public function index(Request $request): View|RedirectResponse
     {
-        $user = auth()->user();
+        $user = $request->user('web');
         $user->load('affiliate');
 
         $affiliate = $user->affiliate;
@@ -36,9 +36,9 @@ class AffiliateController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): View|RedirectResponse
+    public function create(Request $request): View|RedirectResponse
     {
-        $user = auth('web')->user();
+        $user = $request->user('web');
         $user->load('affiliate', 'affiliateUser.affiliate.user');
 
         if ($user->affiliate) {
