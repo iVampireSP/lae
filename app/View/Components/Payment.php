@@ -8,19 +8,11 @@ class Payment extends Component
 {
     public ?string $payment = null;
 
-    /**
-     * Create a new component instance.
-     *
-     * @return void
-     */
     public function __construct(string|null $payment)
     {
         $this->payment = $payment;
     }
 
-    /**
-     * Get the view / contents that represent the component.
-     */
     public function render(): string
     {
         $this->payment = match ($this->payment) {
@@ -33,6 +25,7 @@ class Payment extends Component
             'freeze' => '冻结',
             'console' => '控制台',
             'transfer' => '转账',
+            'affiliate' => '推介',
             default => $this->payment,
         };
 
