@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Models\Affiliate\Affiliates;
 use App\Models\Affiliate\AffiliateUser;
 use App\Models\User;
 use Illuminate\Support\Facades\Crypt;
@@ -22,7 +23,10 @@ class UserObserver
 
         // if session has affiliate_id, then set it to user
         if (session()->has('affiliate_id')) {
-            $user->affiliate_id = session()->get('affiliate_id');
+            $affiliate_id = session()->get('affiliate_id');
+            if (Affiliates::find($affiliate_id)) {
+                $user->affiliate_id = session()->get('affiliate_id');
+            }
         }
     }
 
