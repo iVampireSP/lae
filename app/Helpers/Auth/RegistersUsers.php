@@ -37,6 +37,8 @@ trait RegistersUsers
         //     return $response;
         // }
 
+        session()->forget('affiliate_id');
+
         return $request->wantsJson()
             ? new JsonResponse([], 201)
             : redirect($this->redirectPath());

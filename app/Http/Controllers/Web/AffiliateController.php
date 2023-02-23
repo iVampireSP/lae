@@ -67,7 +67,7 @@ class AffiliateController extends Controller
      */
     public function show($affiliate): RedirectResponse
     {
-        $redirect = redirect()->route('index');
+        $redirect = redirect()->route('register');
 
         $affiliate = Affiliates::where('uuid', $affiliate)->first();
 
