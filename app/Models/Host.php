@@ -212,7 +212,7 @@ class Host extends Model
             'module_id' => $this->module_id,
         ];
 
-        $left = $user->reduce($real_price, $description, false, $data);
+        $left = $user->reduce($real_price, $description, false, $data)->user_remain;
 
         $this->addLog($real_price);
 
