@@ -10,7 +10,7 @@
             @csrf
             @method('PATCH')
 
-            <x-markdown-editor name="content" :placeholder="$reply->content" :value="$reply->content"/>
+            <x-markdown-editor name="content" :value="$reply->content"/>
 
             <button type="submit" class="btn btn-primary mt-3">修改</button>
 
