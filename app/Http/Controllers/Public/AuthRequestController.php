@@ -16,6 +16,7 @@ class AuthRequestController extends Controller
             'description' => 'required|string|max:255',
             'require_token' => 'nullable|boolean',
             'abilities' => 'nullable|array|max:255',
+            'return_url' => 'nullable|url',
         ]);
 
         $token = Str::random(128);
@@ -26,6 +27,7 @@ class AuthRequestController extends Controller
                 'token' => $token,
                 'require_token' => $request->input('require_token', false),
                 'abilities' => $request->input('abilities'),
+                'return_url' => $request->input('return_url'),
             ],
         ];
 
