@@ -42,7 +42,7 @@
             imageUpload: false,
             imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
             imageUploadURL: "./php/upload.php",
-            placeholder: "{{ $placeholder }}",
+            placeholder: '{{ nl2br($placeholder) }}',
         });
     </script>
 
