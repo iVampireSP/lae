@@ -52,7 +52,7 @@ class AuthController extends Controller
             }
         }
 
-        return $request->user('web') ? view('index') : view('welcome');
+        return $request->user('web') ? view('index') : view('auth.login');
     }
 
     public function confirm_redirect(Request $request): View

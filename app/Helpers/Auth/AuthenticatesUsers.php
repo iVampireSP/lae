@@ -2,6 +2,7 @@
 
 namespace App\Helpers\Auth;
 
+use App\Models\User;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -21,6 +22,23 @@ trait AuthenticatesUsers
     public function showLoginForm(): View
     {
         return view('auth.login');
+    }
+
+    public function userIfExists(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        $user = User::where('email', $request->input('email'))->first();
+
+        if ($user) {
+            return $this->success([
+                'name' => $user->name,
+            ]);
+        }
+
+        return $this->notFound();
     }
 
     /**

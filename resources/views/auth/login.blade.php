@@ -2,9 +2,9 @@
 
 @section('content')
 
-    <h2>欢迎使用 {{ config('app.display_name') }}</h2>
+    <h2 id="form-title">注册/登录 {{ config('app.display_name') }}</h2>
 
-    <form action="{{ route('login') }}" method="POST">
+    <form id="main-form" method="POST" onsubmit="return canSubmit()">
         @csrf
 
         <div class="form-group">
@@ -12,42 +12,145 @@
             <input type="email" name="email" id="email" class="form-control mb-3" required autofocus>
         </div>
 
-        <div class="form-group">
-            <label for="password">密码</label>
-            <input type="password" id="password" name="password"
-                   class="form-control rounded-right" required>
-        </div>
+        <div id="suffix-form"></div>
 
-        <div class="form-group mt-2">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="remember" checked>
-                <label class="form-check-label" for="remember">
-                    记住登录
-                </label>
+
+        {{--        <button class="btn btn-primary btn-block mt-2" type="submit">--}}
+        {{--            登录--}}
+        {{--        </button>--}}
+    </form>
+
+    <br/>
+
+    <a class="link" href="{{ route('password.request') }}">
+        {{ __('Forgot Your Password?') }}
+    </a>
+
+    <div class="d-none">
+
+        <div id="password-input">
+            <div class="form-group mt-2">
+                <label for="password">密码</label>
+                <input type="password" id="password" name="password"
+                       class="form-control rounded-right @error('password') is-invalid @enderror" required
+                       placeholder="密码">
+                @error('password')
+                <span class="invalid-feedback" role="alert">
+                <strong>{{ $message }}</strong>
+            </span>
+                @enderror
             </div>
         </div>
 
-        <div class="mt-1">如果您继续，则代表您已经阅读并同意 <a
+
+        <div class="form-group mt-2" id="password-confirm-input">
+            <label for="password-confirm">确认密码</label>
+            <input type="password" id="password-confirm" name="password_confirmation"
+                   class="form-control rounded-right" required autocomplete="new-password"
+                   placeholder="再次输入您的密码">
+        </div>
+
+        <div id="remember-form">
+            <div class="form-group mt-2">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="remember" checked>
+                    <label class="form-check-label" for="remember">
+                        记住登录
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <small id="tip" class="d-block"></small>
+
+        <div class="mt-1" id="tos">如果您继续，则代表您已经阅读并同意 <a
                 href="https://www.laecloud.com/tos/"
                 target="_blank"
                 class="text-decoration-underline">服务条款</a>
         </div>
 
-
-        <button class="btn btn-primary btn-block mt-2" type="submit">
-            登录
+        <button class="btn btn-primary btn-block mt-2" type="submit" id="login-btn">
+            继续
         </button>
+    </div>
 
 
-    </form>
+    <script>
+        const login = "{{ route('login') }}"
+        const register = "{{ route('register') }}"
 
-    <br/>
+        const email = document.getElementById('email');
+        const title = document.getElementById('form-title');
+        const formSuffix = document.getElementById('suffix-form')
+        const rememberForm = document.getElementById('remember-form')
+        const passwordInput = document.getElementById('password-input')
+        const passwordConfirmInput = document.getElementById('password-confirm-input')
+        const loginBtn = document.getElementById('login-btn')
+        const nameInput = document.getElementById('name')
+        const mainForm = document.getElementById('main-form')
+        const tos = document.getElementById('tos')
+        const tip = document.getElementById('tip')
 
-    <a class="link" href="{{ route('register') }}">
-        {{ __('Register') }}
-    </a>
-    &nbsp;
-    <a class="link" href="{{ route('password.request') }}">
-        {{ __('Forgot Your Password?') }}
-    </a>
+        @error('password')
+            title.innerText = "注册莱云"
+            formSuffix.appendChild(rememberForm)
+        @enderror
+
+        @error('email')
+            title.innerText = "密码错误"
+            email.value = "{{ old('email') }}"
+            formSuffix.appendChild(passwordInput)
+            formSuffix.appendChild(rememberForm)
+            formSuffix.appendChild(tos)
+            formSuffix.appendChild(loginBtn)
+            loginBtn.innerText = '登录'
+        @enderror
+
+        let canSubmit = function () {
+            return (email.value !== '' && passwordInput.value !== '')
+        }
+
+        const validateUrl = "{{ route('login.exists-if-user') }}"
+
+        email.onchange = function (ele) {
+            const target = ele.target
+
+            formSuffix.innerHTML = ''
+            formSuffix.appendChild(passwordInput)
+
+            axios.post(validateUrl, {
+                email: target.value
+            })
+                .then(function (res) {
+                    mainForm.action = login
+
+                    title.innerText = "欢迎, " + res.data.name
+
+                    formSuffix.appendChild(passwordInput)
+                    formSuffix.appendChild(rememberForm)
+                    formSuffix.appendChild(tos)
+                    formSuffix.appendChild(loginBtn)
+                    loginBtn.innerText = '登录'
+
+
+                })
+                .catch(function () {
+                    mainForm.action = register
+
+                    title.innerText = "注册莱云"
+                    formSuffix.appendChild(passwordInput)
+                    formSuffix.appendChild(tos)
+                    formSuffix.appendChild(tip)
+
+                    formSuffix.appendChild(loginBtn)
+
+                    tip.innerText = '当您注册后，我们将为您分配随机用户名。'
+
+                    loginBtn.innerText = '注册'
+                });
+        }
+
+
+    </script>
+
 @endsection
