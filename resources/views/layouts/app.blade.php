@@ -148,15 +148,9 @@
     <main class="py-4">
         <div class="container">
             @auth('web')
-                @if (!auth('web')->user()->isAdult())
-                    <x-alert-warning>
-                        未成年账号，需要家长或监护人的同意以及指导下才能使用莱云。
-                    </x-alert-warning>
-                @endif
-
                 @if (!auth('web')->user()->hasVerifiedEmail())
                     <x-alert-warning>
-                        在使用全部功能前，请先 <a href="{{ route('verification.notice') }}">验证您的邮箱</a>。
+                        请先 <a href="{{ route('verification.notice') }}">验证您的邮箱</a>。
                     </x-alert-warning>
                 @endif
             @endauth
