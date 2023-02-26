@@ -39,7 +39,6 @@
                 <!-- Left Side Of Navbar -->
                 <ul class="navbar-nav me-auto">
                     @auth('web')
-
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('index') }}">授权</a>
                         </li>
@@ -110,6 +109,9 @@
                                     {{ __('Reset Password') }}
                                 </a>
 
+                                @if(!auth('web')->user()->isRealNamed())
+                                    <a class="dropdown-item" href="{{ route('real_name.create') }}">实名认证</a>
+                                @endif
 
                                 @if (!session('auth.password_confirmed_at'))
                                     <a class="dropdown-item" href="{{ route('password.confirm') }}">
@@ -173,6 +175,17 @@
     nav.classList.remove('bg-body');
 
     @endif
+
+    // 根据 URL 自动激活导航栏
+    const navLinks = document.querySelectorAll('#nav .nav-link, #nav .dropdown-item');
+    const currentUrl = window.location.href;
+
+    for (let i = 0; i < navLinks.length; i++) {
+        const navLink = navLinks[i];
+        if (currentUrl === navLink.href) {
+            navLink.classList.add('active');
+        }
+    }
 </script>
 
 </body>

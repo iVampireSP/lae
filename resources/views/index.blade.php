@@ -1,15 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-
-    @if(!auth('web')->user()->isRealNamed())
-        <x-alert-warning>
-            <div>
-                部分功能需要您<a href="{{ route('real_name.create') }}">实人认证</a>。
-            </div>
-        </x-alert-warning>
-    @endif
-
     @if (session('token'))
         <x-alert-warning>
             <div>
