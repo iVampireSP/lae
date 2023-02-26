@@ -22,25 +22,27 @@
         <table class="table table-striped">
             <thead>
             <tr>
+                <th scope="col">ID</th>
                 <th scope="col">用户名</th>
                 <th scope="col">盈利</th>
-                <th scope="col">实人状态</th>
+                {{--                <th scope="col">实人状态</th>--}}
                 <th scope="col">注册时间</th>
             </tr>
             </thead>
             <tbody>
             @foreach($affiliateUsers as $user)
                 <tr>
+                    <td>{{ $user->id }}</td>
                     <td>{{ $user->user->name }}</td>
                     <td>{{ $user->revenue }} 元</td>
 
-                    <td>
-                        @if ($user->real_name_verified_at)
-                            完成
-                        @else
-                            <span class="text-danger">未完成</span>
-                        @endif
-                    </td>
+                    {{--                    <td>--}}
+                    {{--                        @if ($user->real_name_verified_at)--}}
+                    {{--                            完成--}}
+                    {{--                        @else--}}
+                    {{--                            <span class="text-danger">未完成</span>--}}
+                    {{--                        @endif--}}
+                    {{--                    </td>--}}
 
                     <td>{{ $user->created_at }}</td>
                 </tr>
@@ -55,7 +57,7 @@
 
     <h4>金额到账时间</h4>
     <p>
-        当您的下属用户完成实人认证后并充值，之后的充值所获得的佣金将会立即到您的余额。
+        下属用户充值所获得的佣金将会立即到您的余额。
     </p>
 
     <h4>佣金计算方式</h4>

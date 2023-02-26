@@ -55,9 +55,9 @@ class AffiliateUser extends Model
     {
         $this->load('user');
 
-        if (! $this->user->isRealNamed()) {
-            return;
-        }
+        // if (! $this->user->isRealNamed()) {
+        //     return;
+        // }
 
         $this->load('affiliate.user');
 
