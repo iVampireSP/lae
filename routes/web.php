@@ -47,12 +47,8 @@ Route::middleware(['auth:web', 'banned', 'verified'])->group(
             }
         );
 
-        Route::middleware(['real_named'])->group(
-            function () {
-                Route::get('confirm_redirect', [AuthController::class, 'confirm_redirect'])->middleware('real_named')->name('confirm_redirect');
-                Route::post('newToken', [AuthController::class, 'newToken'])->middleware('real_named')->name('token.new');
-            }
-        );
+        Route::get('confirm_redirect', [AuthController::class, 'confirm_redirect'])->name('confirm_redirect');
+        Route::post('newToken', [AuthController::class, 'newToken'])->name('token.new');
 
         Route::delete('deleteAll', [AuthController::class, 'deleteAll'])->name('token.delete_all');
 
@@ -71,7 +67,7 @@ Route::middleware(['auth:web', 'banned', 'verified'])->group(
         Route::resource('balances', BalanceController::class)->except('show');
         Route::get('/balances/{balance:order_id}', [BalanceController::class, 'show'])->withoutMiddleware('auth')->name('balances.show');
 
-        Route::middleware(['real_named', 'password.confirm'])->group(
+        Route::middleware('password.confirm')->group(
             function () {
                 Route::get('transfer', [TransferController::class, 'index'])->name('transfer');
                 Route::post('transfer', [TransferController::class, 'transfer']);

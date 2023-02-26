@@ -3,12 +3,11 @@
 @section('content')
 
     @if(!auth('web')->user()->isRealNamed())
-        <x-alert-danger>
+        <x-alert-warning>
             <div>
-                您还没有<a href="{{ route('real_name.create') }}">实人认证</a>，<a
-                    href="{{ route('real_name.create') }}">实人认证</a>后才能使用所有功能。
+                部分功能需要您<a href="{{ route('real_name.create') }}">实人认证</a>。
             </div>
-        </x-alert-danger>
+        </x-alert-warning>
     @endif
 
     @if (session('token'))
