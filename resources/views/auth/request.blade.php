@@ -41,6 +41,12 @@
         </div>
     @endif
 
+    @if (isset($data['meta']['return_url']))
+        <div>
+            返回地址: {{$data['meta']['return_url']}}
+        </div>
+    @endif
+
     @auth('web')
         <form method="POST" action="{{ route('auth_request.store') }}" class="mt-3">
             @csrf
