@@ -174,12 +174,7 @@ class AuthController extends Controller
         Cache::put('auth_request:'.$request->input('token'), $data, 60);
 
         if (isset($data['meta']['return_url']) && $data['meta']['return_url']) {
-            session()->put('callback', $data['meta']['return_url']);
-
-            return view('confirm_redirect', [
-                'token' => $data['meta']['token'],
-                'callback' => $data['meta']['return_url'],
-            ]);
+            return redirect()->to($data['meta']['return_url'].'?auth_request='.$request->input('token'));
         }
 
         return redirect()->route('index')->with('success', '登录请求已确认。');

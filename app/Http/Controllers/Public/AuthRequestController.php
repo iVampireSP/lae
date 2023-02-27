@@ -19,6 +19,18 @@ class AuthRequestController extends Controller
             'return_url' => 'nullable|url',
         ]);
 
+        if ($request->filled('return_url') && $request->hasHeader('referer')) {
+            // 如果有 referer，检查是否和来源域名一致
+            $referer = parse_url($request->header('referer'), PHP_URL_HOST);
+
+            // return url 的域名
+            $returnUrl = parse_url($request->input('return_url'), PHP_URL_HOST);
+
+            if ($referer !== $returnUrl) {
+                return $this->error('来源域名不匹配。');
+            }
+        }
+
         $token = Str::random(128);
 
         $data = [
