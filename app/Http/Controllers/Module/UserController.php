@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 
 class UserController extends Controller
 {
@@ -74,40 +75,55 @@ class UserController extends Controller
         $request->validate([
             'balance' => 'required|numeric|min:-10000|max:10000',
             'description' => 'required|string',
+            'unique_id' => 'nullable|string',
         ]);
 
         $module = $request->user('module');
 
-        $balance = $request->input('balance');
-
-        if ($balance < 0) {
-            // 使用 bc，取 balance 绝对值
-            $balance = bcsub(0, $balance, 4);
-
-            if ($user->hasBalance($balance) === false) {
-                return $this->error('用户余额不足。');
+        if ($request->filled('balance')) {
+            if ($request->filled('unique_id')) {
+                $unique_id_cache_key = 'module:'.$request->user('module')->id.':balance:unique_id:'.$request->input('unique_id');
+                if (Cache::has($unique_id_cache_key)) {
+                    return $this->error('重复的请求。');
+                }
             }
 
-            $trans = $user->reduce($balance, $request->description, true, [
-                'module_id' => $module->id,
-                'payment' => 'balance',
-            ]);
-            $module->charge($balance, 'module_balance', $request->description, [
-                'user_id' => $user->id,
-            ]);
-        } else {
-            $balance = bcsub($balance, 0, 4);
+            $balance = $request->input('balance');
 
-            if ($module->hasBalance($balance) === false) {
-                return $this->error('模块余额不足。');
+            if ($balance < 0) {
+                // 使用 bc，取 balance 绝对值
+                $balance = bcsub(0, $balance, 4);
+
+                if ($user->hasBalance($balance) === false) {
+                    return $this->error('用户余额不足。');
+                }
+
+                $trans = $user->reduce($balance, $request->description, true, [
+                    'module_id' => $module->id,
+                    'payment' => 'balance',
+                ]);
+                $module->charge($balance, 'module_balance', $request->description, [
+                    'user_id' => $user->id,
+                ]);
+            } else {
+                $balance = bcsub($balance, 0, 4);
+
+                if ($module->hasBalance($balance) === false) {
+                    return $this->error('模块余额不足。');
+                }
+
+                $module->reduce($balance, $request->description, true, [
+                    'user_id' => $user->id,
+                ]);
+                $trans = $user->charge($balance, 'balance', $request->description, [
+                    'module_id' => $module->id,
+                ]);
             }
 
-            $module->reduce($balance, $request->description, true, [
-                'user_id' => $user->id,
-            ]);
-            $trans = $user->charge($balance, 'balance', $request->description, [
-                'module_id' => $module->id,
-            ]);
+            if ($request->filled('unique_id')) {
+                $unique_id_cache_key = 'module:'.$request->user('module')->id.':balance:unique_id:'.$request->input('unique_id');
+                Cache::put($unique_id_cache_key, $trans->id, now()->addDay());
+            }
         }
 
         $trans['commission'] = config('settings.billing.commission');
