@@ -84,7 +84,7 @@ class UserController extends Controller
             if ($request->filled('unique_id')) {
                 $unique_id_cache_key = 'module:'.$request->user('module')->id.':balance:unique_id:'.$request->input('unique_id');
                 if (Cache::has($unique_id_cache_key)) {
-                    return $this->error('重复的请求。');
+                    return $this->conflict('重复的请求。');
                 }
             }
 
