@@ -34,8 +34,12 @@
             @foreach($affiliateUsers as $affiliateUser)
                 <tr>
                     <td>{{ $affiliateUser->id }}</td>
-                    <td>{{ $affiliateUser->user->name }}</td>
-                    <td>{{ $affiliateUser->email }}</td>
+                    <td>
+                        <a href="{{ route('admin.users.edit', $affiliateUser->user_id) }}">{{ $affiliateUser->user->name }}</a>
+                    </td>
+                    <td>
+                        <a href="{{ route('admin.users.edit', $affiliateUser->user_id) }}">{{ $affiliateUser->email }}</a>
+                    </td>
                     <td>{{ $affiliateUser->revenue }} 元</td>
 
                     <td>
