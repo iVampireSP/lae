@@ -31,6 +31,11 @@ class Affiliates extends Model
         static::creating(function (self $affiliate) {
             $affiliate->uuid = Str::ulid();
         });
+
+        static::deleting(function (self $affiliate) {
+            $affiliate->users()->delete();
+            $affiliate->user->update(['affiliate_id' => null]);
+        });
     }
 
     public function scopeThisUser(Builder $query): Builder

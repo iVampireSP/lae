@@ -92,14 +92,6 @@ class AffiliateController extends Controller
      */
     public function destroy(Affiliates $affiliate): RedirectResponse
     {
-        // 检测是不是自己的推介计划
-        if ($affiliate->user_id !== auth()->id()) {
-            return redirect()->route('affiliates.index')->with('error', '您没有权限删除此推介计划。');
-        }
-
-        AffiliateUser::where('affiliate_id', $affiliate->id)->delete();
-        User::where('affiliate_id', $affiliate->id)->update(['affiliate_id' => null]);
-
         $affiliate->delete();
 
         return redirect()->route('affiliates.create')->with('success', '推介计划已经成功删除。');
