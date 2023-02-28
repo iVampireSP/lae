@@ -1,39 +1,44 @@
 @extends('layouts.app')
 
 @section('content')
+    <div class="d-flex justify-content-center align-items-center h-screen" style="height: 60vh">
+        <div class="text-center">
+            <span style="font-size: 10rem">
+                <i class="bi bi-person-circle" id="main-icon"></i>
 
-    <h2 id="form-title">注册/登录 {{ config('app.display_name') }}</h2>
+            </span>
 
-    <form id="main-form" method="POST" onsubmit="return canSubmit()">
-        @csrf
+            <h2 id="form-title">注册 或 登录</h2>
 
-        <div class="form-group">
-            <label for="email" class="text-left ml-0">邮箱</label>
-            <input type="email" name="email" id="email" class="form-control mb-3" required autofocus>
+            <form id="main-form" method="POST" onsubmit="return canSubmit()">
+                @csrf
+
+                <div class="form-group">
+                    <input type="email" name="email" id="email" class="form-control mb-3 text-center" placeholder="邮箱"
+                           aria-label="邮箱" required autofocus>
+                </div>
+
+                <div id="suffix-form"></div>
+            </form>
+
+            <br/>
+
+            <a class="link" href="{{ route('password.request') }}">
+                {{ __('Forgot Your Password?') }}
+            </a>
+
+
         </div>
+    </div>
 
-        <div id="suffix-form"></div>
-
-
-        {{--        <button class="btn btn-primary btn-block mt-2" type="submit">--}}
-        {{--            登录--}}
-        {{--        </button>--}}
-    </form>
-
-    <br/>
-
-    <a class="link" href="{{ route('password.request') }}">
-        {{ __('Forgot Your Password?') }}
-    </a>
 
     <div class="d-none">
 
         <div id="password-input">
             <div class="form-group mt-2">
-                <label for="password">密码</label>
                 <input type="password" id="password" name="password"
-                       class="form-control rounded-right @error('password') is-invalid @enderror" required
-                       placeholder="密码">
+                       class="form-control rounded-right text-center @error('password') is-invalid @enderror" required
+                       placeholder="密码" aria-label="密码">
                 @error('password')
                 <span class="invalid-feedback" role="alert">
                 <strong>{{ $message }}</strong>
@@ -51,14 +56,14 @@
         </div>
 
         <div id="remember-form">
-            <div class="form-group mt-2">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" id="remember" checked>
-                    <label class="form-check-label" for="remember">
-                        记住登录
-                    </label>
-                </div>
-            </div>
+            {{--            <div class="form-group mt-2">--}}
+            {{--                <div class="form-check">--}}
+            {{--                    <input class="form-check-input" type="checkbox" id="remember" checked>--}}
+            {{--                    <label class="form-check-label" for="remember">--}}
+            {{--                        记住登录--}}
+            {{--                    </label>--}}
+            {{--                </div>--}}
+            {{--            </div>--}}
         </div>
 
         <small id="tip" class="d-block"></small>
@@ -79,6 +84,7 @@
         const login = "{{ route('login') }}"
         const register = "{{ route('register') }}"
 
+        const mainIcon = document.getElementById('main-icon')
         const email = document.getElementById('email');
         const title = document.getElementById('form-title');
         const formSuffix = document.getElementById('suffix-form')
@@ -93,17 +99,19 @@
 
         @error('password')
             title.innerText = "注册莱云"
-            formSuffix.appendChild(rememberForm)
+        formSuffix.appendChild(rememberForm)
+
+
         @enderror
 
-        @error('email')
+            @error('email')
             title.innerText = "密码错误"
-            email.value = "{{ old('email') }}"
-            formSuffix.appendChild(passwordInput)
-            formSuffix.appendChild(rememberForm)
-            formSuffix.appendChild(tos)
-            formSuffix.appendChild(loginBtn)
-            loginBtn.innerText = '登录'
+        email.value = "{{ old('email') }}"
+        formSuffix.appendChild(passwordInput)
+        formSuffix.appendChild(rememberForm)
+        formSuffix.appendChild(tos)
+        formSuffix.appendChild(loginBtn)
+        loginBtn.innerText = '登录'
         @enderror
 
         let canSubmit = function () {
@@ -115,6 +123,18 @@
         email.onchange = function (ele) {
             const target = ele.target
 
+            if (email.value === '') {
+                title.innerText = "输入邮箱"
+
+                formSuffix.innerHTML = ''
+
+
+                mainIcon.classList.remove(...mainIcon.classList)
+                mainIcon.classList.add('bi', 'bi-person-circle')
+
+                return
+            }
+
             formSuffix.innerHTML = ''
             formSuffix.appendChild(passwordInput)
 
@@ -123,6 +143,9 @@
             })
                 .then(function (res) {
                     mainForm.action = login
+
+                    mainIcon.classList.remove(...mainIcon.classList)
+                    mainIcon.classList.add('bi', 'bi-person-check')
 
                     title.innerText = "欢迎, " + res.data.name
 
@@ -138,6 +161,10 @@
                     mainForm.action = register
 
                     title.innerText = "注册莱云"
+
+                    mainIcon.classList.remove(...mainIcon.classList)
+                    mainIcon.classList.add('bi', 'bi-person-plus')
+
                     formSuffix.appendChild(passwordInput)
                     formSuffix.appendChild(tos)
                     formSuffix.appendChild(tip)
