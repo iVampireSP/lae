@@ -34,6 +34,20 @@ class AffiliateController extends Controller
     }
 
     /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request): RedirectResponse
+    {
+        if (auth()->user()->affiliate) {
+            return redirect()->route('affiliates.index')->with('error', '您已经激活了推介计划。');
+        }
+
+        $request->user('web')->affiliate()->create();
+
+        return redirect()->route('affiliates.index')->with('success', '欢迎您，并感谢您。');
+    }
+
+    /**
      * Show the form for creating a new resource.
      */
     public function create(Request $request): View|RedirectResponse
@@ -46,20 +60,6 @@ class AffiliateController extends Controller
         }
 
         return view('affiliates.create', compact('user'));
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request): RedirectResponse
-    {
-        if (auth()->user()->affiliate) {
-            return redirect()->route('affiliates.index')->with('error', '您已经激活了推介计划。');
-        }
-
-        $request->user('web')->affiliate()->create();
-
-        return redirect()->route('affiliates.index')->with('success', '欢迎您，并感谢您。');
     }
 
     /**

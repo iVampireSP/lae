@@ -200,6 +200,9 @@ class User extends Authenticatable implements MustVerifyEmail
             return $this->balance;
         }
 
+        /**
+         * @throws BalanceNotEnoughException
+         */
         return Cache::lock('user_balance_'.$this->id, 10)->block(10, function () use ($amount, $fail, $description, $options) {
             $this->refresh();
 
@@ -279,6 +282,11 @@ class User extends Authenticatable implements MustVerifyEmail
         }
 
         return $this->user_group->getCostPrice($price);
+    }
+
+    public function subscriptions(): HasMany
+    {
+        return $this->hasMany(Subscription::class);
     }
 
     /**
