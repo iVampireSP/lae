@@ -12,6 +12,7 @@ use App\Http\Middleware\PreventRequestsDuringMaintenance;
 use App\Http\Middleware\RealNamed;
 use App\Http\Middleware\RedirectIfAuthenticated;
 use App\Http\Middleware\ReportRequestToCluster;
+use App\Http\Middleware\ResourceOwner;
 use App\Http\Middleware\TrimStrings;
 use App\Http\Middleware\TrustedDomain;
 use App\Http\Middleware\TrustProxies;
@@ -107,5 +108,6 @@ class Kernel extends HttpKernel
         'banned' => ValidateUserIfBanned::class,
         'admin.validateReferer' => ValidateReferer::class,
         'real_named' => RealNamed::class,
+        'resource_owner' => ResourceOwner::class,
     ];
 }
