@@ -38,7 +38,7 @@
                         <a href="{{ route('admin.users.edit', $affiliateUser->user_id) }}">{{ $affiliateUser->user->name }}</a>
                     </td>
                     <td>
-                        <a href="{{ route('admin.users.edit', $affiliateUser->user_id) }}">{{ $affiliateUser->email }}</a>
+                        <a href="{{ route('admin.users.edit', $affiliateUser->user_id) }}">{{ $affiliateUser->user->email }}</a>
                     </td>
                     <td>{{ $affiliateUser->revenue }} 元</td>
 
