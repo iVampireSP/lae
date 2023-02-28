@@ -12,6 +12,7 @@ use App\Http\Controllers\Web\BalanceController;
 use App\Http\Controllers\Web\HostController;
 use App\Http\Controllers\Web\MaintenanceController;
 use App\Http\Controllers\Web\RealNameController;
+use App\Http\Controllers\Web\SubscriptionController;
 use App\Http\Controllers\Web\TransferController;
 use Illuminate\Support\Facades\Route;
 
@@ -85,6 +86,10 @@ Route::middleware(['auth:web', 'banned', 'verified'])->group(
         Route::resource('affiliates', AffiliateController::class)->only(['index', 'create', 'store', 'destroy']);
         Route::middleware('guest')->withoutMiddleware(['verified', 'auth:web'])->get('affiliates/{affiliate:uuid}', [AffiliateController::class, 'show'])->name('affiliates.show');
         /* End 推介 */
+
+        /* Start 订阅 */
+        Route::middleware('resource_owner:subscription')->resource('subscriptions', SubscriptionController::class)->except(['edit']);
+        /* End 订阅 */
 
         /* Start 匿名登录 */
         Route::get('auth_request/{auth_request}', [AuthController::class, 'showAuthRequest'])->withoutMiddleware(['auth:web', 'verified'])->name('auth_request.show');

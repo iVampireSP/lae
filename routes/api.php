@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\IndexController;
 use App\Http\Controllers\Api\MaintenanceController;
 use App\Http\Controllers\Api\ModuleController;
 use App\Http\Controllers\Api\ReplyController;
+use App\Http\Controllers\Api\SubscriptionController;
 use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\WorkOrderController;
@@ -39,6 +40,7 @@ Route::get('hosts/usages', [HostController::class, 'usages']);
 Route::apiResource('hosts', HostController::class);
 
 Route::apiResource('work-orders', WorkOrderController::class)->only(['index', 'store']);
+Route::apiResource('subscriptions', SubscriptionController::class)->middleware('resource_owner:subscription');
 
 Route::withoutMiddleware('auth:sanctum')->prefix('work-orders')->group(function () {
     Route::get('{workOrder:uuid}', [WorkOrderController::class, 'show']);

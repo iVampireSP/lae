@@ -6,12 +6,14 @@ use App\Models\Balance;
 use App\Models\Host;
 use App\Models\Module;
 use App\Models\PersonalAccessToken;
+use App\Models\Subscription;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\WorkOrder\WorkOrder;
 use App\Observers\BalanceObserver;
 use App\Observers\HostObserver;
 use App\Observers\ModuleObserver;
+use App\Observers\SubscriptionObserve;
 use App\Observers\TaskObserver;
 use App\Observers\UserObserver;
 use App\Observers\WorkOrderObserver;
@@ -20,16 +22,11 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Sanctum\Sanctum;
 
+// use App\Models\Invoice;
+// use App\Observers\InvoiceObserver;
+
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
-    public function register(): void
-    {
-        //
-    }
-
     /**
      * Bootstrap any application services.
      */
@@ -63,5 +60,7 @@ class AppServiceProvider extends ServiceProvider
         Module::observe(ModuleObserver::class);
         Balance::observe(BalanceObserver::class);
         WorkOrder::observe(WorkOrderObserver::class);
+        // Invoice::observe(InvoiceObserver::class);
+        Subscription::observe(SubscriptionObserve::class);
     }
 }

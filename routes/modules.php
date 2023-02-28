@@ -5,6 +5,7 @@ use App\Http\Controllers\Module\DeviceController;
 use App\Http\Controllers\Module\HostController;
 use App\Http\Controllers\Module\ModuleController;
 use App\Http\Controllers\Module\ReplyController;
+use App\Http\Controllers\Module\SubscriptionController;
 use App\Http\Controllers\Module\TaskController;
 use App\Http\Controllers\Module\UserController;
 use App\Http\Controllers\Module\WorkOrderController;
@@ -24,7 +25,8 @@ Route::apiResource('work-orders.replies', ReplyController::class);
 
 // 用户信息
 Route::post('users/attempt', [UserController::class, 'attempt']);
-Route::resource('users', UserController::class)->only(['index', 'show', 'update', 'store']);
+Route::apiResource('users', UserController::class)->only(['index', 'show', 'update', 'store']);
+Route::apiResource('users.subscriptions', SubscriptionController::class);
 
 Route::get('token/{token}', [UserController::class, 'auth']);
 Route::get('users/{user}/hosts', [UserController::class, 'hosts']);

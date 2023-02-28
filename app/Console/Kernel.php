@@ -7,6 +7,8 @@ use App\Jobs\Host\DispatchHostCostQueueJob;
 use App\Jobs\Host\ScanAllHostsJob;
 use App\Jobs\Module\DispatchFetchModuleJob;
 use App\Jobs\Module\SendModuleEarningsJob;
+use App\Jobs\Subscription\DeleteDraftJob;
+use App\Jobs\Subscription\UpdateSubscriptionStatusJob;
 use App\Jobs\User\CheckAndChargeBalanceJob;
 use App\Jobs\User\ClearTasksJob;
 use App\Jobs\User\DeleteUnverifiedUserJob;
@@ -61,6 +63,10 @@ class Kernel extends ConsoleKernel
 
         // 删除注册超过 3 天未验证邮箱的用户
         $schedule->job(new DeleteUnverifiedUserJob())->daily()->onOneServer()->name('删除注册超过 3 天未验证邮箱的用户');
+
+        // 订阅
+        $schedule->job(new DeleteDraftJob())->daily()->onOneServer()->name('删除超过 1 天的草稿订阅');
+        $schedule->job(new UpdateSubscriptionStatusJob())->everyMinute()->onOneServer()->name('更新订阅状态');
     }
 
     /**
