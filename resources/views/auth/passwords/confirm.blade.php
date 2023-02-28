@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="d-flex justify-content-center align-items-center h-screen" style="height:75vh">
+    <div class="d-flex justify-content-center align-items-center h-screen" style="height:60vh">
         <div class="text-center">
             <span style="font-size: 10rem">
                 <i class="bi bi-key"></i>
