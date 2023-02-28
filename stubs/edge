@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 
 
@@ -6,24 +7,6 @@ $node_id = '{{NODE_ID}}';
 
 // Nginx 单个站点的配置文件路径
 $nginx_conf_path = '/path/to/api.laecloud.com.conf';
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /** 自动生成的配置文件，如有变动，按照需求编辑。 **/
@@ -43,7 +26,7 @@ $nginx_file_md5 = '';
 $prefix = $redis_info['prefix'];
 
 // 检查是否存在配置文件
-if (! file_exists($nginx_conf_path)) {
+if (!file_exists($nginx_conf_path)) {
     echo 'nginx.conf not found';
     exit;
 } else {
@@ -68,7 +51,7 @@ try {
     // set db 0
     $redis->select(0);
 } catch (RedisException $e) {
-    echo 'Connection to Redis failed: '.$e->getMessage();
+    echo 'Connection to Redis failed: ' . $e->getMessage();
 }
 
 try {
@@ -114,7 +97,7 @@ while (true) {
 
     redis_hset('nodes', $node_id, [
         'type' => 'edge',
-        'id' => 'edge-'.$node_id,
+        'id' => 'edge-' . $node_id,
         'ip' => $ip,
         // utc +8 timestamp
         'last_heartbeat' => time(),
@@ -128,7 +111,7 @@ while (true) {
     }
 
     // 重新载入 nginx.conf
-    if (! file_exists($nginx_conf_path)) {
+    if (!file_exists($nginx_conf_path)) {
         echo 'nginx.conf not found';
 
         redis_publish('edge.error', [
@@ -143,17 +126,15 @@ while (true) {
 
     // 检查 laecloud_database_cluster:nodes 是否存在
     try {
-        if (! $redis->exists($prefix.'cluster:nodes')) {
+        if (!$redis->exists($prefix . 'cluster:nodes')) {
             output('cluster:nodes not found');
-            exit;
         }
     } catch (RedisException $e) {
         output('redis is error');
-        exit;
     }
 
     $nodes = redis_hgetAll('nodes');
-    if (! $nodes) {
+    if (!$nodes) {
         output('nodes is empty');
 
         continue;
@@ -171,12 +152,12 @@ while (true) {
 
     foreach ($nodes as $node) {
         // only allow node type master, slave
-        if (! in_array($node['type'], ['master', 'slave'])) {
+        if (!in_array($node['type'], ['master', 'slave'])) {
             continue;
         }
 
-        output('node_type: '.$node['type']);
-        output('node_id: '.$node['id']);
+        output('node_type: ' . $node['type']);
+        output('node_id: ' . $node['id']);
         output('================================================================');
 
         $temp_conf = "#node {$node['type']}:{$node['id']}\n";
@@ -200,11 +181,11 @@ while (true) {
 
         $temp_conf .= ";\n";
 
-        echo $temp_conf.PHP_EOL;
+        echo $temp_conf . PHP_EOL;
 
         output('================================================================');
 
-        $conf .= $temp_conf.PHP_EOL;
+        $conf .= $temp_conf . PHP_EOL;
     }
 
     output('!!!!!!!!!!!!!!!!!');
@@ -217,8 +198,8 @@ add_header 'Powered-by' 'Cluster Ready!';
 EOF;
 
     // 放入配置文件，以 ##########CLUSTERREADY######### 开始，以 ##########END_CLUSTERREADY######### 结束
-    $nginx_conf = preg_replace('/##########CLUSTERREADY#########.*##########END_CLUSTERREADY#########/s', '##########CLUSTERREADY#########'.PHP_EOL.$conf.'##########END_CLUSTERREADY#########', $nginx_conf);
-    $nginx_conf = preg_replace('/##########CLUSTERREADY_PROXY#########.*##########END_CLUSTERREADY_PROXY#########/s', '##########CLUSTERREADY_PROXY#########'.PHP_EOL.$add_header.PHP_EOL.'##########END_CLUSTERREADY_PROXY#########', $nginx_conf);
+    $nginx_conf = preg_replace('/##########CLUSTERREADY#########.*##########END_CLUSTERREADY#########/s', '##########CLUSTERREADY#########' . PHP_EOL . $conf . '##########END_CLUSTERREADY#########', $nginx_conf);
+    $nginx_conf = preg_replace('/##########CLUSTERREADY_PROXY#########.*##########END_CLUSTERREADY_PROXY#########/s', '##########CLUSTERREADY_PROXY#########' . PHP_EOL . $add_header . PHP_EOL . '##########END_CLUSTERREADY_PROXY#########', $nginx_conf);
 
     if (md5($nginx_conf) != $nginx_file_md5) {
         file_put_contents($nginx_conf_path, $nginx_conf);
@@ -240,7 +221,7 @@ EOF;
 function output($context): void
 {
     $time_string = date('Y-m-d H:i:s');
-    echo $time_string.': '.$context.PHP_EOL;
+    echo $time_string . ': ' . $context . PHP_EOL;
 }
 
 function redis_get($key, $default = null)
@@ -248,9 +229,9 @@ function redis_get($key, $default = null)
     global $redis, $prefix;
 
     try {
-        $value = $redis->get($prefix.'cluster:'.$key);
+        $value = $redis->get($prefix . 'cluster:' . $key);
     } catch (RedisException $e) {
-        exit('redis get error: '.$e->getMessage());
+        exit('redis get error: ' . $e->getMessage());
     }
 
     if (empty($value)) {
@@ -265,9 +246,9 @@ function redis_hget($key, $hash_key, $default = null)
     global $redis, $prefix;
 
     try {
-        $value = $redis->hget($prefix.'cluster:'.$key, $hash_key);
+        $value = $redis->hget($prefix . 'cluster:' . $key, $hash_key);
     } catch (RedisException $e) {
-        exit('redis get error: '.$e->getMessage());
+        exit('redis get error: ' . $e->getMessage());
     }
 
     if (empty($value)) {
@@ -282,9 +263,9 @@ function redis_hgetAll($key)
     global $redis, $prefix;
 
     try {
-        $value = $redis->hGetAll($prefix.'cluster:'.$key);
+        $value = $redis->hGetAll($prefix . 'cluster:' . $key);
     } catch (RedisException $e) {
-        exit('redis get error: '.$e->getMessage());
+        exit('redis get error: ' . $e->getMessage());
     }
 
     // json_decode all
@@ -300,9 +281,9 @@ function redis_hset($key, $hash_key, $value)
     global $redis, $prefix;
 
     try {
-        $redis->hset($prefix.'cluster:'.$key, $hash_key, json_encode($value));
+        $redis->hset($prefix . 'cluster:' . $key, $hash_key, json_encode($value));
     } catch (RedisException $e) {
-        exit('redis get error: '.$e->getMessage());
+        echo 'redis get error: ' . $e->getMessage();
     }
 }
 
@@ -311,9 +292,9 @@ function redis_hdel($key, $hash_key): void
     global $redis, $prefix;
 
     try {
-        $redis->hdel($prefix.'cluster:'.$key, $hash_key);
+        $redis->hdel($prefix . 'cluster:' . $key, $hash_key);
     } catch (RedisException $e) {
-        exit('redis get error: '.$e->getMessage());
+        echo 'redis get error: ' . $e->getMessage();
     }
 }
 
@@ -333,8 +314,8 @@ function redis_publish($event, $message = []): void
     $data = json_encode($data);
 
     try {
-        $redis->publish($prefix.'cluster_ready', $data);
+        $redis->publish($prefix . 'cluster_ready', $data);
     } catch (RedisException $e) {
-        exit('redis publish error: '.$e->getMessage());
+        echo 'redis publish error: ' . $e->getMessage();
     }
 }
