@@ -31,7 +31,7 @@ class PublishEdge extends Command
         $node_id = $this->option('node-id') ?? Str::random(8);
 
         // 读取 stubs/edge.stub
-        $stub = file_get_contents(base_path('stubs/edge.stub'));
+        $stub = file_get_contents(base_path('stubs/edge'));
 
         // 替换 stubs/edge.stub 中的内容
         $redis_host = config('database.redis.default.host');
