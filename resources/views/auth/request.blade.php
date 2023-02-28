@@ -4,7 +4,7 @@
 
 @section('content')
 
-    <div class="row justify-content-evenly align-items-center col-xs-12" style="height: 80vh">
+    <div class="row justify-content-evenly align-items-center" style="height: 80vh">
         <div class="text-center col-md-4 ">
             <span style="font-size: 10rem">
                 <i class="bi bi-fingerprint"></i>
