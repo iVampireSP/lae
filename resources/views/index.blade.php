@@ -1,6 +1,12 @@
 @extends('layouts.app')
 
 @section('content')
+    @if (!auth('web')->user()->hasVerifiedEmail())
+        <x-alert-warning>
+            请先 <a href="{{ route('verification.notice') }}">验证您的邮箱</a>。
+        </x-alert-warning>
+    @endif
+
     @if (session('token'))
         <x-alert-warning>
             <div>
