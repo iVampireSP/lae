@@ -1,6 +1,6 @@
 @php use Illuminate\Support\Facades\Auth; @endphp
     <!doctype html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-bs-theme="dark">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-bs-theme="auto">
 
 <head>
     <meta charset="utf-8">
@@ -75,7 +75,7 @@
                                 <li>
                                     <a class="dropdown-item" href="{{ route('admin.notifications.create') }}">通知</a>
                                 </li>
-                                  <li>
+                                <li>
                                     <a class="dropdown-item" href="{{ route('admin.maintenances.index') }}">维护</a>
                                 </li>
                             </ul>
