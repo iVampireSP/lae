@@ -83,7 +83,7 @@ Route::middleware(['auth:web', 'banned', 'verified'])->group(
         /* End 实名认证 */
 
         /* Start 推介 */
-        Route::resource('affiliates', AffiliateController::class)->only(['index', 'create', 'store', 'destroy']);
+        Route::middleware('resource_owner:affiliates')->resource('affiliates', AffiliateController::class)->only(['index', 'create', 'store', 'destroy']);
         Route::middleware('guest')->withoutMiddleware(['verified', 'auth:web'])->get('affiliates/{affiliate:uuid}', [AffiliateController::class, 'show'])->name('affiliates.show');
         /* End 推介 */
 
