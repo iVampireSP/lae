@@ -33,7 +33,7 @@ class Affiliates extends Model
         });
 
         static::deleting(function (self $affiliate) {
-            $affiliate->users()->delete();
+            AffiliateUser::where('affiliate_id', $affiliate->id)->delete();
             $affiliate->user->update(['affiliate_id' => null]);
         });
     }

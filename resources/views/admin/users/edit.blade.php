@@ -12,6 +12,7 @@
 
     <a href="{{ route('admin.users.show', $user) }}">作为 {{ $user->name }} 登录</a>
     <a href="{{ route('admin.transactions') }}?user_id={{ $user->id }}">有关此用户的交易记录</a>
+    <a href="{{ route('admin.users.affiliates.index', $user->id) }}">推介计划</a>
 
     @if ($user->banned_at)
         <p class="text-danger">已被封禁，原因: {{ $user->banned_reason }}</p>

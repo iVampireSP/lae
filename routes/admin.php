@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AffiliateController;
 use App\Http\Controllers\Admin\ApplicationController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DeviceController;
@@ -21,6 +22,7 @@ Route::get('/', [HomeController::class, 'index'])->name('index')->middleware('au
 Route::resource('admins', AdminController::class)->except('show');
 
 Route::resource('users', UserController::class);
+Route::resource('users.affiliates', AffiliateController::class)->only(['index', 'destroy']);
 
 Route::resource('modules', ModuleController::class);
 
