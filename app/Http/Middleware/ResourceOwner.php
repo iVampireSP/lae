@@ -3,16 +3,14 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 
 class ResourceOwner
 {
     /**
      * Handle an incoming request.
      */
-    public function handle(Request $request, Closure $next, $model): Response|RedirectResponse
+    public function handle(Request $request, Closure $next, $model): mixed
     {
         $model = $request->route($model);
 
