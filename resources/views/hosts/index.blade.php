@@ -25,7 +25,7 @@
                         {{ $host->id }}
                     </td>
                     <td>
-                        <a>{{ $host->module->name }}</a>
+                        {{ $host->module->name }}
                     </td>
                     <td>
                         {{ $host->name }}
