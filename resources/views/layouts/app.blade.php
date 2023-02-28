@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="zh_CN" data-bs-theme="dark">
+<html lang="zh_CN" data-bs-theme="auto">
 
 <head>
     <meta charset="utf-8">
@@ -11,8 +11,8 @@
     <title>@yield('title', '莱云')</title>
 
 
-    <link rel="icon" href="/images/lae-fav.png"/>
-    <link rel="apple-touch-icon" href="/images/lae-fav.png"/>
+    <link rel="icon" href="{{ asset('/images/lae-fav.png') }}"/>
+    <link rel="apple-touch-icon" href="{{ asset('/images/lae-fav.png') }}"/>
 
     <!-- Fonts -->
     {{-- <link rel="dns-prefetch" href="//fonts.gstatic.com"> --}}
@@ -47,6 +47,9 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('hosts.index') }}">主机</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('subscriptions.index') }}">订阅</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('transfer') }}">转账</a>
