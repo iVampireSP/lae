@@ -18,7 +18,7 @@ return [
     ],
     'dashboard' => [
         'base_url' => env('DASHBOARD_BASE_URL', 'https://dash.laecloud.com'),
-        'birthday_path' => env('DASHBOARD_BIRTHDAY_PATH', '/stars'),
+        'work_order_path' => env('DASHBOARD_WORK_ORDER_PATH', '/work-orders'),
     ],
     'node' => [
         'type' => env('NODE_TYPE', 'slave'),
