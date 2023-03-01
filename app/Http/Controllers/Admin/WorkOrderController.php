@@ -35,7 +35,7 @@ class WorkOrderController extends Controller
     {
         $workOrder->load(['user', 'module', 'host']);
 
-        $replies = (new Reply)->where('work_order_id', $workOrder->id)->latest()->paginate(100);
+        $replies = (new Reply)->where('work_order_id', $workOrder->id)->with('user')->latest()->paginate(100);
 
         return view('admin.work-orders.show', compact('workOrder', 'replies'));
     }
