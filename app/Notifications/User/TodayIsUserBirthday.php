@@ -6,21 +6,10 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-use Illuminate\Support\Facades\URL;
 
 class TodayIsUserBirthday extends Notification implements ShouldQueue
 {
     use Queueable;
-
-    /**
-     * Create a new notification instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
 
     /**
      * Get the notification's delivery channels.
@@ -35,8 +24,6 @@ class TodayIsUserBirthday extends Notification implements ShouldQueue
      */
     public function toMail(): MailMessage
     {
-        $url = URL::format(config('settings.dashboard.base_url'), config('settings.dashboard.birthday_path'));
-
         $lyrics = [
             [
                 'Happy Birthday',
@@ -69,16 +56,21 @@ class TodayIsUserBirthday extends Notification implements ShouldQueue
         $lyric = $lyrics[array_rand($lyrics)];
 
         $email = (new MailMessage)
-            ->subject('生日快乐');
+            ->subject('生日快乐')
+            ->greeting('生日快乐🎂');
 
         foreach ($lyric as $line) {
             $email->line($line);
         }
 
-        $email->line('生日快乐🎂')
-            ->line('在生日当天，我们还为您提供了专属用户组，您可以前往仪表盘查看。')
-            ->action('前往仪表盘', $url)
-            ->line('感谢您继续使用 '.config('app.display_name').'。');
+        $today = now()->format('Y-m-d');
+        $text = <<<EOF
+在这特别的日子里，我们将 《ハピハピ♪バースデイソング ～チノ》 中的歌词献给特别的你。
+
+{$today}, 生日快乐！
+EOF;
+
+        $email->line($text);
 
         return $email;
     }
