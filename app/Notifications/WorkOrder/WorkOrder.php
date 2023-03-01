@@ -30,6 +30,10 @@ class WorkOrder extends Notification implements ShouldQueue
      */
     public function via(): array
     {
+        if (! $this->work_order->notify) {
+            return [];
+        }
+
         return [WeComChannel::class, WebChannel::class];
     }
 

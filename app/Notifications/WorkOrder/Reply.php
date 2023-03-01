@@ -36,6 +36,10 @@ class Reply extends Notification implements ShouldQueue
      */
     public function via(): array
     {
+        if (! $this->work_order->notify) {
+            return [];
+        }
+
         $channels = [WeComChannel::class, WebChannel::class];
 
         if ($this->work_order->status === 'replied') {
