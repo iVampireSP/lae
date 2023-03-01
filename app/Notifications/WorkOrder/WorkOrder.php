@@ -40,6 +40,8 @@ class WorkOrder extends Notification implements ShouldQueue
     {
         $array = $workOrder->toArray();
 
+        $array['latest_reply'] = $workOrder->replies()->latest()->first()?->toArray() ?? [];
+
         $array['event'] = 'work-order.'.$workOrder->status;
 
         return $array;
