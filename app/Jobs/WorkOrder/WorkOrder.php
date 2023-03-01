@@ -26,7 +26,7 @@ class WorkOrder implements ShouldQueue
      */
     public function __construct(WorkOrderModel $workOrder, $type = 'post')
     {
-        $this->workOrder = $workOrder->load(['module']);
+        $this->workOrder = $workOrder;
         $this->type = $type;
     }
 
@@ -38,6 +38,8 @@ class WorkOrder implements ShouldQueue
         if ($this->workOrder->isPlatform()) {
             return;
         }
+
+        $this->workOrder->load(['module']);
 
         if ($this->workOrder->status === 'error' && $this->type !== 'delete') {
             $this->type = 'post';
