@@ -5,13 +5,15 @@ namespace App\Models\WorkOrder;
 use App\Exceptions\CommonException;
 use App\Models\Module;
 use App\Models\User;
+use App\Notifications\WorkOrder\Reply as ReplyNotification;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Notifications\Notifiable;
 
 class Reply extends Model
 {
-    use Cachable;
+    use Cachable, Notifiable;
 
     protected $table = 'work_order_replies';
 
@@ -77,6 +79,9 @@ class Reply extends Model
                 $model->workOrder->save();
             }
 
+            // notify
+            $model->notify(new ReplyNotification($model));
+
             // dispatch
             dispatch(new \App\Jobs\WorkOrder\Reply($model, 'post'));
             dispatch(new \App\Jobs\WorkOrder\WorkOrder($model->workOrder, 'put'));
@@ -117,5 +122,12 @@ class Reply extends Model
     public function safeDelete(): void
     {
         dispatch(new \App\Jobs\WorkOrder\Reply($this, 'delete'));
+    }
+
+    public function routeNotificationForMail(): array
+    {
+        $user = $this->workOrder->user;
+
+        return $user ? [$user->email => $user->name] : [];
     }
 }
