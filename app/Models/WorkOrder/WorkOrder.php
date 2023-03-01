@@ -145,4 +145,9 @@ class WorkOrder extends Model
 
         return [$user->email => $user->name];
     }
+
+    public function getWecomKeyAttribute(): string
+    {
+        return $this->module?->wecom_key ?? config('settings.wecom.robot_hook.default');
+    }
 }
