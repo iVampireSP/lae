@@ -26,6 +26,8 @@ class WebChannel extends Notification
 
         $user = (new User)->find($user_id);
 
-        broadcast(new Users($user, $data['event'], $data));
+        if ($user) {
+            broadcast(new Users($user, $data['event'], $data));
+        }
     }
 }
