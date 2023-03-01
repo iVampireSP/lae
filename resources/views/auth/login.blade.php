@@ -56,14 +56,7 @@
         </div>
 
         <div id="remember-form">
-            {{--            <div class="form-group mt-2">--}}
-            {{--                <div class="form-check">--}}
-            {{--                    <input class="form-check-input" type="checkbox" id="remember" checked>--}}
-            {{--                    <label class="form-check-label" for="remember">--}}
-            {{--                        记住登录--}}
-            {{--                    </label>--}}
-            {{--                </div>--}}
-            {{--            </div>--}}
+            <input class="form-check-input" type="hidden" id="remember" name="remember" value="1">
         </div>
 
         <small id="tip" class="d-block"></small>
