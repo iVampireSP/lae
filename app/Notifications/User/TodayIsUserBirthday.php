@@ -2,6 +2,7 @@
 
 namespace App\Notifications\User;
 
+use App\Notifications\Channels\WebChannel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -11,18 +12,49 @@ class TodayIsUserBirthday extends Notification implements ShouldQueue
 {
     use Queueable;
 
+    private string $subject = '生日快乐';
+
+    private string $greeting = '生日快乐🎂';
+
     /**
      * Get the notification's delivery channels.
      */
     public function via(): array
     {
-        return ['mail'];
+        return [WebChannel::class, 'mail'];
     }
 
     /**
      * Get the mail representation of the notification.
      */
     public function toMail(): MailMessage
+    {
+        $email = (new MailMessage)
+            ->subject($this->subject)
+            ->greeting($this->greeting);
+
+        $lyrics = $this->lyrics();
+        foreach ($lyrics as $lyric) {
+            $email->line($lyric);
+        }
+
+        $email->line($this->suffixText());
+
+        return $email;
+    }
+
+    /**
+     * Get the array representation of the notification.
+     */
+    public function toArray(): array
+    {
+        return [
+            'title' => $this->greeting,
+            'message' => $this->lyrics(true).$this->suffixText(),
+        ];
+    }
+
+    protected function lyrics(bool $to_string = false): array|string
     {
         $lyrics = [
             [
@@ -50,38 +82,31 @@ class TodayIsUserBirthday extends Notification implements ShouldQueue
             [
                 '即使以心传心但也一定有着极限的。所以要好好地说出来。',
             ],
-
         ];
 
-        $lyric = $lyrics[array_rand($lyrics)];
+        $random_lyrics = $lyrics[array_rand($lyrics)];
 
-        $email = (new MailMessage)
-            ->subject('生日快乐')
-            ->greeting('生日快乐🎂');
+        if ($to_string) {
+            $lyric_string = '';
+            foreach ($random_lyrics as $lyric) {
+                $lyric_string .= $lyric.PHP_EOL.PHP_EOL;
+            }
 
-        foreach ($lyric as $line) {
-            $email->line($line);
+            return $lyric_string;
         }
 
+        return $random_lyrics;
+    }
+
+    public function suffixText(): string
+    {
         $today = now()->format('Y-m-d');
-        $text = <<<EOF
+
+        return <<<EOF
 在这特别的日子里，我们将 《ハピハピ♪バースデイソング ～チノ》 中的歌词献给特别的你。
+
 
 {$today}, 生日快乐！
 EOF;
-
-        $email->line($text);
-
-        return $email;
-    }
-
-    /**
-     * Get the array representation of the notification.
-     */
-    public function toArray(): array
-    {
-        return [
-            //
-        ];
     }
 }
