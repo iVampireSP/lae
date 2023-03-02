@@ -6,6 +6,7 @@ use App\Events\Users;
 use App\Jobs\Host\HostJob;
 use App\Models\Host;
 use App\Notifications\WebNotification;
+use Illuminate\Support\Facades\Cache;
 
 class HostObserver
 {
@@ -41,8 +42,15 @@ class HostObserver
     /**
      * Handle the Host "updated" event.
      */
-    public function updating(Host $host): void
+    public function updating(Host $host): bool
     {
+        // 取得锁
+        $lock = Cache::lock('host:updating:'.$host->id, 10);
+
+        if (! $lock->get()) {
+            return false;
+        }
+
         if ($host->isDirty('status')) {
             if ($host->status == 'suspended') {
                 $host->suspended_at = now();
@@ -69,6 +77,11 @@ class HostObserver
         }
 
         broadcast(new Users($host->user_id, 'hosts.updating', $host));
+
+        // 释放锁
+        $lock->release();
+
+        return true;
     }
 
     public function updated(Host $host): void
