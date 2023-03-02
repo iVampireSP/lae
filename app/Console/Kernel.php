@@ -47,7 +47,7 @@ class Kernel extends ConsoleKernel
         $schedule->job(new DeleteHostJob())->hourly()->onOneServer()->name('删除暂停或部署时间超过 3 天以上的主机');
 
         // 检查主机是否存在于模块
-        $schedule->job(new ScanAllHostsJob())->everyThirtyMinutes()->withoutOverlapping()->onOneServer()->name('检查主机是否存在于模块');
+        // $schedule->job(new ScanAllHostsJob())->everyThirtyMinutes()->withoutOverlapping()->onOneServer()->name('检查主机是否存在于模块');
 
         // 检查未充值的订单，并充值
         $schedule->job(new CheckAndChargeBalanceJob())->everyFiveMinutes()->onOneServer()->withoutOverlapping()->name('检查未充值的订单，并充值');
