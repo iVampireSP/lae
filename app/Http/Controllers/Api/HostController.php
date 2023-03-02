@@ -24,12 +24,21 @@ class HostController extends Controller
     public function update(HostRequest $request, Host $host): JsonResponse
     {
         $request->validate([
-            'status' => 'required|in:running,stopped,suspended',
+            'name' => 'nullable|string|max:255',
+            'status' => 'nullable|in:running,stopped,suspended',
         ]);
 
-        $status = $host->changeStatus($request->input('status'));
+        if ($request->filled('name')) {
+            $host->update([
+                'name' => $request->input('name'),
+            ]);
+        }
 
-        return $status ? $this->updated($host) : $this->failed('修改失败，请检查是否有足够的余额。');
+        if ($request->filled('status')) {
+            $host->changeStatus($request->input('status'));
+        }
+
+        return $this->updated($host);
     }
 
     public function destroy(HostRequest $request, Host $host): JsonResponse
