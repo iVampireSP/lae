@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 
 trait ApiResponse
@@ -107,8 +108,12 @@ trait ApiResponse
         return $this->success($message, 202);
     }
 
-    public function updated($message = 'Updated'): JsonResponse
+    public function updated(mixed $message = 'Updated'): JsonResponse
     {
+        if ($message instanceof Model) {
+            $message = $message->getChanges();
+        }
+
         return $this->success($message);
     }
 
