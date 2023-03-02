@@ -40,14 +40,15 @@ class DispatchHostCostQueueJob implements ShouldQueue
             if (app()->environment() != 'local') {
                 $host = $host->where('minute_at', $this->minute);
             }
-
-            $host->whereIn('status', ['running', 'stopped'])->with('user')->chunk(500, function ($hosts) {
-                foreach ($hosts as $host) {
-                    dispatch(new self($this->minute, $host));
-                }
+            $host->whereIn('status', ['running', 'stopped'])->with(['user', 'module'])->chunk(500, function ($hosts) {
+                $hosts->each(function ($host) {
+                    if ($host->module->isUp()) {
+                        dispatch(new self($this->minute, $host));
+                    }
+                });
             });
+        } else {
+            $this->host->cost($this->host->getPrice());
         }
-
-        $this->host?->cost($this->host->getPrice());
     }
 }
