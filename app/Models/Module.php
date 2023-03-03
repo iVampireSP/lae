@@ -132,6 +132,7 @@ class Module extends Authenticatable
         if ($user) {
             $http = $http->withHeaders([
                 'X-User-Id' => $user->id,
+                'User-Agent' => request()->headers->get('User-Agent', 'unknown'),
             ]);
 
             // $requests['user_id'] = $user->id;
