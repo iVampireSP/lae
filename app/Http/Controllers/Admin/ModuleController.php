@@ -36,9 +36,14 @@ class ModuleController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        $request->validate([
+            'id' => 'required|string|max:255|unique:modules,id',
+            'api_token' => 'nullable|string|max:255|unique:modules,api_token',
+        ]);
+
         $request->validate($this->rules());
 
-        $api_token = Str::random(60);
+        $api_token = $request->input('api_token') ?: Str::random(60);
 
         $module = new Module();
 
@@ -58,7 +63,6 @@ class ModuleController extends Controller
     private function rules(): array
     {
         return [
-            'id' => 'required|string|max:255',
             'name' => 'required|string|max:255',
             'url' => 'required|url',
             'ip_port' => 'nullable|string|max:255',
@@ -95,6 +99,11 @@ class ModuleController extends Controller
      */
     public function update(Request $request, Module $module): RedirectResponse
     {
+        $request->validate([
+            'id' => 'required|string|max:255|unique:modules,id,'.$module->id,
+            'api_token' => 'required|string|max:255|unique:modules,api_token,'.$module->id,
+        ]);
+
         $request->validate($this->rules());
 
         $module->id = $request->input('id');
