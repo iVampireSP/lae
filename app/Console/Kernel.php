@@ -4,7 +4,7 @@ namespace App\Console;
 
 use App\Jobs\Host\DeleteHostJob;
 use App\Jobs\Host\DispatchHostCostQueueJob;
-use App\Jobs\Host\ScanAllHostsJob;
+use App\Jobs\Host\ScanErrorHostsJob;
 use App\Jobs\Module\DispatchFetchModuleJob;
 use App\Jobs\Module\SendModuleEarningsJob;
 use App\Jobs\Subscription\DeleteDraftJob;
@@ -48,6 +48,9 @@ class Kernel extends ConsoleKernel
 
         // 检查主机是否存在于模块
         // $schedule->job(new ScanAllHostsJob())->everyThirtyMinutes()->withoutOverlapping()->onOneServer()->name('检查主机是否存在于模块');
+
+        // 扫描出错的主机
+        $schedule->job(new ScanErrorHostsJob())->everyThirtyMinutes()->withoutOverlapping()->onOneServer()->name('扫描出错的主机');
 
         // 检查未充值的订单，并充值
         $schedule->job(new CheckAndChargeBalanceJob())->everyFiveMinutes()->onOneServer()->withoutOverlapping()->name('检查未充值的订单，并充值');
