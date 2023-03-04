@@ -52,6 +52,13 @@ class HostJob implements ShouldQueue
             return;
         }
 
+        // 如果主机状态为 error 并且上次更新时间超过 7 天，则删除主机
+        if ($host->status === 'error' && $host->updated_at->lt(now()->subDays(7))) {
+            $host->delete();
+
+            return;
+        }
+
         $host->load(['module']);
 
         if (! $host->module->isUp()) {
