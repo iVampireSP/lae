@@ -33,7 +33,7 @@
             @foreach($affiliateUsers as $user)
                 <tr>
                     <td>{{ $user->id }}</td>
-                    <td>{{ $user->user->name }}</td>
+                    <td>{{ $user->user?->name }}</td>
                     <td>{{ $user->revenue }} 元</td>
 
                     {{--                    <td>--}}
