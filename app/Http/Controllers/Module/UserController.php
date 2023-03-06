@@ -44,7 +44,7 @@ class UserController extends Controller
     public function store(Request $request): JsonResponse
     {
         $request->validate([
-            'name' => 'required|string',
+            'name' => 'string',
             'email' => 'required|email|unique:users',
             'password' => 'required|string|min:6',
         ]);
