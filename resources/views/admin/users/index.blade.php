@@ -56,7 +56,9 @@
                         </a>
                     </td>
                     <td>
-                        {{ $user->email }}
+                        {{ $user->email }} @if(!$user->hasVerifiedEmail())
+                            <small class="text-muted">没有验证</small>
+                        @endif
                     </td>
                     <td>
                         @if ($user->hasBalance())

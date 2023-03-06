@@ -26,7 +26,9 @@
 
     <span>注册时间: {{ $user->created_at }}</span> <br/>
 
-    <span>邮箱: {{ $user->email }}</span> <br/>
+    <span>邮箱: {{ $user->email }} @if(!$user->hasVerifiedEmail())
+            <small class="text-muted">没有验证</small>
+        @endif</span> <br/>
 
 
     @if ($user->birthday_at)
@@ -244,7 +246,8 @@
         @csrf
         @method('DELETE')
 
-        <button type="submit" class="btn btn-danger mt-3" onclick="return confirm('请再次确认要删除此用户吗？')">删除</button>
+        <button type="submit" class="btn btn-danger mt-3" onclick="return confirm('请再次确认要删除此用户吗？')">删除
+        </button>
     </form>
 
 
