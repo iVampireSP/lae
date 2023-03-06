@@ -19,8 +19,9 @@ class UserController extends Controller
             'password' => 'required|string',
         ]);
 
+        $user = User::where('email', $request->input('email'))->first();
         // 检测用户是否存在
-        if (! User::where('email', $request->input('email'))->exists()) {
+        if (! $user) {
             $user = User::create([
                 'email' => $request->input('email'),
                 'password' => bcrypt($request->input('password')),
@@ -32,7 +33,12 @@ class UserController extends Controller
         $credentials = $request->only(['email', 'password']);
 
         if (! auth()->attempt($credentials)) {
-            return $this->error('Invalid credentials', 401);
+            return $this->error('Invalid credentials.', 401);
+        }
+
+        // 用户是否验证了邮箱
+        if (! $user->hasVerifiedEmail()) {
+            return $this->error('Please verify your email.', 401);
         }
 
         $token = auth()->user()->createToken($request->input('name', 'Api Login'))->plainTextToken;
