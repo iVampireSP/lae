@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -14,7 +15,19 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'nullable|string',
+            'email' => 'required|email',
+            'password' => 'required|string',
         ]);
+
+        // 检测用户是否存在
+        if (! User::where('email', $request->input('email'))->exists()) {
+            $user = User::create([
+                'email' => $request->input('email'),
+                'password' => bcrypt($request->input('password')),
+            ]);
+
+            return $this->created($user);
+        }
 
         $credentials = $request->only(['email', 'password']);
 
