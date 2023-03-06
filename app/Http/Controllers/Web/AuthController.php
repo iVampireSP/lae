@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Notifications\User\UserNotification;
 use function back;
 use function config;
@@ -178,5 +179,27 @@ class AuthController extends Controller
         }
 
         return redirect()->route('index')->with('success', '登录请求已确认。');
+    }
+
+    public function fastLogin(string $token): RedirectResponse
+    {
+        $cache_key = 'session_login:'.$token;
+        $user_id = Cache::get('session_login:'.$token);
+
+        if (empty($user_id)) {
+            return redirect()->route('index')->with('error', '登录请求的 Token 不存在或已过期。');
+        }
+
+        $user = User::find($user_id);
+
+        if (empty($user)) {
+            return redirect()->route('index')->with('error', '无法验证。');
+        }
+
+        Auth::guard('web')->login($user);
+
+        Cache::forget($cache_key);
+
+        return redirect()->route('index');
     }
 }
