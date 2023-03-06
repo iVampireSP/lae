@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Models\Affiliate\Affiliates;
 use App\Models\Affiliate\AffiliateUser;
 use App\Models\User;
+use Faker\Provider\zh_CN\Person;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Str;
 use Psr\Container\ContainerExceptionInterface;
@@ -18,6 +19,10 @@ class UserObserver
      */
     public function creating(User $user): void
     {
+        if (! $user->name) {
+            $user->name = Person::firstNameMale();
+        }
+
         $user->email_md5 = md5($user->email);
         $user->uuid = Str::uuid();
 
