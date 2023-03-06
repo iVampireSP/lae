@@ -6,6 +6,7 @@ use App\Models\Affiliate\Affiliates;
 use App\Models\Affiliate\AffiliateUser;
 use App\Models\User;
 use Faker\Provider\zh_CN\Person;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Str;
 use Psr\Container\ContainerExceptionInterface;
@@ -44,6 +45,8 @@ class UserObserver
                 'user_id' => $user->id,
             ]);
         }
+
+        event(new Registered($user));
     }
 
     public function updating(User $user): void

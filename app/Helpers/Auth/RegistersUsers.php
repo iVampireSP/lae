@@ -2,7 +2,6 @@
 
 namespace App\Helpers\Auth;
 
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Auth\StatefulGuard;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -29,7 +28,7 @@ trait RegistersUsers
     {
         $this->validator($request->all())->validate();
 
-        event(new Registered($user = $this->create($request->all())));
+        $user = $this->create($request->all());
 
         $this->guard()->login($user);
 
