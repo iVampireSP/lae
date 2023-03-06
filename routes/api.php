@@ -15,7 +15,11 @@ use App\Http\Controllers\Public\AuthRequestController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [IndexController::class, 'index'])->withoutMiddleware('auth:sanctum');
+Route::post('tokens', [UserController::class, 'attempt'])->withoutMiddleware('auth:sanctum');
+
 Route::get('/birthdays', [IndexController::class, 'birthdays']);
+
+Route::post('sessions', [UserController::class, 'session']);
 
 Route::get('users', [UserController::class, 'index']);
 

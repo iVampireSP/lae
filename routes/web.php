@@ -38,6 +38,8 @@ Route::prefix('auth')->group(function () {
     Route::get('email/verify', [VerificationController::class, 'show'])->name('verification.notice');
     Route::get('email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify');
     Route::post('email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
+
+    Route::get('token/{token}', [AuthController::class, 'fastLogin'])->name('auth.fast-login');
 });
 
 Route::middleware(['auth:web', 'banned', 'verified'])->group(
