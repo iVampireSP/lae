@@ -40,3 +40,14 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 //     forceTLS: (import.meta.env.VITE_PUSHER_SCHEME ?? 'https') === 'https',
 //     enabledTransports: ['ws', 'wss'],
 // });
+
+// 根据 URL 自动激活导航栏
+const navLinks = document.querySelectorAll('#nav .nav-link, #nav .dropdown-item');
+const currentUrl = window.location.href;
+
+for (let i = 0; i < navLinks.length; i++) {
+    const navLink = navLinks[i];
+    if (currentUrl === navLink.href) {
+        navLink.classList.add('active');
+    }
+}
