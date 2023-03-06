@@ -21,7 +21,7 @@
 
 <body>
 <div id="app">
-    <nav class="navbar navbar-expand-lg bd-navbar sticky-top bg-body">
+    <nav class="navbar navbar-expand-lg bd-navbar sticky-top bg-body" id="nav">
         <div class="container">
             <a class="navbar-brand" href="{{ route('admin.index') }}">
                 管理员
