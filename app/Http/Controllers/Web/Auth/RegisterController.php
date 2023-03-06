@@ -6,7 +6,6 @@ use App\Helpers\Auth\RegistersUsers;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
-use Faker\Provider\zh_CN\Person;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -58,7 +57,7 @@ class RegisterController extends Controller
     protected function create(array $data): User
     {
         return (new User)->create([
-            'name' => $data['name'] ?? '随机 - '.Person::firstNameMale(),
+            'name' => $data['name'] ?? null,
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
