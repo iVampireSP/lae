@@ -15,7 +15,7 @@ use App\Http\Controllers\Public\AuthRequestController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [IndexController::class, 'index'])->withoutMiddleware('auth:sanctum');
-Route::post('auth', [UserController::class, 'attempt'])->withoutMiddleware('auth:sanctum')->middleware('throttle:5,1');
+Route::post('auth', [UserController::class, 'attempt'])->withoutMiddleware('auth:sanctum')->middleware('throttle:1,5');
 
 Route::get('/birthdays', [IndexController::class, 'birthdays']);
 
