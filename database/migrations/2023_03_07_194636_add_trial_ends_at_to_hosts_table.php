@@ -5,8 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -17,27 +16,30 @@ return new class extends Migration
             $table->enum('billing_cycle', ['hourly', 'monthly', 'once'])->default('hourly')->index()->after('status');
             $table->tinyInteger('day_at')->nullable()->index()->after('billing_cycle');
             $table->timestamp('trial_ends_at')->nullable()->after('day_at');
+            $table->timestamp('last_paid_at')->nullable()->after('trial_ends_at');
+            $table->timestamp('expired_at')->nullable()->after('last_paid_at');
 
             // 不自动续费
             $table->boolean('cancel_at_period_end')->default(false)->after('trial_ends_at');
 
             // 上次扣费金额
             $table->decimal('last_paid', 10)->nullable()->after('cancel_at_period_end');
-            $table->timestamp('last_paid_at')->nullable()->after('last_paid');
 
             // 到期时间（下次扣费时间）
-            $table->timestamp('expired_at')->nullable()->after('last_paid_at');
         });
 
-        $hosts = Host::all();
-        $count = $hosts->count();
+        $count = Host::count();
         // 为已有的主机设置默认值
-        Host::all()->each(function (Host $host) use (&$count) {
-            echo "Migrating {$host->id} ({$host->name})... {$count} left".PHP_EOL;
+        Host::chunk(100, function ($hosts) use (&$count) {
+            $hosts->each(function ($host) use (&$count) {
+                echo "Migrating {$host->id} ({$host->name})... {$count} left" . PHP_EOL;
 
-            $host->day_at = $host->created_at->day;
+                $host->day_at = $host->created_at->day;
 
-            $host->saveQuietly();
+                $host->saveQuietly();
+
+                $count--;
+            });
         });
     }
 
