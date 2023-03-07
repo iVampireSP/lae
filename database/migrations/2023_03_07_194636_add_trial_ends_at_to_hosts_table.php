@@ -29,11 +29,15 @@ return new class extends Migration
             $table->timestamp('expired_at')->nullable()->after('last_paid_at');
         });
 
+        $hosts = Host::all();
+        $count = $hosts->count();
         // 为已有的主机设置默认值
-        Host::all()->each(function (Host $host) {
+        Host::all()->each(function (Host $host) use (&$count) {
+            echo "Migrating {$host->id} ({$host->name})... {$count} left".PHP_EOL;
+
             $host->day_at = $host->created_at->day;
 
-            $host->save();
+            $host->saveQuietly();
         });
     }
 
