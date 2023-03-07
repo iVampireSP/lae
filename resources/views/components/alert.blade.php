@@ -23,7 +23,11 @@
             {{ session('status') }}
         </x-alert-info>
     @endif
-
+    @if (session('info'))
+        <x-alert-info>
+            {{ session('info') }}
+        </x-alert-info>
+    @endif
     @if (session('success'))
         <x-alert-success>
             {{ session('success') }}
