@@ -215,9 +215,9 @@ class Host extends Model
     public function cost(
         string $amount = null, $auto = true, $description = null
     ): bool {
-        if ($this->isTrial() && ! $this->trial_ends_at->isPast()) {
-            return true;
-        }
+        // if ($this->isTrial() && $this->trial_ends_at->()) {
+        //     return true;
+        // }
 
         $this->load('user');
         $user = $this->user;
