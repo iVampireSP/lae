@@ -5,7 +5,8 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration {
+return new class extends Migration
+{
     /**
      * Run the migrations.
      */
@@ -32,7 +33,7 @@ return new class extends Migration {
         // 为已有的主机设置默认值
         Host::chunk(100, function ($hosts) use (&$count) {
             $hosts->each(function ($host) use (&$count) {
-                echo "Migrating {$host->id} ({$host->name})... {$count} left" . PHP_EOL;
+                echo "Migrating {$host->id} ({$host->name})... {$count} left".PHP_EOL;
 
                 $host->day_at = $host->created_at->day;
 
