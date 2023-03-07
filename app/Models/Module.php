@@ -220,7 +220,7 @@ class Module extends Authenticatable
                     'module_id' => $this->id,
                     'amount' => $amount,
                     'description' => $description,
-                    'payment' => 'balance',
+                    'payment' => 'module_balance',
                     'type' => 'payout',
                 ];
 
