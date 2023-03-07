@@ -115,7 +115,7 @@ class UserController extends Controller
                 $module->reduce($balance, $request->description, true, [
                     'user_id' => $user->id,
                 ]);
-                $trans = $user->charge($balance, 'balance', $request->description, [
+                $trans = $user->charge($balance, 'module_balance', $request->description, [
                     'module_id' => $module->id,
                 ]);
             }
