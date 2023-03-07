@@ -38,13 +38,23 @@ class HostController extends Controller
             'status' => 'required|in:draft,running,stopped,error,suspended,pending',
             'price' => 'required|numeric',
             'user_id' => 'required|integer|exists:users,id',
+            'managed_price' => 'nullable|numeric',
+            'billing_cycle' => 'nullable|in:hourly,monthly',
+            'trial_ends_at' => 'nullable|date|after:now',
+            'configuration' => 'nullable|array',
         ]);
 
         $user = (new User)->findOrFail($request->input('user_id'));
 
         if ($request->input('price') > 0) {
-            if ($user->balance < 1) {
-                return $this->error('此用户余额不足，无法开设计费项目。');
+            if ($request->billing_cycle === 'hourly') {
+                if (! $user->hasBalance(1)) {
+                    return $this->error('此用户余额不足，无法开设计费项目。');
+                }
+            } else {
+                if (! $user->hasBalance($request->input('managed_price', $request->input('price')))) {
+                    return $this->error('此用户余额不足，无法开计月费项目。');
+                }
             }
         }
 
@@ -58,6 +68,8 @@ class HostController extends Controller
             'price' => $request->input('price'),
             'managed_price' => $request->input('managed_price'),
             'status' => $request->input('status'),
+            'billing_cycle' => $request->input('billing_cycle', 'hourly'),
+            'trial_ends_at' => $request->input('trial_ends_at'),
         ];
 
         $host = (new Host)->create($data);
@@ -73,9 +85,6 @@ class HostController extends Controller
     public function show(Host $host): JsonResponse
     {
         return $this->success($host);
-        //
-
-        // dd($host->cost());
     }
 
     /**
@@ -88,10 +97,21 @@ class HostController extends Controller
     {
         $this->validate($request, [
             'status' => 'sometimes|in:running,stopped,error,suspended,pending',
+            'price' => 'sometimes|nullable|numeric',
             'managed_price' => 'sometimes|numeric|nullable',
+            'configuration' => 'nullable|array',
+            'trial_ends_at' => 'nullable|date|after:now',
         ]);
 
-        $update = $request->except(['module_id', 'user_id']);
+        $update = $request->only([
+            'name',
+            'status',
+            'price',
+            'managed_price',
+            'billing_cycle',
+            'trial_ends_at',
+            'configuration',
+        ]);
 
         $host->update($update);
 

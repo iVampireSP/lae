@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Exceptions\User\BalanceNotEnoughException;
 use App\Jobs\Host\HostJob;
 use App\Jobs\Host\UpdateOrDeleteHostJob;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
@@ -25,13 +26,23 @@ class Host extends Model
         'configuration',
         'status',
         'suspended_at',
+        'trial_ends_at',
+        'billing_cycle',
+        'cancel_at_period_end',
+        'last_paid',
+        'last_paid_at',
+        'expired_at',
     ];
 
     protected $casts = [
         'price' => 'decimal:2',
+        'last_paid' => 'decimal:2',
         'managed_price' => 'decimal:2',
         'configuration' => 'array',
         'suspended_at' => 'datetime',
+        'last_paid_at' => 'datetime',
+        'trial_ends_at' => 'datetime',
+        'expired_at' => 'datetime',
     ];
 
     /** @noinspection PhpUndefinedMethodInspection */
@@ -111,13 +122,41 @@ class Host extends Model
         return $this->status === 'suspended';
     }
 
+    public function isExpired(): bool
+    {
+        return $this->expired_at && $this->expired_at->isPast();
+    }
+
     public function safeDelete(): bool
     {
-        // 如果创建时间大于 1 小时
-        if ($this->created_at->diffInHours(now()) > 1) {
-            // 如果当前时间比扣费时间小，则说明没有扣费。执行扣费。
-            if (now()->minute < $this->minute_at) {
-                $this->cost();
+        if ($this->isHourly()) {
+            // 如果创建时间大于 1 小时
+            if ($this->created_at->diffInHours(now()) > 1) {
+                // 如果当前时间比扣费时间小，则说明没有扣费。执行扣费。
+                if (now()->minute < $this->minute_at) {
+                    $this->cost();
+                }
+            }
+        } elseif ($this->isMonthly() && $this->last_paid && ! $this->isExpired()) {
+            // 根据扣费时间，计算出退款金额
+            $refund = $this->getRefundAmount();
+
+            if ($refund) {
+                // 如果有退款金额，则退款
+                $this->module?->reduce($refund, 'module_balance', '主机 '.$this->name.' 退款。', [
+                    'host_id' => $this->id,
+                    'module_id' => $this->module_id,
+                ]);
+                $this->user->charge($refund, 'balance', '主机 '.$this->name.' 退款。', [
+                    'host_id' => $this->id,
+                    'module_id' => $this->module_id,
+                ]);
+
+                // 退款后，更新扣费时间
+                $this->update([
+                    'last_paid_at' => null,
+                    'last_paid' => 0,
+                ]);
             }
         }
 
@@ -126,9 +165,52 @@ class Host extends Model
         return true;
     }
 
+    public function getRefundAmount(): string|null
+    {
+        if (! $this->last_paid_at) {
+            return null;
+        }
+
+        // 如果是月付，则按比例
+        $days = $this->last_paid_at->daysInMonth;
+
+        // 本月已经过的天数
+        $passed_days = $this->last_paid_at->day;
+
+        // 本月还剩下的天数
+        $left_days = $days - $passed_days;
+
+        // 计算
+        return bcmul($this->last_paid, bcdiv($left_days, $days, 2), 2);
+    }
+
+    public function isTrial(): bool
+    {
+        return $this->trial_ends_at !== null;
+    }
+
+    public function isMonthly(): bool
+    {
+        return $this->billing_cycle === 'monthly';
+    }
+
+    public function isHourly(): bool
+    {
+        return $this->billing_cycle === 'hourly';
+    }
+
+    public function isNextMonthCancel(): bool
+    {
+        return $this->cancel_at_period_end;
+    }
+
     public function cost(
         string $amount = null, $auto = true, $description = null
     ): bool {
+        if ($this->isTrial() && ! $this->trial_ends_at->isPast()) {
+            return true;
+        }
+
         $this->load('user');
         $user = $this->user;
         $user->load('user_group');
@@ -157,7 +239,7 @@ class Host extends Model
             }
         }
 
-        if ($auto) {
+        if ($auto && $this->isHourly()) {
             // 获取本月天数
             $days = now()->daysInMonth;
             // 本月每天的每小时的价格
@@ -195,12 +277,19 @@ class Host extends Model
 
         Cache::put($month_cache_key, $hosts_balances, 604800);
 
-        if (! $description) {
-            $description = '模块发起的扣费。';
+        $description = '主机: '.$this->name.', '.$description;
+
+        if ($auto && $this->isHourly()) {
+            $description .= '小时计费。';
+        } elseif ($auto && $this->isMonthly()) {
+            $description .= '月度计费。';
+        } else {
+            $description .= '扣费。';
         }
 
-        if ($auto) {
-            $description = '自动扣费。';
+        if ($this->isTrial() && $this->trial_ends_at->isPast()) {
+            $description .= '试用已过期。';
+            $this->trial_ends_at = null;
         }
 
         if ($append_description) {
@@ -212,16 +301,28 @@ class Host extends Model
             'module_id' => $this->module_id,
         ];
 
-        $left = $user->reduce($real_price, $description, false, $data)->user_remain;
+        $this->last_paid = $real_price;
+        $this->last_paid_at = now();
+
+        if ($this->isMonthly()) {
+            $this->expired_at = now()->addMonth();
+        }
+
+        try {
+            $left = $user->reduce($real_price, $description, ! $this->isHourly(), $data)->user_remain;
+        } catch (BalanceNotEnoughException) {
+            $this->changeStatus('suspended');
+
+            return false;
+        }
 
         $this->addLog($real_price);
 
         if ($left < 0) {
             $this->changeStatus('suspended');
-
-            $this->last_paid = $real_price;
-            $this->save();
         }
+
+        $this->save();
 
         return true;
     }
@@ -291,7 +392,11 @@ class Host extends Model
                 return false;
             }
 
-            if (! $user->hasBalance('0.5')) {
+            if ($this->isMonthly()) {
+                if (! $user->hasBalance($this->price)) {
+                    return false;
+                }
+            } elseif (! $user->hasBalance('0.5')) {
                 return false;
             }
         }

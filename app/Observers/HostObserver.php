@@ -14,6 +14,7 @@ class HostObserver
     {
         $host->hour_at = now()->hour;
         $host->minute_at = now()->minute;
+        $host->day_at = now()->day;
 
         if ($host->price !== null) {
             $host->price = bcdiv($host->price, 1, 2);
@@ -21,6 +22,10 @@ class HostObserver
 
         if ($host->managed_price !== null) {
             $host->managed_price = bcdiv($host->managed_price, 1, 2);
+        }
+
+        if (! $host->billing_cycle) {
+            $host->billing_cycle = 'hourly';
         }
     }
 
@@ -37,6 +42,10 @@ class HostObserver
         $host->user->notify(new WebNotification($host, 'hosts.created'));
 
         $host->save();
+
+        if ($host->isMonthly()) {
+            $host->cost(null, true, '预');
+        }
     }
 
     /**

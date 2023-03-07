@@ -6,6 +6,8 @@ use App\Events\Users;
 use App\Exceptions\User\BalanceNotEnoughException;
 use App\Models\Affiliate\Affiliates;
 use App\Models\Affiliate\AffiliateUser;
+use App\Notifications\User\BalanceNotEnough;
+use App\Notifications\User\LowBalance;
 use GeneaLabs\LaravelModelCaching\CachedBuilder;
 use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -208,6 +210,9 @@ class User extends Authenticatable implements MustVerifyEmail
 
             if ($this->balance < $amount) {
                 if ($fail) {
+                    // 发送邮件通知
+                    $this->notify(new BalanceNotEnough());
+
                     throw new BalanceNotEnoughException();
                 }
             }
@@ -228,6 +233,12 @@ class User extends Authenticatable implements MustVerifyEmail
             }
 
             broadcast(new Users($this, 'balances.amount.reduced', $this));
+
+            // 如果用户的余额小于 5 元，则发送邮件提醒（一天只发送一次，使用缓存）
+            if (! $this->hasBalance(5) && ! Cache::has('user_balance_less_than_5_'.$this->id)) {
+                $this->notify(new LowBalance());
+                Cache::put('user_balance_less_than_5_'.$this->id, true, now()->addDay());
+            }
 
             return (new Transaction)->create($data);
         });

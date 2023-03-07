@@ -38,15 +38,29 @@
                             {{ $host->price }} 元
                         @endif
                         <br/>
+                        @if ($host->isMonthly())
+                            <span class="text-muted">月付</span>
+                        @endif
                     </td>
                     <td>
                         <x-host-status :status="$host->status"/>
+                        @if ($host->isNextMonthCancel())
+                            <br/>
+                            <small>
+                                <span class="text-danger">不自动续费</span>
+                            </small>
+                        @endif
                     </td>
                     <td>
                         <span class="small">
                             {{ $host->updated_at }}
                             <br/>
                             {{ $host->created_at }}
+
+                            @if ($host->isTrial())
+                                <br/>
+                                <span class="text-danger">试用到 {{ $host->trial_ends_at }}</span>
+                            @endif
                         </span>
                     </td>
                     <td>
@@ -82,6 +96,22 @@
                                         @csrf
                                         @method('PATCH')
                                         <input type="hidden" name="status" value="suspended">
+                                    </form>
+                                @endif
+
+                                @if (!$host->isHourly())
+                                    <a class="dropdown-item" href="#"
+                                       onclick="document.getElementById('update-{{$host->id}}').submit()">
+                                        {{ $host->isNextMonthCancel() ? '启用自动续订' : '取消自动续订'}}
+                                    </a>
+
+                                    <form action="{{ route('hosts.update', $host) }}"
+                                          id="update-{{$host->id}}"
+                                          method="post" class="d-none">
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="hidden" name="cancel_at_period_end"
+                                               value="{{ !$host->isNextMonthCancel() ? '1' : '0'}}">
                                     </form>
                                 @endif
 

@@ -23,12 +23,29 @@ class HostController extends Controller
     public function update(Request $request, Host $host): RedirectResponse
     {
         $request->validate([
-            'status' => 'required|in:running,stopped,suspended',
+            'status' => 'nullable|in:running,stopped,suspended',
+            'cancel_at_period_end' => 'nullable|boolean',
         ]);
 
-        $status = $host->changeStatus($request->input('status'));
+        if ($request->filled('status')) {
+            $status = $host->changeStatus($request->input('status'));
 
-        return $status ? back()->with('success', '修改成功。') : back()->with('error', '修改失败。');
+            if (! $status) {
+                return back()->with('error', '在修改主机状态时发生错误。');
+            }
+        }
+
+        if ($request->filled('cancel_at_period_end')) {
+            if ($host->isHourly()) {
+                return back()->with('error', '按小时计费的主机无法进行此操作。');
+            }
+
+            $host->update([
+                'cancel_at_period_end' => $request->boolean('cancel_at_period_end'),
+            ]);
+        }
+
+        return back()->with('info', '更改已应用。');
     }
 
     /**
