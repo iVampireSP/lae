@@ -41,6 +41,7 @@ class CancelExpiredHostJob implements ShouldQueue
             $host->where('day_at', $now->day)
                 ->where('hour_at', $now->hour)
                 ->where('trial_ends_at', '<', $now)
+                ->whereNot('billing_cycle', 'hourly')
                 ->chunk(500, function ($hosts) {
                     $hosts->each(function ($host) {
                         /* @var Host $host */
@@ -53,6 +54,7 @@ class CancelExpiredHostJob implements ShouldQueue
 
             // 查找到期的主机
             $host->where('expired_at', '<', $now)
+                ->whereNot('billing_cycle', 'hourly')
                 ->chunk(500, function ($hosts) {
                     $hosts->each(function ($host) {
                         /* @var Host $host */
@@ -63,6 +65,10 @@ class CancelExpiredHostJob implements ShouldQueue
                     });
                 });
         } else {
+            if ($this->host->isHourly()) {
+                return;
+            }
+
             if ($this->host->isNextMonthCancel()) {
                 $this->host->safeDelete();
             } else {
