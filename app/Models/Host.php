@@ -201,7 +201,15 @@ class Host extends Model
 
     public function isNextMonthCancel(): bool
     {
-        return $this->cancel_at_period_end;
+        if ($this->isHourly()) {
+            return false;
+        }
+
+        if ($this->isMonthly()) {
+            return $this->cancel_at_period_end;
+        }
+
+        return false;
     }
 
     public function cost(

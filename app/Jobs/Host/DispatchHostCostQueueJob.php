@@ -60,7 +60,7 @@ class DispatchHostCostQueueJob implements ShouldQueue
                 });
             });
         } else {
-            if (! $this->host->isHourly() && ! $this->host->isNextMonthCancel() && ! $this->host->isTrial()) {
+            if (! $this->host->isNextMonthCancel() && ! $this->host->isTrial()) {
                 $this->host->cost($this->host->getPrice());
             }
         }
