@@ -20,6 +20,12 @@ Route::post('hosts/{host}/cost', [HostController::class, 'cost']);
 
 Route::apiResource('tasks', TaskController::class);
 
+// Route::match(['get', 'post'], 'queues/handle', [QueueController::class, 'handleNext']);
+// Route::apiResource('queues', QueueController::class)->except(['store', 'destroy']);
+// Route::post('queues/{queue}/handle', [QueueController::class, 'handle']);
+
+// Route::apiResource('transactions', TransactionController::class)->only(['index', 'show']);
+
 Route::apiResource('work-orders', WorkOrderController::class);
 Route::apiResource('work-orders.replies', ReplyController::class);
 
@@ -28,7 +34,7 @@ Route::post('users/attempt', [UserController::class, 'attempt']);
 Route::apiResource('users', UserController::class)->only(['index', 'show', 'update', 'store']);
 Route::apiResource('users.subscriptions', SubscriptionController::class);
 
-Route::get('token/{token}', [UserController::class, 'auth']);
+Route::get('tokens/{token}', [UserController::class, 'auth']);
 Route::get('users/{user}/hosts', [UserController::class, 'hosts']);
 
 Route::post('broadcast/users/{user}', [BroadcastController::class, 'broadcast_to_user']);
