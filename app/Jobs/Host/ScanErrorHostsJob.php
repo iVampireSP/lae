@@ -20,6 +20,8 @@ class ScanErrorHostsJob implements ShouldQueue
     {
         // 扫描出错的主机
         (new Host)->whereIn('status', ['error', 'pending', 'unavailable'])->with('module')->chunk(100, function ($hosts) {
+            /* @var Host $host */
+
             foreach ($hosts as $host) {
                 // 忽略维护中的模块
                 if ($host->module->status !== 'up') {
