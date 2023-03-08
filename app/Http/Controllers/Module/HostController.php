@@ -46,7 +46,7 @@ class HostController extends Controller
 
         if ($request->input('price') > 0) {
             if ($request->input('billing_cycle', 'hourly') === 'hourly') {
-                if (! $user->hasBalance("1")) {
+                if (! $user->hasBalance('1')) {
                     return $this->error('此用户余额不足，无法开设计费项目。');
                 }
             } else {
