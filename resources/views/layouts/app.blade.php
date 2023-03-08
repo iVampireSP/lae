@@ -43,7 +43,7 @@
                             <a class="nav-link" href="{{ route('index') }}">授权</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('balances.index') }}">资金</a>
+                            <a class="nav-link" href="{{ route('balances.index') }}">余额</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('hosts.index') }}">主机</a>
