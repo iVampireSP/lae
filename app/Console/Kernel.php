@@ -4,7 +4,8 @@ namespace App\Console;
 
 use App\Jobs\Host\CancelExpiredHostJob;
 use App\Jobs\Host\DeleteHostJob;
-use App\Jobs\Host\DispatchHostCostQueueJob;
+use App\Jobs\Host\DispatchHostCostHourlyJob;
+use App\Jobs\Host\DispatchHostCostMonthlyJob;
 use App\Jobs\Host\ScanErrorHostsJob;
 use App\Jobs\Module\DispatchFetchModuleJob;
 use App\Jobs\Module\SendModuleEarningsJob;
@@ -31,8 +32,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('sanctum:prune-expired --hours=24')->daily()->runInBackground()->onOneServer()->name('清理过期的 Token。');
 
         // 扣费
-        $schedule->job(new DispatchHostCostQueueJob(now(), null, 'hourly'))->everyMinute()->withoutOverlapping()->onOneServer()->name('部署扣费任务 (小时)');
-        $schedule->job(new DispatchHostCostQueueJob(now(), null, 'monthly'))->hourly()->withoutOverlapping()->onOneServer()->name('部署扣费任务 (月度)');
+        $schedule->job(new DispatchHostCostHourlyJob(now()->minute, null))->everyMinute()->withoutOverlapping()->onOneServer()->name('部署扣费任务 (小时)');
+        $schedule->job(new DispatchHostCostMonthlyJob(now()->day, now()->hour, null))->hourly()->withoutOverlapping()->onOneServer()->name('部署扣费任务 (月度)');
         $schedule->job(new CancelExpiredHostJob())->hourly()->withoutOverlapping()->onOneServer()->name('部署清理到期主机任务');
 
         // 获取模块暴露的信息（服务器等,检查模块状态）
