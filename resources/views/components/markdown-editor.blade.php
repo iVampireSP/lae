@@ -4,8 +4,8 @@
     @php($rand = rand(0, 1000))
     <div id="md_{{$rand}}_{{ $name }}" class="mt-3">
 
-        <textarea name="{{ $name }}" style="display:none;" placeholder="{{ $placeholder }}"
-                  aria-label="{{ $placeholder }}">{{ $value ?? old($name) }}</textarea>
+        <textarea id="md_{{$rand}}_{{ $name }}_textarea" name="{{ $name }}" style="display:none;" placeholder="{{ $placeholder }}"
+                  aria-label="{{ $placeholder }}">{{ $value ?? old('content') }}</textarea>
 
     </div>
 
@@ -34,7 +34,7 @@
             theme: darkTheme ? 'dark' : 'default',
             previewTheme: darkTheme ? 'dark' : 'default',
             editorTheme: darkTheme ? 'pastel-on-dark' : 'default',
-            markdown: "{{ old('content') }}",
+            markdown: document.getElementById("md_{{$rand}}_{{ $name }}_textarea").value,
             codeFold: true,
             saveHTMLToTextarea: false,
             searchReplace: true,
