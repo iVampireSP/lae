@@ -13,8 +13,6 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 
-// use App\Models\User;
-
 class HostController extends Controller
 {
     /**
@@ -47,8 +45,8 @@ class HostController extends Controller
         $user = (new User)->findOrFail($request->input('user_id'));
 
         if ($request->input('price') > 0) {
-            if ($request->billing_cycle === 'hourly') {
-                if (! $user->hasBalance(1)) {
+            if ($request->input('billing_cycle', 'hourly') === 'hourly') {
+                if (! $user->hasBalance("1")) {
                     return $this->error('此用户余额不足，无法开设计费项目。');
                 }
             } else {
@@ -63,7 +61,6 @@ class HostController extends Controller
 
         $data = [
             'name' => $name,
-            'user_id' => $user->id,
             'module_id' => auth('module')->id(),
             'price' => $request->input('price'),
             'managed_price' => $request->input('managed_price'),
@@ -72,7 +69,7 @@ class HostController extends Controller
             'trial_ends_at' => $request->input('trial_ends_at'),
         ];
 
-        $host = (new Host)->create($data);
+        $host = $user->hosts()->create($data);
 
         $host['host_id'] = $host->id;
 
