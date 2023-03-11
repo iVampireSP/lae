@@ -259,10 +259,12 @@ class AuthController extends Controller
             $user->name = $name;
             $user->email = $email;
             $user->email_verified_at = $email_verified_at;
-            $user->real_name_verified_at = $real_name->real_name_verified_at;
-            $user->real_name = $real_name->real_name;
-            $user->id_card = $real_name->id_card;
 
+            if ($real_name->real_name_verified_at) {
+                $user->real_name_verified_at = $real_name->real_name_verified_at;
+                $user->real_name = $real_name->real_name;
+                $user->id_card = $real_name->id_card;
+            }
 
             $user->password = Hash::make(Str::random(16));
 

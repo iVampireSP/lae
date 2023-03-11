@@ -26,6 +26,11 @@
         </p>
 
         <x-alert-info>
+            您也可以到 <a target="_blank" href="{{ config('oauth.oauth_domain') }}">{{ config('oauth.oauth_name') }}</a>
+            中实名认证。重新登录后即可同步。
+        </x-alert-info>
+
+        <x-alert-info>
             实人认证产品是结合公安一所“互联网+”可信身份认证平台（简称CTID平台），通过用户活体视频进行活体检测得到人脸视频，通过OCR扫描用户身份证获取姓名+身份证号，并将人脸视频检测成功后获取的高质量人像照片直连公安一所“互联网+可信身份认证平台”（简称CTID平台）进行照片及信息比对，返回权威比对结果。H5全流程，接入简单，应用方便快捷。
         </x-alert-info>
         <x-alert-warning>
