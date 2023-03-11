@@ -19,8 +19,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [AuthController::class, 'index'])->middleware('banned')->name('index');
 
 Route::prefix('auth')->group(function () {
-    Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
-    Route::post('login', [LoginController::class, 'login']);
+    // Route::get('login', [LoginController::class, 'showLoginForm'])->name('login');
+    // Route::post('login', [LoginController::class, 'login']);
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
     Route::post('exists', [LoginController::class, 'userIfExists'])->name('login.exists-if-user');
 
@@ -40,6 +40,9 @@ Route::prefix('auth')->group(function () {
     Route::post('email/resend', [VerificationController::class, 'resend'])->name('verification.resend');
 
     Route::get('token/{token}', [AuthController::class, 'fastLogin'])->name('auth.fast-login');
+
+    Route::get('redirect', [AuthController::class, 'redirect'])->name('login');
+    Route::get('callback', [AuthController::class, 'callback'])->name('callback');
 });
 
 Route::middleware(['auth:web', 'banned', 'verified'])->group(

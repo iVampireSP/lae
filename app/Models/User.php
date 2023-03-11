@@ -158,7 +158,7 @@ class User extends Authenticatable implements MustVerifyEmail
         // 仅需选择公开的
         return $this->select($this->publics);
     }
-
+    
     public function getOnlyPublic($appened_excepts = [], $display = []): array
     {
         if ($display) {

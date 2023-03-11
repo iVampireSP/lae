@@ -5,15 +5,19 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Notifications\User\UserNotification;
-use function back;
-use function config;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
 use Illuminate\View\View;
+use function back;
+use function config;
 use function redirect;
 use function session;
 use function view;
@@ -33,13 +37,13 @@ class AuthController extends Controller
                 $dashboardHost = parse_url(config('settings.dashboard.base_url'), PHP_URL_HOST);
 
                 if ($callbackHost === $dashboardHost) {
-                    if (! $request->user('web')->isRealNamed()) {
+                    if (!$request->user('web')->isRealNamed()) {
                         return redirect()->route('real_name.create')->with('status', '重定向已被打断，需要先实人认证。');
                     }
 
                     $token = $request->user()->createToken('Dashboard')->plainTextToken;
 
-                    return redirect($callback.'?token='.$token);
+                    return redirect($callback . '?token=' . $token);
                 }
 
                 session(['referer.domain' => parse_url($request->header('referer'), PHP_URL_HOST)]);
@@ -124,7 +128,7 @@ class AuthController extends Controller
 
     public function showAuthRequest($token): View|RedirectResponse
     {
-        $data = Cache::get('auth_request:'.$token);
+        $data = Cache::get('auth_request:' . $token);
 
         if (empty($data)) {
             return redirect()->route('index')->with('error', '登录请求的 Token 不存在或已过期。');
@@ -148,7 +152,7 @@ class AuthController extends Controller
             'token' => 'required|string|max:128',
         ]);
 
-        $data = Cache::get('auth_request:'.$request->input('token'));
+        $data = Cache::get('auth_request:' . $request->input('token'));
 
         if (empty($data)) {
             return back()->with('error', '登录请求的 Token 不存在或已过期。');
@@ -172,10 +176,10 @@ class AuthController extends Controller
             $data['token'] = $user->createToken($data['meta']['description'] ?? Carbon::now()->toDateString(), $abilities)->plainTextToken;
         }
 
-        Cache::put('auth_request:'.$request->input('token'), $data, 60);
+        Cache::put('auth_request:' . $request->input('token'), $data, 60);
 
         if (isset($data['meta']['return_url']) && $data['meta']['return_url']) {
-            return redirect()->to($data['meta']['return_url'].'?auth_request='.$request->input('token'));
+            return redirect()->to($data['meta']['return_url'] . '?auth_request=' . $request->input('token'));
         }
 
         return redirect()->route('index')->with('success', '登录请求已确认。');
@@ -183,8 +187,8 @@ class AuthController extends Controller
 
     public function fastLogin(string $token): RedirectResponse
     {
-        $cache_key = 'session_login:'.$token;
-        $user_id = Cache::get('session_login:'.$token);
+        $cache_key = 'session_login:' . $token;
+        $user_id = Cache::get('session_login:' . $token);
 
         if (empty($user_id)) {
             return redirect()->route('index')->with('error', '登录请求的 Token 不存在或已过期。');
@@ -202,4 +206,81 @@ class AuthController extends Controller
 
         return redirect()->route('index');
     }
+
+    public function redirect(Request $request)
+    {
+        $request->session()->put('state', $state = Str::random(40));
+
+        $query = http_build_query([
+            'client_id' => config('oauth.client_id'),
+            'redirect_uri' => config('oauth.callback_uri'),
+            'response_type' => 'code',
+            'scope' => config('oauth.scope'),
+            'state' => $state,
+        ]);
+
+        return redirect()->to(config('oauth.oauth_auth_url') . '?' . $query);
+    }
+
+    public function callback(Request $request)
+    {
+        try {
+            $authorize = Http::asForm()->throw()->post(config('oauth.oauth_token_url'), [
+                'grant_type' => 'authorization_code',
+                'client_id' => config('oauth.client_id'),
+                'client_secret' => config('oauth.client_secret'),
+                'redirect_uri' => config('oauth.callback_uri'),
+                'code' => $request->input('code'),
+            ])->getBody();
+        } catch (Exception $e) {
+            return redirect()->route('index')->with('error', '无法获取授权。' . $e->getMessage());
+        }
+
+        $authorize = json_decode($authorize);
+
+        $http = Http::asForm()->withHeaders([
+            'Accept' => 'application/json',
+            'Authorization' => 'Bearer ' . $authorize->access_token
+        ])->throw();
+
+        $oauth_user = $http->get(config('oauth.oauth_user_url'))->object();
+        $real_name = $http->get(config('oauth.oauth_real_name_url'))->object();
+
+        $user_sql = User::where('email', $oauth_user->email);
+        $user = $user_sql->first();
+
+        if (is_null($user)) {
+            $name = $oauth_user->name;
+            $email = $oauth_user->email;
+            $email_verified_at = $oauth_user->email_verified_at;
+
+            $user = new User();
+
+            $user->name = $name;
+            $user->email = $email;
+            $user->email_verified_at = $email_verified_at;
+            $user->real_name_verified_at = $real_name->real_name_verified_at;
+            $user->real_name = $real_name->real_name;
+            $user->id_card = $real_name->id_card;
+
+
+            $user->password = Hash::make(Str::random(16));
+
+
+            $user->save();
+
+            $request->session()->put('auth.password_confirmed_at', time());
+        } else {
+            if ($user->name != $oauth_user->name) {
+                User::where('email', $oauth_user->email)->update([
+                    'name' => $oauth_user->name
+                ]);
+            }
+        }
+
+        Auth::guard('web')->loginUsingId($user->id, true);
+
+        return redirect()->route('index');
+    }
+
 }
