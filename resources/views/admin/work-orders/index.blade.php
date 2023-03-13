@@ -58,14 +58,14 @@
                                 href="{{ route('admin.hosts.edit', $workOrder->host_id) }}"
                                 class="host_name"
                             >
-                                {{ $workOrder?->host->name }}
+                                {{ $workOrder->host?->name }}
                             </a>
                         @else
                             无
                         @endif
                     </td>
                     <td>
-                        <a href="{{ route('admin.users.edit', $workOrder->user_id) }}">{{ $workOrder?->user->name }}</a>
+                        <a href="{{ route('admin.users.edit', $workOrder->user_id) }}">{{ $workOrder->user?->name }}</a>
                     </td>
                     <td>
                         {{ $workOrder->created_at }}, {{ $workOrder->created_at->diffForHumans() }}
