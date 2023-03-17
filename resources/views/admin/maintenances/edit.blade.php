@@ -12,7 +12,7 @@
 
         <div class="form-group mt-1">
             <label for="name">维护名称</label>
-            <input type="text" class="form-control" id="name" name="name" placeholder="维护名称" value={{ $maintenance->name }} required>
+            <input type="text" class="form-control" id="name" name="name" placeholder="维护名称" value="{{ $maintenance->name }}" required>
         </div>
 
         <div class="form-group mt-1">
