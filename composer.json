@@ -24,7 +24,7 @@
         "genealabs/laravel-model-caching": "^0.12.5",
         "guzzlehttp/guzzle": "^7.2",
         "jenssegers/mongodb": "^3.9",
-        "laravel/framework": "^9.19",
+        "laravel/framework": "^10.0",
         "laravel/octane": "^1.3",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
