@@ -54,11 +54,17 @@
 ### 一些模块
 
 #### 第三代(lae v3)
+
 [Module Template](https://github.com/iVampireSP/lae-example-module)
+
 [Pterodactyl 自动化](https://github.com/iVampireSP/lae-module-pterodactyl)
+
 [服务于用户的 MQTT](https://github.com/iVampireSP/lae-module-user-mqtt)
+
 [IP Manager](https://github.com/iVampireSP/lae-ip-manager)
+
 [ForbiddenForest](https://github.com/iVampireSP/lae-forbiddenforest)
+
 [拼手气红包模块](https://github.com/iVampireSP/lae-redpacket)
 
 #### 外置应用
@@ -68,9 +74,13 @@
 [lae_v1](https://github.com/orgs/loliart-lae/repositories) 主程序
 
 [Frp Tunnel Client](https://github.com/loliart-lae/lae-tunnel-client)
+
 [cyberpanelManager](https://github.com/loliart-lae/lm-cyberpanelManager)
+
 [共享的远程桌面自动化](https://github.com/loliart-lae/lae-windows-agent)
+
 [FTP 服务器](https://github.com/loliart-lae/lae-ftp-server)
+
 [静态站点 Agent](https://github.com/loliart-lae/lae-staticSite-agent)
 
 
