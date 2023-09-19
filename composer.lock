@@ -9993,23 +9993,17 @@
         },
         {
             "name": "laravel-lang/lang",
-            "version": "12.18.4",
+            "version": "12.24.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Laravel-Lang/lang.git",
-                "reference": "b224d7f29fb792c2e816de270c930d8a77d25249"
+                "reference": "5a6a3e7751a91dec3ee7d69c12db4690643d59a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Laravel-Lang/lang/zipball/b224d7f29fb792c2e816de270c930d8a77d25249",
-                "reference": "b224d7f29fb792c2e816de270c930d8a77d25249",
-                "shasum": "",
-                "mirrors": [
-                    {
-                        "url": "https://mirrors.aliyun.com/composer/dists/%package%/%reference%.%type%",
-                        "preferred": true
-                    }
-                ]
+                "url": "https://api.github.com/repos/Laravel-Lang/lang/zipball/5a6a3e7751a91dec3ee7d69c12db4690643d59a0",
+                "reference": "5a6a3e7751a91dec3ee7d69c12db4690643d59a0",
+                "shasum": ""
             },
             "require": {
                 "ext-json": "*",
@@ -10017,7 +10011,7 @@
                 "php": "^8.1"
             },
             "require-dev": {
-                "laravel-lang/status-generator": "^1.13",
+                "laravel-lang/status-generator": "^1.15",
                 "phpunit/phpunit": "^9.6",
                 "symfony/var-dumper": "^6.0"
             },
@@ -10044,7 +10038,7 @@
                     "homepage": "https://github.com/Laravel-Lang"
                 }
             ],
-            "description": "Languages for Laravel",
+            "description": "List of 78 languages for Laravel Framework, Laravel Jetstream, Laravel Fortify, Laravel Breeze, Laravel Cashier, Laravel Nova, Laravel Spark and Laravel UI",
             "keywords": [
                 "lang",
                 "languages",
@@ -10061,7 +10055,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2023-02-27T13:39:16+00:00"
+            "time": "2023-07-25T22:28:42+00:00"
         },
         {
             "name": "laravel-lang/publisher",
@@ -12814,5 +12808,5 @@
         "ext-zip": "^1.19"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "plugin-api-version": "2.6.0"
 }
