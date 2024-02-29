@@ -3,7 +3,7 @@
 ### 这是第三代莱云的系统
 它具有 天生分布式，可集群化，方便部署，高性能 等特点。美中不足的是，它的周期计费做的不是很好。
 
-(在 laecloud.com 上查看 莱云 v3)[https://www.laecloud.com/lae_v3/]
+[在 laecloud.com 上查看 莱云 v3](https://www.laecloud.com/lae_v3)
 
 功能列表
 用户端
