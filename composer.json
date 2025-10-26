@@ -34,7 +34,7 @@
         "pusher/pusher-php-server": "^7.2",
         "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/laravel-tags": "^4.3",
-        "spiral/roadrunner": "^2.8.2",
+        "spiral/roadrunner": "^2025.0.0",
         "symfony/psr-http-message-bridge": "^2.1",
         "yansongda/laravel-pay": "~3.2.0"
     },
